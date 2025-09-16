@@ -1,0 +1,72 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "assets/images/uploads"
+public_folder: "/assets/images/uploads"
+
+site_url: ""
+
+collections:
+  - name: "products"
+    label: "Products"
+    folder: "content/products"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Photo", name: "image", widget: "image" }
+      - { label: "Short description", name: "summary", widget: "string" }
+      - { label: "Description", name: "body", widget: "markdown" }
+
+  - name: "services"
+    label: "Services"
+    folder: "content/services"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Short description", name: "summary", widget: "string" }
+      - { label: "Details", name: "body", widget: "markdown" }
+
+  - name: "work"
+    label: "Our Work"
+    folder: "content/work"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Image", name: "image", widget: "image" }
+      - label: "Gallery"
+        name: "gallery"
+        widget: "list"
+        field:
+          { label: "Image", name: "image", widget: "image" }
+      - { label: "Description", name: "description", widget: "markdown" }
+
+  - name: "settings"
+    label: "Settings"
+    files:
+      - file: "content/settings/about.md"
+        label: "About"
+        name: "about"
+        fields:
+          - { label: "Title", name: "title", widget: "string", default: "About Us" }
+          - { label: "Body", name: "body", widget: "markdown" }
+
+      - file: "content/settings/pricing.md"
+        label: "Pricing"
+        name: "pricing"
+        fields:
+          - { label: "Standard Pricing (markdown)", name: "standard", widget: "markdown" }
+          - { label: "Premium Pricing (markdown)", name: "premium", widget: "markdown" }
+
+      - file: "content/settings/contact.md"
+        label: "Contact"
+        name: "contact"
+        fields:
+          - { label: "Phone", name: "phone", widget: "string" }
+          - { label: "WhatsApp link", name: "whatsapp", widget: "string" }
+          - { label: "Instagram", name: "instagram", widget: "string" }
+          - { label: "Operating hours", name: "hours", widget: "string" }
+          - { label: "CEO", name: "ceo", widget: "string" }
