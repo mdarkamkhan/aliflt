@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Alif – The Custom Clothing Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    * { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { padding-bottom: 80px; overflow-x: hidden; }
+    .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .hero-animation { animation: fadeInUp 1s ease-out; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:active { transform: scale(0.95); }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.98); border-top: 1px solid rgba(0,0,0,0.08); z-index: 1000; }
+    .nav-item.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white !important; }
+    .nav-indicator { display: none; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm fixed w-full top-0 z-50">
+    <div class="max-w-6xl mx-auto flex justify-between items-center h-14 px-4">
+      <div class="flex items-center space-x-2 text-indigo-600 font-bold text-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2z" />
+        </svg>
+        <span>Alif</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <div class="flex justify-around items-center">
+      <a href="#home" class="nav-item active flex flex-col items-center p-3 text-gray-600">
+        <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9v9a1 1 0 01-1 1h-5V9H9v13H4a1 1 0 01-1-1v-9z"/></svg>
+        <span class="text-xs font-medium">Home</span>
+      </a>
+      <a href="#products" class="nav-item flex flex-col items-center p-3 text-gray-600">
+        <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
+        <span class="text-xs font-medium">Products</span>
+      </a>
+      <a href="#services" class="nav-item flex flex-col items-center p-3 text-gray-600">
+        <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17l-.75 3h6l-.75-3M3 13h18"/></svg>
+        <span class="text-xs font-medium">Services</span>
+      </a>
+      <a href="#work" class="nav-item flex flex-col items-center p-3 text-gray-600">
+        <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <span class="text-xs font-medium">Work</span>
+      </a>
+      <a href="#pricing" class="nav-item flex flex-col items-center p-3 text-gray-600">
+        <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2"/></svg>
+        <span class="text-xs font-medium">Pricing</span>
+      </a>
+      <a href="#contact" class="nav-item flex flex-col items-center p-3 text-gray-600">
+        <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h18M8 5v14m8-14v14"/></svg>
+        <span class="text-xs font-medium">Contact</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="home" class="gradient-bg min-h-screen flex items-center justify-center pt-14">
+    <div class="text-center hero-animation px-4">
+      <h1 class="text-3xl font-bold text-white mb-4">
+        Alif – The Custom Clothing Store
+        <span class="block text-yellow-300">Premium Boutique Tailoring</span>
+      </h1>
+      <p class="text-base text-white mb-8">Elegant stitching, fast delivery, and a fusion of traditional & modern ethnic styles.</p>
+      <a href="#pricing" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-3 px-8 rounded-full text-lg">View Pricing</a>
+    </div>
+  </section>
+
+  <!-- About Us -->
+  <section id="about" class="py-16 bg-white">
+    <div class="max-w-3xl mx-auto text-center px-4">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">About Us</h2>
+      <p class="text-gray-600 leading-relaxed">
+        Welcome to <strong>Alif</strong>, your trusted boutique tailoring service in Sahibganj. 
+        We specialize in creating elegant ethnic wear – from blouses to lehengas – stitched with precision and care. 
+        Our mission is to blend tradition with modern trends, giving every woman the confidence to shine.
+      </p>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section id="products" class="py-16 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8">Our Products</h2>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="bg-white shadow-md rounded-xl p-6">Blouse (Placeholder)</div>
+        <div class="bg-white shadow-md rounded-xl p-6">Suit (Placeholder)</div>
+        <div class="bg-white shadow-md rounded-xl p-6">Lehenga (Placeholder)</div>
+        <div class="bg-white shadow-md rounded-xl p-6">Kurti (Placeholder)</div>
+        <div class="bg-white shadow-md rounded-xl p-6">Frock (Placeholder)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8">Our Services</h2>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="card-hover bg-gray-50 p-6 rounded-xl shadow">Custom Stitching</div>
+        <div class="card-hover bg-gray-50 p-6 rounded-xl shadow">Bridal Wear</div>
+        <div class="card-hover bg-gray-50 p-6 rounded-xl shadow">Fast Delivery</div>
+        <div class="card-hover bg-gray-50 p-6 rounded-xl shadow">Trendy Designs</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section id="work" class="py-16 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8">Our Work</h2>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="bg-white shadow-md rounded-xl h-40 flex items-center justify-center">Work 1</div>
+        <div class="bg-white shadow-md rounded-xl h-40 flex items-center justify-center">Work 2</div>
+        <div class="bg-white shadow-md rounded-xl h-40 flex items-center justify-center">Work 3</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-16 bg-white">
+    <div class="max-w-5xl mx-auto px-4 text-center">
+      <h2 class="text-2xl font-bold text-gray-900 mb-10">Our Pricing</h2>
+      <div class="grid gap-8 md:grid-cols-2">
+        <div class="border rounded-2xl shadow-lg p-8 text-left">
+          <h3 class="text-xl font-bold mb-2">Standard</h3>
+          <ul class="mb-6 space-y-2 text-gray-700">
+            <li>Blouse – ₹240</li>
+            <li>Suit – ₹300</li>
+            <li>Kurti – ₹150</li>
+            <li>Lehenga – ₹700</li>
+            <li>Frock – ₹250</li>
+          </ul>
+          <a href="https://wa.me/917488611845" target="_blank" class="block text-center bg-indigo-600 text-white py-3 rounded-lg font-semibold">Book Now</a>
+        </div>
+        <div class="border rounded-2xl shadow-lg p-8 text-left bg-gradient-to-tr from-indigo-500 to-purple-600 text-white">
+          <h3 class="text-xl font-bold">Premium</h3>
+          <ul class="mb-6 space-y-2">
+            <li>Plain blouse – ₹200</li>
+            <li>Plain suit – ₹450</li>
+            <li>Blouse – ₹420</li>
+            <li>Suit – ₹490</li>
+            <li>Kurti – ₹240</li>
+            <li>Lehenga – ₹900</li>
+          </ul>
+          <a href="https://wa.me/917488611845" target="_blank" class="block text-center bg-white text-indigo-700 py-3 rounded-lg font-semibold">Book Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="py-16 bg-gray-50">
+    <div class="max-w-3xl mx-auto text-center px-4">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Contact Us</h2>
+      <p class="mb-3"><strong>Phone / WhatsApp:</strong> <a href="https://wa.me/917488611845" class="text-indigo-600">+91 74886 11845</a></p>
+      <p class="mb-3"><strong>Instagram:</strong> <a href="https://instagram.com/alif_lstr" target="_blank" class="text-indigo-600">@alif_lstr</a></p>
+      <p class="mb-3"><strong>Hours:</strong> 10:45 AM – 9 PM</p>
+      <p class="mb-6"><strong>CEO:</strong> Muhammad Arkam Khan (<a href="https://instagram.com/md_w4kx4.96" target="_blank" class="text-indigo-600">@md_w4kx4.96</a>)</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-6 bg-white border-t text-center text-gray-600">
+    Made with ❤️ in Sahibganj
+  </footer>
+
+</body>
+</html>
