@@ -1,8 +1,0 @@
-{
-  "name": "aliflt-cms-site",
-  "version": "1.0.0",
-  "description": "Custom Clothing Store with Netlify CMS and Functions",
-  "dependencies": {
-    "js-yaml": "^4.1.0"
-  }
-}
