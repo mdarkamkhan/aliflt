@@ -1,10 +1,12 @@
 backend:
-  name: github
-  repo: mdarkamkhan/aliflt
+  name: git-gateway
   branch: main
+  # Note: Netlify Git Gateway use karne ke liye,
+  # Netlify site settings mein 'Identity' aur 'Git Gateway' enable hona ZARURI hai.
+  # Agar abhi bhi blank screen aaye, toh woh steps must hain.
 
-media_folder: "uploads"
-public_folder: "/uploads"
+media_folder: "uploads"          # Where uploaded files go in repo
+public_folder: "/uploads"        # Public URL for those files
 
 collections:
   - name: "offers"
@@ -27,7 +29,7 @@ collections:
 
   - name: "services"
     label: "Services"
-    folder: "services"
+    folder: "service"
     create: true
     slug: "{{slug}}"
     fields:
@@ -42,3 +44,4 @@ collections:
     fields:
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
+      
