@@ -2,38 +2,54 @@
 
 const fs = require('fs');
 const path = require('path');
-const yaml = require('js-yaml'); // YAML file padhne ke liye zaroori library
-
-// **Important:** Agar aap 'js-yaml' library use kar rahe hain,
-// toh aapko apne project mein ek 'package.json' file bhi banani padegi,
-// aur usme yeh library (dependency) add karna padega.
+const matter = require('gray-matter'); // Nayi library: gray-matter
 
 exports.handler = async (event, context) => {
   try {
     const { category } = event.queryStringParameters;
 
-    // Security Check: Sirf allowed categories hi padhiye
     const allowedCategories = ['offers', 'products', 'service', 'works']; 
     if (!allowedCategories.includes(category)) {
       return { statusCode: 400, body: 'Invalid category' };
     }
 
-    // Us category folder ka path
+    // Path to the content directory (e.g., 'offers')
     const contentDir = path.join(process.cwd(), category);
     
-    // Check karein ki folder exist karta hai
     if (!fs.existsSync(contentDir)) {
-      // Agar folder nahi mila, toh empty array wapas kar do
       return { statusCode: 200, body: JSON.stringify([]) }; 
     }
 
-    // Folder ke andar saari files (CMS entries) padhiye
     const files = fs.readdirSync(contentDir);
     
     const galleryItems = files.map(file => {
-      // Sirf .md (Markdown) ya .yaml files hi padhiye
-      if (file.endsWith('.md') || file.endsWith('.yaml') || file.endsWith('.yml')) {
+      // Sirf .md files padhiye (CMS ki default file)
+      if (file.endsWith('.md')) {
         const fullPath = path.join(contentDir, file);
+        const fileContent = fs.readFileSync(fullPath, 'utf8');
+        
+        // Frontmatter (CMS data) ko parse karein
+        const { data } = matter(fileContent); 
+        return data; // Sirf data object return hoga jismein title aur image hai
+      }
+      return null;
+    }).filter(item => item !== null);
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(galleryItems),
+    };
+  } catch (error) {
+    console.error('Error fetching gallery data:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Failed to fetch gallery data' }),
+    };
+  }
+};
         const fileContent = fs.readFileSync(fullPath, 'utf8');
 
         // Agar .yaml file hai, toh usko parse karein
