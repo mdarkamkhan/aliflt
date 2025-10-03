@@ -4,7 +4,7 @@
   "description": "Custom Clothing Store with Netlify CMS and Functions",
   "dependencies": {
     "js-yaml": "^4.1.0",
-    "gray-matter": "^4.0.3"  <-- Yeh naya add kiya gaya hai
+    "gray-matter": "^4.0.3"
   },
   "scripts": {
     "build": "echo 'Build successful' "
