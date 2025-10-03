@@ -1,0 +1,9 @@
+// netlify/functions/package.json
+{
+  "name": "netlify-functions",
+  "version": "1.0.0",
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.0"
+  }
+}
