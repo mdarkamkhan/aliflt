@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Custom Clothing Store with Netlify CMS and Functions",
   "dependencies": {
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "gray-matter": "^4.0.3"  <-- Yeh naya add kiya gaya hai
+  },
+  "scripts": {
+    "build": "echo 'Build successful' "
   }
 }
