@@ -1,4 +1,16 @@
 [build]
   publish = "."
-  functions = "netlify/functions" # <-- Yeh line add karna zaruri hai!
-  
+  functions = "netlify/functions"
+
+[[plugins]]
+  package = "@netlify/plugin-copy-contents"
+  [plugins.inputs]
+    # Root mein maujood offers, products, etc. ko functions folder mein copy karein
+    source = [
+      "offers", 
+      "products", 
+      "service", 
+      "works"
+    ]
+    destination = "netlify/functions"
+    
