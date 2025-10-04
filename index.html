@@ -501,29 +501,44 @@
     </footer>
     
     <!-- ✅ Auto-gallery script -->
-  <script>
-    async function loadGallery(folder, targetId) {
-      try {
-        const res = await fetch(`/.netlify/functions/gallery?folder=${folder}`);
-        const files = await res.json();
+   <script>
 
-        const container = document.getElementById(targetId);
-        if (!container) return;
+function loadGallery(category, sectionId) {
+    // API call mein category ko query parameter ki tarah daalna zaroori hai
+    fetch(`/.netlify/functions/gallery?category=${category}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const container = document.getElementById(sectionId);
+            if (!container) return;
 
-        files.forEach(file => {
-          const img = document.createElement("img");
-          img.src = `/${folder}/${file}`;
-          container.appendChild(img);
+            // Purane content ko hataiye
+            container.innerHTML = ''; 
+
+            data.forEach(item => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                
+                // Image aur Title ka HTML banayein
+                galleryItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}">
+                    <h3>${item.title}</h3>
+                `;
+                container.appendChild(galleryItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading gallery for ' + category + ':', error);
+            document.getElementById(sectionId).innerHTML = '<p>Error loading content.</p>';
         });
-      } catch (err) {
-        console.error("Error loading gallery:", folder, err);
-      }
-    }
+}
 
-    // Load all sections
-    loadGallery("products", "products");
-    loadGallery("services", "services");
-    loadGallery("works", "works");
-    loadGallery("offers", "offers");
-  <!-- ✅ Auto-gallery script -->
-  <script>
+// In calls ko theek se karna hai:
+loadGallery("products", "products");
+loadGallery("service", "services"); // Dhyan dein: 'service' (singular) use kiya hai config.yml se match karne ke liye
+loadGallery("works", "works");
+loadGallery("offers", "offers");
