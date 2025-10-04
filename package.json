@@ -1,14 +1,13 @@
 {
   "name": "aliflt-cms-site",
   "version": "1.0.0",
-  "description": "CMS dependencies and file copy script",
+  "description": "Custom Clothing Store with Netlify CMS and Functions",
   "dependencies": {
     "js-yaml": "^4.1.0",
     "gray-matter": "^4.0.3",
     "copyfiles": "^2.4.1"
   },
   "scripts": {
-    "build": "copyfiles -f offers/*.md products/*.md service/*.md works/*.md netlify/functions/ && echo 'Content files copied'"
-    /* 👆 Ismein humne sirf *.md files ko copy karne ka command diya hai */
+    "build": "copyfiles -u 1 offers/**/* products/**/* service/**/* works/**/* netlify/functions/ && echo 'Content files copied'"
   }
 }
