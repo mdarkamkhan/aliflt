@@ -12,3 +12,4 @@
       "works"
     ]
     destination = "netlify/functions"
+    
