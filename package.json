@@ -4,9 +4,11 @@
   "description": "Custom Clothing Store with Netlify CMS and Functions",
   "dependencies": {
     "js-yaml": "^4.1.0",
-    "gray-matter": "^4.0.3"
+    "gray-matter": "^4.0.3",
+    "copyfiles": "^2.4.1"  <-- Nayi dependency
   },
   "scripts": {
-    "build": "echo 'Build successful' "
+    "build": "copyfiles -u 1 offers/**/* netlify/functions/ && echo 'Content files copied' && exit 0" 
+    /* 👆 Yeh script 'offers' ke content ko function folder mein copy karega */
   }
 }
