@@ -5,7 +5,6 @@
 [[plugins]]
   package = "@netlify/plugin-copy-contents"
   [plugins.inputs]
-    # Root mein maujood offers, products, etc. ko functions folder mein copy karein
     source = [
       "offers", 
       "products", 
