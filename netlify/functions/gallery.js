@@ -6,20 +6,35 @@ exports.handler = async (event, context) => {
   try {
     const { category } = event.queryStringParameters;
     
-    // Yahaan path ko final aur sabse stable tareeke se set kiya gaya hai!
-    // LAMBDA_TASK_ROOT Netlify ka function folder hai, isliye hum do steps upar jaate hain.
-    const rootDir = path.join(process.env.LAMBDA_TASK_ROOT, '..', '..');
-
     const allowedCategories = ['offers', 'products', 'service', 'works']; 
     if (!allowedCategories.includes(category)) {
       return { statusCode: 400, body: 'Invalid category' };
     }
 
-    // Is path mein hi aapka data (offers/, products/) maujood hota hai
-    const contentDir = path.join(rootDir, category); 
-    
-    if (!fs.existsSync(contentDir)) {
-      // Agar contentDir nahi mila, toh empty array bhejte hain
+    // Possible paths Netlify might use for content (most common first)
+    const possiblePaths = [
+      // 1. Common Netlify deploy path from root
+      path.join(__dirname, '..', '..', category), 
+      // 2. LAMBDA_TASK_ROOT path (which we tried before)
+      path.join(process.env.LAMBDA_TASK_ROOT, '..', '..', category),
+      // 3. Simple relative path (which we tried before)
+      path.join(process.cwd(), category),
+      // 4. Fallback path used in some environments
+      path.join('/', 'var', 'task', category) 
+    ];
+
+    let contentDir = null;
+
+    // Har path par check karte hain
+    for (const testPath of possiblePaths) {
+      if (fs.existsSync(testPath)) {
+        contentDir = testPath;
+        break; // Sahi path mil gaya, ruk jao
+      }
+    }
+
+    if (!contentDir) {
+      console.log(`Content directory not found for ${category} in any common path.`);
       return { statusCode: 200, body: JSON.stringify([]) }; 
     }
 
@@ -42,10 +57,11 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(galleryItems), 
     };
   } catch (error) {
-    console.error('Final Runtime Error (LAMBDA PATH):', error);
+    console.error('Ultimate Path Check Runtime Error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: `Function failed due to path issue: ${error.message}` }),
+      body: JSON.stringify({ error: `Final Function Crash: ${error.message}` }),
     };
   }
 };
+  
