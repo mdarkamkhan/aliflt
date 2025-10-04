@@ -2,13 +2,9 @@
   publish = "."
   functions = "netlify/functions"
 
-[[plugins]]
-  package = "@netlify/plugin-copy-contents"
-  [plugins.inputs]
-    source = [
-      "offers", 
-      "products", 
-      "service", 
-      "works"
-    ]
-    destination = "netlify/functions"
+# Niche wala pura section delete kar do:
+# [[plugins]]
+#   package = "@netlify/plugin-copy-contents"
+#   [plugins.inputs]
+#     source = ["offers", "products", "service", "works"]
+#     destination = "netlify/functions"
