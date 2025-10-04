@@ -1,40 +1,21 @@
 const fs = require('fs');
-const path = require('path');
+// const path = require('path'); <--- Path module hata diya
 const matter = require('gray-matter'); 
 
 exports.handler = async (event, context) => {
   try {
     const { category } = event.queryStringParameters;
     
+    // Ab contentDir seedha function folder ke andar dekhega
+    const contentDir = `./${category}`; 
+
     const allowedCategories = ['offers', 'products', 'service', 'works']; 
     if (!allowedCategories.includes(category)) {
       return { statusCode: 400, body: 'Invalid category' };
     }
 
-    // Possible paths Netlify might use for content (most common first)
-    const possiblePaths = [
-      // 1. Common Netlify deploy path from root
-      path.join(__dirname, '..', '..', category), 
-      // 2. LAMBDA_TASK_ROOT path (which we tried before)
-      path.join(process.env.LAMBDA_TASK_ROOT, '..', '..', category),
-      // 3. Simple relative path (which we tried before)
-      path.join(process.cwd(), category),
-      // 4. Fallback path used in some environments
-      path.join('/', 'var', 'task', category) 
-    ];
-
-    let contentDir = null;
-
-    // Har path par check karte hain
-    for (const testPath of possiblePaths) {
-      if (fs.existsSync(testPath)) {
-        contentDir = testPath;
-        break; // Sahi path mil gaya, ruk jao
-      }
-    }
-
-    if (!contentDir) {
-      console.log(`Content directory not found for ${category} in any common path.`);
+    if (!fs.existsSync(contentDir)) {
+      // Agar contentDir nahi mila, toh empty array bhejte hain
       return { statusCode: 200, body: JSON.stringify([]) }; 
     }
 
@@ -42,7 +23,7 @@ exports.handler = async (event, context) => {
     
     const galleryItems = files.map(file => {
       if (file.endsWith('.md')) { 
-        const fullPath = path.join(contentDir, file);
+        const fullPath = `${contentDir}/${file}`; // Simple string path
         const fileContent = fs.readFileSync(fullPath, 'utf8');
         
         const { data } = matter(fileContent); 
@@ -57,11 +38,11 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(galleryItems), 
     };
   } catch (error) {
-    console.error('Ultimate Path Check Runtime Error:', error);
+    console.error('Final Runtime Error (Check new path):', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: `Final Function Crash: ${error.message}` }),
     };
   }
 };
-  
+      
