@@ -6,21 +6,26 @@ exports.handler = async (event, context) => {
   try {
     const { category } = event.queryStringParameters;
     
-    // Yahaan path fix kiya gaya hai:
-    // Netlify functions root level se shuru nahi hote, isliye hum ek step upar jaate hain
-    const rootDir = path.join(process.cwd(), '..'); 
+    // Yahaan path ko final baar fix kiya gaya hai!
+    // Content files repo ki root directory mein deploy hoti hain,
+    // aur Netlify ka deploy path '/var/task/repo/' se banta hai.
+    const contentDir = path.join(process.cwd(), category); 
 
     const allowedCategories = ['offers', 'products', 'service', 'works']; 
     if (!allowedCategories.includes(category)) {
       return { statusCode: 400, body: 'Invalid category' };
     }
 
-    // Ab contentDir ko rootDir se jodte hain
-    const contentDir = path.join(rootDir, 'repo', category); 
-    
     if (!fs.existsSync(contentDir)) {
-      console.log(`Content directory not found: ${contentDir}`);
-      return { statusCode: 200, body: JSON.stringify([]) }; 
+      // Agar contentDir nahi mila, toh Netlify ke deploy structure ko check karte hain.
+      const fallbackDir = path.join(process.cwd(), '..', category);
+      if (fs.existsSync(fallbackDir)) {
+          // Agar backup path mil gaya, toh use karte hain
+          contentDir = fallbackDir; 
+      } else {
+          // Agar dono path nahi mile
+          return { statusCode: 200, body: JSON.stringify([]) }; 
+      }
     }
 
     const files = fs.readdirSync(contentDir);
@@ -42,11 +47,10 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(galleryItems), 
     };
   } catch (error) {
-    // Log the error for troubleshooting
     console.error('Final Runtime Error (Check new path):', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Function failed due to final path issue.' }),
+      body: JSON.stringify({ error: `Function failed: ${error.message}` }),
     };
   }
 };
