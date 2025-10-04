@@ -6,20 +6,20 @@ exports.handler = async (event, context) => {
   try {
     const { category } = event.queryStringParameters;
     
-    // Yahaan path ko final baar fix kiya gaya hai!
-    // Netlify mein content files /var/task/ ke bahar hoti hain।
-    // Hum function folder se do steps upar jaakar content folder tak pahunchenge।
-    const rootPath = path.join(process.cwd(), '..', '..');
+    // Yahaan path ko FINAL aur SABSE RELIABLE tareeke se fix kiya gaya hai!
+    // __dirname (current directory: netlify/functions/) se do steps upar jao (root /)
+    const projectRoot = path.join(__dirname, '..', '..');
 
     const allowedCategories = ['offers', 'products', 'service', 'works']; 
     if (!allowedCategories.includes(category)) {
       return { statusCode: 400, body: 'Invalid category' };
     }
 
-    // Ab contentDir ko content folder se jodo
-    const contentDir = path.join(rootPath, category);
+    // Root / se content folder ka path banao (e.g., /offers)
+    const contentDir = path.join(projectRoot, category);
     
     if (!fs.existsSync(contentDir)) {
+      // Ab hum naya path log kar rahe hain, jisse pata chale ki woh kahan dhoondh raha hai!
       console.log(`Content directory not found at: ${contentDir}`);
       return { statusCode: 200, body: JSON.stringify([]) }; 
     }
@@ -43,11 +43,11 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(galleryItems), 
     };
   } catch (error) {
-    console.error('Final Runtime Error (Check new path):', error);
+    console.error('Final Runtime Error (Using __dirname):', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: `Function failed due to path issue: ${error.message}` }),
+      body: JSON.stringify({ error: `Function failed due to final path issue: ${error.message}` }),
     };
   }
 };
-  
+      
