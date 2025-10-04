@@ -6,20 +6,18 @@ exports.handler = async (event, context) => {
   try {
     const { category } = event.queryStringParameters;
     
-    // Yahaan path ko FINAL aur SABSE RELIABLE tareeke se fix kiya gaya hai!
-    // __dirname (current directory: netlify/functions/) se do steps upar jao (root /)
-    const projectRoot = path.join(__dirname, '..', '..');
+    // Yahaan path ko simple relative path par set kiya gaya hai,
+    // kyunki content files ab function ke bagal mein hain।
+    // process.cwd() is '/var/task/' (function's folder)
+    const contentDir = path.join(process.cwd(), category); 
 
     const allowedCategories = ['offers', 'products', 'service', 'works']; 
     if (!allowedCategories.includes(category)) {
       return { statusCode: 400, body: 'Invalid category' };
     }
 
-    // Root / se content folder ka path banao (e.g., /offers)
-    const contentDir = path.join(projectRoot, category);
-    
     if (!fs.existsSync(contentDir)) {
-      // Ab hum naya path log kar rahe hain, jisse pata chale ki woh kahan dhoondh raha hai!
+      // Agar folder ab bhi nahi mila (jo ki nahi hona chahiye), toh log karein
       console.log(`Content directory not found at: ${contentDir}`);
       return { statusCode: 200, body: JSON.stringify([]) }; 
     }
@@ -27,6 +25,7 @@ exports.handler = async (event, context) => {
     const files = fs.readdirSync(contentDir);
     
     const galleryItems = files.map(file => {
+      // Sirf Markdown files padhega, .gitkeep ko chhod dega
       if (file.endsWith('.md')) { 
         const fullPath = path.join(contentDir, file);
         const fileContent = fs.readFileSync(fullPath, 'utf8');
@@ -43,11 +42,10 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(galleryItems), 
     };
   } catch (error) {
-    console.error('Final Runtime Error (Using __dirname):', error);
+    console.error('Final Runtime Error (The Tested Path):', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: `Function failed due to final path issue: ${error.message}` }),
+      body: JSON.stringify({ error: `Function crashed: ${error.message}` }),
     };
   }
 };
-      
