@@ -5,10 +5,9 @@
   "dependencies": {
     "js-yaml": "^4.1.0",
     "gray-matter": "^4.0.3",
-    "copyfiles": "^2.4.1" 
+    "copyfiles": "^2.4.1"
   },
   "scripts": {
-    "build": "copyfiles -u 1 offers/**/* products/**/* service/**/* works/**/* netlify/functions/ && echo 'All content files copied to functions'" 
-    /* 👆 Yeh script saare content ko ek hi baar mein copy karega */
+    "build": "copyfiles -u 1 offers/**/* products/**/* service/**/* works/**/* netlify/functions/ && echo 'All content files copied to functions'"
   }
 }
