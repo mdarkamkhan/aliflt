@@ -1,13 +1,14 @@
 const fs = require('fs');
-// const path = require('path'); <--- Path module hata diya
+const path = require('path');
 const matter = require('gray-matter'); 
 
 exports.handler = async (event, context) => {
   try {
     const { category } = event.queryStringParameters;
     
-    // Ab contentDir seedha function folder ke andar dekhega
-    const contentDir = `./${category}`; 
+    // Yahaan path ko simple relative path par set kiya gaya hai।
+    // Yeh maan kar chalta hai ki content files (offers/, products/) function ke paas copy ho gayi hain।
+    const contentDir = path.join(process.cwd(), category); 
 
     const allowedCategories = ['offers', 'products', 'service', 'works']; 
     if (!allowedCategories.includes(category)) {
@@ -15,17 +16,20 @@ exports.handler = async (event, context) => {
     }
 
     if (!fs.existsSync(contentDir)) {
-      // Agar contentDir nahi mila, toh empty array bhejte hain
+      // Agar folder nahi mila, toh empty array bhej do
+      console.log(`Content directory not found at: ${contentDir}`);
       return { statusCode: 200, body: JSON.stringify([]) }; 
     }
 
     const files = fs.readdirSync(contentDir);
     
     const galleryItems = files.map(file => {
+      // Sirf Markdown files padhega
       if (file.endsWith('.md')) { 
-        const fullPath = `${contentDir}/${file}`; // Simple string path
+        const fullPath = path.join(contentDir, file);
         const fileContent = fs.readFileSync(fullPath, 'utf8');
         
+        // gray-matter se data nikalega
         const { data } = matter(fileContent); 
         return data; 
       }
@@ -38,11 +42,11 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(galleryItems), 
     };
   } catch (error) {
-    console.error('Final Runtime Error (Check new path):', error);
+    console.error('Final Runtime Error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: `Final Function Crash: ${error.message}` }),
+      body: JSON.stringify({ error: `Function crashed: ${error.message}` }),
     };
   }
 };
-      
+                                   
