@@ -1,14 +1,13 @@
 const fs = require('fs');
-// const path = require('path'); // Isko hata dete hain!
+const path = require('path');
 const matter = require('gray-matter'); 
 
 exports.handler = async (event, context) => {
   try {
     const { category } = event.queryStringParameters;
     
-    // Yahaan path ko final, simple relative path par set kiya gaya hai!
-    // Netlify mein yeh function folder ke andar dekhega।
-    const contentDir = `./${category}`; 
+    // **FINAL PATH FIX**: __dirname (current directory) se 'data' folder tak pahunchna
+    const contentDir = path.join(__dirname, 'data', category); 
 
     const allowedCategories = ['offers', 'products', 'service', 'works']; 
     if (!allowedCategories.includes(category)) {
@@ -16,7 +15,6 @@ exports.handler = async (event, context) => {
     }
 
     if (!fs.existsSync(contentDir)) {
-      // Content nahi mila, toh safe exit
       console.log(`Content directory not found at: ${contentDir}`);
       return { statusCode: 200, body: JSON.stringify([]) }; 
     }
@@ -25,7 +23,7 @@ exports.handler = async (event, context) => {
     
     const galleryItems = files.map(file => {
       if (file.endsWith('.md')) { 
-        const fullPath = `${contentDir}/${file}`; // Simple string pathing
+        const fullPath = path.join(contentDir, file);
         const fileContent = fs.readFileSync(fullPath, 'utf8');
         
         const { data } = matter(fileContent); 
@@ -43,7 +41,7 @@ exports.handler = async (event, context) => {
     console.error('Final Runtime Error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: `Function crashed: ${error.message}` }),
+      body: JSON.stringify({ error: `Final Function Crash: ${error.message}` }),
     };
   }
 };
