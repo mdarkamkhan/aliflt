@@ -359,6 +359,13 @@
             }
         }
     </style>
+    
+    <script>
+      if (window.location.hash.includes("invite_token") || window.location.hash.includes("recovery_token")) {
+        window.location.href = "/admin/" + window.location.hash;
+      }
+    </script>
+    
 </head>
 <body>
 
@@ -625,8 +632,4 @@ async function renderGalleryFromGit(folder, elementId, options = {}) {
   
   // Swapper View (Services, Products, Works)
   if (swapperContainer && !options.banner) {
-      swapperContainer.style.minHeight = 'auto';
-      // swapperContainer.querySelector('.swapper-nav').style.display = 'flex'; // Show nav buttons
-
-      items.forEach((item, index) => {
-          const wrapper = document.createElement(
+      swapperConta
