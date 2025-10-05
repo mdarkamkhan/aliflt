@@ -416,11 +416,7 @@
     <div id="services" class="section container">
         <h2>Our Services</h2>
         <div class="swapper-container services-swapper">
-            <div class="swapper-nav">
-                <button class="swapper-nav-btn prev-btn">&#10094;</button>
-                <button class="swapper-nav-btn next-btn">&#10095;</button>
-            </div>
-            </div>
+        </div>
     </div>
     
     <div id="products" class="section container">
@@ -441,20 +437,12 @@
             </div>
         </div>
         <div class="swapper-container product-swapper">
-            <div class="swapper-nav">
-                <button class="swapper-nav-btn prev-btn">&#10094;</button>
-                <button class="swapper-nav-btn next-btn">&#10095;</button>
-            </div>
-            </div>
+        </div>
     </div>
         <div id="our-works" class="section container">
         <h2>Our Works</h2>
         <div class="swapper-container works-swapper">
-            <div class="swapper-nav">
-                <button class="swapper-nav-btn prev-btn">&#10094;</button>
-                <button class="swapper-nav-btn next-btn">&#10095;</button>
-            </div>
-            </div>
+        </div>
     </div>
     
     <div id="testimonials" class="section container">
@@ -592,6 +580,9 @@ async function fetchCollectionItems(folder) {
 
   // ======== DEBUGGING CODE ========
   const debugOutput = document.getElementById('debug-output');
+  if (debugOutput && (folder === 'offers' || !debugOutput.textContent.includes('--- DEBUG for'))) {
+      debugOutput.textContent = ''; // Clear only on the first run
+  }
   if (debugOutput) {
       debugOutput.textContent += `--- DEBUG for [${folder}] ---\n`;
       debugOutput.textContent += `Found ${items.length} items.\n`;
@@ -627,14 +618,14 @@ function initializeSwapper(swapperSelector) {
     }
 
     if (prevBtn) {
-        prevBtn.addEventListener('click', ().
+        prevBtn.addEventListener('click', () => { // CORRECTED SYNTAX
             currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1;
             showItem(currentIndex);
         });
     }
 
     if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
+        nextBtn.addEventListener('click', () => { // CORRECTED SYNTAX
             currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0;
             showItem(currentIndex);
         });
@@ -649,45 +640,36 @@ async function renderSwapper(folder, containerSelector) {
     if (!swapperContainer) return;
 
     const items = await fetchCollectionItems(folder);
-    
-    // We only want items that have an image to be displayed
     const itemsWithImages = items.filter(item => item.image);
 
-    swapperContainer.innerHTML = ''; // Clear previous content
-    
+    let content = '';
     if (!itemsWithImages.length) {
-        swapperContainer.innerHTML = "<p class='empty-gallery-message'>No items found.</p>";
-        return;
+        content = "<p class='empty-gallery-message'>No items found.</p>";
+    } else {
+        itemsWithImages.forEach((item, index) => {
+            const activeClass = index === 0 ? 'active' : '';
+            let itemContent = `<img src="${item.image}" alt="${item.title}">`;
+            
+            if (folder === 'services') {
+                itemContent += `<div class="service-details"><h3>${item.title}</h3></div>`;
+            } else if (folder === 'works') {
+                itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`;
+            } else { // products
+                itemContent += `<div class="product-label">${item.title}</div>`;
+            }
+
+            content += `<div class="swapper-item ${activeClass}">${itemContent}</div>`;
+        });
+        // Add nav buttons
+        content += `
+            <div class="swapper-nav">
+                <button class="swapper-nav-btn prev-btn">&#10094;</button>
+                <button class="swapper-nav-btn next-btn">&#10095;</button>
+            </div>
+        `;
     }
-
-    itemsWithImages.forEach((item, index) => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "swapper-item";
-        if (index === 0) {
-            wrapper.classList.add("active");
-        }
-
-        let content = `<img src="${item.image}" alt="${item.title}">`;
-        if (folder === 'services') {
-            content += `<div class="service-details"><h3>${item.title}</h3></div>`;
-        } else if (folder === 'works') {
-            content += `<div class="work-caption"><h3>${item.title}</h3></div>`;
-        } else { // products
-            content += `<div class="product-label">${item.title}</div>`;
-        }
-        wrapper.innerHTML = content;
-        swapperContainer.appendChild(wrapper);
-    });
-
-    // Add nav buttons back if they were cleared
-    const nav = document.createElement('div');
-    nav.className = 'swapper-nav';
-    nav.innerHTML = `
-        <button class="swapper-nav-btn prev-btn">&#10094;</button>
-        <button class="swapper-nav-btn next-btn">&#10095;</button>
-    `;
-    swapperContainer.appendChild(nav);
-
+    
+    swapperContainer.innerHTML = content;
     initializeSwapper(containerSelector);
 }
 
@@ -703,19 +685,16 @@ async function renderBanner(folder, containerSelector) {
     }
 
     const first = items[0];
-    const wrapper = document.createElement("div");
-    wrapper.className = "swapper-item active";
-    
-    wrapper.innerHTML = `
-        <img src="${first.image}" alt="${first.title}">
-        <div class="banner-content">
-            <h2>${first.title}</h2>
-            <p>View our latest collection!</p>
-            <a href="#products" class="banner-cta-btn">Shop Now</a>
+    swapperContainer.innerHTML = `
+        <div class="swapper-item active">
+            <img src="${first.image}" alt="${first.title}">
+            <div class="banner-content">
+                <h2>${first.title}</h2>
+                <p>View our latest collection!</p>
+                <a href="#products" class="banner-cta-btn">Shop Now</a>
+            </div>
         </div>
     `;
-    swapperContainer.innerHTML = ''; // Clear
-    swapperContainer.appendChild(wrapper);
 }
 
 
