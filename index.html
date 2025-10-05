@@ -363,7 +363,7 @@
 <body>
 
     <div id="top-banner">
-    Customutton class="close-banner-btn">&times;</button>
+        <button class="close-banner-btn">&times;</button>
         <div class="swapper-container banner-swapper">
             </div>
     </div>
@@ -499,5 +499,134 @@
             <p>&copy; 2025 ALiF ladies tailor . All Rights Reserved.</p>
         </div>
     </footer>
+    
 <script>
-</script>
+/* ====== CONFIG (Do not change these values, they are for your repository) ====== */
+const OWNER = "mdarkamkhan";      
+const REPO  = "aliflt";           
+const SITE_ORIGIN = "https://aliflt.netlify.app"; 
+const CACHE_TTL = 60 * 60 * 1000; // 1 hour cache for GitHub results
+
+/* ====== UTIL: parse YAML frontmatter from markdown */
+function parseYAMLFrontMatter(text) {
+  const fm = text.match(/^---\s*([\s\S]*?)\s*---/);
+  if (!fm) return {};
+  const lines = fm[1].split(/\r?\n/);
+  const data = {};
+  for (let line of lines) {
+    const m = line.match(/^\s*([A-Za-z0-9_\- ]+)\s*:\s*(.+)$/);
+    if (m) {
+      let key = m[1].trim();
+      let val = m[2].trim();
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      data[key] = val;
+    }
+  }
+  return data;
+}
+
+/* ====== Fetch and cache folder listing + parse entries ====== */
+async function fetchCollectionItems(folder) {
+  const cacheKey = `ghc_${OWNER}_${REPO}_${folder}`;
+  try {
+    const rawCache = localStorage.getItem(cacheKey);
+    if (rawCache) {
+      const parsed = JSON.parse(rawCache);
+      if (Date.now() - parsed.ts < CACHE_TTL) return parsed.items;
+    }
+  } catch (e) { /* ignore parse errors */ }
+
+  const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${folder}`;
+  const res = await fetch(apiUrl);
+  if (!res.ok) {
+    console.warn(`GitHub API error for ${folder}:`, res.status, res.statusText);
+    return [];
+  }
+  const list = await res.json(); 
+
+  const items = [];
+  for (const file of list) {
+    if (!file.name.match(/\.(md|markdown|json)$/i)) continue; 
+    try {
+      const rawText = await fetch(file.download_url).then(r => r.text());
+      let data = {};
+      if (file.name.match(/\.(md|markdown)$/i)) {
+        data = parseYAMLFrontMatter(rawText);
+      } else { 
+        try { data = JSON.parse(rawText); } catch(e){ data = {}; }
+      }
+      
+      let img = data.image || data.img || data.Image || data.photo || null;
+      let title = data.title || data.Title || data.name || file.name.replace(/\.(md|markdown|json)$/i, "");
+      
+      if (img) {
+        if (img.startsWith("/")) img = SITE_ORIGIN + img;
+        else if (!img.startsWith("http")) img = SITE_ORIGIN + "/" + img;
+      }
+      if (img) items.push({ title, image: img, raw: data, slug: file.name });
+    } catch (err) {
+      console.error("Error reading file", file.name, err);
+    }
+  }
+
+  try {
+    localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), items }));
+  } catch (e) {}
+
+  return items;
+}
+
+/* ====== Render helper ====== */
+function createImgEl(src, alt = "") {
+  const img = document.createElement("img");
+  img.src = src;
+  img.alt = alt;
+  img.loading = "lazy";
+  img.style.width = "100%";
+  img.style.borderRadius = "8px";
+  img.style.objectFit = "cover";
+  return img;
+}
+
+/* ====== Public function to render a folder into an elementId ====== */
+async function renderGalleryFromGit(folder, elementId, options = {}) {
+  const container = document.getElementById(elementId);
+  if (!container) return;
+  container.innerHTML = ""; 
+
+  const items = await fetchCollectionItems(folder);
+  if (!items.length) {
+    container.innerHTML = "<p class='empty-gallery-message'>No items found. Upload content via CMS.</p>";
+    return;
+  }
+
+  // Find the swapper container for this section
+  const swapperContainer = container.closest('.swapper-container');
+
+  if (options.banner && swapperContainer) {
+    // Banner view (Top Banner)
+    const first = items[0];
+    const wrapper = document.createElement("div");
+    wrapper.className = "swapper-item active"; // Make it active to display
+    
+    wrapper.innerHTML = `
+        <img src="${first.image}" alt="${first.title}">
+        <div class="banner-content">
+            <h2>${first.title}</h2>
+            <p>View our latest collection!</p>
+            <a href="#products" class="banner-cta-btn">Shop Now</a>
+        </div>
+    `;
+    swapperContainer.appendChild(wrapper);
+    return;
+  }
+  
+  // Swapper View (Services, Products, Works)
+  if (swapperContainer && !options.banner) {
+      swapperContainer.style.minHeight = 'auto';
+      swapperContainer.querySelector('.swapper-nav').style.display = 'flex'; // Show nav buttons
+
+      items.forEach((item, index) => {
+          const wrapper = document.createElement("di
