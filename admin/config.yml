@@ -9,6 +9,8 @@ collections:
   - name: "offers"
     label: "Offers Banner"
     folder: "offers"
+    media_folder: "uploads"
+    public_folder: "/uploads"
     create: true
     slug: "{{slug}}"
     fields:
@@ -18,15 +20,19 @@ collections:
   - name: "products"
     label: "Products"
     folder: "products"
+    media_folder: "uploads"
+    public_folder: "/uploads"
     create: true
     slug: "{{slug}}"
     fields:
       - { name: "title", label: "Title", widget: "string" }
-      - { name: "image", label: "Image", widget: "image" }
+      - { name: "image", "label": "Image", widget: "image" }
 
   - name: "services"
     label: "Services"
     folder: "services"
+    media_folder: "uploads"
+    public_folder: "/uploads"
     create: true
     slug: "{{slug}}"
     fields:
@@ -36,6 +42,8 @@ collections:
   - name: "works"
     label: "Our Works"
     folder: "works"
+    media_folder: "uploads"
+    public_folder: "/uploads"
     create: true
     slug: "{{slug}}"
     fields:
