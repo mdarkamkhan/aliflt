@@ -6,7 +6,8 @@ exports.handler = async (event, context) => {
   try {
     const { category } = event.queryStringParameters;
     
-    // **FINAL PATH FIX**: __dirname (current directory) se 'data' folder tak pahunchna
+    // **ABSOLUTE FINAL PATH FIX**: __dirname (current directory of gallery.js) se shuru karo
+    // Isse yeh path banega: /var/task/data/offers
     const contentDir = path.join(__dirname, 'data', category); 
 
     const allowedCategories = ['offers', 'products', 'service', 'works']; 
@@ -15,6 +16,7 @@ exports.handler = async (event, context) => {
     }
 
     if (!fs.existsSync(contentDir)) {
+      // Log ki tarah message print kar do
       console.log(`Content directory not found at: ${contentDir}`);
       return { statusCode: 200, body: JSON.stringify([]) }; 
     }
@@ -38,10 +40,11 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(galleryItems), 
     };
   } catch (error) {
-    console.error('Final Runtime Error:', error);
+    console.error('Ultimate Function Crash:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: `Final Function Crash: ${error.message}` }),
     };
   }
 };
+                                                             
