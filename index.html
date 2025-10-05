@@ -204,10 +204,11 @@
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: none; /* Hide by default */
         }
         .swapper-item.active {
             opacity: 1;
-            display: block;
+            display: block; /* Show only active */
         }
         .swapper-item img {
             width: 100%;
@@ -343,11 +344,11 @@
             border: none;
             font-size: 1.5em;
             padding: 5px 10px;
-            border-radius: 03%;
+            border-radius: 3%;
             cursor: pointer;
             z-index: 100;
         }
-        @media (max-width: 900 px) {
+        @media (max-width: 900px) {
             #top-banner {
                 height: 50vh; /* Adjust height for smaller screens */
             }
@@ -368,7 +369,8 @@
     
 </head>
 <body>
-
+    
+    <pre id="debug-output" style="background-color: #fff; border: 2px solid red; padding: 15px; margin: 10px; white-space: pre-wrap; word-wrap: break-word; font-size: 12px; max-height: 400px; overflow-y: auto;">Debug Output Will Appear Here...</pre>
     <div id="top-banner">
         <button class="close-banner-btn">&times;</button>
         <div class="swapper-container banner-swapper">
@@ -445,8 +447,7 @@
             </div>
             </div>
     </div>
-    
-    <div id="our-works" class="section container">
+        <div id="our-works" class="section container">
         <h2>Our Works</h2>
         <div class="swapper-container works-swapper">
             <div class="swapper-nav">
@@ -508,11 +509,11 @@
     </footer>
     
 <script>
-/* ====== CONFIG (Do not change these values, they are for your repository) ====== */
+/* ====== CONFIG ====== */
 const OWNER = "mdarkamkhan";      
 const REPO  = "aliflt";           
 const SITE_ORIGIN = "https://aliflt.netlify.app"; 
-const CACHE_TTL = 60 * 60 * 1000; // 1 hour cache for GitHub results
+const CACHE_TTL = 5 * 1000; // Cache is now only 5 seconds for debugging
 
 /* ====== UTIL: parse YAML frontmatter from markdown */
 function parseYAMLFrontMatter(text) {
@@ -537,18 +538,23 @@ function parseYAMLFrontMatter(text) {
 /* ====== Fetch and cache folder listing + parse entries ====== */
 async function fetchCollectionItems(folder) {
   const cacheKey = `ghc_${OWNER}_${REPO}_${folder}`;
-  try {
-    const rawCache = localStorage.getItem(cacheKey);
-    if (rawCache) {
-      const parsed = JSON.parse(rawCache);
-      if (Date.now() - parsed.ts < CACHE_TTL) return parsed.items;
-    }
-  } catch (e) { /* ignore parse errors */ }
+  // For debugging, we temporarily bypass the cache to always get fresh data
+  // try {
+  //   const rawCache = localStorage.getItem(cacheKey);
+  //   if (rawCache) {
+  //     const parsed = JSON.parse(rawCache);
+  //     if (Date.now() - parsed.ts < CACHE_TTL) return parsed.items;
+  //   }
+  // } catch (e) { /* ignore parse errors */ }
 
   const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${folder}`;
   const res = await fetch(apiUrl);
   if (!res.ok) {
     console.warn(`GitHub API error for ${folder}:`, res.status, res.statusText);
+    const debugOutput = document.getElementById('debug-output');
+    if (debugOutput) {
+        debugOutput.textContent += `\n--- GITHUB API ERROR for [${folder}]: ${res.status} ${res.statusText} ---\n`;
+    }
     return [];
   }
   const list = await res.json(); 
@@ -572,7 +578,9 @@ async function fetchCollectionItems(folder) {
         if (img.startsWith("/")) img = SITE_ORIGIN + img;
         else if (!img.startsWith("http")) img = SITE_ORIGIN + "/" + img;
       }
-      if (img) items.push({ title, image: img, raw: data, slug: file.name });
+      
+      items.push({ title, image: img, raw: data, slug: file.name });
+      
     } catch (err) {
       console.error("Error reading file", file.name, err);
     }
@@ -582,41 +590,121 @@ async function fetchCollectionItems(folder) {
     localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), items }));
   } catch (e) {}
 
+  // ======== DEBUGGING CODE ========
+  const debugOutput = document.getElementById('debug-output');
+  if (debugOutput) {
+      debugOutput.textContent += `--- DEBUG for [${folder}] ---\n`;
+      debugOutput.textContent += `Found ${items.length} items.\n`;
+      debugOutput.textContent += JSON.stringify(items, null, 2);
+      debugOutput.textContent += `\n\n`;
+  }
+  // ===============================
+
   return items;
 }
 
-/* ====== Render helper ====== */
-function createImgEl(src, alt = "") {
-  const img = document.createElement("img");
-  img.src = src;
-  img.alt = alt;
-  img.loading = "lazy";
-  img.style.width = "100%";
-  img.style.borderRadius = "8px";
-  img.style.objectFit = "cover";
-  return img;
+
+/* ====== Swapper and Gallery Logic ====== */
+function initializeSwapper(swapperSelector) {
+    const swapper = document.querySelector(swapperSelector);
+    if (!swapper) return;
+
+    const items = swapper.querySelectorAll('.swapper-item');
+    const prevBtn = swapper.querySelector('.prev-btn');
+    const nextBtn = swapper.querySelector('.next-btn');
+    let currentIndex = 0;
+
+    if (items.length <= 1) {
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+        return;
+    }
+
+    function showItem(index) {
+        items.forEach((item, i) => {
+            item.classList.toggle('active', i === index);
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', ().
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1;
+            showItem(currentIndex);
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0;
+            showItem(currentIndex);
+        });
+    }
+    
+    showItem(currentIndex);
 }
 
-/* ====== Public function to render a folder into an elementId ====== */
-async function renderGalleryFromGit(folder, elementId, options = {}) {
-  const container = document.getElementById(elementId);
-  if (!container) return;
-  container.innerHTML = ""; 
 
-  const items = await fetchCollectionItems(folder);
-  if (!items.length) {
-    container.innerHTML = "<p class='empty-gallery-message'>No items found. Upload content via CMS.</p>";
-    return;
-  }
+async function renderSwapper(folder, containerSelector) {
+    const swapperContainer = document.querySelector(containerSelector);
+    if (!swapperContainer) return;
 
-  // Find the swapper container for this section
-  const swapperContainer = container.closest('.swapper-container');
+    const items = await fetchCollectionItems(folder);
+    
+    // We only want items that have an image to be displayed
+    const itemsWithImages = items.filter(item => item.image);
 
-  if (options.banner && swapperContainer) {
-    // Banner view (Top Banner)
+    swapperContainer.innerHTML = ''; // Clear previous content
+    
+    if (!itemsWithImages.length) {
+        swapperContainer.innerHTML = "<p class='empty-gallery-message'>No items found.</p>";
+        return;
+    }
+
+    itemsWithImages.forEach((item, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "swapper-item";
+        if (index === 0) {
+            wrapper.classList.add("active");
+        }
+
+        let content = `<img src="${item.image}" alt="${item.title}">`;
+        if (folder === 'services') {
+            content += `<div class="service-details"><h3>${item.title}</h3></div>`;
+        } else if (folder === 'works') {
+            content += `<div class="work-caption"><h3>${item.title}</h3></div>`;
+        } else { // products
+            content += `<div class="product-label">${item.title}</div>`;
+        }
+        wrapper.innerHTML = content;
+        swapperContainer.appendChild(wrapper);
+    });
+
+    // Add nav buttons back if they were cleared
+    const nav = document.createElement('div');
+    nav.className = 'swapper-nav';
+    nav.innerHTML = `
+        <button class="swapper-nav-btn prev-btn">&#10094;</button>
+        <button class="swapper-nav-btn next-btn">&#10095;</button>
+    `;
+    swapperContainer.appendChild(nav);
+
+    initializeSwapper(containerSelector);
+}
+
+async function renderBanner(folder, containerSelector) {
+    const swapperContainer = document.querySelector(containerSelector);
+    if (!swapperContainer) return;
+
+    const items = await fetchCollectionItems(folder);
+    if (!items.length || !items[0].image) {
+        const banner = document.getElementById('top-banner');
+        if (banner) banner.style.display = 'none';
+        return;
+    }
+
     const first = items[0];
     const wrapper = document.createElement("div");
-    wrapper.className = "swapper-item active"; // Make it active to display
+    wrapper.className = "swapper-item active";
     
     wrapper.innerHTML = `
         <img src="${first.image}" alt="${first.title}">
@@ -626,10 +714,44 @@ async function renderGalleryFromGit(folder, elementId, options = {}) {
             <a href="#products" class="banner-cta-btn">Shop Now</a>
         </div>
     `;
+    swapperContainer.innerHTML = ''; // Clear
     swapperContainer.appendChild(wrapper);
-    return;
-  }
-  
-  // Swapper View (Services, Products, Works)
-  if (swapperContainer && !options.banner) {
-      swapperConta
+}
+
+
+/* ====== Main Execution ====== */
+document.addEventListener('DOMContentLoaded', () => {
+    // Render all galleries
+    renderBanner('offers', '.banner-swapper');
+    renderSwapper('services', '.services-swapper');
+    renderSwapper('products', '.product-swapper');
+    renderSwapper('works', '.works-swapper');
+
+    // Close banner button
+    const closeBtn = document.querySelector('.close-banner-btn');
+    if(closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            const banner = document.getElementById('top-banner');
+            if (banner) banner.style.display = 'none';
+        });
+    }
+
+    // Filter toggle button
+    const filterToggle = document.querySelector('.filter-toggle-btn');
+    const filtersContainer = document.querySelector('.product-filters-container');
+    if(filterToggle && filtersContainer) {
+        filterToggle.addEventListener('click', () => {
+            filtersContainer.classList.toggle('open');
+            if (filtersContainer.classList.contains('open')) {
+                filterToggle.innerHTML = 'Hide Filters &uarr;';
+            } else {
+                filterToggle.innerHTML = 'Show Filters &darr;';
+            }
+        });
+    }
+});
+
+</script>
+
+</body>
+</html>
