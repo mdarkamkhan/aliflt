@@ -500,47 +500,4 @@
         </div>
     </footer>
 <script>
-    function loadGallery(category, sectionId) {
-        // Correctly sends the category as a query parameter (e.g., ?category=offers)
-        fetch(`/.netlify/functions/gallery?category=${category}`)
-            .then(response => {
-                if (!response.ok) {
-                    // If network fails (Function returns 500)
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                const container = document.getElementById(sectionId);
-                if (!container) return;
-
-                // Clears existing content before adding new data
-                container.innerHTML = ''; 
-
-                // Loops through the data (images, titles) received from the Netlify Function
-                data.forEach(item => {
-                    const galleryItem = document.createElement('div');
-                    galleryItem.className = 'gallery-item';
-                    
-                    // Creates HTML element with the image and title from CMS data
-                    galleryItem.innerHTML = `
-                        <img src="${item.image}" alt="${item.title}">
-                        <h3>${item.title}</h3>
-                    `;
-                    container.appendChild(galleryItem);
-                });
-            })
-            .catch(error => {
-                console.error('Error loading gallery for ' + category + ':', error);
-                // Shows a visible error message on the site if function fails
-                document.getElementById(sectionId).innerHTML = `<p style="color:red; margin: 20px 0;">Error loading content. Please check function logs. (${error.message})</p>`;
-            });
-    }
-
-    // Call the function for all sections. 
-    // IMPORTANT: Category names must match your folder names (e.g., 'service' for services).
-    loadGallery("products", "products");
-    loadGallery("service", "services"); // Using 'service' to match your config.yml folder name
-    loadGallery("works", "works");
-    loadGallery("offers", "offers");
 </script>
