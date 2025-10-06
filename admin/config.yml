@@ -57,4 +57,3 @@ label - { name: "date", label: "Date", widget: "datetime" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
-      
