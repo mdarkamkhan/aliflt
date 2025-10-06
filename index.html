@@ -70,27 +70,6 @@
             display: block;
             border-radius: 5px;
         }
-        .testimonials {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .testimonial {
-            background: #f9f9f9;
-            border-left: 4px solid #333;
-            padding: 20px;
-            font-style: italic;
-        }
-        .testimonial p {
-            margin: 0 0 10px 0;
-        }
-        .testimonial cite {
-            display: block;
-            text-align: right;
-            font-style: normal;
-            font-weight: bold;
-            color: #555;
-        }
         .contact-form label {
             display: block;
             margin-bottom: 5px;
@@ -282,7 +261,7 @@
         #top-banner {
             position: relative;
             width: 100%;
-            height: 100vh; /* CHANGED TO FULL SCREEN */
+            height: 100vh; /* Full screen */
             overflow: hidden;
         }
         #top-banner .swapper-container {
@@ -350,7 +329,7 @@
         }
         @media (max-width: 900px) {
             #top-banner {
-                height: 100vh; /* CHANGED TO FULL SCREEN */
+                height: 100vh;
             }
             .banner-content h2 {
                 font-size: 1.8em;
@@ -390,7 +369,6 @@
             <a href="#services">Services</a>
             <a href="#products">Products</a>
             <a href="#our-works">Our Works</a>
-            <a href="#testimonials">Reviews</a>
             <a href="#contact">Contact</a>
         </div>
     </nav>
@@ -438,23 +416,9 @@
         <div class="swapper-container product-swapper">
         </div>
     </div>
-    <div id="our-works" class="section container">
+        <div id="our-works" class="section container">
         <h2>Our Works</h2>
         <div class="swapper-container works-swapper">
-        </div>
-    </div>
-    
-    <div id="testimonials" class="section container">
-        <h2>Client Testimonials</h2>
-        <div class="testimonials">
-            <div class="testimonial">
-                <p>"I was blown away by the quality of work. My suit fits perfectly, and the attention to detail is unmatched. Highly recommend!"</p>
-                <cite>- John D.</cite>
-            </div>
-            <div class="testimonial">
-                <p>"They made my wedding dress fit like a dream. The service was fantastic, and the results were flawless."</p>
-                <cite>- Jane S.</cite>
-            </div>
         </div>
     </div>
 
@@ -462,7 +426,7 @@
         <h2>Contact Us</h2>
         <p>For any inquiry please, Fill out the form below or contact us directly.</p>
         
-        <form name="contact" method="POST" data-netlify="true" class="contact-form">
+        <form id="whatsapp-form" class="contact-form">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
 
@@ -727,6 +691,32 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 filterToggle.innerHTML = 'Show Filters &darr;';
             }
+        });
+    }
+
+    // WhatsApp Form Handler
+    const whatsappForm = document.getElementById('whatsapp-form');
+    if (whatsappForm) {
+        whatsappForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Stop form from submitting the old way
+
+            const yourNumber = "917250470009"; // Your WhatsApp number
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            // Create the message text
+            let text = `Hi, I have an inquiry:\n\n`;
+            text += `*Name:* ${name}\n`;
+            text += `*Email:* ${email}\n`;
+            text += `*Message:* ${message}`;
+
+            // Encode the text for the URL
+            const encodedText = encodeURIComponent(text);
+
+            // Create the WhatsApp link and open it
+            const whatsappUrl = `https://wa.me/${yourNumber}?text=${encodedText}`;
+            window.open(whatsappUrl, '_blank');
         });
     }
 });
