@@ -275,12 +275,6 @@
             #top-banner {
                 height: 100vh;
             }
-            .banner-content h2 {
-                font-size: 1.8em;
-            }
-            .banner-content p {
-                font-size: 1em;
-            }
         }
         
         /* SCROLL ANIMATION STYLES */
@@ -392,7 +386,7 @@
             Hours :   11:00 am to 9:00pm
         </p>
         
-        <iframe src="http://googleusercontent.com/maps/google.com/5" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="http://googleusercontent.com/maps.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3603.4862283929423!2d87.6366086759163!3d25.42188682218414!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f9947477526941%3A0x631b3d95b5490a77!2sDaal%20Kuan!5e0!3m2!1sen!2sin!4v1728243399990!5m2!1sen!2sin" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         
         <div class="social-links">
             <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank">Instagram</a>
@@ -590,7 +584,7 @@ async function renderSwapper(folder, containerSelector, options = {}) {
                 } else if (folder === 'works') {
                     itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`;
                 } else { // products
-                    itemContent += `<div class="product-label">${item.title}</div>`;
+                    itemContent += `<div class="product-label">${item.title}</h3></div>`;
                 }
             }
             content += `<div class="swapper-item ${activeClass}">${itemContent}</div>`;
