@@ -370,6 +370,7 @@
 </head>
 <body>
     
+    <pre id="debug-output" style="background-color: #fff; border: 2px solid red; padding: 15px; margin: 10px; white-space: pre-wrap; word-wrap: break-word; font-size: 12px; max-height: 400px; overflow-y: auto;">Debug Output Will Appear Here...</pre>
     <div id="top-banner">
         <button class="close-banner-btn">&times;</button>
         <div class="swapper-container banner-swapper">
@@ -500,7 +501,7 @@
 const OWNER = "mdarkamkhan";      
 const REPO  = "aliflt";           
 const SITE_ORIGIN = "https://aliflt.netlify.app"; 
-const CACHE_TTL = 60 * 60 * 1000; // 1 hour cache
+const CACHE_TTL = 5 * 1000; // 5 second cache for debugging
 
 /* ====== UTIL: parse YAML frontmatter from markdown */
 function parseYAMLFrontMatter(text) {
@@ -509,7 +510,7 @@ function parseYAMLFrontMatter(text) {
   const lines = fm[1].split(/\r?\n/);
   const data = {};
   for (let line of lines) {
-    const m = line.match(/^\s*([A-Za-z0-B_\- ]+)\s*:\s*(.+)$/);
+    const m = line.match(/^\s*([A-Za-z0-9_\- ]+)\s*:\s*(.+)$/);
     if (m) {
       let key = m[1].trim();
       let val = m[2].trim();
@@ -518,27 +519,23 @@ function parseYAMLFrontMatter(text) {
       }
       data[key] = val;
     }
-  }
+}
   return data;
 }
 
 /* ====== Fetch and cache folder listing + parse entries ====== */
 async function fetchCollectionItems(folder) {
-  const cacheKey = `ghc_${OWNER}_${REPO}_${folder}`;
-  try {
-    const rawCache = localStorage.getItem(cacheKey);
-    if (rawCache) {
-      const parsed = JSON.parse(rawCache);
-      if (Date.now() - parsed.ts < CACHE_TTL) {
-        return parsed.items;
-      }
-    }
-  } catch (e) { /* ignore parse errors */ }
+  // Clear cache for debugging
+  localStorage.removeItem(`ghc_${OWNER}_${REPO}_${folder}`);
 
   const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${folder}`;
   const res = await fetch(apiUrl);
   if (!res.ok) {
     console.warn(`GitHub API error for ${folder}:`, res.status, res.statusText);
+    const debugOutput = document.getElementById('debug-output');
+    if (debugOutput) {
+        debugOutput.textContent += `\n--- GITHUB API ERROR for [${folder}]: ${res.status} ${res.statusText} ---\n`;
+    }
     return [];
   }
   const list = await res.json(); 
@@ -570,9 +567,18 @@ async function fetchCollectionItems(folder) {
     }
   }
 
-  try {
-    localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), items }));
-  } catch (e) {}
+  // ======== DEBUGGING CODE ========
+  const debugOutput = document.getElementById('debug-output');
+  if (debugOutput && (folder === 'offers' || !debugOutput.textContent.includes('--- DEBUG for'))) {
+      debugOutput.textContent = ''; // Clear only on the first run
+  }
+  if (debugOutput) {
+      debugOutput.textContent += `--- DEBUG for [${folder}] ---\n`;
+      debugOutput.textContent += `Found ${items.length} items.\n`;
+      debugOutput.textContent += JSON.stringify(items, null, 2);
+      debugOutput.textContent += `\n\n`;
+  }
+  // ===============================
 
   return items;
 }
