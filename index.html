@@ -282,7 +282,7 @@
         #top-banner {
             position: relative;
             width: 100%;
-            height: 75vh;
+            height: 100vh; /* CHANGED TO FULL SCREEN */
             overflow: hidden;
         }
         #top-banner .swapper-container {
@@ -350,7 +350,7 @@
         }
         @media (max-width: 900px) {
             #top-banner {
-                height: 50vh; /* Adjust height for smaller screens */
+                height: 100vh; /* CHANGED TO FULL SCREEN */
             }
             .banner-content h2 {
                 font-size: 1.8em;
@@ -369,8 +369,7 @@
     
 </head>
 <body>
-    
-    <pre id="debug-output" style="background-color: #fff; border: 2px solid red; padding: 15px; margin: 10px; white-space: pre-wrap; word-wrap: break-word; font-size: 12px; max-height: 400px; overflow-y: auto;">Debug Output Will Appear Here...</pre>
+
     <div id="top-banner">
         <button class="close-banner-btn">&times;</button>
         <div class="swapper-container banner-swapper">
@@ -439,7 +438,7 @@
         <div class="swapper-container product-swapper">
         </div>
     </div>
-        <div id="our-works" class="section container">
+    <div id="our-works" class="section container">
         <h2>Our Works</h2>
         <div class="swapper-container works-swapper">
         </div>
@@ -501,7 +500,7 @@
 const OWNER = "mdarkamkhan";      
 const REPO  = "aliflt";           
 const SITE_ORIGIN = "https://aliflt.netlify.app"; 
-const CACHE_TTL = 5 * 1000; // 5 second cache for debugging
+const CACHE_TTL = 60 * 60 * 1000; // 1 hour cache
 
 /* ====== UTIL: parse YAML frontmatter from markdown */
 function parseYAMLFrontMatter(text) {
@@ -519,23 +518,27 @@ function parseYAMLFrontMatter(text) {
       }
       data[key] = val;
     }
-}
+  }
   return data;
 }
 
 /* ====== Fetch and cache folder listing + parse entries ====== */
 async function fetchCollectionItems(folder) {
-  // Clear cache for debugging
-  localStorage.removeItem(`ghc_${OWNER}_${REPO}_${folder}`);
+  const cacheKey = `ghc_${OWNER}_${REPO}_${folder}`;
+  try {
+    const rawCache = localStorage.getItem(cacheKey);
+    if (rawCache) {
+      const parsed = JSON.parse(rawCache);
+      if (Date.now() - parsed.ts < CACHE_TTL) {
+        return parsed.items;
+      }
+    }
+  } catch (e) { /* ignore parse errors */ }
 
   const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${folder}`;
   const res = await fetch(apiUrl);
   if (!res.ok) {
     console.warn(`GitHub API error for ${folder}:`, res.status, res.statusText);
-    const debugOutput = document.getElementById('debug-output');
-    if (debugOutput) {
-        debugOutput.textContent += `\n--- GITHUB API ERROR for [${folder}]: ${res.status} ${res.statusText} ---\n`;
-    }
     return [];
   }
   const list = await res.json(); 
@@ -567,25 +570,16 @@ async function fetchCollectionItems(folder) {
     }
   }
 
-  // ======== DEBUGGING CODE ========
-  const debugOutput = document.getElementById('debug-output');
-  if (debugOutput && (folder === 'offers' || !debugOutput.textContent.includes('--- DEBUG for'))) {
-      debugOutput.textContent = ''; // Clear only on the first run
-  }
-  if (debugOutput) {
-      debugOutput.textContent += `--- DEBUG for [${folder}] ---\n`;
-      debugOutput.textContent += `Found ${items.length} items.\n`;
-      debugOutput.textContent += JSON.stringify(items, null, 2);
-      debugOutput.textContent += `\n\n`;
-  }
-  // ===============================
+  try {
+    localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), items }));
+  } catch (e) {}
 
   return items;
 }
 
 
 /* ====== Swapper and Gallery Logic ====== */
-function initializeSwapper(swapperSelector) {
+function initializeSwapper(swapperSelector, options = {}) {
     const swapper = document.querySelector(swapperSelector);
     if (!swapper) return;
 
@@ -593,6 +587,7 @@ function initializeSwapper(swapperSelector) {
     const prevBtn = swapper.querySelector('.prev-btn');
     const nextBtn = swapper.querySelector('.next-btn');
     let currentIndex = 0;
+    let autoplayInterval = null;
 
     if (items.length <= 1) {
         if (prevBtn) prevBtn.style.display = 'none';
@@ -606,30 +601,59 @@ function initializeSwapper(swapperSelector) {
         });
     }
 
+    function next() {
+        currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0;
+        showItem(currentIndex);
+    }
+    
+    function prev() {
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1;
+        showItem(currentIndex);
+    }
+
     if (prevBtn) {
         prevBtn.addEventListener('click', () => {
-            currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1;
-            showItem(currentIndex);
+            prev();
+            if (autoplayInterval) resetAutoplay();
         });
     }
 
     if (nextBtn) {
         nextBtn.addEventListener('click', () => {
-            currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0;
-            showItem(currentIndex);
+            next();
+            if (autoplayInterval) resetAutoplay();
         });
+    }
+
+    function startAutoplay() {
+        if (options.autoplay) {
+            autoplayInterval = setInterval(next, options.autoplay);
+        }
+    }
+
+    function resetAutoplay() {
+        clearInterval(autoplayInterval);
+        startAutoplay();
     }
     
     showItem(currentIndex);
+    startAutoplay();
 }
 
 
-async function renderSwapper(folder, containerSelector) {
+async function renderSwapper(folder, containerSelector, options = {}) {
     const swapperContainer = document.querySelector(containerSelector);
     if (!swapperContainer) return;
 
     const items = await fetchCollectionItems(folder);
     const itemsWithImages = items.filter(item => item.image);
+
+    // Sort items by date if it exists
+    itemsWithImages.sort((a, b) => {
+        const dateA = a.raw.date ? new Date(a.raw.date) : new Date(0);
+        const dateB = b.raw.date ? new Date(b.raw.date) : new Date(0);
+        return dateB - dateA;
+    });
 
     let content = '';
     if (!itemsWithImages.length) {
@@ -637,18 +661,30 @@ async function renderSwapper(folder, containerSelector) {
     } else {
         itemsWithImages.forEach((item, index) => {
             const activeClass = index === 0 ? 'active' : '';
-            let itemContent = `<img src="${item.image}" alt="${item.title}">`;
-            
-            if (folder === 'services') {
-                itemContent += `<div class="service-details"><h3>${item.title}</h3></div>`;
-            } else if (folder === 'works') {
-                itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`;
-            } else { // products
-                itemContent += `<div class="product-label">${item.title}</div>`;
-            }
+            let itemContent = '';
 
+            if (options.isBanner) {
+                 itemContent = `
+                    <img src="${item.image}" alt="${item.title}">
+                    <div class="banner-content">
+                        <h2>${item.title}</h2>
+                        <p>View our latest collection!</p>
+                        <a href="#products" class="banner-cta-btn">Shop Now</a>
+                    </div>
+                `;
+            } else {
+                itemContent = `<img src="${item.image}" alt="${item.title}">`;
+                if (folder === 'services') {
+                    itemContent += `<div class="service-details"><h3>${item.title}</h3></div>`;
+                } else if (folder === 'works') {
+                    itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`;
+                } else { // products
+                    itemContent += `<div class="product-label">${item.title}</div>`;
+                }
+            }
             content += `<div class="swapper-item ${activeClass}">${itemContent}</div>`;
         });
+        
         // Add nav buttons
         content += `
             <div class="swapper-nav">
@@ -659,53 +695,14 @@ async function renderSwapper(folder, containerSelector) {
     }
     
     swapperContainer.innerHTML = content;
-    initializeSwapper(containerSelector);
-}
-
-async function renderBanner(folder, containerSelector) {
-    const swapperContainer = document.querySelector(containerSelector);
-    if (!swapperContainer) return;
-
-    const items = await fetchCollectionItems(folder);
-    if (!items.length) {
-        const banner = document.getElementById('top-banner');
-        if (banner) banner.style.display = 'none';
-        return;
-    }
-
-    // Sort items by date, newest first
-    items.sort((a, b) => {
-        // Handle items that might not have a date
-        const dateA = a.raw.date ? new Date(a.raw.date) : new Date(0);
-        const dateB = b.raw.date ? new Date(b.raw.date) : new Date(0);
-        return dateB - dateA;
-    });
-    
-    const newestItem = items[0]; // This is now the most recent post
-
-    if (!newestItem.image) {
-        const banner = document.getElementById('top-banner');
-        if (banner) banner.style.display = 'none';
-        return;
-    }
-
-    swapperContainer.innerHTML = `
-        <div class="swapper-item active">
-            <img src="${newestItem.image}" alt="${newestItem.title}">
-            <div class="banner-content">
-                <h2>${newestItem.title}</h2>
-                <p>View our latest collection!</p>
-                <a href="#products" class="banner-cta-btn">Shop Now</a>
-            </div>
-        </div>
-    `;
+    initializeSwapper(containerSelector, options);
 }
 
 
 /* ====== Main Execution ====== */
 document.addEventListener('DOMContentLoaded', () => {
     // Render all galleries
-    renderBanner('offers', '.banner-swapper');
+    renderSwapper('offers', '.banner-swapper', { isBanner: true, autoplay: 5000 });
     renderSwapper('services', '.services-swapper');
     renderSwapper('products', '.product-swapper');
     renderSwapper('works', '.works-swapper');
