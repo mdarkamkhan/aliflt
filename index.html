@@ -11,8 +11,8 @@
 
     <style>
         :root {
-            --accent-color: #A93226; /* New Accent Color */
-            --accent-color-dark: #87281F; /* Darker shade for hover */
+            --accent-color: #2C3E50; /* Deep Blue Accent Color */
+            --accent-color-dark: #212F3D; /* Darker shade for hover */
         }
 
         body {
@@ -64,21 +64,10 @@
         }
         .section h2 {
             text-align: center;
-            color: var(--accent-color); /* ACCENT COLOR ADDED */
-            border-bottom: 2px solid var(--accent-color); /* ACCENT COLOR ADDED */
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
             padding-bottom: 10px;
             margin-bottom: 20px;
-        }
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        .gallery-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 5px;
         }
         .contact-form label {
             display: block;
@@ -93,7 +82,7 @@
             border-radius: 5px;
         }
         .contact-form button {
-            background: var(--accent-color); /* ACCENT COLOR ADDED */
+            background: var(--accent-color);
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -102,7 +91,7 @@
             transition: background-color 0.3s;
         }
         .contact-form button:hover {
-            background: var(--accent-color-dark); /* ACCENT COLOR ADDED */
+            background: var(--accent-color-dark);
         }
         .cta-buttons {
             text-align: center;
@@ -119,7 +108,7 @@
             margin: 0 10px;
         }
         .cta-buttons a.instagram-btn {
-            background: #833AB4; /* Instagram Purple */
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); /* INSTAGRAM GRADIENT */
         }
         .social-links {
             text-align: center;
@@ -154,11 +143,11 @@
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            display: none; /* Hide by default */
+            display: none;
         }
         .swapper-item.active {
             opacity: 1;
-            display: block; /* Show only active */
+            display: block;
         }
         .swapper-item img {
             width: 100%;
@@ -249,8 +238,7 @@
             width: 80%;
         }
         .banner-content h2 {
-            font-size: 2.5em;
-            margin: 0 0 10px 0;
+            display: none; /* TITLE HIDDEN */
         }
         .banner-content p {
             font-size: 1.2em;
@@ -265,6 +253,7 @@
             font-weight: bold;
             font-size: 1em;
             transition: background-color 0.3s;
+            margin-top: 20px; /* MOVED DOWN */
         }
         .banner-cta-btn:hover {
             background: #128C7E;
@@ -316,7 +305,7 @@
 <body>
 
     <div id="top-banner">
-        <button class="close-banner-btn">&times;</button>
+        <button class="close-banner-btn">×</button>
         <div class="swapper-container banner-swapper">
             </div>
     </div>
@@ -364,7 +353,7 @@
     
     <div id="products" class="section container fade-in-section">
         <h2>Products</h2>
-        <button class="filter-toggle-btn">Show Filters &darr;</button>
+        <button class="filter-toggle-btn">Show Filters ↓</button>
         <div class="product-filters-container">
             <div class="product-filters">
                 <span class="filter-button" data-filter="all">All</span>
@@ -372,7 +361,7 @@
         </div>
         <div class="swapper-container product-swapper">
         </div>
-            </div>
+    </div>
         <div id="our-works" class="section container fade-in-section">
         <h2>Our Works</h2>
         <div class="swapper-container works-swapper">
@@ -387,8 +376,8 @@
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <label for="inquiry">Inquiry Type:</label>
+            <input type="text" id="inquiry" name="inquiry" required placeholder="e.g., Product Info, Shop Address">
 
             <label for="message">Message:</label>
             <textarea id="message" name="message" rows="5" required></textarea>
@@ -398,12 +387,12 @@
         
         <p>
             Address :   daal kua, college road, sahibganj, 816109<br>
-            Phone :  <a href="tel:+917250470009" style="color: inherit; text-decoration: none;">+91 72504 70009</a> <br>
+            Phone :  <a href="tel:+917250470009" style="color: inherit; text-decoration: none;">+91 72504 70009</a><br>
             Email :   alifladiestailor@gmail.com<br>
             Hours :   11:00 am to 9:00pm
         </p>
         
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.178652251322!2d87.64361107515128!3d25.19736887771092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39fa10dd5050f131%3A0xd2115858b668d576!2sCollege%20Rd%2C%20Sahibganj%2C%20Jharkhand%20816109%2C%20India!5e0!3m2!1sen!2sus!4v1728241031252!5m2!1sen!2sus" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="http://googleusercontent.com/maps/google.com/5" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         
         <div class="social-links">
             <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank">Instagram</a>
@@ -414,7 +403,7 @@
 
     <footer class="fade-in-section">
         <div class="container">
-            <p>&copy; 2025 ALiF ladies tailor . All Rights Reserved.</p>
+            <p>© 2025 ALiF ladies tailor . All Rights Reserved.</p>
         </div>
     </footer>
     
@@ -591,8 +580,7 @@ async function renderSwapper(folder, containerSelector, options = {}) {
                     <img src="${item.image}" alt="${item.title}">
                     <div class="banner-content">
                         <h2>${item.title}</h2>
-                        <p>View our latest collection!</p>
-                        <a href="#products" class="banner-cta-btn">Shop Now</a>
+                        <a href="#home" class="banner-cta-btn">Visit Now</a>
                     </div>
                 `;
             } else {
@@ -611,8 +599,8 @@ async function renderSwapper(folder, containerSelector, options = {}) {
         // Add nav buttons
         content += `
             <div class="swapper-nav">
-                <button class="swapper-nav-btn prev-btn">&#10094;</button>
-                <button class="swapper-nav-btn next-btn">&#10095;</button>
+                <button class="swapper-nav-btn prev-btn">❮</button>
+                <button class="swapper-nav-btn next-btn">❯</button>
             </div>
         `;
     }
@@ -647,13 +635,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const yourNumber = "917250470009"; // Your WhatsApp number
             const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
+            const inquiry = document.getElementById('inquiry').value;
             const message = document.getElementById('message').value;
 
             // Create the message text
             let text = `Hi, I have an inquiry:\n\n`;
             text += `*Name:* ${name}\n`;
-            text += `*Email:* ${email}\n`;
+            text += `*Inquiry Type:* ${inquiry}\n`;
             text += `*Message:* ${message}`;
 
             // Encode the text for the URL
