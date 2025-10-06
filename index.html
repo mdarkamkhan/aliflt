@@ -372,7 +372,7 @@
         </div>
         <div class="swapper-container product-swapper">
         </div>
-    </div>
+            </div>
         <div id="our-works" class="section container fade-in-section">
         <h2>Our Works</h2>
         <div class="swapper-container works-swapper">
@@ -398,10 +398,12 @@
         
         <p>
             Address :   daal kua, college road, sahibganj, 816109<br>
-            Phone :  +91 72504 70009 <br>
+            Phone :  <a href="tel:+917250470009" style="color: inherit; text-decoration: none;">+91 72504 70009</a> <br>
             Email :   alifladiestailor@gmail.com<br>
             Hours :   11:00 am to 9:00pm
         </p>
+        
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.178652251322!2d87.64361107515128!3d25.19736887771092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39fa10dd5050f131%3A0xd2115858b668d576!2sCollege%20Rd%2C%20Sahibganj%2C%20Jharkhand%20816109%2C%20India!5e0!3m2!1sen!2sus!4v1728241031252!5m2!1sen!2sus" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         
         <div class="social-links">
             <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank">Instagram</a>
@@ -637,13 +639,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Filter toggle button
-    const filterToggle = document.querySelector('.filter-toggle-btn');
-    // ... (rest of filter logic)
-
     // WhatsApp Form Handler
     const whatsappForm = document.getElementById('whatsapp-form');
-    // ... (rest of whatsapp logic)
+    if (whatsappForm) {
+        whatsappForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Stop form from submitting the old way
+
+            const yourNumber = "917250470009"; // Your WhatsApp number
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            // Create the message text
+            let text = `Hi, I have an inquiry:\n\n`;
+            text += `*Name:* ${name}\n`;
+            text += `*Email:* ${email}\n`;
+            text += `*Message:* ${message}`;
+
+            // Encode the text for the URL
+            const encodedText = encodeURIComponent(text);
+
+            // Create the WhatsApp link and open it
+            const whatsappUrl = `https://wa.me/${yourNumber}?text=${encodedText}`;
+            window.open(whatsappUrl, '_blank');
+        });
+    }
 
     // SCROLL ANIMATION LOGIC
     const animatedSections = document.querySelectorAll('.fade-in-section');
