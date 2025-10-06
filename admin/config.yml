@@ -2,6 +2,7 @@ backend:
   name: git-gateway
   branch: main
 
+# GLOBAL MEDIA FOLDERS (SABSE UPAR)
 media_folder: "uploads"
 public_folder: "/uploads"
 
@@ -10,8 +11,6 @@ collections:
     label: "Offers Banner"
     folder: "offers"
     format: "frontmatter"
-    media_folder: "uploads"
-    public_folder: "/uploads"
     create: true
     slug: "{{slug}}"
     fields:
@@ -23,8 +22,6 @@ collections:
     label: "Products"
     folder: "products"
     format: "frontmatter"
-    media_folder: "uploads"
-    public_folder: "/uploads"
     create: true
     slug: "{{slug}}"
     fields:
@@ -36,8 +33,6 @@ collections:
     label: "Services"
     folder: "services"
     format: "frontmatter"
-    media_folder: "uploads"
-    public_folder: "/uploads"
     create: true
     slug: "{{slug}}"
     fields:
@@ -49,8 +44,6 @@ collections:
     label: "Our Works"
     folder: "works"
     format: "frontmatter"
-    media_folder: "uploads"
-    public_folder: "/uploads"
     create: true
     slug: "{{slug}}"
     fields:
