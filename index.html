@@ -126,6 +126,8 @@
             padding: 20px 0;
             color: #777;
         }
+        
+        /* Styles for Swappers & Filters */
         .swapper-container {
             position: relative;
             width: 100%;
@@ -198,10 +200,12 @@
             font-style: italic;
             color: #777;
         }
+        
+        /* New Styles for Top Banner */
         #top-banner {
             position: relative;
             width: 100%;
-            height: 100vh;
+            height: 100vh; /* Full screen */
             overflow: hidden;
         }
         #top-banner .swapper-container {
@@ -234,7 +238,7 @@
             width: 80%;
         }
         .banner-content h2 {
-            display: none;
+            display: none; /* TITLE HIDDEN */
         }
         .banner-content p {
             font-size: 1.2em;
@@ -249,7 +253,7 @@
             font-weight: bold;
             font-size: 1em;
             transition: background-color 0.3s;
-            margin-top: 20px;
+            margin-top: 20px; /* MOVED DOWN */
         }
         .banner-cta-btn:hover {
             background: #128C7E;
@@ -271,7 +275,15 @@
             #top-banner {
                 height: 100vh;
             }
+            .banner-content h2 {
+                font-size: 1.8em;
+            }
+            .banner-content p {
+                font-size: 1em;
+            }
         }
+        
+        /* SCROLL ANIMATION STYLES */
         .fade-in-section {
             opacity: 0;
             transform: translateY(30px);
@@ -331,8 +343,9 @@
     <div id="about" class="section container fade-in-section">
         <h2>About Us</h2>
         <p>At Alif Tailoring, we craft custom lehengas, frocks, and dresses that fit perfectly and make you feel amazing. Mixing traditional techniques with modern style, we bring your ideas to life.</p>
-  </div>
-      <div id="services" class="section container fade-in-section">
+    </div>
+        
+    <div id="services" class="section container fade-in-section">
         <h2>Our Services</h2>
         <div class="swapper-container services-swapper">
         </div>
@@ -349,10 +362,10 @@
         <div class="swapper-container product-swapper">
         </div>
     </div>
-
-    <div id="our-works" class="section container fade-in-section">
+        <div id="our-works" class="section container fade-in-section">
         <h2>Our Works</h2>
-        <div id="curator-feed-default-feed-layout"><a href="https://curator.io" target="_blank" class="crt-logo crt-tag">Powered by Curator.io</a></div>
+        <div class="swapper-container works-swapper">
+        </div>
     </div>
 
     <div id="contact" class="section container fade-in-section">
@@ -371,14 +384,15 @@
 
             <button type="submit">Send Message</button>
         </form>
-                <p>
+        
+        <p>
             Address :   daal kua, college road, sahibganj, 816109<br>
             Phone :  <a href="tel:+917250470009" style="color: inherit; text-decoration: none;">+91 72504 70009</a><br>
             Email :   alifladiestailor@gmail.com<br>
             Hours :   11:00 am to 9:00pm
         </p>
         
-        <iframe src="http://googleusercontent.com/maps.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3603.486694982697!2d87.63675287591629!3d25.42187312217637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f99411f1813027%3A0x2650c8646e2a2236!2s6JRP%2BRQ%2sSahibganj%2C%sJharkhand!5e0!3m2!1sen!2sin!4v1728249053303!5m2!1sen!2sin" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="http://googleusercontent.com/maps/google.com/5" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         
         <div class="social-links">
             <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank">Instagram</a>
@@ -582,15 +596,13 @@ async function renderSwapper(folder, containerSelector, options = {}) {
             content += `<div class="swapper-item ${activeClass}">${itemContent}</div>`;
         });
         
-        // Add nav buttons if it's not a banner
-        if (!options.isBanner) {
-            content += `
-                <div class="swapper-nav">
-                    <button class="swapper-nav-btn prev-btn">❮</button>
-                    <button class="swapper-nav-btn next-btn">❯</button>
-                </div>
-            `;
-        }
+        // Add nav buttons
+        content += `
+            <div class="swapper-nav">
+                <button class="swapper-nav-btn prev-btn">❮</button>
+                <button class="swapper-nav-btn next-btn">❯</button>
+            </div>
+        `;
     }
     
     swapperContainer.innerHTML = content;
@@ -604,7 +616,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSwapper('offers', '.banner-swapper', { isBanner: true, autoplay: 5000 });
     renderSwapper('services', '.services-swapper');
     renderSwapper('products', '.product-swapper');
-    // We don't render 'works' anymore, the widget handles it.
+    renderSwapper('works', '.works-swapper');
 
     // Close banner button
     const closeBtn = document.querySelector('.close-banner-btn');
@@ -658,15 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(section);
     });
 });
-</script>
 
-<script type="text/javascript">
-/* curator-feed-default-feed-layout */
-(function(){
-var i,e,d=document,s="script";i=d.createElement("script");i.async=1;i.charset="UTF-8";
-i.src="https://cdn.curator.io/published/6626baad-49ed-411e-a7f0-7365368a6f30.js";
-e=d.getElementsByTagName(s)[0];e.parentNode.insertBefore(i, e);
-})();
 </script>
 
 </body>
