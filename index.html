@@ -22,6 +22,7 @@
             padding: 0;
             color: #333;
             background-color: #f4f4f4;
+            padding-bottom: 80px; /* Add padding for chat button */
         }
         .container {
             max-width: 960px;
@@ -45,6 +46,9 @@
             color: #fff;
             text-align: center;
             padding: 0.5rem 0;
+            position: sticky; /* Make nav sticky */
+            top: 0;
+            z-index: 1000; /* Ensure it stays on top */
         }
         nav a {
             color: #fff;
@@ -80,6 +84,7 @@
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-sizing: border-box; /* Include padding in width */
         }
         .contact-form button {
             background: var(--accent-color);
@@ -105,7 +110,7 @@
             text-decoration: none;
             border-radius: 50px;
             font-weight: bold;
-            margin: 0 10px;
+            margin: 5px 10px; /* Adjusted margin for better wrapping */
         }
         .cta-buttons a.instagram-btn {
             background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); /* INSTAGRAM GRADIENT */
@@ -126,8 +131,6 @@
             padding: 20px 0;
             color: #777;
         }
-        
-        /* Styles for Swappers & Filters */
         .swapper-container {
             position: relative;
             width: 100%;
@@ -200,12 +203,10 @@
             font-style: italic;
             color: #777;
         }
-        
-        /* New Styles for Top Banner */
         #top-banner {
             position: relative;
             width: 100%;
-            height: 100vh; /* Full screen */
+            height: 100vh;
             overflow: hidden;
         }
         #top-banner .swapper-container {
@@ -229,61 +230,53 @@
         }
         .banner-content {
             position: absolute;
-            top: 50%;
+            bottom: 10vh; /* MOVED LOWER */
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%); /* Center horizontally */
             text-align: center;
             color: #fff;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             width: 80%;
         }
         .banner-content h2 {
-            display: none; /* TITLE HIDDEN */
-        }
-        .banner-content p {
-            font-size: 1.2em;
-            margin: 0 0 20px 0;
+            display: none;
         }
         .banner-cta-btn {
-            background: #25D366;
+            background: var(--accent-color); /* THEME COLOR ADDED */
             color: #fff;
-            padding: 10px 25px;
+            padding: 12px 30px; /* Slightly bigger padding */
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            font-size: 1em;
+            font-size: 1.1em; /* Slightly bigger font */
             transition: background-color 0.3s;
-            margin-top: 20px; /* MOVED DOWN */
+            display: inline-block; /* Needed for positioning */
         }
         .banner-cta-btn:hover {
-            background: #128C7E;
+            background: var(--accent-color-dark); /* THEME COLOR ADDED */
         }
         .close-banner-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 15px;
+            right: 15px;
             background: rgba(0,0,0,0.5);
             color: white;
             border: none;
-            font-size: 1.5em;
-            padding: 5px 10px;
-            border-radius: 3%;
+            font-size: 1.8em;
+            padding: 5px 12px;
+            border-radius: 50%;
             cursor: pointer;
             z-index: 100;
+            line-height: 1;
         }
         @media (max-width: 900px) {
             #top-banner {
                 height: 100vh;
             }
-            .banner-content h2 {
-                font-size: 1.8em;
-            }
-            .banner-content p {
-                font-size: 1em;
+            .banner-content {
+                 bottom: 15vh;
             }
         }
-        
-        /* SCROLL ANIMATION STYLES */
         .fade-in-section {
             opacity: 0;
             transform: translateY(30px);
@@ -293,9 +286,123 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* --- CHATBOT STYLES --- */
+        #chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+        #chat-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+         #chat-window {
+            display: none; /* Hidden by default */
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+         }
+         #chat-header {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+         }
+          #close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+          }
+         #chat-messages {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+         }
+         .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+         }
+         .user-message {
+            background-color: #eee;
+            align-self: flex-end;
+            margin-left: auto; /* Push user messages to the right */
+         }
+         .ai-message {
+            background-color: var(--accent-color);
+            color: white;
+            align-self: flex-start;
+            margin-right: auto; /* Push AI messages to the left */
+         }
+          .thinking-message {
+            font-style: italic;
+            color: #888;
+            align-self: flex-start;
+          }
+         #chat-input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+         }
+         #chat-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+         }
+         #send-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+         }
+         #send-button:hover {
+             background-color: var(--accent-color-dark);
+         }
+         /* Hide chat window initially */
+         #chat-window.hidden {
+            display: none;
+         }
+          #chat-window.visible {
+            display: flex;
+         }
+         /* --- END CHATBOT STYLES --- */
+
     </style>
     
     <script>
+      // Netlify Identity redirect
       if (window.location.hash.includes("invite_token") || window.location.hash.includes("recovery_token")) {
         window.location.href = "/admin/" + window.location.hash;
       }
@@ -344,8 +451,7 @@
         <h2>About Us</h2>
         <p>At Alif Tailoring, we craft custom lehengas, frocks, and dresses that fit perfectly and make you feel amazing. Mixing traditional techniques with modern style, we bring your ideas to life.</p>
     </div>
-        
-    <div id="services" class="section container fade-in-section">
+        <div id="services" class="section container fade-in-section">
         <h2>Our Services</h2>
         <div class="swapper-container services-swapper">
         </div>
@@ -362,10 +468,10 @@
         <div class="swapper-container product-swapper">
         </div>
     </div>
-        <div id="our-works" class="section container fade-in-section">
+
+    <div id="our-works" class="section container fade-in-section">
         <h2>Our Works</h2>
-        <div class="swapper-container works-swapper">
-        </div>
+        <div id="curator-feed-default-feed-layout"><a href="https://curator.io" target="_blank" class="crt-logo crt-tag">Powered by Curator.io</a></div>
     </div>
 
     <div id="contact" class="section container fade-in-section">
@@ -384,7 +490,7 @@
 
             <button type="submit">Send Message</button>
         </form>
-        
+
         <p>
             Address :   daal kua, college road, sahibganj, 816109<br>
             Phone :  <a href="tel:+917250470009" style="color: inherit; text-decoration: none;">+91 72504 70009</a><br>
@@ -392,7 +498,7 @@
             Hours :   11:00 am to 9:00pm
         </p>
         
-        <iframe src="http://googleusercontent.com/maps/google.com/5" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="http://googleusercontent.com/maps.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3603.486694982697!2d87.63675287591629!3d25.42187312217637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f99411f1813027%3A0x2650c8646e2a2236!2s6JRP%2BRQ%20Sahibganj%2C%20Jharkhand!5e0!3m2!1sen!2sin!4v1728249053303!5m2!1sen!2sin" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         
         <div class="social-links">
             <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank">Instagram</a>
@@ -406,6 +512,23 @@
             <p>© 2025 ALiF ladies tailor . All Rights Reserved.</p>
         </div>
     </footer>
+
+    <div id="chat-widget">
+        <button id="chat-button">💬</button>
+        <div id="chat-window" class="hidden">
+            <div id="chat-header">
+                <span>Ask Alif AI</span>
+                <button id="close-chat">&times;</button>
+            </div>
+            <div id="chat-messages">
+                <div class="message ai-message">Hello! How can I help you today?</div>
+            </div>
+            <div id="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask a question...">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+    </div>
     
 <script>
 /* ====== CONFIG ====== */
@@ -588,35 +711,41 @@ async function renderSwapper(folder, containerSelector, options = {}) {
                 if (folder === 'services') {
                     itemContent += `<div class="service-details"><h3>${item.title}</h3></div>`;
                 } else if (folder === 'works') {
-                    itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`;
+                    // We don't need work-caption for Curator feed
                 } else { // products
                     itemContent += `<div class="product-label">${item.title}</div>`;
                 }
             }
-            content += `<div class="swapper-item ${activeClass}">${itemContent}</div>`;
+            // Don't render items for 'works' if Curator feed is there
+            if (folder !== 'works' || !document.getElementById('curator-feed-default-feed-layout')) {
+                 content += `<div class="swapper-item ${activeClass}">${itemContent}</div>`;
+            }
         });
         
-        // Add nav buttons
-        content += `
-            <div class="swapper-nav">
-                <button class="swapper-nav-btn prev-btn">❮</button>
-                <button class="swapper-nav-btn next-btn">❯</button>
-            </div>
-        `;
+        // Add nav buttons if it's not a banner and not 'works'
+        if (!options.isBanner && folder !== 'works') {
+            content += `
+                <div class="swapper-nav">
+                    <button class="swapper-nav-btn prev-btn">❮</button>
+                    <button class="swapper-nav-btn next-btn">❯</button>
+                </div>
+            `;
+        }
     }
     
-    swapperContainer.innerHTML = content;
-    initializeSwapper(containerSelector, options);
+    // Only render if it's not the 'works' section (handled by Curator)
+    if (folder !== 'works' || !document.getElementById('curator-feed-default-feed-layout')) {
+        swapperContainer.innerHTML = content;
+        initializeSwapper(containerSelector, options);
+    }
 }
-
-
-/* ====== Main Execution ====== */
+    /* ====== Main Execution ====== */
 document.addEventListener('DOMContentLoaded', () => {
     // Render all galleries
     renderSwapper('offers', '.banner-swapper', { isBanner: true, autoplay: 5000 });
     renderSwapper('services', '.services-swapper');
     renderSwapper('products', '.product-swapper');
-    renderSwapper('works', '.works-swapper');
+    // We don't call renderSwapper for 'works' anymore
 
     // Close banner button
     const closeBtn = document.querySelector('.close-banner-btn');
@@ -669,8 +798,115 @@ document.addEventListener('DOMContentLoaded', () => {
     animatedSections.forEach(section => {
         observer.observe(section);
     });
-});
 
+    // --- CHATBOT LOGIC ---
+    const chatButton = document.getElementById('chat-button');
+    const chatWindow = document.getElementById('chat-window');
+    const closeChatButton = document.getElementById('close-chat');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const sendButton = document.getElementById('send-button');
+
+    // Toggle chat window visibility
+    chatButton.addEventListener('click', () => {
+        chatWindow.classList.toggle('visible');
+        chatWindow.classList.toggle('hidden');
+    });
+
+    closeChatButton.addEventListener('click', () => {
+        chatWindow.classList.add('hidden');
+        chatWindow.classList.remove('visible');
+    });
+
+    // Function to add a message to the chat
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        messageDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
+        messageDiv.textContent = text;
+        chatMessages.appendChild(messageDiv);
+        // Scroll to the bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+     // Function to add a "thinking" message
+    function addThinkingMessage() {
+        const thinkingDiv = document.createElement('div');
+        thinkingDiv.classList.add('message', 'thinking-message');
+        thinkingDiv.setAttribute('id', 'thinking'); // Add an ID to easily remove it
+        thinkingDiv.textContent = 'Alif AI is thinking...';
+        chatMessages.appendChild(thinkingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Function to remove the "thinking" message
+    function removeThinkingMessage() {
+        const thinkingDiv = document.getElementById('thinking');
+        if (thinkingDiv) {
+            chatMessages.removeChild(thinkingDiv);
+        }
+    }
+
+    // Function to send message to the AI (Netlify Function)
+    async function sendMessageToAI() {
+        const question = chatInput.value.trim();
+        if (!question) return;
+
+        addMessage(question, 'user');
+        chatInput.value = ''; // Clear input field
+        sendButton.disabled = true; // Disable button while thinking
+        addThinkingMessage(); // Show thinking indicator
+
+        try {
+            const response = await fetch('/.netlify/functions/ask-ai', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ question: question }),
+            });
+
+            removeThinkingMessage(); // Remove thinking indicator
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Error from AI function:", errorData);
+                addMessage(`Error: ${errorData.error || response.statusText}`, 'ai');
+            } else {
+                const data = await response.json();
+                addMessage(data.answer, 'ai');
+            }
+        } catch (error) {
+            removeThinkingMessage(); // Remove thinking indicator on error too
+            console.error("Network or other error:", error);
+            addMessage('Sorry, something went wrong. Please try again.', 'ai');
+        } finally {
+             sendButton.disabled = false; // Re-enable button
+             chatInput.focus(); // Focus back on input
+        }
+    }
+
+    // Send message when button is clicked
+    sendButton.addEventListener('click', sendMessageToAI);
+
+    // Send message when Enter key is pressed in the input field
+    chatInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            sendMessageToAI();
+        }
+    });
+    // --- END CHATBOT LOGIC ---
+
+});
+</script>
+
+<script type="text/javascript">
+/* curator-feed-default-feed-layout */
+(function(){
+var i,e,d=document,s="script";i=d.createElement("script");i.async=1;i.charset="UTF-8";
+i.src="https://cdn.curator.io/published/6626baad-49ed-411e-a7f0-7365368a6f30.js";
+e=d.getElementsByTagName(s)[0];e.parentNode.insertBefore(i, e);
+})();
 </script>
 
 </body>
