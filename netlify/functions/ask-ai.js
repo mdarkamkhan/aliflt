@@ -2,10 +2,9 @@
 const fetch = require('node-fetch');
 
 // OpenRouter API endpoint
-const MODEL_TO_USE = "mistralai/mistral-7b-instruct";
-// We'll use a free model available on OpenRouter for now.
-// You can change this later in OpenRouter's dashboard or here if needed.
-const MODEL_TO_USE = "nousresearch/nous-capybara-7b"; 
+const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+// Correct Model definition (Only one line)
+const MODEL_TO_USE = "mistralai/mistral-7b-instruct"; 
 
 exports.handler = async (event, context) => {
     // Only allow POST requests
@@ -62,6 +61,10 @@ exports.handler = async (event, context) => {
              if (response.status === 429) { // Too Many Requests / Quota Exceeded
                  return { statusCode: 429, body: JSON.stringify({ error: "AI is busy or quota exceeded, please try again later." }) };
             }
+             // Specific handling for 404 from OpenRouter API itself (model not found)
+             if (response.status === 404) {
+                 return { statusCode: 404, body: JSON.stringify({ error: `AI Model '${MODEL_TO_USE}' not found on OpenRouter.` }) };
+             }
             return { statusCode: response.status, body: JSON.stringify({ error: `Failed to get response from AI. Status: ${response.status}` }) };
         }
 
