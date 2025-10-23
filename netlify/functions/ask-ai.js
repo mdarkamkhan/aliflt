@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 
 // Choose a conversational AI model from Hugging Face (e.g., GPT-2 or a smaller fine-tuned model)
 // We'll use a relatively small model suitable for the free tier
-const MODEL_API_URL = "https://api-inference.huggingface.co/models/distilgpt2";
+"https://api-inference.huggingface.co/models/google/gemma-2b-it"
 // Note: DialoGPT is okay for simple chat but might not follow instructions well. 
 // We can change the model later.
 
