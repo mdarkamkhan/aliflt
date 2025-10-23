@@ -2,7 +2,7 @@
 const fetch = require('node-fetch');
 
 // OpenRouter API endpoint
-const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const MODEL_TO_USE = "mistralai/mistral-7b-instruct";
 // We'll use a free model available on OpenRouter for now.
 // You can change this later in OpenRouter's dashboard or here if needed.
 const MODEL_TO_USE = "nousresearch/nous-capybara-7b"; 
