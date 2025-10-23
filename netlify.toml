@@ -1,3 +1,6 @@
 [build]
   command = ""
-  publish = "."
+  publish = "." # Specifies the root directory should be published
+
+[functions]
+  directory = "netlify/functions" # Tells Netlify where the functions are
