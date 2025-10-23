@@ -136,7 +136,8 @@
             width: 100%;
             max-width: 400px;
             margin: 0 auto;
-            min-height: 500px;
+            min-height: 500px; /* Ensure space for image */
+            overflow: hidden; /* Hide overflow */
         }
         .swapper-item {
             position: absolute;
@@ -157,6 +158,8 @@
             height: auto;
             display: block;
             border-radius: 5px;
+            min-height: 450px; /* Ensure image area has height */
+            object-fit: cover; /* Cover the area */
         }
         .swapper-item .product-label, .swapper-item .service-details, .swapper-item .work-caption {
             position: absolute;
@@ -194,6 +197,7 @@
             border-radius: 5px;
         }
         .empty-gallery-message {
+            /* Keep original styles */
             position: absolute;
             top: 50%;
             left: 50%;
@@ -227,6 +231,7 @@
             height: 100%;
             object-fit: cover;
             border-radius: 0;
+            min-height: 0; /* Override min-height for banner */
         }
         .banner-content {
             position: absolute;
@@ -394,29 +399,6 @@
          #chat-window.visible { display: flex; }
          /* --- END CHATBOT STYLES --- */
 
-        /* --- DEBUG BOX STYLE --- */
-         #chat-debug-output {
-             background-color: #f0f0f0;
-             border: 1px dashed red;
-             padding: 10px;
-             margin: 10px;
-             white-space: pre-wrap;
-             word-wrap: break-word;
-             font-size: 11px;
-             max-height: 200px;
-             overflow-y: auto;
-         }
-         /* --- TEST BUTTON STYLE --- */
-         #test-function-button {
-             margin: 10px;
-             padding: 10px 15px;
-             background-color: orange;
-             color: white;
-             border: none;
-             border-radius: 5px;
-             cursor: pointer;
-         }
-
     </style>
     
     <script>
@@ -429,7 +411,6 @@
 </head>
 <body>
 
-    <pre id="chat-debug-output">Chat Debug Output Will Appear Here...</pre>
     <div id="top-banner">
         <button class="close-banner-btn">×</button>
         <div class="swapper-container banner-swapper">
@@ -464,7 +445,6 @@
             <a href="https://wa.me/7250470009" target="_blank">WhatsApp</a>
             <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" class="instagram-btn">Instagram</a>
         </div>
-        <button id="test-function-button">Test AI Function</button>
     </div>
 
     <div id="about" class="section container fade-in-section">
@@ -474,7 +454,7 @@
         <div id="services" class="section container fade-in-section">
         <h2>Our Services</h2>
         <div class="swapper-container services-swapper">
-        </div>
+            </div>
     </div>
     
     <div id="products" class="section container fade-in-section">
@@ -486,12 +466,13 @@
                 </div>
         </div>
         <div class="swapper-container product-swapper">
-        </div>
+            </div>
     </div>
 
     <div id="our-works" class="section container fade-in-section">
         <h2>Our Works</h2>
-        <div id="curator-feed-default-feed-layout"><a href="https://curator.io" target="_blank" class="crt-logo crt-tag">Powered by Curator.io</a></div>
+        <div class="swapper-container works-swapper">
+            </div>
     </div>
 
     <div id="contact" class="section container fade-in-section">
@@ -648,7 +629,7 @@ function initializeSwapper(swapperSelector, options = {}) {
     if (items.length <= 1) {
         if (prevBtn) prevBtn.style.display = 'none';
         if (nextBtn) nextBtn.style.display = 'none';
-        return;
+        return; // No need for controls or autoplay if 0 or 1 item
     }
 
     function showItem(index) {
@@ -682,7 +663,8 @@ function initializeSwapper(swapperSelector, options = {}) {
     }
 
     function startAutoplay() {
-        if (options.autoplay) {
+        // Only start autoplay if it's enabled and there's more than one item
+        if (options.autoplay && items.length > 1) { 
             autoplayInterval = setInterval(next, options.autoplay);
         }
     }
@@ -733,19 +715,17 @@ async function renderSwapper(folder, containerSelector, options = {}) {
                 if (folder === 'services') {
                     itemContent += `<div class="service-details"><h3>${item.title}</h3></div>`;
                 } else if (folder === 'works') {
-                    // We don't need work-caption for Curator feed
+                     itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`; // ADDED CAPTION FOR WORKS
                 } else { // products
                     itemContent += `<div class="product-label">${item.title}</div>`;
                 }
             }
-            // Don't render items for 'works' if Curator feed is there
-            if (folder !== 'works' || !document.getElementById('curator-feed-default-feed-layout')) {
-                 content += `<div class="swapper-item ${activeClass}">${itemContent}</div>`;
-            }
+            content += `<div class="swapper-item ${activeClass}">${itemContent}</div>`;
+
         });
         
-        // Add nav buttons if it's not a banner and not 'works'
-        if (!options.isBanner && folder !== 'works') {
+        // Add nav buttons if it's not a banner
+        if (!options.isBanner) {
             content += `
                 <div class="swapper-nav">
                     <button class="swapper-nav-btn prev-btn">❮</button>
@@ -755,21 +735,18 @@ async function renderSwapper(folder, containerSelector, options = {}) {
         }
     }
     
-    // Only render if it's not the 'works' section (handled by Curator)
-    if (folder !== 'works' || !document.getElementById('curator-feed-default-feed-layout')) {
-        swapperContainer.innerHTML = content;
-        initializeSwapper(containerSelector, options);
-    }
+    swapperContainer.innerHTML = content;
+    initializeSwapper(containerSelector, options);
 }
 
 
 /* ====== Main Execution ====== */
 document.addEventListener('DOMContentLoaded', () => {
-    // Render all galleries
-    renderSwapper('offers', '.banner-swapper', { isBanner: true, autoplay: 5000 });
-    renderSwapper('services', '.services-swapper');
-    renderSwapper('products', '.product-swapper');
-    // We don't call renderSwapper for 'works' anymore
+    // Render all galleries with specified autoplay intervals
+    renderSwapper('offers', '.banner-swapper', { isBanner: true, autoplay: 5000 }); // Banner auto-swipes every 5 seconds
+    renderSwapper('services', '.services-swapper', { autoplay: 4000 }); // Services auto-swipes every 4 seconds
+    renderSwapper('products', '.product-swapper', { autoplay: 4000 }); // Products auto-swipes every 4 seconds
+    renderSwapper('works', '.works-swapper', { autoplay: 3000 }); // Works auto-swipes every 3 seconds
 
     // Close banner button
     const closeBtn = document.querySelector('.close-banner-btn');
@@ -830,18 +807,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
     const sendButton = document.getElementById('send-button');
-    const chatDebugOutput = document.getElementById('chat-debug-output'); // Get debug element
-    const testFunctionButton = document.getElementById('test-function-button'); // Get test button
-
-    // Function to log messages to debug box
-    function logDebug(message) {
-        if (chatDebugOutput) {
-            const time = new Date().toLocaleTimeString();
-            chatDebugOutput.textContent += `[${time}] ${message}\n`;
-            chatDebugOutput.scrollTop = chatDebugOutput.scrollHeight; // Scroll to bottom
-        }
-        console.log(message); // Also log to console
-    }
 
     // Toggle chat window visibility
     chatButton.addEventListener('click', () => {
@@ -859,7 +824,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message');
         messageDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
-        messageDiv.textContent = text;
+        messageDiv.textContent = text; 
         chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
@@ -884,7 +849,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to call the Netlify Function
     async function callNetlifyFunction(questionText) {
-        logDebug(`Sending request to Netlify function for: "${questionText}"`);
+        console.log(`Sending request to Netlify function for: "${questionText}"`); 
         try {
             const response = await fetch('/.netlify/functions/ask-ai', {
                 method: 'POST',
@@ -894,23 +859,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ question: questionText }),
             });
 
-            logDebug(`Received response status: ${response.status}`);
-            const responseBody = await response.json(); // Read body once
+            console.log(`Received response status: ${response.status}`); 
+            const responseBody = await response.json(); 
 
             if (!response.ok) {
-                console.error("Error from AI function:", responseBody);
-                logDebug(`Error from function: ${JSON.stringify(responseBody)}`);
+                console.error("Error from AI function:", responseBody); 
                 return { success: false, message: `Error: ${responseBody.error || `Status ${response.status}`}` };
             } else {
-                logDebug(`Success response body: ${JSON.stringify(responseBody)}`);
+                console.log(`Success response body: ${JSON.stringify(responseBody)}`); 
                 return { success: true, message: responseBody.answer };
             }
         } catch (error) {
-            console.error("Network or other error:", error);
-            logDebug(`Network/JS Error: ${error.message}`);
+            console.error("Network or other error:", error); 
             return { success: false, message: 'Sorry, something went wrong (Network Error).' };
         } finally {
-             logDebug('Request finished.');
+             console.log('Request finished.'); 
         }
     }
 
@@ -943,30 +906,9 @@ document.addEventListener('DOMContentLoaded', () => {
             sendMessageFromChat();
         }
     });
-
-    // Test button click listener
-    if (testFunctionButton) {
-        testFunctionButton.addEventListener('click', async () => {
-            logDebug('--- Test Button Clicked ---');
-            addThinkingMessage(); // Show thinking in chat too
-            const result = await callNetlifyFunction('Test Question');
-            removeThinkingMessage();
-            addMessage(`Test Result: ${result.message}`, 'ai');
-            logDebug(`--- Test Finished ---`);
-        });
-    }
     // --- END CHATBOT LOGIC ---
 
 });
-</script>
-
-<script type="text/javascript">
-/* curator-feed-default-feed-layout */
-(function(){
-var i,e,d=document,s="script";i=d.createElement("script");i.async=1;i.charset="UTF-8";
-i.src="https://cdn.curator.io/published/6626baad-49ed-411e-a7f0-7365368a6f30.js";
-e=d.getElementsByTagName(s)[0];e.parentNode.insertBefore(i, e);
-})();
 </script>
 
 </body>
