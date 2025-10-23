@@ -399,6 +399,19 @@
          }
          /* --- END CHATBOT STYLES --- */
 
+        /* --- DEBUG BOX STYLE --- */
+         #chat-debug-output {
+             background-color: #f0f0f0;
+             border: 1px dashed red;
+             padding: 10px;
+             margin: 10px;
+             white-space: pre-wrap;
+             word-wrap: break-word;
+             font-size: 11px;
+             max-height: 200px;
+             overflow-y: auto;
+         }
+
     </style>
     
     <script>
@@ -411,6 +424,7 @@
 </head>
 <body>
 
+    <pre id="chat-debug-output">Chat Debug Output Will Appear Here...</pre>
     <div id="top-banner">
         <button class="close-banner-btn">×</button>
         <div class="swapper-container banner-swapper">
@@ -490,8 +504,7 @@
 
             <button type="submit">Send Message</button>
         </form>
-
-        <p>
+                <p>
             Address :   daal kua, college road, sahibganj, 816109<br>
             Phone :  <a href="tel:+917250470009" style="color: inherit; text-decoration: none;">+91 72504 70009</a><br>
             Email :   alifladiestailor@gmail.com<br>
@@ -518,7 +531,7 @@
         <div id="chat-window" class="hidden">
             <div id="chat-header">
                 <span>Ask Alif AI</span>
-                <button id="close-chat">&times;</button>
+                <button id="close-chat">×</button>
             </div>
             <div id="chat-messages">
                 <div class="message ai-message">Hello! How can I help you today?</div>
@@ -615,7 +628,8 @@ async function fetchCollectionItems(folder) {
 
 /* ====== Swapper and Gallery Logic ====== */
 function initializeSwapper(swapperSelector, options = {}) {
-    const swapper = document.querySelector(swapperSelector);
+    // ... (InitializeSwapper function code remains the same) ...
+     const swapper = document.querySelector(swapperSelector);
     if (!swapper) return;
 
     const items = swapper.querySelectorAll('.swapper-item');
@@ -677,7 +691,8 @@ function initializeSwapper(swapperSelector, options = {}) {
 
 
 async function renderSwapper(folder, containerSelector, options = {}) {
-    const swapperContainer = document.querySelector(containerSelector);
+    // ... (renderSwapper function code remains the same) ...
+     const swapperContainer = document.querySelector(containerSelector);
     if (!swapperContainer) return;
 
     const items = await fetchCollectionItems(folder);
@@ -739,7 +754,9 @@ async function renderSwapper(folder, containerSelector, options = {}) {
         initializeSwapper(containerSelector, options);
     }
 }
-    /* ====== Main Execution ====== */
+
+
+/* ====== Main Execution ====== */
 document.addEventListener('DOMContentLoaded', () => {
     // Render all galleries
     renderSwapper('offers', '.banner-swapper', { isBanner: true, autoplay: 5000 });
@@ -806,6 +823,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
     const sendButton = document.getElementById('send-button');
+    const chatDebugOutput = document.getElementById('chat-debug-output'); // Get debug element
+
+    // Function to log messages to debug box
+    function logDebug(message) {
+        if (chatDebugOutput) {
+            const time = new Date().toLocaleTimeString();
+            chatDebugOutput.textContent += `[${time}] ${message}\n`;
+            chatDebugOutput.scrollTop = chatDebugOutput.scrollHeight; // Scroll to bottom
+        }
+        console.log(message); // Also log to console
+    }
 
     // Toggle chat window visibility
     chatButton.addEventListener('click', () => {
@@ -825,7 +853,6 @@ document.addEventListener('DOMContentLoaded', () => {
         messageDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
         messageDiv.textContent = text;
         chatMessages.appendChild(messageDiv);
-        // Scroll to the bottom
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
     
@@ -833,7 +860,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function addThinkingMessage() {
         const thinkingDiv = document.createElement('div');
         thinkingDiv.classList.add('message', 'thinking-message');
-        thinkingDiv.setAttribute('id', 'thinking'); // Add an ID to easily remove it
+        thinkingDiv.setAttribute('id', 'thinking');
         thinkingDiv.textContent = 'Alif AI is thinking...';
         chatMessages.appendChild(thinkingDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -853,9 +880,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!question) return;
 
         addMessage(question, 'user');
-        chatInput.value = ''; // Clear input field
-        sendButton.disabled = true; // Disable button while thinking
-        addThinkingMessage(); // Show thinking indicator
+        logDebug(`User question: ${question}`);
+        chatInput.value = ''; 
+        sendButton.disabled = true; 
+        addThinkingMessage(); 
+        logDebug('Sending request to Netlify function...');
 
         try {
             const response = await fetch('/.netlify/functions/ask-ai', {
@@ -866,30 +895,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ question: question }),
             });
 
-            removeThinkingMessage(); // Remove thinking indicator
+            removeThinkingMessage(); 
+
+            logDebug(`Received response status: ${response.status}`);
+            const responseBody = await response.json(); // Read body once
 
             if (!response.ok) {
-                const errorData = await response.json();
-                console.error("Error from AI function:", errorData);
-                addMessage(`Error: ${errorData.error || response.statusText}`, 'ai');
+                console.error("Error from AI function:", responseBody);
+                logDebug(`Error from function: ${JSON.stringify(responseBody)}`);
+                addMessage(`Error: ${responseBody.error || `Status ${response.status}`}`, 'ai');
             } else {
-                const data = await response.json();
-                addMessage(data.answer, 'ai');
+                logDebug(`Success response body: ${JSON.stringify(responseBody)}`);
+                addMessage(responseBody.answer, 'ai');
             }
         } catch (error) {
-            removeThinkingMessage(); // Remove thinking indicator on error too
+            removeThinkingMessage(); 
             console.error("Network or other error:", error);
+            logDebug(`Network/JS Error: ${error.message}`);
             addMessage('Sorry, something went wrong. Please try again.', 'ai');
         } finally {
-             sendButton.disabled = false; // Re-enable button
-             chatInput.focus(); // Focus back on input
+             sendButton.disabled = false; 
+             chatInput.focus(); 
+             logDebug('Request finished.');
         }
     }
 
     // Send message when button is clicked
     sendButton.addEventListener('click', sendMessageToAI);
 
-    // Send message when Enter key is pressed in the input field
+    // Send message when Enter key is pressed
     chatInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
             sendMessageToAI();
