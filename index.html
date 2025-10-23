@@ -390,13 +390,8 @@
          #send-button:hover {
              background-color: var(--accent-color-dark);
          }
-         /* Hide chat window initially */
-         #chat-window.hidden {
-            display: none;
-         }
-          #chat-window.visible {
-            display: flex;
-         }
+         #chat-window.hidden { display: none; }
+         #chat-window.visible { display: flex; }
          /* --- END CHATBOT STYLES --- */
 
         /* --- DEBUG BOX STYLE --- */
@@ -410,6 +405,16 @@
              font-size: 11px;
              max-height: 200px;
              overflow-y: auto;
+         }
+         /* --- TEST BUTTON STYLE --- */
+         #test-function-button {
+             margin: 10px;
+             padding: 10px 15px;
+             background-color: orange;
+             color: white;
+             border: none;
+             border-radius: 5px;
+             cursor: pointer;
          }
 
     </style>
@@ -459,6 +464,7 @@
             <a href="https://wa.me/7250470009" target="_blank">WhatsApp</a>
             <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" class="instagram-btn">Instagram</a>
         </div>
+        <button id="test-function-button">Test AI Function</button>
     </div>
 
     <div id="about" class="section container fade-in-section">
@@ -572,6 +578,7 @@ function parseYAMLFrontMatter(text) {
 
 /* ====== Fetch and cache folder listing + parse entries ====== */
 async function fetchCollectionItems(folder) {
+  // ... (fetchCollectionItems function code remains the same) ...
   const cacheKey = `ghc_${OWNER}_${REPO}_${folder}`;
   try {
     const rawCache = localStorage.getItem(cacheKey);
@@ -824,6 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatInput = document.getElementById('chat-input');
     const sendButton = document.getElementById('send-button');
     const chatDebugOutput = document.getElementById('chat-debug-output'); // Get debug element
+    const testFunctionButton = document.getElementById('test-function-button'); // Get test button
 
     // Function to log messages to debug box
     function logDebug(message) {
@@ -874,28 +882,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to send message to the AI (Netlify Function)
-    async function sendMessageToAI() {
-        const question = chatInput.value.trim();
-        if (!question) return;
-
-        addMessage(question, 'user');
-        logDebug(`User question: ${question}`);
-        chatInput.value = ''; 
-        sendButton.disabled = true; 
-        addThinkingMessage(); 
-        logDebug('Sending request to Netlify function...');
-
+    // Function to call the Netlify Function
+    async function callNetlifyFunction(questionText) {
+        logDebug(`Sending request to Netlify function for: "${questionText}"`);
         try {
             const response = await fetch('/.netlify/functions/ask-ai', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ question: question }),
+                body: JSON.stringify({ question: questionText }),
             });
-
-            removeThinkingMessage(); 
 
             logDebug(`Received response status: ${response.status}`);
             const responseBody = await response.json(); // Read body once
@@ -903,32 +900,61 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) {
                 console.error("Error from AI function:", responseBody);
                 logDebug(`Error from function: ${JSON.stringify(responseBody)}`);
-                addMessage(`Error: ${responseBody.error || `Status ${response.status}`}`, 'ai');
+                return { success: false, message: `Error: ${responseBody.error || `Status ${response.status}`}` };
             } else {
                 logDebug(`Success response body: ${JSON.stringify(responseBody)}`);
-                addMessage(responseBody.answer, 'ai');
+                return { success: true, message: responseBody.answer };
             }
         } catch (error) {
-            removeThinkingMessage(); 
             console.error("Network or other error:", error);
             logDebug(`Network/JS Error: ${error.message}`);
-            addMessage('Sorry, something went wrong. Please try again.', 'ai');
+            return { success: false, message: 'Sorry, something went wrong (Network Error).' };
         } finally {
-             sendButton.disabled = false; 
-             chatInput.focus(); 
              logDebug('Request finished.');
         }
     }
 
+    // Function to send message from chat input
+    async function sendMessageFromChat() {
+        const question = chatInput.value.trim();
+        if (!question) return;
+
+        addMessage(question, 'user');
+        chatInput.value = ''; 
+        sendButton.disabled = true; 
+        addThinkingMessage(); 
+
+        const result = await callNetlifyFunction(question);
+        removeThinkingMessage(); 
+        addMessage(result.message, 'ai');
+
+        sendButton.disabled = false; 
+        chatInput.focus(); 
+    }
+
+    // --- Event Listeners ---
+
     // Send message when button is clicked
-    sendButton.addEventListener('click', sendMessageToAI);
+    sendButton.addEventListener('click', sendMessageFromChat);
 
     // Send message when Enter key is pressed
     chatInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
-            sendMessageToAI();
+            sendMessageFromChat();
         }
     });
+
+    // Test button click listener
+    if (testFunctionButton) {
+        testFunctionButton.addEventListener('click', async () => {
+            logDebug('--- Test Button Clicked ---');
+            addThinkingMessage(); // Show thinking in chat too
+            const result = await callNetlifyFunction('Test Question');
+            removeThinkingMessage();
+            addMessage(`Test Result: ${result.message}`, 'ai');
+            logDebug(`--- Test Finished ---`);
+        });
+    }
     // --- END CHATBOT LOGIC ---
 
 });
