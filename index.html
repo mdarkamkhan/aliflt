@@ -445,7 +445,7 @@
         <h2>Welcome</h2>
         <p>Welcome to ALiF!
          Custom lehengas, frocks, aur dresses — modern style, traditional touch, 100% aapke liye.
- Ayen Daalu Kuan, College Road, Sahibganj
+ Ayen Daal Kuan, College Road, Sahibganj
 </p>
         <div class="cta-buttons">
             <a href="https://wa.me/7250470009" target="_blank">WhatsApp</a>
@@ -497,20 +497,14 @@
 
             <button type="submit">Send Message</button>
         </form>
-                <p>
+        <p>
             Address :   daal kua, college road, sahibganj, 816109<br>
             Phone :  <a href="tel:+917250470009" style="color: inherit; text-decoration: none;">+91 72504 70009</a><br>
             Email :   alifladiestailor@gmail.com<br>
             Hours :   11:00 am to 9:00pm
         </p>
         
-        <iframe src=<iframe src="https://www.google.com /maps/embed?pb=!1m18!1m12!1m3!1d3603
-
-486694982697!2d87.63675287591629!3d25 42187312217637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13 1!3m3!1m2!1s0x39f99411f1813027
-
-%3A0x2650c8646e2a2236!2s6JRP%2BRQ
-
-%20Sahibganj%2C%20Jharkhand!5e0!3m2!1sen!2sin !4v1728250645672!5m2!1sen!2sin" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3603.486694982697!2d87.63675287591629!3d25.42187312217637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f99411f1813027%3A0x2650c8646e2a2236!2s6JRP%2BRQ%20Sahibganj%2C%20Jharkhand!5e0!3m2!1sen!2sin!4v1728250645672!5m2!1sen!2sin" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         
         <div class="social-links">
             <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank">Instagram</a>
@@ -533,7 +527,7 @@
                 <button id="close-chat">×</button>
             </div>
             <div id="chat-messages">
-                <div class="message ai-message">Hello! How can I help you today?</div>
+                <div class="message ai-message">welcome to ALiF</div>
             </div>
             <div id="chat-input-area">
                 <input type="text" id="chat-input" placeholder="Ask a question...">
@@ -757,7 +751,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSwapper('offers', '.banner-swapper', { isBanner: true, autoplay: 5000 });
     renderSwapper('services', '.services-swapper', { autoplay: 4000 }); // Services auto-swipes every 4 seconds
     renderSwapper('products', '.product-swapper', { autoplay: 4000 }); // Products auto-swipes every 4 seconds
-    renderSwapper('works', '.works-swapper', { autoplay: 3000 }); // Works auto-swipes every 3 seconds
+    renderSwapper('works', '.works-swapper', { autoplay: 4000 }); // Works auto-swipes every 3 seconds
 
     // Close banner button
     const closeBtn = document.querySelector('.close-banner-btn');
@@ -781,9 +775,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Create the message text
             let text = `Hi, I have an inquiry:\n\n`;
-            text += `*Name:* ${name}\n`;
-            text += `*Inquiry Type:* ${inquiry}\n`;
-            text += `*Message:* ${message}`;
+            text += `Name: ${name}\n`;
+            text += `Inquiry Type: ${inquiry}\n`;
+            text += `Message: ${message}`;
 
             // Encode the text for the URL
             const encodedText = encodeURIComponent(text);
