@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 
 // OpenRouter API endpoint
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL_TO_USE = "mistralai/mistral-7b-instruct"; 
+const MODEL_TO_USE = "openai/gpt-3.5-turbo"; 
 
 // --- ALIF AI SYSTEM PROMPT v2.0 ---
 const ALIF_AI_CONTEXT = `
