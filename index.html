@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALiF Ladies Tailor | Custom Stitching for Women in Sahibganj</title>
     
-    <meta name="description" content="ALiF Ladies Tailor offers the best custom stitching for Blouses, Lehengas, Frocks, and Suits in Sahibganj. Guaranteed perfect fitting and latest designs.">
-    <meta name="keywords" content="Ladies Tailor Sahibganj, Custom Stitching, Blouse Stitching, blouse Tailor, Sahibganj Tailor, Alif Ladies Tailor, ladies tailor in sahibganj, blouse tailor sahibganj, ladies blouse ka tailor sahibganj me, best ladies tailor in sahibganj, best blouse tailor in sahibganj, Women Top Retailers">
-    <link rel="canonical" href="https://aliflt.netlify.app/">
-    
-    <link rel="icon" href="/favicon.png" type="image/png">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -237,13 +231,6 @@
             max-width: none;
             min-height: auto;
         }
-        #top-banner .swapper-item {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
         .banner-content {
             position: absolute;
             bottom: 10vh; /* MOVED LOWER */
@@ -303,6 +290,107 @@
             transform: translateY(0);
         }
 
+        /* --- CHATBOT STYLES --- */
+        #chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999; /* Z-INDEX INCREASED */
+        }
+        #chat-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+         #chat-window {
+            display: none; /* Hidden by default */
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9999; /* Z-INDEX INCREASED */
+         }
+         #chat-header {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+         }
+          #close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+          }
+         .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+         }
+         .user-message {
+            background-color: #eee;
+            align-self: flex-end;
+            margin-left: auto; /* Push user messages to the right */
+         }
+         .ai-message {
+            background-color: var(--accent-color);
+            color: white;
+            align-self: flex-start;
+            margin-right: auto; /* Push AI messages to the left */
+         }
+          .thinking-message {
+            font-style: italic;
+            color: #888;
+            align-self: flex-start;
+          }
+         #chat-input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+         }
+         #chat-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+         }
+         #send-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+         }
+         #send-button:hover {
+             background-color: var(--accent-color-dark);
+         }
+         #chat-window.hidden { display: none; }
+         #chat-window.visible { display: flex; }
+         /* --- END CHATBOT STYLES --- */
+
     </style>
     
     <script>
@@ -343,7 +431,7 @@
         <h2>Welcome</h2>
         <p>Welcome to ALiF!
          Custom lehengas, frocks, aur dresses — modern style, traditional touch, 100% aapke liye.
- Ayen Daalu Kuan, College Road, Sahibganj
+ Ayen Daal Kuan, College Road, Sahibganj
 </p>
         <div class="cta-buttons">
             <a href="https://wa.me/7250470009" target="_blank">WhatsApp</a>
@@ -355,71 +443,14 @@
         <h2>About Us</h2>
         <p>At Alif Tailoring, we craft custom lehengas, frocks, and dresses that fit perfectly and make you feel amazing. Mixing traditional techniques with modern style, we bring your ideas to life.</p>
     </div>
-        <div id="services" class="section container fade-in-section">
-        <h2>Our Services</h2>
-        <div class="swapper-container services-swapper">
-            </div>
-    </div>
-    
-    <div id="products" class="section container fade-in-section">
-        <h2>Products</h2>
-        <button class="filter-toggle-btn">Show Filters ↓</button>
-        <div class="product-filters-container">
-            <div class="product-filters">
-                <span class="filter-button" data-filter="all">All</span>
-                </div>
-        </div>
-        <div class="swapper-container product-swapper">
-            </div>
-    </div>
-
-    <div id="our-works" class="section container fade-in-section">
-        <h2>Our Works</h2>
-        <div class="swapper-container works-swapper">
-            </div>
-    </div>
-
-    <div id="reviews" class="section container fade-in-section">
-        <h2>Client Reviews</h2>
-        <p style="text-align: center; margin-bottom: 25px;">Did you love our service? Help others find us by leaving a review!</p>
-        
-        <div class="cta-buttons">
-             <a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" class="review-btn">
-                Write a Review on Google
-            </a>
-        </div>
-        
-        <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 30px;">
-            <h3 style="text-align: center; color: #555;">What Our Clients Say</h3>
-            
-            <script src="https://elfsightcdn.com/platform.js" async></script>
-            <div class="elfsight-app-2c83f037-ee5d-4d90-913e-2a5f353d7add" data-elfsight-app-lazy></div>
-            </div>
-    </div>
-    <div id="contact" class="section container fade-in-section">
-        <h2>Contact Us</h2>
-        <p>For any inquiry please, Fill out the form below or contact us directly.</p>
-        
-        <form id="whatsapp-form" class="contact-form">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="inquiry">Inquiry Type:</label>
-            <input type="text" id="inquiry" name="inquiry" required placeholder="e.g., Product Info, Shop Address">
-
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
-
-            <button type="submit">Send Message</button>
-        </form>
-                <p>
+            <p>
             Address :   daal kua, college road, sahibganj, 816109<br>
             Phone :  <a href="tel:+917250470009" style="color: inherit; text-decoration: none;">+91 72504 70009</a><br>
             Email :   alifladiestailor@gmail.com<br>
             Hours :   11:00 am to 9:00pm
         </p>
         
-        <iframe src="https://maps.app.goo.gl/HZaoxkjC1oUTf5oNA9" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3603.486694982697!2d87.63675287591629!3d25.42187312217637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f99411f1813027%3A0x2650c8646e2a2236!2s6JRP%2BRQ%20Sahibganj%2C%20Jharkhand!5e0!3m2!1sen!2sin!4v1728249053303!5m2!1sen!2sin" width="100%" height="450" style="border:0; border-radius: 8px; margin-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         
         <div class="social-links">
             <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank">Instagram</a>
