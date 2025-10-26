@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALiF Ladies Tailor | {{ title }}</title>
     
+    <meta name="description" content="ALiF Ladies Tailor offers the best custom stitching for Lehengas, Frocks, and Suits in Sahibganj. Guaranteed perfect fitting and latest designs.">
+    <meta name="keywords" content="Ladies Tailor Sahibganj, Custom Stitching, Blouse Stitching, Lehenga Tailor, Sahibganj Tailor, Alif Ladies Tailor, Women Top Retailers">
+    <link rel="canonical" href="https://aliflt.netlify.app/">
+    <link rel="icon" href="/favicon.png" type="image/png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -22,7 +27,7 @@
             padding: 0;
             color: #333;
             background-color: #f4f4f4;
-            padding-bottom: 80px; /* Add padding for chat button */
+            padding-bottom: 80px;
         }
         .container {
             max-width: 960px;
@@ -46,9 +51,9 @@
             color: #fff;
             text-align: center;
             padding: 0.5rem 0;
-            position: sticky; /* Make nav sticky */
+            position: sticky;
             top: 0;
-            z-index: 1000; /* Ensure it stays on top */
+            z-index: 1000;
         }
         nav a {
             color: #fff;
@@ -84,7 +89,7 @@
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            box-sizing: border-box; /* Include padding in width */
+            box-sizing: border-box;
         }
         .contact-form button {
             background: var(--accent-color);
@@ -110,11 +115,11 @@
             text-decoration: none;
             border-radius: 50px;
             font-weight: bold;
-            margin: 5px 10px; /* Adjusted margin for better wrapping */
+            margin: 5px 10px;
         }
-        .cta-buttons a.review-btn { /* NEW STYLE FOR REVIEW BUTTON */
+        .cta-buttons a.review-btn {
             background: #4285F4; /* Google Blue */
-            margin: 20px auto 0 auto; /* Center and add top margin */
+            margin: 20px auto 0 auto;
             padding: 12px 30px;
             font-size: 1.1em;
             display: block;
@@ -125,7 +130,7 @@
              background: #3c7de9;
         }
         .cta-buttons a.instagram-btn {
-            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); /* INSTAGRAM GRADIENT */
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
         }
         .social-links {
             text-align: center;
@@ -148,8 +153,8 @@
             width: 100%;
             max-width: 400px;
             margin: 0 auto;
-            min-height: 500px; /* Ensure space for image */
-            overflow: hidden; /* Hide overflow */
+            min-height: 500px;
+            overflow: hidden;
         }
         .swapper-item {
             position: absolute;
@@ -170,8 +175,8 @@
             height: auto;
             display: block;
             border-radius: 5px;
-            min-height: 450px; /* Ensure image area has height */
-            object-fit: cover; /* Cover the area */
+            min-height: 450px;
+            object-fit: cover;
         }
         .swapper-item .product-label, .swapper-item .service-details, .swapper-item .work-caption {
             position: absolute;
@@ -209,7 +214,6 @@
             border-radius: 5px;
         }
         .empty-gallery-message {
-            /* Keep original styles */
             position: absolute;
             top: 50%;
             left: 50%;
@@ -233,9 +237,9 @@
         }
         .banner-content {
             position: absolute;
-            bottom: 10vh; /* MOVED LOWER */
+            bottom: 10vh;
             left: 50%;
-            transform: translateX(-50%); /* Center horizontally */
+            transform: translateX(-50%);
             text-align: center;
             color: #fff;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
@@ -245,18 +249,18 @@
             display: none;
         }
         .banner-cta-btn {
-            background: var(--accent-color); /* THEME COLOR ADDED */
+            background: var(--accent-color);
             color: #fff;
-            padding: 12px 30px; /* Slightly bigger padding */
+            padding: 12px 30px;
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            font-size: 1.1em; /* Slightly bigger font */
+            font-size: 1.1em;
             transition: background-color 0.3s;
-            display: inline-block; /* Needed for positioning */
+            display: inline-block;
         }
         .banner-cta-btn:hover {
-            background: var(--accent-color-dark); /* THEME COLOR ADDED */
+            background: var(--accent-color-dark);
         }
         .close-banner-btn {
             position: absolute;
@@ -295,7 +299,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            z-index: 9999; /* Z-INDEX INCREASED */
+            z-index: 9999;
         }
         #chat-button {
             background-color: var(--accent-color);
@@ -312,7 +316,7 @@
             justify-content: center;
         }
          #chat-window {
-            display: none; /* Hidden by default */
+            display: none;
             position: fixed;
             bottom: 90px;
             right: 20px;
@@ -324,7 +328,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            z-index: 9999; /* Z-INDEX INCREASED */
+            z-index: 9999;
          }
          #chat-header {
             background-color: var(--accent-color);
@@ -351,13 +355,13 @@
          .user-message {
             background-color: #eee;
             align-self: flex-end;
-            margin-left: auto; /* Push user messages to the right */
+            margin-left: auto;
          }
          .ai-message {
             background-color: var(--accent-color);
             color: white;
             align-self: flex-start;
-            margin-right: auto; /* Push AI messages to the left */
+            margin-right: auto;
          }
           .thinking-message {
             font-style: italic;
@@ -419,12 +423,12 @@
     <nav class="fade-in-section">
         <div class="container">
             <a href="/">Home</a> 
-            <a href="/products/">Products & Work</a> 
+            <a href="/gallery/">Services & Products</a> 
             <a href="/contact-us/">Reviews & Contact</a> 
         </div>
     </nav>
 
-    {{ content }}
+    <main>{{ content }}</main>
     <footer class="fade-in-section">
         <div class="container">
             <p>© 2025 ALiF ladies tailor . All Rights Reserved.</p>
@@ -449,381 +453,7 @@
     </div>
     
 <script>
-/* ====== CONFIG ====== */
-const OWNER = "mdarkamkhan";      
-const REPO  = "aliflt";           
-const SITE_ORIGIN = "https://aliflt.netlify.app"; 
-const CACHE_TTL = 60 * 60 * 1000; // 1 hour cache
-
-/* ====== UTIL: parse YAML frontmatter from markdown */
-function parseYAMLFrontMatter(text) {
-  const fm = text.match(/^---\s*([\s\S]*?)\s*---/);
-  if (!fm) return {};
-  const lines = fm[1].split(/\r?\n/);
-  const data = {};
-  for (let line of lines) {
-    const m = line.match(/^\s*([A-Za-z0-9_\- ]+)\s*:\s*(.+)$/);
-    if (m) {
-      let key = m[1].trim();
-      let val = m[2].trim();
-      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-        val = val.slice(1, -1);
-      }
-      data[key] = val;
-    }
-  }
-  return data;
-}
-
-/* ====== Fetch and cache folder listing + parse entries ====== */
-async function fetchCollectionItems(folder) {
-  const cacheKey = `ghc_${OWNER}_${REPO}_${folder}`;
-  try {
-    const rawCache = localStorage.getItem(cacheKey);
-    if (rawCache) {
-      const parsed = JSON.parse(rawCache);
-      if (Date.now() - parsed.ts < CACHE_TTL) {
-        return parsed.items;
-      }
-    }
-  } catch (e) { /* ignore parse errors */ }
-
-  const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${folder}`;
-  const res = await fetch(apiUrl);
-  if (!res.ok) {
-    console.warn(`GitHub API error for ${folder}:`, res.status, res.statusText);
-    return [];
-  }
-  const list = await res.json(); 
-
-  const items = [];
-  for (const file of list) {
-    if (!file.name.match(/\.(md|markdown|json)$/i)) continue; 
-    try {
-      const rawText = await fetch(file.download_url).then(r => r.text());
-      let data = {};
-      if (file.name.match(/\.(md|markdown)$/i)) {
-        data = parseYAMLFrontMatter(rawText);
-      } else { 
-        try { data = JSON.parse(rawText); } catch(e){ data = {}; }
-      }
-      
-      let img = data.image || data.img || data.Image || data.photo || null;
-      let title = data.title || data.Title || data.name || file.name.replace(/\.(md|markdown|json)$/i, "");
-      
-      if (img) {
-        if (img.startsWith("/")) img = SITE_ORIGIN + img;
-        else if (!img.startsWith("http")) img = SITE_ORIGIN + "/" + img;
-      }
-      
-      items.push({ title, image: img, raw: data, slug: file.name });
-      
-    } catch (err) {
-      console.error("Error reading file", file.name, err);
-    }
-  }
-
-  try {
-    localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), items }));
-  } catch (e) {}
-
-  return items;
-}
-
-
-/* ====== Swapper and Gallery Logic ====== */
-function initializeSwapper(swapperSelector, options = {}) {
-     const swapper = document.querySelector(swapperSelector);
-    if (!swapper) return;
-
-    const items = swapper.querySelectorAll('.swapper-item');
-    const prevBtn = swapper.querySelector('.prev-btn');
-    const nextBtn = swapper.querySelector('.next-btn');
-    let currentIndex = 0;
-    let autoplayInterval = null;
-
-    if (items.length <= 1) {
-        if (prevBtn) prevBtn.style.display = 'none';
-        if (nextBtn) nextBtn.style.display = 'none';
-        return; 
-    }
-
-    function showItem(index) {
-        items.forEach((item, i) => {
-            item.classList.toggle('active', i === index);
-        });
-    }
-
-    function next() {
-        currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0;
-        showItem(currentIndex);
-    }
-    
-    function prev() {
-        currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1;
-        showItem(currentIndex);
-    }
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            prev();
-            if (autoplayInterval) resetAutoplay();
-        });
-    }
-
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            next();
-            if (autoplayInterval) resetAutoplay();
-        });
-    }
-
-    function startAutoplay() {
-        if (options.autoplay && items.length > 1) { 
-            autoplayInterval = setInterval(next, options.autoplay);
-        }
-    }
-
-    function resetAutoplay() {
-        clearInterval(autoplayInterval);
-        startAutoplay();
-    }
-    
-    showItem(currentIndex);
-    startAutoplay();
-}
-
-
-async function renderSwapper(folder, containerSelector, options = {}) {
-     const swapperContainer = document.querySelector(containerSelector);
-    if (!swapperContainer) return;
-
-    const items = await fetchCollectionItems(folder);
-    const itemsWithImages = items.filter(item => item.image);
-
-    // Sort items by date if it exists
-    itemsWithImages.sort((a, b) => {
-        const dateA = a.raw.date ? new Date(a.raw.date) : new Date(0);
-        const dateB = b.raw.date ? new Date(b.raw.date) : new Date(0);
-        return dateB - dateA;
-    });
-
-    let content = '';
-    if (!itemsWithImages.length) {
-        content = "<p class='empty-gallery-message'>No items found.</p>";
-    } else {
-        itemsWithImages.forEach((item, index) => {
-            const activeClass = index === 0 ? 'active' : '';
-            let itemContent = '';
-
-            if (options.isBanner) {
-                 itemContent = `
-                    <img src="${item.image}" alt="${item.title}">
-                    <div class="banner-content">
-                        <h2>${item.title}</h2>
-                        <a href="#home" class="banner-cta-btn">Visit Now</a>
-                    </div>
-                `;
-            } else {
-                itemContent = `<img src="${item.image}" alt="${item.title}">`;
-                if (folder === 'services') {
-                    itemContent += `<div class="service-details"><h3>${item.title}</h3></div>`;
-                } else if (folder === 'works') {
-                     itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`; 
-                } else { // products
-                    itemContent += `<div class="product-label">${item.title}</div>`;
-                }
-            }
-            content += `<div class="swapper-item ${activeClass}">${itemContent}</div>`;
-
-        });
-        
-        // Add nav buttons if it's not a banner
-        if (!options.isBanner) {
-            content += `
-                <div class="swapper-nav">
-                    <button class="swapper-nav-btn prev-btn">❮</button>
-                    <button class="swapper-nav-btn next-btn">❯</button>
-                </div>
-            `;
-        }
-    }
-    
-    swapperContainer.innerHTML = content;
-    initializeSwapper(containerSelector, options);
-}
-
-
-/* ====== Main Execution ====== */
-document.addEventListener('DOMContentLoaded', () => {
-    // Render all galleries
-    renderSwapper('offers', '.banner-swapper', { isBanner: true, autoplay: 5000 });
-    renderSwapper('services', '.services-swapper', { autoplay: 4000 }); 
-    renderSwapper('products', '.product-swapper', { autoplay: 4000 }); 
-    renderSwapper('works', '.works-swapper', { autoplay: 3000 }); 
-
-    // Close banner button
-    const closeBtn = document.querySelector('.close-banner-btn');
-    if(closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            const banner = document.getElementById('top-banner');
-            if (banner) banner.style.display = 'none';
-        });
-    }
-
-    // WhatsApp Form Handler
-    const whatsappForm = document.getElementById('whatsapp-form');
-    if (whatsappForm) {
-        whatsappForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Stop form from submitting the old way
-
-            const yourNumber = "917250470009"; // Your WhatsApp number
-            const name = document.getElementById('name').value;
-            const inquiry = document.getElementById('inquiry').value;
-            const message = document.getElementById('message').value;
-
-            // Create the message text
-            let text = `Hi, I have an inquiry:\n\n`;
-            text += `*Name:* ${name}\n`;
-            text += `*Inquiry Type:* ${inquiry}\n`;
-            text += `*Message:* ${message}`;
-
-            // Encode the text for the URL
-            const encodedText = encodeURIComponent(text);
-
-            // Create the WhatsApp link and open it
-            const whatsappUrl = `https://wa.me/${yourNumber}?text=${encodedText}`;
-            window.open(whatsappUrl, '_blank');
-        });
-    }
-
-    // SCROLL ANIMATION LOGIC
-    const animatedSections = document.querySelectorAll('.fade-in-section');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target); // Optional: stop observing after it's visible
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-
-    animatedSections.forEach(section => {
-        observer.observe(section);
-    });
-
-    // --- CHATBOT LOGIC ---
-    const chatButton = document.getElementById('chat-button');
-    const chatWindow = document.getElementById('chat-window');
-    const closeChatButton = document.getElementById('close-chat');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatInput = document.getElementById('chat-input');
-    const sendButton = document.getElementById('send-button');
-
-    // Toggle chat window visibility
-    chatButton.addEventListener('click', () => {
-        chatWindow.classList.toggle('visible');
-        chatWindow.classList.toggle('hidden');
-    });
-
-    closeChatButton.addEventListener('click', () => {
-        chatWindow.classList.add('hidden');
-        chatWindow.classList.remove('visible');
-    });
-
-    // Function to add a message to the chat
-    function addMessage(text, sender) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message');
-        messageDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
-        messageDiv.textContent = text; 
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-    
-     // Function to add a "thinking" message
-    function addThinkingMessage() {
-        const thinkingDiv = document.createElement('div');
-        thinkingDiv.classList.add('message', 'thinking-message');
-        thinkingDiv.setAttribute('id', 'thinking');
-        thinkingDiv.textContent = 'Alif AI is thinking...';
-        chatMessages.appendChild(thinkingDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    // Function to remove the "thinking" message
-    function removeThinkingMessage() {
-        const thinkingDiv = document.getElementById('thinking');
-        if (thinkingDiv) {
-            chatMessages.removeChild(thinkingDiv);
-        }
-    }
-
-    // Function to call the Netlify Function
-    async function callNetlifyFunction(questionText) {
-        console.log(`Sending request to Netlify function for: "${questionText}"`); 
-        try {
-            const response = await fetch('/.netlify/functions/ask-ai', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ question: questionText }),
-            });
-
-            console.log(`Received response status: ${response.status}`); 
-            const responseBody = await response.json(); 
-
-            if (!response.ok) {
-                console.error("Error from AI function:", responseBody); 
-                return { success: false, message: `Error: ${responseBody.error || \`Status \${response.status}\`}` };
-            } else {
-                console.log(`Success response body: ${JSON.stringify(responseBody)}`); 
-                return { success: true, message: responseBody.answer };
-            }
-        } catch (error) {
-            console.error("Network or other error:", error); 
-            return { success: false, message: 'Sorry, something went wrong (Network Error).' };
-        } finally {
-             console.log('Request finished.'); 
-        }
-    }
-
-    // Function to send message from chat input
-    async function sendMessageFromChat() {
-        const question = chatInput.value.trim();
-        if (!question) return;
-
-        addMessage(question, 'user');
-        chatInput.value = ''; 
-        sendButton.disabled = true; 
-        addThinkingMessage(); 
-
-        const result = await callNetlifyFunction(question);
-        removeThinkingMessage(); 
-        addMessage(result.message, 'ai');
-
-        sendButton.disabled = false; 
-        chatInput.focus(); 
-    }
-
-    // --- Event Listeners ---
-
-    // Send message when button is clicked
-    sendButton.addEventListener('click', sendMessageFromChat);
-
-    // Send message when Enter key is pressed
-    chatInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            sendMessageFromChat();
-        }
-    });
-    // --- END CHATBOT LOGIC ---
-
-});
+// ... (JavaScript functions will follow in the next part) ...
+// The remaining JavaScript logic for Swappers, Fetching, and Chatbot will follow.
+// NOTE: I added <main> tags around {{ content }} to ensure valid HTML structure.
 </script>
-
-</body>
-</html>
