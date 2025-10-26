@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALiF Ladies Tailor | Custom Stitching for Women in Sahibganj</title>
+    <title>ALiF Ladies Tailor | {{ title }}</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -419,111 +418,13 @@
 
     <nav class="fade-in-section">
         <div class="container">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#services">Services</a>
-            <a href="#products">Products</a>
-            <a href="#our-works">Our Works</a>
-            <a href="#reviews">Reviews</a> <a href="#contact">Contact</a>
+            <a href="/">Home</a> 
+            <a href="/products/">Products & Work</a> 
+            <a href="/contact-us/">Reviews & Contact</a> 
         </div>
     </nav>
 
- <div id="home" class="section container fade-in-section">
-        <h2>Welcome</h2>
-        <p>Welcome to ALiF!
-         Custom lehengas, frocks, aur dresses — modern style, traditional touch, 100% aapke liye.
- Ayen Daal Kuan, College Road, Sahibganj
-</p>
-        <div class="cta-buttons">
-            <a href="https://wa.me/7250470009" target="_blank">WhatsApp</a>
-            <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" class="instagram-btn">Instagram</a>
-        </div>
-    </div>
-
-    <div id="about" class="section container fade-in-section">
-        <h2>About Us</h2>
-        <p>At Alif Tailoring, we craft custom lehengas, frocks, and dresses that fit perfectly and make you feel amazing. Mixing traditional techniques with modern style, we bring your ideas to life.</p>
-    </div>
-    <div id="services" class="section container fade-in-section">
-        <h2>Our Services</h2>
-        <div class="swapper-container services-swapper">
-            </div>
-    </div>
-    
-    <div id="products" class="section container fade-in-section">
-        <h2>Products</h2>
-        <button class="filter-toggle-btn">Show Filters ↓</button>
-        <div class="product-filters-container">
-            <div class="product-filters">
-                <span class="filter-button" data-filter="all">All</span>
-                </div>
-        </div>
-        <div class="swapper-container product-swapper">
-            </div>
-    </div>
-
-    <div id="our-works" class="section container fade-in-section">
-        <h2>Our Works</h2>
-        <div class="swapper-container works-swapper">
-            </div>
-    </div>
-
-    <div id="reviews" class="section container fade-in-section">
-        <h2>Client Reviews</h2>
-        <p style="text-align: center; margin-bottom: 25px;">Did you love our service? Help others find us by leaving a review!</p>
-        
-        <div class="cta-buttons">
-             <a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" class="review-btn">
-                Write a Review on Google
-            </a>
-        </div>
-        
-        <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 30px;">
-            <h3 style="text-align: center; color: #555;">What Our Clients Say</h3>
-            
-            <script src="https://elfsightcdn.com/platform.js" async></script>
-            <div class="elfsight-app-2c83f037-ee5d-4d90-913e-2a5f353d7add" data-elfsight-app-lazy></div>
-            </div>
-    </div>
-    <div id="contact" class="section container fade-in-section">
-        <h2>Contact Us</h2>
-        <p>For any inquiry please, Fill out the form below or contact us directly.</p>
-        
-        <form id="whatsapp-form" class="contact-form">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="inquiry">Inquiry Type:</label>
-            <input type="text" id="inquiry" name="inquiry" required placeholder="e.g., Product Info, Shop Address">
-
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
-
-            <button type="submit">Send Message</button>
-        </form>
-        <p>
-            Address :   Daal Kuan, College Road, Sahibganj, 816109<br>
-            Phone :  <a href="tel:+917250470009" style="color: inherit; text-decoration: none;">+91 72504 70009</a><br>
-            Email :   alifladiestailor@gmail.com<br>
-            Hours :   11:00 am to 9:00pm
-        </p>
-        
-    <iframe 
-  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.982789838897!2d87.6494549!3d25.2429151!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f04aea8cb0fb8b%3A0xb1b1c789d63ba9e0!2s6JRP%2BRQ%2C%20Sahibganj%2C%20Jharkhand%20816109%2C%20India!5e0!3m2!1sen!2sin!4v1738821234567!5m2!1sen!2sin" 
-  width="100%" 
-  height="400" 
-  style="border:0; border-radius: 14px;" 
-  allowfullscreen="" 
-  loading="lazy" 
-  referrerpolicy="no-referrer-when-downgrade">
-    </iframe>      
-        <div class="social-links">
-            <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank">Instagram</a>
-            <a href="https://www.facebook.com/share/16x8xdygPb/" target="_blank">Facebook</a>
-            <a href="----error----" target="_blank">Twitter</a>
-        </div>
-    </div>
-
+    {{ content }}
     <footer class="fade-in-section">
         <div class="container">
             <p>© 2025 ALiF ladies tailor . All Rights Reserved.</p>
@@ -644,7 +545,7 @@ function initializeSwapper(swapperSelector, options = {}) {
     if (items.length <= 1) {
         if (prevBtn) prevBtn.style.display = 'none';
         if (nextBtn) nextBtn.style.display = 'none';
-        return; // No need for controls or autoplay if 0 or 1 item
+        return; 
     }
 
     function showItem(index) {
@@ -678,7 +579,6 @@ function initializeSwapper(swapperSelector, options = {}) {
     }
 
     function startAutoplay() {
-        // Only start autoplay if it's enabled and there's more than one item
         if (options.autoplay && items.length > 1) { 
             autoplayInterval = setInterval(next, options.autoplay);
         }
@@ -729,7 +629,7 @@ async function renderSwapper(folder, containerSelector, options = {}) {
                 if (folder === 'services') {
                     itemContent += `<div class="service-details"><h3>${item.title}</h3></div>`;
                 } else if (folder === 'works') {
-                     itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`; // ADDED CAPTION FOR WORKS
+                     itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`; 
                 } else { // products
                     itemContent += `<div class="product-label">${item.title}</div>`;
                 }
@@ -737,8 +637,8 @@ async function renderSwapper(folder, containerSelector, options = {}) {
             content += `<div class="swapper-item ${activeClass}">${itemContent}</div>`;
 
         });
-
-// Add nav buttons if it's not a banner
+        
+        // Add nav buttons if it's not a banner
         if (!options.isBanner) {
             content += `
                 <div class="swapper-nav">
@@ -753,13 +653,14 @@ async function renderSwapper(folder, containerSelector, options = {}) {
     initializeSwapper(containerSelector, options);
 }
 
+
 /* ====== Main Execution ====== */
 document.addEventListener('DOMContentLoaded', () => {
     // Render all galleries
     renderSwapper('offers', '.banner-swapper', { isBanner: true, autoplay: 5000 });
-    renderSwapper('services', '.services-swapper', { autoplay: 4000 }); // Services auto-swipes every 4 seconds
-    renderSwapper('products', '.product-swapper', { autoplay: 4000 }); // Products auto-swipes every 4 seconds
-    renderSwapper('works', '.works-swapper', { autoplay: 3000 }); // Works auto-swipes every 3 seconds
+    renderSwapper('services', '.services-swapper', { autoplay: 4000 }); 
+    renderSwapper('products', '.product-swapper', { autoplay: 4000 }); 
+    renderSwapper('works', '.works-swapper', { autoplay: 3000 }); 
 
     // Close banner button
     const closeBtn = document.querySelector('.close-banner-btn');
@@ -877,7 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 console.error("Error from AI function:", responseBody); 
-                return { success: false, message: `Error: ${responseBody.error || `Status ${response.status}`}` };
+                return { success: false, message: `Error: ${responseBody.error || \`Status \${response.status}\`}` };
             } else {
                 console.log(`Success response body: ${JSON.stringify(responseBody)}`); 
                 return { success: true, message: responseBody.answer };
