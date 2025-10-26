@@ -1,6 +1,6 @@
 [build]
-  command = ""
-  publish = "." # Specifies the root directory should be published
+  command = "npx @11ty/eleventy" # This is the build command
+  publish = "_site" # This forces Netlify to publish the correct folder
 
 [functions]
-  directory = "netlify/functions" # Tells Netlify where the functions are
+  directory = "netlify/functions"
