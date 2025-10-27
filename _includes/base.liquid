@@ -117,9 +117,9 @@
             font-weight: bold;
             margin: 5px 10px; /* Adjusted margin for better wrapping */
         }
-        .cta-buttons a.review-btn { 
+        .cta-buttons a.review-btn { /* NEW STYLE FOR REVIEW BUTTON */
             background: #4285F4; /* Google Blue */
-            margin: 20px auto 0 auto;
+            margin: 20px auto 0 auto; /* Center and add top margin */
             padding: 12px 30px;
             font-size: 1.1em;
             display: block;
@@ -175,7 +175,7 @@
             height: auto;
             display: block;
             border-radius: 5px;
-            min-height: 450px; 
+            min-height: 450px;
             object-fit: cover;
         }
         .swapper-item .product-label, .swapper-item .service-details, .swapper-item .work-caption {
@@ -293,6 +293,8 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* --- CHATBOT STYLES --- */
         #chat-widget {
             position: fixed;
             bottom: 20px;
@@ -408,8 +410,8 @@
         <div class="swapper-container banner-swapper">
             </div>
     </div>
-
-<header class="fade-in-section">
+    
+    <header class="fade-in-section">
         <div class="container">
             <h1>ALiF</h1>
             <p>A Custom Clothing Store</p>
@@ -545,7 +547,7 @@ function initializeSwapper(swapperSelector, options = {}) {
     if (items.length <= 1) {
         if (prevBtn) prevBtn.style.display = 'none';
         if (nextBtn) nextBtn.style.display = 'none';
-        return; 
+        return; // No need for controls or autoplay if 0 or 1 item
     }
 
     function showItem(index) {
@@ -579,6 +581,7 @@ function initializeSwapper(swapperSelector, options = {}) {
     }
 
     function startAutoplay() {
+        // Only start autoplay if it's enabled and there's more than one item
         if (options.autoplay && items.length > 1) { 
             autoplayInterval = setInterval(next, options.autoplay);
         }
@@ -629,7 +632,7 @@ async function renderSwapper(folder, containerSelector, options = {}) {
                 if (folder === 'services') {
                     itemContent += `<div class="service-details"><h3>${item.title}</h3></div>`;
                 } else if (folder === 'works') {
-                     itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`;
+                     itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`; // ADDED CAPTION FOR WORKS
                 } else { // products
                     itemContent += `<div class="product-label">${item.title}</div>`;
                 }
@@ -641,7 +644,7 @@ async function renderSwapper(folder, containerSelector, options = {}) {
         // Add nav buttons if it's not a banner
         if (!options.isBanner) {
             content += `
-                <div class="swapper-nav">
+             <div class="swapper-nav">
                     <button class="swapper-nav-btn prev-btn">❮</button>
                     <button class="swapper-nav-btn next-btn">❯</button>
                 </div>
@@ -658,9 +661,9 @@ async function renderSwapper(folder, containerSelector, options = {}) {
 document.addEventListener('DOMContentLoaded', () => {
     // Render all galleries
     renderSwapper('offers', '.banner-swapper', { isBanner: true, autoplay: 5000 });
-    renderSwapper('services', '.services-swapper', { autoplay: 4000 }); 
-    renderSwapper('products', '.product-swapper', { autoplay: 4000 }); 
-    renderSwapper('works', '.works-swapper', { autoplay: 3000 }); 
+    renderSwapper('services', '.services-swapper', { autoplay: 4000 }); // Services auto-swipes every 4 seconds
+    renderSwapper('products', '.product-swapper', { autoplay: 4000 }); // Products auto-swipes every 4 seconds
+    renderSwapper('works', '.works-swapper', { autoplay: 3000 }); // Works auto-swipes every 3 seconds
 
     // Close banner button
     const closeBtn = document.querySelector('.close-banner-btn');
@@ -778,7 +781,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 console.error("Error from AI function:", responseBody); 
-                return { success: false, message: `Error: ${responseBody.error || `Status ${response.status}`}` };
+                return { success: false, message: `Error: ${responseBody.error || \`Status \${response.status}\`}` };
             } else {
                 console.log(`Success response body: ${JSON.stringify(responseBody)}`); 
                 return { success: true, message: responseBody.answer };
