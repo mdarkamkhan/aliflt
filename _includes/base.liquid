@@ -27,7 +27,7 @@
             padding: 0;
             color: #333;
             background-color: #f4f4f4;
-            padding-bottom: 80px; /* Add padding for chat button */
+            padding-bottom: 80px;
         }
         .container {
             max-width: 960px;
@@ -51,9 +51,9 @@
             color: #fff;
             text-align: center;
             padding: 0.5rem 0;
-            position: sticky; /* Make nav sticky */
+            position: sticky;
             top: 0;
-            z-index: 1000; /* Ensure it stays on top */
+            z-index: 1000;
         }
         nav a {
             color: #fff;
@@ -89,7 +89,7 @@
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            box-sizing: border-box; /* Include padding in width */
+            box-sizing: border-box;
         }
         .contact-form button {
             background: var(--accent-color);
@@ -115,11 +115,11 @@
             text-decoration: none;
             border-radius: 50px;
             font-weight: bold;
-            margin: 5px 10px; /* Adjusted margin for better wrapping */
+            margin: 5px 10px;
         }
-        .cta-buttons a.review-btn { /* NEW STYLE FOR REVIEW BUTTON */
+        .cta-buttons a.review-btn { 
             background: #4285F4; /* Google Blue */
-            margin: 20px auto 0 auto; /* Center and add top margin */
+            margin: 20px auto 0 auto;
             padding: 12px 30px;
             font-size: 1.1em;
             display: block;
@@ -175,7 +175,7 @@
             height: auto;
             display: block;
             border-radius: 5px;
-            min-height: 450px;
+            min-height: 450px; 
             object-fit: cover;
         }
         .swapper-item .product-label, .swapper-item .service-details, .swapper-item .work-caption {
@@ -293,8 +293,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* --- CHATBOT STYLES --- */
         #chat-widget {
             position: fixed;
             bottom: 20px;
@@ -418,12 +416,12 @@
         </div>
     </header>
 
-        <nav class="fade-in-section">
+    <nav class="fade-in-section">
         <div class="container">
             <a href="/">Home</a> 
-            <a href="/products/">Products</a>
-            <a href="/services-works/">Service</a>
-            <a href="/contact-us/">Contact</a>
+            <a href="/products/">Products</a> 
+            <a href="/services-works/">Service</a> 
+            <a href="/contact-us/">Contact</a> 
         </div>
     </nav>
 
@@ -645,15 +643,15 @@ async function renderSwapper(folder, containerSelector, options = {}) {
         // Add nav buttons if it's not a banner
         if (!options.isBanner) {
             content += `
-             <div class="swapper-nav">
+                <div class="swapper-nav">
                     <button class="swapper-nav-btn prev-btn">❮</button>
                     <button class="swapper-nav-btn next-btn">❯</button>
                 </div>
             `;
         }
     }
-    
-    swapperContainer.innerHTML = content;
+
+swapperContainer.innerHTML = content;
     initializeSwapper(containerSelector, options);
 }
 
