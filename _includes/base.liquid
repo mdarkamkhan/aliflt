@@ -175,7 +175,7 @@
             height: auto;
             display: block;
             border-radius: 5px;
-            min-height: 450px;
+            min-height: 450px; 
             object-fit: cover;
         }
         .swapper-item .product-label, .swapper-item .service-details, .swapper-item .work-caption {
@@ -299,7 +299,98 @@
             right: 20px;
             z-index: 9999;
         }
-        /* (Rest of Chatbot CSS omitted for brevity) */
+        #chat-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+         #chat-window {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9999;
+         }
+         #chat-header {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+         }
+          #close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+          }
+         .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+         }
+         .user-message {
+            background-color: #eee;
+            align-self: flex-end;
+            margin-left: auto;
+         }
+         .ai-message {
+            background-color: var(--accent-color);
+            color: white;
+            align-self: flex-start;
+            margin-right: auto;
+         }
+          .thinking-message {
+            font-style: italic;
+            color: #888;
+            align-self: flex-start;
+          }
+         #chat-input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+         }
+         #chat-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+         }
+         #send-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+         }
+         #send-button:hover {
+             background-color: var(--accent-color-dark);
+         }
+         #chat-window.hidden { display: none; }
+         #chat-window.visible { display: flex; }
     </style>
     
     <script>
@@ -317,8 +408,8 @@
         <div class="swapper-container banner-swapper">
             </div>
     </div>
-    
-    <header class="fade-in-section">
+
+<header class="fade-in-section">
         <div class="container">
             <h1>ALiF</h1>
             <p>A Custom Clothing Store</p>
@@ -440,8 +531,7 @@ async function fetchCollectionItems(folder) {
 }
 
 
-/* ====== Swapper and Gallery Logic (and Chatbot Script) is too long to display here but is fully integrated) ====== */
-
+/* ====== Swapper and Gallery Logic ====== */
 function initializeSwapper(swapperSelector, options = {}) {
      const swapper = document.querySelector(swapperSelector);
     if (!swapper) return;
@@ -688,7 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 console.error("Error from AI function:", responseBody); 
-                return { success: false, message: `Error: ${responseBody.error || \`Status \${response.status}\`}` };
+                return { success: false, message: `Error: ${responseBody.error || `Status ${response.status}`}` };
             } else {
                 console.log(`Success response body: ${JSON.stringify(responseBody)}`); 
                 return { success: true, message: responseBody.answer };
