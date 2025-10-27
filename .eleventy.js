@@ -8,11 +8,14 @@ module.exports = function(eleventyConfig) {
 
     // Output directory (Netlify will publish this folder)
     return {
+        // 👇 ADD THIS LINE (or ensure this is present)
+        htmlTemplateEngine: "liquid",
+
         dir: {
-            input: "./", // Look for files in the root directory
-            includes: "_includes", // Look for reusable parts in the _includes folder
-            data: "_data", // Look for global data in the _data folder
-            output: "_site" // Publish the final site files to the _site folder
+            input: "./", 
+            includes: "_includes", 
+            data: "_data", 
+            output: "_site" 
         }
     };
 };
