@@ -1,16 +1,17 @@
 // .eleventy.js
 module.exports = function(eleventyConfig) {
-    // CMS images are in /uploads, so copy the 'uploads' folder to the output directory
-    eleventyConfig.addPassthroughCopy("uploads");
     
-    // Copy the admin folder (CMS interface files)
+    // --- Passthrough Copies ---
+    // 💡 CRITICAL FIX: Add the CSS folder so the site can be styled
+    eleventyConfig.addPassthroughCopy("css"); 
+    
+    eleventyConfig.addPassthroughCopy("uploads");
     eleventyConfig.addPassthroughCopy("admin");
 
-    // Output directory (Netlify will publish this folder)
-    return {
-        // 👇 ADD THIS LINE (or ensure this is present)
-        htmlTemplateEngine: "liquid",
+    // We can remove this line as we standardized to .liquid files:
+    // htmlTemplateEngine: "liquid",
 
+    return {
         dir: {
             input: "./", 
             includes: "_includes", 
