@@ -1,22 +1,15 @@
 {
-  "name": "aliflt-website",
+  "name": "aliflt",
   "version": "1.0.0",
-  "description": "ALiF Ladies Tailor website built with Eleventy (11ty) and Netlify CMS.",
-  "main": "index.js",
+  "description": "ALiF Ladies Tailor Website",
   "scripts": {
     "start": "npx @11ty/eleventy --serve",
     "build": "npx @11ty/eleventy"
   },
-  "keywords": [
-    "eleventy",
-    "netlify",
-    "cms",
-    "static-site-generator"
-  ],
-  "author": "mdarkamkhan",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@11ty/eleventy": "^2.0.1",
-    "node-fetch": "^2.6.7"
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1" 
   }
 }
