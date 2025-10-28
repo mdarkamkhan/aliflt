@@ -1,6 +1,10 @@
-[build]
-  command = "npx @11ty/eleventy" # This is the build command
-  publish = "_site" # This forces Netlify to publish the correct folder
+# netlify.toml
+# This file tells Netlify how to build and deploy your site.
 
-[functions]
-  directory = "netlify/functions"
+[build]
+  command = "npx @11ty/eleventy"  # The command to build your site
+  publish = "_site"               # The folder to deploy (Eleventy's output)
+
+[context.production.environment]
+  # Sets the Node.js version
+  NODE_VERSION = "18"
