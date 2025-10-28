@@ -1,17 +1,30 @@
 ---
 layout: base.liquid
-title: Service
-permalink: /services-works/
+title: Our Products
 ---
 
-<div id="services" class="section container fade-in-section">
-    <h2>Our Services</h2>
-    <div class="swapper-container services-swapper">
+<div class="section container fade-in-section">
+    <h2>Our Products</h2>
+    
+    <div class="swapper-container product-swapper">
+        
+        {% for item in collections.products %}
+        <div class="swapper-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ item.data.image }}" alt="{{ item.data.title }}">
+            <div class="product-label">{{ item.data.title }}</div>
         </div>
-</div>
+        {% endfor %}
 
-<div id="our-works" class="section container fade-in-section">
-    <h2>Our Works</h2>
-    <div class="swapper-container works-swapper">
+        {% if collections.products.length > 1 %}
+        <div class="swapper-nav">
+            <button class="swapper-nav-btn prev-btn">❮</button>
+            <button class="swapper-nav-btn next-btn">❯</button>
         </div>
+        {% endif %}
+
+        {% if collections.products.length == 0 %}
+            <p class='empty-gallery-message'>No products found.</p>
+        {% endif %}
+
+    </div>
 </div>
