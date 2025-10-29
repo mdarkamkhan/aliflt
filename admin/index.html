@@ -5,322 +5,82 @@
     <title>Content Manager</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- ✅ Mobile-first, touch-friendly, and modal styles -->
+    <!-- ✅ Mobile-friendly + readable design -->
     <style>
-      /* Base & Font Sizing */
-      :root {
-        /* Responsive font size */
-        font-size: 16px;
-      }
-
       body {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
-        background: #f4f4f4;
-        /* Ensure bottom nav doesn't hide content */
-        padding-bottom: 60px;
+        font-family: "Inter", system-ui, sans-serif;
+        background: #f9fafb;
       }
 
-      /* Mass Upload Modal & Toast Styles 
-      */
-      .mass-upload-modal {
-        display: none;
-        position: fixed;
-        z-index: 10001; /* Above Decap's UI */
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.6);
-        -webkit-backdrop-filter: blur(5px);
-        backdrop-filter: blur(5px);
+      .nc-app, .nc-collectionPage, .cms-editor {
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
       }
 
-      .mass-upload-content {
-        background-color: #fff;
-        margin: 15% auto;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        width: 90%;
-        max-width: 500px;
-        position: relative;
-        font-size: 1rem;
-      }
-      
-      .mass-upload-content h2 {
-        margin-top: 0;
+      /* Sidebar responsive */
+      .nc-sidebar {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: space-around;
+        background: #fff;
+        border-bottom: 1px solid #ddd;
+        z-index: 1000;
       }
 
-      .mass-upload-close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        position: absolute;
-        top: 10px;
-        right: 20px;
-        cursor: pointer;
-      }
-      
-      .mass-upload-form-item {
-        margin-bottom: 20px;
-      }
-      
-      .mass-upload-form-item label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-      }
-      
-      .mass-upload-form-item input,
-      .mass-upload-form-item select {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        box-sizing: border-box; /* Important */
-        font-size: 1rem;
-      }
-      
-      #massUploadBtn {
-        background-color: #2C3E50;
-        color: white;
-        padding: 14px 20px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        width: 100%;
-        font-size: 1rem;
-        font-weight: 600;
-      }
-      
-      #massUploadBtn:hover {
-        background-color: #212F3D;
-      }
-      
-      #massUploadStatus {
-        margin-top: 20px;
-        font-size: 0.9rem;
-        background: #f4f4f4;
-        border-radius: 8px;
-        padding: 15px;
-        max-height: 100px;
-        overflow-y: auto;
-        line-height: 1.5;
-        color: #555;
-      }
-
-      /* Injected "Mass Upload" Button */
-      .mass-upload-open-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background-color: #2C3E50 !important;
-        color: white !important;
-        padding: 10px 14px !important;
-        border-radius: 8px !important;
-        font-size: 14px !important;
-        margin-left: 10px;
-        line-height: 1;
-        height: auto;
-      }
-
-      /* Toast Notification */
-      #massUploadToast {
-        visibility: hidden;
-        min-width: 250px;
-        background-color: #333;
-        color: #fff;
+      .nc-sidebar a, .nc-sidebar button {
+        flex: 1;
         text-align: center;
+        padding: 12px 5px;
+        font-size: 15px;
         border-radius: 8px;
-        padding: 16px;
-        position: fixed;
-        z-index: 10002;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 70px; /* Above bottom nav */
-        font-size: 1rem;
-        opacity: 0;
-        transition: visibility 0.5s, opacity 0.5s, bottom 0.5s;
-      }
-      #massUploadToast.show {
-        visibility: visible;
-        opacity: 1;
-        bottom: 80px;
-      }
-      #massUploadToast.success {
-        background-color: #28a745;
-      }
-      #massUploadToast.error {
-        background-color: #dc3545;
       }
 
-      /*
-        Mobile-First Responsive Overrides (360px - 767px)
-      */
-      @media (max-width: 767px) {
-        :root {
-          font-size: 15px; /* Slightly smaller base on small phones */
-        }
-        
-        .nc-app-container {
-          padding-top: 50px; /* Space for the header */
-        }
-
-        /* Top Header */
-        .nc-app-header-content {
-          padding: 0.5rem;
-          flex-wrap: wrap; /* Allow buttons to wrap */
-          justify-content: center;
-        }
-
-        /* Sidebar -> Becomes a top bar */
-        .nc-app-sidebar-container {
-          position: fixed !important;
-          top: 0;
-          left: 0;
-          right: 0;
-          width: 100% !important;
-          height: auto !important;
-          background: #fff;
-          border-bottom: 1px solid #ddd;
-          z-index: 1000;
-          overflow-x: auto;
-          white-space: nowrap;
-        }
-        
-        .nc-app-sidebar-content {
-          display: flex;
-          flex-direction: row; /* Horizontal scrolling items */
-          justify-content: flex-start;
-          padding: 0.5rem;
-        }
-
-        .nc-app-sidebar-nav-link {
-          padding: 0.75rem 1rem; /* Better tap targets */
-          font-size: 1rem;
-          text-align: center;
-          flex-shrink: 0;
-        }
-        
-        .nc-app-sidebar-nav-link-active {
-          border-bottom: 3px solid #2C3E50;
-          border-left: none !important;
-        }
-
-        /* Main content area */
-        .nc-app-main {
-          width: 100% !important;
-          max-width: 100vw !important;
-          padding: 0;
-          margin: 0 !important;
-          /* Ensure content clears the bottom nav */
-          padding-bottom: 60px !important;
-        }
-        
-        .nc-collection-page-main,
-        .nc-entry-page-main,
-        .nc-media-library-main {
-          padding: 1rem 0.75rem !important;
-        }
-
-        /* Collection Cards */
-        .nc-collection-page-list {
-          /* 1-column layout on small phones */
-          grid-template-columns: 1fr !important;
-          gap: 1rem !important;
-        }
-
-        /* On slightly larger phones, go 2-column */
-        @media (min-width: 480px) {
-          .nc-collection-page-list {
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
-          }
-        }
-        
-        .nc-list-card-link-link {
-          padding: 1rem;
-        }
-        
-        .nc-list-card-title {
-          font-size: 1.1rem;
-        }
-        
-        /* Buttons */
-        .nc-app-header-actions {
-          padding: 0.5rem;
-          justify-content: center;
-        }
-        
-        .nc-app-button-button,
-        .nc-list-card-link-new-entry-button {
-          padding: 0.75rem 1rem !important; /* Larger tap target */
-          font-size: 1rem !important;
-          width: 100%;
-          margin-bottom: 0.5rem;
-        }
-
-        /* Editor */
-        .nc-entry-editor-container {
-          padding: 0.75rem !important;
-        }
-        
-        .nc-control-pane-control {
-          padding: 1rem 0; /* More spacing */
-        }
-        
-        .nc-control-pane-label {
-          font-size: 1rem; /* More readable */
-        }
-        
-        .nc-widget-string-input,
-        .nc-widget-number-input,
-        .nc-widget-text-textarea,
-        .nc-widget-select-select {
-          font-size: 1rem !important;
-          padding: 0.75rem !important;
-        }
-        
-        .nc-entry-editor-bottom-sticky {
-          position: sticky;
-          bottom: 60px; /* Stick above mobile nav */
-        }
-
-        /* Hide Desktop Preview */
-        .nc-preview-pane-container {
-          display: none !important;
-        }
-        
-        /* Mobile Preview Toggle */
-        .nc-entry-page-main-toggles {
-          display: none; /* Hide confusing desktop toggles */
-        }
-        
-        /* Media Library */
-        .nc-media-library-grid-cards {
-          grid-template-columns: repeat(3, 1fr) !important;
-          gap: 8px;
-        }
+      .nc-collection {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+        gap: 14px !important;
+        padding: 14px !important;
       }
-      
-      /* Desktop styles (keep existing preview) */
+
+      .nc-entryCard {
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+      }
+
+      .nc-button, button {
+        padding: 10px 16px !important;
+        border-radius: 8px !important;
+        font-size: 15px !important;
+      }
+
+      .nc-previewPane {
+        display: none !important;
+      }
+
       @media (min-width: 768px) {
-        .nc-preview-pane-container {
+        .nc-previewPane {
           display: block !important;
         }
-        /* Ensure bottom nav is hidden on desktop */
-        .mobile-bottom-nav {
-          display: none !important;
-        }
-        body {
-          padding-bottom: 0; /* No bottom padding needed */
-        }
       }
 
-      /* Bottom mobile nav */
+      .nc-header {
+        flex-wrap: wrap;
+        justify-content: center !important;
+        padding: 6px !important;
+        background: #fff;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .nc-entryEditor, .nc-entryPage {
+        padding: 12px !important;
+      }
+
+      /* Bottom nav */
       .mobile-bottom-nav {
         display: flex;
         justify-content: space-around;
@@ -328,81 +88,42 @@
         border-top: 1px solid #ccc;
         position: fixed;
         bottom: 0;
-        left: 0;
         width: 100%;
-        height: 55px;
+        height: 60px;
         align-items: center;
         z-index: 10000;
-        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
       }
 
       .mobile-bottom-nav button {
         background: none;
         border: none;
-        font-size: 13px;
-        color: #555;
-        padding: 5px;
-        flex-grow: 1;
-        height: 100%;
+        font-size: 15px;
+        color: #333;
+        flex: 1;
       }
 
       .mobile-bottom-nav button.active {
-        color: #2C3E50;
+        color: #007bff;
         font-weight: 600;
-        border-top: 3px solid #2C3E50;
       }
-      
-      /* Hide on desktop */
-      @media (min-width: 768px) {
-        .mobile-bottom-nav {
-          display: none;
-        }
+
+      .nc-collectionPage {
+        margin-bottom: 70px;
+      }
+
+      /* Modal style */
+      #massUploadModal h3 {
+        font-size: 18px;
       }
     </style>
   </head>
+
   <body>
-    <!-- Netlify CMS Script -->
+    <!-- Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
-    <!-- ✅ Mass Upload Modal HTML -->
-    <div id="massUploadModal" class="mass-upload-modal">
-      <div class="mass-upload-content">
-        <span class="mass-upload-close" id="massUploadCloseBtn">&times;</span>
-        <h2>Mass Upload</h2>
-        <p style="font-size: 0.9rem; color: #555; margin-top: -10px; margin-bottom: 25px;">
-          Upload a .csv or .json file. Ensure column headers match your CMS fields (e.g., <strong>title, price, category, description, image</strong>). The 'image' field must be a path like '/uploads/image.jpg'.
-        </p>
-        
-        <div class="mass-upload-form-item">
-          <label for="massUploadFile">1. Select .csv or .json file</label>
-          <input type="file" id="massUploadFile" accept=".csv,.json,text/csv,application/json">
-        </div>
-        
-        <div class="mass-upload-form-item">
-          <label for="massUploadCollection">2. Select Collection</label>
-          <select id="massUploadCollection">
-            <option value="">-- Select a Collection --</option>
-            <option value="products">Products</option>
-            <option value="services">Services</option>
-            <option value="works">Works</option>
-          </select>
-        </div>
-        
-        <button id="massUploadBtn">Upload All Entries</button>
-        
-        <div id="massUploadStatus">
-          Waiting for file...
-        </div>
-      </div>
-    </div>
-    
-    <!-- ✅ Toast Notification HTML -->
-    <div id="massUploadToast"></div>
-
-    <!-- Netlify Identity Script -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-    <!-- Redirect script -->
+    <!-- Netlify invite redirect -->
     <script>
       (function() {
         if (document.location.hash.indexOf('invite_token') > -1) {
@@ -410,309 +131,130 @@
         }
       })();
     </script>
-    
-    <!-- ✅ Mass Upload & Button Injector Script -->
-    <script>
-      (function() {
-        // --- Modal ---
-        const modal = document.getElementById("massUploadModal");
-        const closeBtn = document.getElementById("massUploadCloseBtn");
-        
-        function openModal() { modal.style.display = "block"; }
-        function closeModal() { modal.style.display = "none"; }
-        
-        closeBtn.onclick = closeModal;
-        window.onclick = function(event) {
-          if (event.target == modal) {
-            closeModal();
-          }
-        }
-        
-        // --- Toast ---
-        function showToast(message, type = 'success', duration = 3000) {
-          const toast = document.getElementById("massUploadToast");
-          toast.textContent = message;
-          toast.className = `show ${type}`;
-          setTimeout(function(){ 
-            toast.className = toast.className.replace("show", ""); 
-          }, duration);
-        }
 
-        // --- Button Injector ---
-        const injectorInterval = setInterval(() => {
-          const headerActions = document.querySelector(".nc-app-header-actions");
-          if (headerActions && !document.getElementById("massUploadOpenBtn")) {
-            const massUploadOpenBtn = document.createElement("button");
-            massUploadOpenBtn.id = "massUploadOpenBtn";
-            massUploadOpenBtn.className = "mass-upload-open-btn";
-            massUploadOpenBtn.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
-              </svg> Mass Upload
-            `;
-            massUploadOpenBtn.onclick = openModal;
-            headerActions.appendChild(massUploadOpenBtn);
-          }
-        }, 500);
-
-        // --- Main Upload Logic ---
-        const uploadBtn = document.getElementById("massUploadBtn");
-        const fileInput = document.getElementById("massUploadFile");
-        const collectionSelect = document.getElementById("massUploadCollection");
-        const statusEl = document.getElementById("massUploadStatus");
-
-        uploadBtn.onclick = async function() {
-          const file = fileInput.files[0];
-          const collectionName = collectionSelect.value;
-
-          if (!file || !collectionName) {
-            showToast("Please select a file and a collection.", "error");
-            return;
-          }
-          
-          statusEl.innerHTML = "Reading file...";
-          
-          try {
-            const content = await file.text();
-            let data;
-            
-            if (file.name.endsWith(".json")) {
-              data = JSON.parse(content);
-            } else if (file.name.endsWith(".csv")) {
-              data = parseCSV(content);
-            } else {
-              throw new Error("Unsupported file type.");
-            }
-            
-            if (!Array.isArray(data) || data.length === 0) {
-              throw new Error("File is empty or not a valid array.");
-            }
-            
-            statusEl.innerHTML = `Found ${data.length} entries. Starting upload...`;
-            
-            // Get Decap backend API
-            const config = CMS.config;
-            const backend = CMS.getBackend(config.backend.name);
-            const collection = config.collections.find(c => c.name === collectionName);
-
-            if (!collection) {
-              throw new Error("Could not find collection in CMS config.");
-            }
-
-            const uploadPromises = data.map(item => {
-              const slug = slugify(item.title || `entry-${Date.now()}`);
-              const path = `${collection.folder}/${slug}.md`;
-              
-              // Build frontmatter string
-              let raw = "---\n";
-              raw += `title: "${item.title || ''}"\n`;
-              raw += `date: "${new Date().toISOString()}"\n`;
-              raw += `image: "${item.image || ''}"\n`;
-              raw += `category: "${item.category || ''}"\n`;
-              raw += `price: ${item.price || 0}\n`;
-              raw += "---\n\n";
-              raw += `${item.description || ''}`;
-
-              // Create Decap entry object
-              const entry = {
-                path: path,
-                raw: raw,
-                slug: slug,
-                data: item,
-                isNew: true
-              };
-              
-              // Persist entry using the backend API
-              // We pass an empty commit message, Decap will generate one.
-              return backend.persistEntry(entry, collection, "");
-            });
-            
-            await Promise.all(uploadPromises);
-            
-            statusEl.innerHTML = `<b>Success!</b> Uploaded ${data.length} entries to '${collectionName}'.`;
-            showToast(`Uploaded ${data.length} entries!`, "success");
-            closeModal();
-            
-            // This is a bit of a hack, but Decap needs a nudge to reload
-            // the collection view after programmatic additions.
-            const currentHash = location.hash;
-            location.hash = `#/collections/${collectionName}?ts=${Date.now()}`;
-            // Go back if we were already there, to force a full reload
-            if (currentHash.includes(collectionName)) {
-              history.back();
-            }
-
-          } catch (err) {
-            statusEl.innerHTML = `<b>Error:</b> ${err.message}`;
-            showToast(`Upload failed: ${err.message}`, "error", 5000);
-          }
-        }
-        
-        // --- Helper Functions ---
-        function parseCSV(text) {
-          const lines = text.split(/\r?\n/);
-          if (lines.length < 2) return [];
-          
-          const headers = lines[0].split(',').map(h => h.trim());
-          const data = [];
-          
-          for (let i = 1; i < lines.length; i++) {
-            if (!lines[i]) continue;
-            const values = lines[i].split(','); // Simple parser
-            const entry = {};
-            for (let j = 0; j < headers.length; j++) {
-              entry[headers[j]] = (values[j] || '').trim();
-            }
-            data.push(entry);
-          }
-          return data;
-        }
-
-        function slugify(text) {
-          return text.toString().toLowerCase()
-            .replace(/\s+/g, '-')       // Replace spaces with -
-            .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
-            .replace(/\-\-+/g, '-')     // Replace multiple - with single -
-            .replace(/^-+/, '')        // Trim - from start
-            .replace(/-+$/, '');       // Trim - from end
-        }
-
-      })();
-    </script>
-
-    <!-- ✅ Bottom mobile nav -->
+    <!-- ✅ Bottom mobile navigation -->
     <div class="mobile-bottom-nav">
       <button onclick="location.hash='#/collections/offers'">Offers</button>
       <button onclick="location.hash='#/collections/products'">Products</button>
       <button onclick="location.hash='#/collections/services'">Services</button>
       <button onclick="location.hash='#/collections/works'">Works</button>
     </div>
+
+    <!-- ✅ Mass Upload Script -->
     <script>
-  // Wait until CMS fully loads
-  document.addEventListener("DOMContentLoaded", function () {
-    const interval = setInterval(() => {
-      const headerActions = document.querySelector(".nc-app-header-actions");
-      if (headerActions && !document.querySelector("#massUploadBtn")) {
-        clearInterval(interval);
+      document.addEventListener("DOMContentLoaded", function () {
+        const interval = setInterval(() => {
+          const headerActions = document.querySelector(".nc-app-header-actions");
+          if (headerActions && !document.querySelector("#massUploadBtn")) {
+            clearInterval(interval);
 
-        // Create button
-        const btn = document.createElement("button");
-        btn.id = "massUploadBtn";
-        btn.textContent = "Mass Upload";
-        btn.style.marginLeft = "10px";
-        btn.style.padding = "8px 14px";
-        btn.style.borderRadius = "8px";
-        btn.style.border = "none";
-        btn.style.background = "#007bff";
-        btn.style.color = "#fff";
-        btn.style.cursor = "pointer";
-        btn.style.fontSize = "14px";
+            // Create button
+            const btn = document.createElement("button");
+            btn.id = "massUploadBtn";
+            btn.textContent = "📦 Mass Upload";
+            btn.style.marginLeft = "10px";
+            btn.style.padding = "10px 14px";
+            btn.style.borderRadius = "8px";
+            btn.style.border = "none";
+            btn.style.background = "#007bff";
+            btn.style.color = "#fff";
+            btn.style.cursor = "pointer";
+            btn.style.fontSize = "15px";
+            headerActions.appendChild(btn);
 
-        headerActions.appendChild(btn);
+            // Modal
+            const modal = document.createElement("div");
+            modal.id = "massUploadModal";
+            modal.style.display = "none";
+            modal.style.position = "fixed";
+            modal.style.top = "0";
+            modal.style.left = "0";
+            modal.style.width = "100%";
+            modal.style.height = "100%";
+            modal.style.background = "rgba(0,0,0,0.5)";
+            modal.style.zIndex = "9999";
+            modal.innerHTML = `
+              <div style="
+                background: #fff;
+                padding: 20px;
+                border-radius: 12px;
+                width: 90%;
+                max-width: 420px;
+                margin: 12% auto;
+                text-align: center;
+              ">
+                <h3>📦 Mass Upload Entries</h3>
+                <p>Select a collection and upload CSV/JSON file.</p>
+                <select id="massCollection" style="padding: 10px; width: 100%; border-radius: 6px; margin-bottom: 10px;">
+                  <option value="products">Products</option>
+                  <option value="services">Services</option>
+                  <option value="works">Works</option>
+                </select>
+                <input type="file" id="massFile" accept=".csv,.json" style="margin-bottom: 10px; width: 100%;" />
+                <button id="massConfirm" style="padding: 10px 16px; background: #28a745; color: #fff; border: none; border-radius: 6px;">Upload All</button>
+                <p id="massUploadStatus" style="margin-top: 10px; color: #333;"></p>
+                <button id="closeMassModal" style="margin-top: 10px; background: #ccc; border: none; padding: 8px 12px; border-radius: 6px;">Cancel</button>
+              </div>
+            `;
+            document.body.appendChild(modal);
 
-        // Modal container
-        const modal = document.createElement("div");
-        modal.id = "massUploadModal";
-        modal.style.display = "none";
-        modal.style.position = "fixed";
-        modal.style.top = "0";
-        modal.style.left = "0";
-        modal.style.width = "100%";
-        modal.style.height = "100%";
-        modal.style.background = "rgba(0,0,0,0.5)";
-        modal.style.zIndex = "9999";
-        modal.innerHTML = `
-          <div style="
-            background: #fff; 
-            padding: 20px; 
-            border-radius: 10px; 
-            width: 90%; 
-            max-width: 400px; 
-            margin: 10% auto; 
-            text-align: center;
-          ">
-            <h3>📦 Mass Upload Entries</h3>
-            <p>Select a collection and upload a CSV or JSON file.</p>
-            <select id="massCollection" style="padding: 8px; width: 100%; border-radius: 6px; margin-bottom: 10px;">
-              <option value="products">Products</option>
-              <option value="services">Services</option>
-              <option value="works">Works</option>
-            </select>
-            <input type="file" id="massFile" accept=".csv,.json" style="margin-bottom: 10px; width: 100%;" />
-            <button id="massConfirm" style="padding: 10px 16px; background: #28a745; color: #fff; border: none; border-radius: 6px;">Upload All</button>
-            <p id="massUploadStatus" style="margin-top: 10px; color: #333;"></p>
-            <button id="closeMassModal" style="margin-top: 10px; background: #ccc; border: none; padding: 8px 12px; border-radius: 6px;">Cancel</button>
-          </div>
-        `;
-        document.body.appendChild(modal);
+            // Show modal
+            btn.addEventListener("click", () => (modal.style.display = "block"));
+            document.getElementById("closeMassModal").addEventListener("click", () => (modal.style.display = "none"));
 
-        // Show modal
-        btn.addEventListener("click", () => {
-          modal.style.display = "block";
-        });
+            // Upload logic
+            document.getElementById("massConfirm").addEventListener("click", async () => {
+              const collection = document.getElementById("massCollection").value;
+              const file = document.getElementById("massFile").files[0];
+              const status = document.getElementById("massUploadStatus");
 
-        // Close modal
-        document.getElementById("closeMassModal").addEventListener("click", () => {
-          modal.style.display = "none";
-        });
+              if (!file) return alert("Please select a file first!");
 
-        // Upload button logic
-        document.getElementById("massConfirm").addEventListener("click", async () => {
-          const collection = document.getElementById("massCollection").value;
-          const file = document.getElementById("massFile").files[0];
-          const status = document.getElementById("massUploadStatus");
+              status.textContent = "⏳ Uploading...";
 
-          if (!file) {
-            alert("Please select a file first!");
-            return;
+              const reader = new FileReader();
+              reader.onload = async (e) => {
+                try {
+                  const text = e.target.result;
+                  let entries = [];
+
+                  if (file.name.endsWith(".csv")) {
+                    const [header, ...rows] = text.split("\n").filter(Boolean);
+                    const headers = header.split(",");
+                    entries = rows.map((r) => {
+                      const values = r.split(",");
+                      const obj = {};
+                      headers.forEach((h, i) => (obj[h.trim()] = values[i]?.trim()));
+                      return obj;
+                    });
+                  } else {
+                    entries = JSON.parse(text);
+                  }
+
+                  const backend = window.CMS?.getBackend();
+                  if (!backend) throw new Error("Backend not ready");
+
+                  for (const entry of entries) {
+                    const slug = entry.title?.toLowerCase().replace(/\s+/g, "-") || Date.now();
+                    const content = `---\ntitle: "${entry.title || "Untitled"}"\ndate: "${new Date().toISOString()}"\nprice: ${entry.price || 0}\ncategory: "${entry.category || ""}"\nimage: "${entry.image || ""}"\n---\n${entry.description || ""}`;
+                    await backend.persistEntry({
+                      collection,
+                      slug,
+                      entry: { path: `${collection}/${slug}.md`, raw: content }
+                    });
+                  }
+
+                  status.textContent = "✅ Upload successful!";
+                  setTimeout(() => location.reload(), 1500);
+                } catch (err) {
+                  status.textContent = "❌ Error: " + err.message;
+                }
+              };
+              reader.readAsText(file);
+            });
           }
-
-          status.textContent = "⏳ Uploading...";
-
-          const reader = new FileReader();
-          reader.onload = async (e) => {
-            try {
-              const text = e.target.result;
-              let entries = [];
-
-              if (file.name.endsWith(".csv")) {
-                const [header, ...rows] = text.split("\n").filter(Boolean);
-                const headers = header.split(",");
-                entries = rows.map(row => {
-                  const values = row.split(",");
-                  const obj = {};
-                  headers.forEach((h, i) => obj[h.trim()] = values[i]?.trim());
-                  return obj;
-                });
-              } else {
-                entries = JSON.parse(text);
-              }
-
-              const backend = window.CMS?.getBackend();
-              if (!backend) throw new Error("Backend not ready");
-
-              for (const entry of entries) {
-                const slug = entry.title?.toLowerCase().replace(/\s+/g, "-") || Date.now();
-                const content = `---\ntitle: "${entry.title || "Untitled"}"\ndate: "${new Date().toISOString()}"\nprice: ${entry.price || 0}\ncategory: "${entry.category || ""}"\nimage: "${entry.image || ""}"\n---\n${entry.description || ""}`;
-                await backend.persistEntry({
-                  collection,
-                  slug,
-                  entry: { path: `${collection}/${slug}.md`, raw: content }
-                });
-              }
-
-              status.textContent = "✅ All entries uploaded successfully!";
-              setTimeout(() => location.reload(), 1500);
-            } catch (err) {
-              status.textContent = "❌ Error: " + err.message;
-            }
-          };
-          reader.readAsText(file);
-        });
-      }
-    }, 1000);
-  });
+        }, 1000);
+      });
     </script>
   </body>
 </html>
