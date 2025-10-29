@@ -1,29 +1,49 @@
 ---
 layout: base.liquid
 title: Our Products
+permalink: /products/
 ---
 
+<!-- 
+  This section is now a 2-column grid.
+  The "swapper" has been removed.
+-->
 <div class="section container fade-in-section">
     <h2>Our Products</h2>
     
-    <div class="swapper-container product-swapper">
+    <!-- 
+      This is the new product grid container.
+      The .product-card items inside are loaded 
+      progressively with JavaScript for an 
+      "infinite scroll" feel.
+    -->
+    <div class="product-grid">
         
+        <!-- 
+          This Liquid loop builds your product grid from the .md files
+          in your 'products' folder.
+        -->
         {% for item in collections.products %}
-        <div class="swapper-item {% if forloop.first %}active{% endif %}">
-            <img src="{{ item.data.image }}" alt="{{ item.data.title }}">
-            <div class="product-label">{{ item.data.title }}</div>
-        </div>
+        <!-- 
+          Each product is a "card".
+          For now, it links directly to the image.
+          Later, this can link to a product detail page.
+        -->
+        <a href="{{ item.data.image }}" target="_blank" class="product-card">
+            <div class="product-card-image-wrapper">
+                <img src="{{ item.data.image }}" alt="{{ item.data.title }}">
+            </div>
+            <div class="product-card-name">
+                {{ item.data.title }}
+            </div>
+        </a>
         {% endfor %}
 
-        {% if collections.products.length > 1 %}
-        <div class="swapper-nav">
-            <button class="swapper-nav-btn prev-btn">❮</button>
-            <button class="swapper-nav-btn next-btn">❯</button>
-        </div>
-        {% endif %}
-
+        <!-- Show message if collection is empty -->
         {% if collections.products.length == 0 %}
-            <p class='empty-gallery-message'>No products found.</p>
+            <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
+                No products found. Please check back soon.
+            </p>
         {% endif %}
 
     </div>
