@@ -4,6 +4,15 @@ title: Home
 permalink: /
 ---
 
+<!-- 
+  NOTE: We remove the old "Welcome" and "About Us" sections 
+  and replace them with the new Prada-style panels.
+  The 'reviews' section is kept at the bottom.
+-->
+
+<!-- ================================= 
+     PANEL 1: ALIF PRODUCTS 
+================================== -->
 <a href="/products/" class="prada-panel">
     <div class="prada-panel-label">ALiF Products</div>
     
@@ -20,21 +29,34 @@ permalink: /
     </div>
 </a>
 
+<!-- ================================= 
+     PANEL 2: ALIF SERVICES
+     (Links to the /services-works/ page)
+================================== -->
 <a href="/services-works/" class="prada-panel">
     <div class="prada-panel-label">ALiF Services</div>
     
-    <div class="swapper-container">
-        {% assign service = collections.services | first %}
-        {% if service %}
-        <div class="swapper-item active">
-            <img src="{{ service.data.image }}" alt="{{ service.data.title }}">
+    <!-- 
+      💡 UPDATED: This is now an auto-sliding gallery 
+      just like the other panels.
+    -->
+    <div class="swapper-container services-panel-gallery">
+        {% for item in collections.services %}
+        <div class="swapper-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ item.data.image }}" alt="{{ item.data.title }}">
         </div>
-        {% else %}
+        {% endfor %}
+
+        {% if collections.services.length == 0 %}
             <p class='empty-gallery-message'>Services coming soon.</p>
         {% endif %}
     </div>
 </a>
 
+<!-- ================================= 
+     PANEL 3: ALIF WORKS
+     (Links to the /services-works/ page)
+================================== -->
 <a href="/services-works/" class="prada-panel">
     <div class="prada-panel-label">ALiF Works</div>
     
@@ -52,20 +74,27 @@ permalink: /
 </a>
 
 
-<div id="reviews" class="section container fade-in-section">
-    <h2>Client Reviews</h2>
-    <p style="text-align: center; margin-bottom: 25px;">Did you love our service? Help others find us by leaving a review!</p>
-    
-    <div class="cta-buttons">
-         <a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" class="review-btn">
-            Write a Review on Google
-        </a>
-    </div>
-    
-    <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 30px;">
-        <h3 style="text-align: center; color: #555;">What Our Clients Say</h3>
+<!-- 
+  This is your original reviews section,
+  which we can keep on the homepage.
+  (Wrapped in a container to add padding)
+-->
+<div class="container">
+    <div id="reviews" class="section fade-in-section">
+        <h2>Client Reviews</h2>
+        <p style="text-align: center; margin-bottom: 25px;">Did you love our service? Help others find us by leaving a review!</p>
         
-        <script src="https://elfsightcdn.com/platform.js" async></script>
-        <div class="elfsight-app-2c83f037-ee5d-4d90-913e-2a5f353d7add" data-elfsight-app-lazy></div>
+        <div class="cta-buttons">
+            <a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" class="review-btn">
+                Write a Review on Google
+            </a>
         </div>
+        
+        <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 30px;">
+            <h3 style="text-align: center; color: #555;">What Our Clients Say</h3>
+            
+            <script src="https://elfsightcdn.com/platform.js" async></script>
+            <div class="elfsight-app-2c83f037-ee5d-4d90-913e-2a5f353d7add" data-elfsight-app-lazy></div>
+            </div>
+    </div>
 </div>
