@@ -5,66 +5,118 @@ permalink: /products/
 ---
 
 <div class="section container fade-in-section">
-    <h2>Our Products</h2>
+  <h2>Our Products</h2>
 
-    <div class="product-grid">
-        
-        {% for item in collections.products %}
-        <!-- The card is still a single link -->
-        <a href="{{ item.data.image }}" target="_blank" class="product-card">
-            <div class="product-card-image-wrapper">
-                <img src="{{ item.data.image }}" alt="{{ item.data.title }}">
-            </div>
-            
-            <!-- 
-              This container holds all the text.
-              We add inline styles to override the default text-align
-              and font-weight from the CSS for cleaner formatting.
-            -->
-            <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
-                
-                <!-- Title -->
-                <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
-                    {{ item.data.title }}
-                </div>
-                
-                <!-- Price -->
-                {% if item.data.price %}
-                <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
-                    ₹{{ item.data.price }}
-                </div>
-                {% endif %}
-                
-                <!-- Category -->
-                {% if item.data.category %}
-                <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
-                    {{ item.data.category }}
-                </div>
-                {% endif %}
-                
-                <!-- Description (Collapsible) -->
-                {% if item.data.description %}
-                <details style="margin-top: 10px; font-size: 0.9rem; color: #555; line-height: 1.4;">
-                    <!-- This summary is the "Description" link -->
-                    <summary style="cursor: pointer; font-weight: 600; color: #333; font-size: 0.9rem; text-transform: none;">
-                        Description
-                    </summary>
-                    <!-- This is the content that shows/hides -->
-                    <p style="margin-top: 5px; margin-bottom: 0; font-weight: normal;">
-                        {{ item.data.description }}
-                    </p>
-                </details>
-                {% endif %}
+  <!-- 🌸 Filter Buttons -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="lace">Lace</button>
+    <button class="filter-btn" data-filter="latkan">Latkan</button>
+    <button class="filter-btn" data-filter="thread">Thread</button>
+    <button class="filter-btn" data-filter="fabric">Fabric</button>
+    <button class="filter-btn" data-filter="net">Net</button>
+    <button class="filter-btn" data-filter="banarasi">Banarasi</button>
+    <button class="filter-btn" data-filter="cotton">Cotton</button>
+    <button class="filter-btn" data-filter="organza">Organza</button>
+  </div>
 
-            </div>
-        </a>
-        {% endfor %}
+  <div class="product-grid">
+    {% for item in collections.products %}
+    <a href="{{ item.data.image }}" target="_blank" class="product-card">
+      <div class="product-card-image-wrapper">
+        <img src="{{ item.data.image }}" alt="{{ item.data.title }}">
+      </div>
 
-        <!-- This is the fallback message if no products exist -->
-        {% if collections.products.length == 0 %}
-            <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
-                No products found. Please check back soon.
-            </p>
+      <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
+        <!-- Title -->
+        <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
+          {{ item.data.title }}
+        </div>
+
+        <!-- Price -->
+        {% if item.data.price %}
+        <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
+          ₹{{ item.data.price }}
+        </div>
         {% endif %}
-    </div>
+
+        <!-- Category -->
+        {% if item.data.category %}
+        <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+          {{ item.data.category }}
+        </div>
+        {% endif %}
+
+        <!-- Description -->
+        {% if item.data.description %}
+        <details style="margin-top: 10px; font-size: 0.9rem; color: #555; line-height: 1.4;">
+          <summary style="cursor: pointer; font-weight: 600; color: #333; font-size: 0.9rem;">
+            Description
+          </summary>
+          <p style="margin-top: 5px; margin-bottom: 0; font-weight: normal;">
+            {{ item.data.description }}
+          </p>
+        </details>
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+
+    {% if collections.products.length == 0 %}
+    <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
+      No products found. Please check back soon.
+    </p>
+    {% endif %}
+  </div>
 </div>
+
+<!-- 🌼 Filter Bar Styling -->
+<style>
+.filter-bar {
+  margin: 25px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.filter-btn {
+  background-color: #eee;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-weight: 500;
+}
+.filter-btn.active,
+.filter-btn:hover {
+  background-color: #222;
+  color: #fff;
+}
+</style>
+
+<!-- 🌼 Filter Logic Script -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll(".filter-btn");
+  const cards = document.querySelectorAll(".product-card");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const filter = btn.dataset.filter;
+
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      cards.forEach(card => {
+        const category = card.querySelector(".product-card-category")?.textContent.toLowerCase() || "";
+        if (filter === "all" || category.includes(filter)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  });
+});
+</script>
