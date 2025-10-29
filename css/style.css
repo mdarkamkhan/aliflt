@@ -403,12 +403,12 @@ footer {
 /* This is the main link wrapper for each panel */
 .prada-panel {
     position: relative;
-    width: 90%;
+    width: 100%;
     /* Height is 90vh (90% of viewport height) for a large panel 
       that doesn't quite take up the *entire* screen.
       Adjust to 100vh if you want it full-screen.
     */
-    height: 70vh; 
+    height: 90vh; 
     overflow: hidden;
     display: block;
     text-decoration: none;
