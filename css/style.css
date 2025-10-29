@@ -343,7 +343,7 @@ footer {
     border-radius: 15px;
     max-width: 80%;
  }
- .user-message {
+ .user-.message {
     background-color: #eee;
     align-self: flex-end;
     margin-left: auto;
@@ -480,3 +480,90 @@ footer {
         left: 20px;
     }
 }
+
+
+/* ==================================================
+===== PRODUCT PAGE GRID LAYOUT (NEW) =============
+================================================== 
+*/
+
+.product-grid {
+    display: grid;
+    /* 2-column grid */
+    grid-template-columns: repeat(2, 1fr); 
+    /* Spacing between cards (matches panel margins) */
+    gap: 20px; 
+}
+
+.product-card {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    border-radius: 8px; /* Match panel radius */
+    
+    /* "Infinite scroll" reveal - hidden by default */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
+}
+
+/* This class is added by JS when the card scrolls into view */
+.product-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.product-card-image-wrapper {
+    overflow: hidden; /* This makes the zoom effect work */
+    border-radius: 8px; /* Match panel radius */
+    background: #eee;
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1 / 1.25; /* Taller aspect ratio for products */
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.05); /* The zoom-in hover effect */
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Subtle shadow on hover */
+}
+
+.product-card-name {
+    text-align: center;
+    font-weight: bold;
+    padding: 15px 10px;
+    font-size: 1.1rem;
+    text-transform: capitalize;
+}
+
+/* Responsive: 1-column grid on mobile */
+@media (max-width: 600px) {
+    .product-grid {
+        grid-template-columns: 1fr; /* 1 column */
+        gap: 15px; /* Smaller gap */
+    }
+    
+    .section {
+        padding: 20px; /* Smaller padding on mobile */
+    }
+
+    .container .section {
+        margin: 10px 0;
+    }
+    
+    .product-card-name {
+        font-size: 1rem;
+        padding: 10px;
+    }
+}
+
+
+     
