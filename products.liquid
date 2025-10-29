@@ -4,47 +4,67 @@ title: Our Products
 permalink: /products/
 ---
 
-<!-- 
-  This section is now a 2-column grid.
-  The "swapper" has been removed.
--->
 <div class="section container fade-in-section">
     <h2>Our Products</h2>
-    
-    <!-- 
-      This is the new product grid container.
-      The .product-card items inside are loaded 
-      progressively with JavaScript for an 
-      "infinite scroll" feel.
-    -->
+
     <div class="product-grid">
         
-        <!-- 
-          This Liquid loop builds your product grid from the .md files
-          in your 'products' folder.
-        -->
         {% for item in collections.products %}
-        <!-- 
-          Each product is a "card".
-          For now, it links directly to the image.
-          Later, this can link to a product detail page.
-        -->
+        <!-- The card is still a single link -->
         <a href="{{ item.data.image }}" target="_blank" class="product-card">
             <div class="product-card-image-wrapper">
                 <img src="{{ item.data.image }}" alt="{{ item.data.title }}">
             </div>
-            <div class="product-card-name">
-                {{ item.data.title }}
+            
+            <!-- 
+              This container holds all the text.
+              We add inline styles to override the default text-align
+              and font-weight from the CSS for cleaner formatting.
+            -->
+            <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
+                
+                <!-- Title -->
+                <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
+                    {{ item.data.title }}
+                </div>
+                
+                <!-- Price -->
+                {% if item.data.price %}
+                <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
+                    ₹{{ item.data.price }}
+                </div>
+                {% endif %}
+                
+                <!-- Category -->
+                {% if item.data.category %}
+                <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+                    {{ item.data.category }}
+                </div>
+                {% endif %}
+                
+                <!-- Description (Collapsible) -->
+                {% if item.data.description %}
+                <details style="margin-top: 10px; font-size: 0.9rem; color: #555; line-height: 1.4;">
+                    <!-- This summary is the "Description" link -->
+                    <summary style="cursor: pointer; font-weight: 600; color: #333; font-size: 0.9rem; text-transform: none;">
+                        Description
+                    </summary>
+                    <!-- This is the content that shows/hides -->
+                    <p style="margin-top: 5px; margin-bottom: 0; font-weight: normal;">
+                        {{ item.data.description }}
+                    </p>
+                </details>
+                {% endif %}
+
             </div>
         </a>
         {% endfor %}
 
-        <!-- Show message if collection is empty -->
+        <!-- This is the fallback message if no products exist -->
         {% if collections.products.length == 0 %}
             <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
                 No products found. Please check back soon.
             </p>
         {% endif %}
-
     </div>
 </div>
