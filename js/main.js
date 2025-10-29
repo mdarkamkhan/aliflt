@@ -1,104 +1,17 @@
 /* js/main.js */
-/* All your site scripts, moved from base.liquid */
+/* 💡 CLEANUP: This file has been simplified.
+  All GitHub API fetching (fetchCollectionItems, renderSwapper) 
+  has been REMOVED because Eleventy now builds your galleries statically.
+  This file now ONLY handles client-side interactivity.
+*/
 
-/* ====== CONFIG ====== */
-// 💡 NOTE: This config is for the CLIENT-SIDE GitHub fetcher.
-// We are replacing this with Eleventy collections (see Step 4),
-// so this section will become obsolete, but we keep it for now.
-const OWNER = "mdarkamkhan";      
-const REPO  = "aliflt";           
-const SITE_ORIGIN = "https://aliflt.netlify.app"; 
-const CACHE_TTL = 60 * 60 * 1000; // 1 hour cache
-
-/* ====== UTIL: parse YAML frontmatter from markdown */
-function parseYAMLFrontMatter(text) {
-  const fm = text.match(/^---\s*([\s\S]*?)\s*---/);
-  if (!fm) return {};
-  const lines = fm[1].split(/\r?\n/);
-  const data = {};
-  for (let line of lines) {
-    const m = line.match(/^\s*([A-Za-z0-9_\- ]+)\s*:\s*(.+)$/);
-    if (m) {
-      let key = m[1].trim();
-      let val = m[2].trim();
-      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-        val = val.slice(1, -1);
-      }
-      data[key] = val;
-    }
-  }
-  return data;
-}
-
-/* ====== Fetch and cache folder listing + parse entries ====== */
-// 💡 NOTE: This is the dynamic GitHub fetcher. We are replacing this.
-async function fetchCollectionItems(folder) {
-  const cacheKey = `ghc_${OWNER}_${REPO}_${folder}`;
-  try {
-    const rawCache = localStorage.getItem(cacheKey);
-    if (rawCache) {
-      const parsed = JSON.parse(rawCache);
-      if (Date.now() - parsed.ts < CACHE_TTL) {
-        return parsed.items;
-      }
-    }
-  } catch (e) { /* ignore parse errors */ }
-
-  const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${folder}`;
-  const res = await fetch(apiUrl);
-  if (!res.ok) {
-    console.warn(`GitHub API error for ${folder}:`, res.status, res.statusText);
-    
-    // --- DEBUGGING: Hide banner if API fails ---
-    if (folder === 'offers') {
-         const banner = document.getElementById('top-banner');
-         if (banner) banner.style.display = 'none';
-    }
-    // --- END DEBUGGING ---
-    
-    return [];
-  }
-  const list = await res.json(); 
-
-  const items = [];
-  for (const file of list) {
-    if (!file.name.match(/\.(md|markdown|json)$/i)) continue; 
-    try {
-      const rawText = await fetch(file.download_url).then(r => r.text());
-      let data = {};
-      if (file.name.match(/\.(md|markdown)$/i)) {
-        data = parseYAMLFrontMatter(rawText);
-      } else { 
-        try { data = JSON.parse(rawText); } catch(e){ data = {}; }
-      }
-      
-      let img = data.image || data.img || data.Image || data.photo || null;
-      let title = data.title || data.Title || data.name || file.name.replace(/\.(md|markdown|json)$/i, "");
-      
-      if (img) {
-        if (img.startsWith("/")) img = SITE_ORIGIN + img;
-        else if (!img.startsWith("http")) img = SITE_ORIGIN + "/" + img;
-      }
-      
-      items.push({ title, image: img, raw: data, slug: file.name });
-      
-    } catch (err) {
-      console.error("Error reading file", file.name, err);
-    }
-  }
-
-  try {
-    localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), items }));
-  } catch (e) {}
-
-  return items;
-}
-
-
-/* ====== Swapper and Gallery Logic ====== */
+/* ==================================================
+===== Swapper and Gallery Logic ==================
+================================================== 
+*/
 function initializeSwapper(swapperSelector, options = {}) {
      const swapper = document.querySelector(swapperSelector);
-    if (!swapper) return;
+    if (!swapper) return; // Exit if this gallery isn't on the current page
 
     const items = swapper.querySelectorAll('.swapper-item');
     const prevBtn = swapper.querySelector('.prev-btn');
@@ -109,7 +22,15 @@ function initializeSwapper(swapperSelector, options = {}) {
     if (items.length <= 1) {
         if (prevBtn) prevBtn.style.display = 'none';
         if (nextBtn) nextBtn.style.display = 'none';
-        return; // No need for controls or autoplay if 0 or 1 item
+        
+        // If it's a banner, we don't need to do anything else
+        if (options.isBanner) {
+            // But if it's NOT a banner and only 1 item, show it
+            if (items.length === 1) {
+                showItem(0);
+            }
+            return;
+        }
     }
 
     function showItem(index) {
@@ -143,100 +64,45 @@ function initializeSwapper(swapperSelector, options = {}) {
     }
 
     function startAutoplay() {
-        // Only start autoplay if it's enabled and there's more than one item
         if (options.autoplay && items.length > 1) { 
             autoplayInterval = setInterval(next, options.autoplay);
         }
     }
 
-function resetAutoplay() {
+    function resetAutoplay() {
         clearInterval(autoplayInterval);
         startAutoplay();
     }
     
-    showItem(currentIndex);
-    startAutoplay();
+    showItem(currentIndex); // Show the first item
+    startAutoplay(); // Start the slideshow
 }
 
 
-async function renderSwapper(folder, containerSelector, options = {}) {
-     const swapperContainer = document.querySelector(containerSelector);
-    if (!swapperContainer) return;
-
-    const items = await fetchCollectionItems(folder);
-    const itemsWithImages = items.filter(item => item.image);
-
-    // Sort items by date if it exists
-    itemsWithImages.sort((a, b) => {
-        const dateA = a.raw.date ? new Date(a.raw.date) : new Date(0);
-        const dateB = b.raw.date ? new Date(b.raw.date) : new Date(0);
-        return dateB - dateA;
-    });
-
-    let content = '';
-    if (!itemsWithImages.length) {
-        content = "<p class='empty-gallery-message'>No items found.</p>";
-        
-        // 💡 DEBUGGING FIX: Hide the banner if it finds no content
-        if (options.isBanner) {
-            const banner = document.getElementById('top-banner');
-            if (banner) banner.style.display = 'none';
-        }
-    } else {
-        itemsWithImages.forEach((item, index) => {
-            const activeClass = index === 0 ? 'active' : '';
-            let itemContent = '';
-
-            if (options.isBanner) {
-                 itemContent = `
-                    <img src="${item.image}" alt="${item.title}">
-                    <div class="banner-content">
-                        <h2>${item.title}</h2>
-                        <a href="#home" class="banner-cta-btn">Visit Now</a>
-                    </div>
-                `;
-            } else {
-                itemContent = `<img src="${item.image}" alt="${item.title}">`;
-                if (folder === 'services') {
-                    itemContent += `<div class="service-details"><h3>${item.title}</h3></div>`;
-                } else if (folder === 'works') {
-                     itemContent += `<div class="work-caption"><h3>${item.title}</h3></div>`; // ADDED CAPTION FOR WORKS
-                } else { // products
-                    itemContent += `<div class="product-label">${item.title}</div>`;
-                }
-            }
-            content += `<div class="swapper-item ${activeClass}">${itemContent}</div>`;
-
-        });
-        
-        // Add nav buttons if it's not a banner
-        if (!options.isBanner) {
-            content += `
-                <div class="swapper-nav">
-                    <button class="swapper-nav-btn prev-btn">❮</button>
-                    <button class="swapper-nav-btn next-btn">❯</button>
-                </div>
-            `;
-        }
-    }
-    
-    swapperContainer.innerHTML = content;
-    initializeSwapper(containerSelector, options);
-}
-
-
-/* ====== Main Execution ====== */
+/* ==================================================
+===== Main Execution (On Page Load) ==============
+================================================== 
+*/
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 💡 NOTE: This section will be replaced by static Eleventy code.
-    // For now, we leave it so the site doesn't break
-    // before you add content in Step 4.
-    renderSwapper('offers', '.banner-swapper', { isBanner: true, autoplay: 5000 });
-    renderSwapper('services', '.services-swapper', { autoplay: 4000 }); 
-    renderSwapper('products', '.product-swapper', { autoplay: 4000 }); 
-    renderSwapper('works', '.works-swapper', { autoplay: 3000 }); 
+    // 💡 UPDATED: We now just INITIALIZE the static galleries
+    
+    // --- Galleries on ALL pages ---
+    initializeSwapper('.banner-swapper', { isBanner: true, autoplay: 5000 });
 
-    // Close banner button
+    // --- Galleries on Homepage (index.liquid) ---
+    initializeSwapper('.products-panel-gallery', { autoplay: 4000 });
+    initializeSwapper('.works-panel-gallery', { autoplay: 3000 });
+
+    // --- Galleries on Products page (products.html) ---
+    initializeSwapper('.product-swapper', { autoplay: 4000 });
+
+    // --- Galleries on Services page (services-works.liquid) ---
+    initializeSwapper('.services-swapper', { autoplay: 4000 });
+    initializeSwapper('.works-swapper', { autoplay: 3000 });
+
+
+    // --- Close banner button ---
     const closeBtn = document.querySelector('.close-banner-btn');
     if(closeBtn) {
         closeBtn.addEventListener('click', () => {
@@ -245,10 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // WhatsApp Form Handler (your existing code...)
-
     // --- SCROLL ANIMATION LOGIC ---
-    // This is the fix for your invisible content
     const sectionsToFade = document.querySelectorAll('.fade-in-section');
     
     if (sectionsToFade.length > 0) {
@@ -273,8 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
             observer.observe(section);
         });
     }
-    // --- END SCROLL ANIMATION ---
 
-    // --- CHATBOT LOGIC --- (your existing code...)
+    // --- CHATBOT LOGIC --- 
+    // (Your existing chatbot code would go here if it's not already
+    // part of the main.js file. If it is, it's preserved.)
 });
-                                                  
