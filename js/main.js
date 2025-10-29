@@ -93,11 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Galleries on Homepage (index.liquid) ---
     initializeSwapper('.products-panel-gallery', { autoplay: 4000 });
     initializeSwapper('.works-panel-gallery', { autoplay: 3000 });
-    // 💡 UPDATED: Added the Services panel slider
     initializeSwapper('.services-panel-gallery', { autoplay: 3500 });
 
     // --- Galleries on Products page (products.html) ---
-    initializeSwapper('.product-swapper', { autoplay: 4000 });
+    // 💡 REMOVED: initializeSwapper('.product-swapper', ...);
 
     // --- Galleries on Services page (services-works.liquid) ---
     initializeSwapper('.services-swapper', { autoplay: 4000 });
@@ -113,33 +112,47 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- SCROLL ANIMATION LOGIC ---
+    // --- SCROLL ANIMATION LOGIC (for .fade-in-section) ---
     const sectionsToFade = document.querySelectorAll('.fade-in-section');
     
     if (sectionsToFade.length > 0) {
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1 
-        };
-
-        const observerCallback = (entries, observer) => {
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
                     observer.unobserve(entry.target); 
                 }
             });
-        };
-
-        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        }, { threshold: 0.1 });
 
         sectionsToFade.forEach(section => {
-            observer.observe(section);
+            sectionObserver.observe(section);
+        });
+    }
+
+    // --- 💡 NEW: "INFINITE SCROLL" for Product Grid ---
+    const productCards = document.querySelectorAll('.product-card');
+    
+    if (productCards.length > 0) {
+        const cardObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Add a slight delay based on the item's index
+                    // This creates a nice "staggered" load-in effect
+                    setTimeout(() => {
+                        entry.target.classList.add('is-visible');
+                    }, 100 * (index % 10)); // 100ms delay per item, resets every 10
+                    
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { rootMargin: '0px 0px -50px 0px' }); // Start loading 50px before it's fully in view
+
+        productCards.forEach(card => {
+            cardObserver.observe(card);
         });
     }
 
     // --- CHATBOT LOGIC --- 
-    // (Your existing chatbot code would go here if it's not already
-    // part of the main.js file. If it is, it's preserved.)
+    // (Your existing chatbot code would go here)
 });
