@@ -1,5 +1,5 @@
 /* css/style.css */
-/* All your site styles, moved from base.liquid */
+/* All your site styles */
 
 :root {
     --accent-color: #2C3E50;
@@ -12,7 +12,7 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    background-color: #f4f4f4;
+    background-color: #f4f4f4; /* This is the "white" background for margins */
     padding-bottom: 80px;
 }
 .container {
@@ -50,13 +50,19 @@ nav a {
 nav a:hover {
     background: #555;
 }
+/* 💡 UPDATED: Set .section margin to 0 so panels are the only thing with margin */
 .section {
     background: #fff;
-    margin: 20px 0;
+    margin: 0; /* Was 20px 0 */
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+/* We add margin back to sections that are *inside* a container */
+.container .section {
+    margin: 20px 0;
+}
+
 .section h2 {
     text-align: center;
     color: var(--accent-color);
@@ -396,42 +402,44 @@ footer {
 
 
 /* ==================================================
-===== PRADA-STYLE HOMEPAGE PANELS ================
+===== PRADA-STYLE HOMEPAGE PANELS (CARD-STYLE) ====
 ================================================== 
 */
 
-/* This is the main link wrapper for each panel */
 .prada-panel {
     position: relative;
-    width: 100%;
-    /* Height is 90vh (90% of viewport height) for a large panel 
-      that doesn't quite take up the *entire* screen.
-      Adjust to 100vh if you want it full-screen.
-    */
-    height: 90vh; 
+    /* 💡 UPDATED: Not full width, centered with margin */
+    width: calc(100% - 40px);
+    max-width: 1600px; /* Max-width for very large screens */
+    margin: 20px auto; /* 20px top/bottom gap, auto left/right for center */
+    
+    /* 💡 UPDATED: Height reduced for card-feel */
+    height: 85vh; 
+    
     overflow: hidden;
     display: block;
     text-decoration: none;
     color: white;
     background: #333; /* Fallback color */
+
+    /* 💡 UPDATED: Added border-radius for "card" look */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* This is the text label (e.g., "ALiF Products") */
 .prada-panel-label {
     position: absolute;
-    top: 30px;
-    left: 30px;
+    /* 💡 UPDATED: Positioned relative to the card */
+    top: 25px;
+    left: 25px;
     z-index: 10;
     font-size: 1.5rem;
     font-weight: bold;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.7);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-/* We override the default .swapper-container rules
-  to make it fill the entire panel.
-*/
 .prada-panel .swapper-container {
     max-width: none;
     width: 100%;
@@ -443,19 +451,32 @@ footer {
     height: 100%;
 }
 
-/* This makes the images cover the panel without stretching */
 .prada-panel .swapper-item img {
     height: 100%;
     min-height: 0;
     object-fit: cover;
+    /* 💡 UPDATED: Image border-radius matches the panel */
+    border-radius: 8px;
 }
 
-/* This hides the original elements we don't 
-  want on the homepage panels.
-*/
 .prada-panel .swapper-nav,
 .prada-panel .product-label,
 .prada-panel .service-details,
 .prada-panel .work-caption {
     display: none;
+}
+
+/* 💡 UPDATED: Media query for mobile */
+@media (max-width: 600px) {
+    .prada-panel {
+        /* Use smaller gaps on mobile */
+        width: calc(100% - 20px);
+        margin: 10px auto;
+        height: 70vh; /* Shorter height on mobile */
+    }
+    .prada-panel-label {
+        font-size: 1.2rem;
+        top: 20px;
+        left: 20px;
+    }
 }
