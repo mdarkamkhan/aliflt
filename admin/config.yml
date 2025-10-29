@@ -2,7 +2,6 @@ backend:
   name: git-gateway
   branch: main
 
-# GLOBAL MEDIA FOLDERS (SABSE UPAR)
 media_folder: "uploads"
 public_folder: "/uploads"
 
@@ -27,7 +26,29 @@ collections:
     fields:
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
-      - { name: "image", "label": "Image", widget: "image" }
+      - { name: "image", label: "Image", widget: "image" }
+      - name: "category"
+        label: "Category"
+        widget: "select"
+        options:
+          - lace
+          - latkan
+          - thread
+          - aster
+          - fall
+          - blouse piece
+          - plain saten
+          - plain crape
+          - plain cotton
+          - plain reyon
+          - net
+          - organza
+          - jorget
+          - banarasi
+          - velvet
+          - cotton
+      - { name: "price", label: "Price", widget: "number" }
+      - { name: "description", label: "Description", widget: "text" }
 
   - name: "services"
     label: "Services"
@@ -39,6 +60,25 @@ collections:
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
+      - name: "category"
+        label: "Category"
+        widget: "select"
+        options:
+          - blouse
+          - kurti pant
+          - kurti patyala
+          - kurti
+          - garara
+          - sharara
+          - gown
+          - anarkali gown
+          - frock
+          - afgani kurti
+          - lehanga
+          - trendy lehanga
+          - saree fall & pico
+      - { name: "price", label: "Price", widget: "number" }
+      - { name: "description", label: "Description", widget: "text" }
 
   - name: "works"
     label: "Our Works"
@@ -50,3 +90,22 @@ collections:
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
+      - name: "category"
+        label: "Category"
+        widget: "select"
+        options:
+          - blouse
+          - kurti pant
+          - kurti patyala
+          - kurti
+          - garara
+          - sharara
+          - gown
+          - anarkali gown
+          - frock
+          - afgani kurti
+          - lehanga
+          - trendy lehanga
+          - saree fall & pico
+      - { name: "price", label: "Price", widget: "number" }
+      - { name: "description", label: "Description", widget: "text" }
