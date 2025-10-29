@@ -93,6 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Galleries on Homepage (index.liquid) ---
     initializeSwapper('.products-panel-gallery', { autoplay: 4000 });
     initializeSwapper('.works-panel-gallery', { autoplay: 3000 });
+    // 💡 UPDATED: Added the Services panel slider
+    initializeSwapper('.services-panel-gallery', { autoplay: 3500 });
 
     // --- Galleries on Products page (products.html) ---
     initializeSwapper('.product-swapper', { autoplay: 4000 });
