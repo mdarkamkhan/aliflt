@@ -1,25 +1,56 @@
 ---
-layout: base
+layout: base.liquid
 title: Home
 permalink: /
 ---
 
-<div id="home" class="section container fade-in-section">
-    <h2>Welcome</h2>
-    <p>Welcome to ALiF!
-     Custom lehengas, frocks, aur dresses — modern style, traditional touch, 100% aapke liye.
- Ayen Daal Kuan, College Road, Sahibganj
-</p>
-    <div class="cta-buttons">
-        <a href="https://wa.me/7250470009" target="_blank">WhatsApp</a>
-        <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" class="instagram-btn">Instagram</a>
-    </div>
-</div>
+<a href="/products/" class="prada-panel">
+    <div class="prada-panel-label">ALiF Products</div>
+    
+    <div class="swapper-container products-panel-gallery">
+        {% for item in collections.products %}
+        <div class="swapper-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ item.data.image }}" alt="{{ item.data.title }}">
+        </div>
+        {% endfor %}
 
-<div id="about" class="section container fade-in-section">
-    <h2>About Us</h2>
-    <p>At Alif Tailoring, we craft custom lehengas, frocks, and dresses that fit perfectly and make you feel amazing. Mixing traditional techniques with modern style, we bring your ideas to life.</p>
-</div>
+        {% if collections.products.length == 0 %}
+            <p class='empty-gallery-message'>Products coming soon.</p>
+        {% endif %}
+    </div>
+</a>
+
+<a href="/services-works/" class="prada-panel">
+    <div class="prada-panel-label">ALiF Services</div>
+    
+    <div class="swapper-container">
+        {% assign service = collections.services | first %}
+        {% if service %}
+        <div class="swapper-item active">
+            <img src="{{ service.data.image }}" alt="{{ service.data.title }}">
+        </div>
+        {% else %}
+            <p class='empty-gallery-message'>Services coming soon.</p>
+        {% endif %}
+    </div>
+</a>
+
+<a href="/services-works/" class="prada-panel">
+    <div class="prada-panel-label">ALiF Works</div>
+    
+    <div class="swapper-container works-panel-gallery">
+        {% for item in collections.works %}
+        <div class="swapper-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ item.data.image }}" alt="{{ item.data.title }}">
+        </div>
+        {% endfor %}
+
+        {% if collections.works.length == 0 %}
+            <p class='empty-gallery-message'>Our work coming soon.</p>
+        {% endif %}
+    </div>
+</a>
+
 
 <div id="reviews" class="section container fade-in-section">
     <h2>Client Reviews</h2>
