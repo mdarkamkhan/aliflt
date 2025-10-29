@@ -3,10 +3,94 @@
   <head>
     <meta charset="utf-8" />
     <title>Content Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Custom mobile-friendly CSS -->
+    <style>
+      /* Make overall layout fit smaller screens */
+      body, html {
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, sans-serif;
+        background-color: #f9f9f9;
+      }
+
+      /* Fix for mobile sidebar and editor split */
+      .cms-editor-visual {
+        display: block !important;
+      }
+
+      .cms-editor, .cms-editor-visual, .cms-editor-control-pane {
+        width: 100% !important;
+        max-width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      /* Sidebar toggle */
+      .nc-sidebar {
+        position: relative;
+        width: 100% !important;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      /* Collection list layout */
+      .nc-collection {
+        grid-template-columns: 1fr !important;
+        padding: 10px;
+      }
+
+      /* Buttons and forms */
+      button, .nc-button {
+        font-size: 15px !important;
+        padding: 10px 14px !important;
+      }
+
+      input, textarea, select {
+        width: 100% !important;
+        font-size: 15px;
+        border-radius: 8px;
+        padding: 8px 10px;
+      }
+
+      /* Fix overflow */
+      .nc-app, .cms-editor, .nc-collection {
+        overflow-x: hidden;
+      }
+
+      /* For preview panel */
+      .nc-preview-pane {
+        display: none; /* hide live preview for mobile */
+      }
+
+      @media (min-width: 768px) {
+        .nc-preview-pane {
+          display: block;
+        }
+      }
+
+      /* Top navbar tweaks */
+      .nc-header {
+        flex-wrap: wrap;
+        gap: 8px;
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
+    <!-- Netlify CMS Core -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- Redirect logic -->
+    <script>
+      (function() {
+        if (document.location.hash.indexOf('invite_token') > -1) {
+          document.location.pathname = '/admin/';
+        }
+      })();
+    </script>
   </body>
 </html>
