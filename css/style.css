@@ -223,10 +223,13 @@ footer {
     }
 }
 
-/* Visibility fix for footer/sections */
+/* ==================================================
+===== 💡 VISIBILITY FIX 1 ========================
+================================================== 
+*/
 .fade-in-section {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1; /* 💡 FIX: Was 0. Makes footer & product pages visible. */
+    transform: translateY(0); /* 💡 FIX: Was 30px. */
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 .fade-in-section.is-visible {
@@ -350,16 +353,24 @@ footer {
 @media (min-width: 1400px) {
     .product-grid { grid-template-columns: repeat(5, 1fr); }
 }
+
+/* ==================================================
+===== 💡 VISIBILITY FIX 2 ========================
+================================================== 
+*/
 .product-card {
     text-decoration: none;
     color: #333;
     display: block;
     border-radius: 8px;
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1; /* 💡 FIX: Was 0. Makes product cards visible. */
+    transform: translateY(0); /* 💡 FIX: Was 20px. */
     transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
 }
-.product-card.is-visible { opacity: 1; transform: translateY(0); }
+.product-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
 .product-card-image-wrapper {
     overflow: hidden;
     border-radius: 8px;
@@ -541,27 +552,10 @@ details[open] .collapsible-content {
 .sidebar-socials .footer-socials { gap: 20px; }
 
 
-/* ==================================================
-===== E-COMMERCE STYLES (NEW) ====================
-================================================== 
-*/
-
-/* 1. Nav Bar Cart Icon */
-.nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.nav-cart-btn {
-    position: relative;
-    color: #333;
-    padding: 5px;
-}
-.nav-cart-btn svg {
-    width: 24px;
-    height: 24px;
-    stroke: #333;
-}
+/* E-COMMERCE STYLES */
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+.nav-cart-btn { position: relative; color: #333; padding: 5px; }
+.nav-cart-btn svg { width: 24px; height: 24px; stroke: #333; }
 .cart-count {
     position: absolute;
     top: -5px;
@@ -576,8 +570,6 @@ details[open] .collapsible-content {
     min-width: 10px;
     text-align: center;
 }
-
-/* 2. Generic Buttons (Cart/Buy) */
 .btn-cart, .btn-buy {
     font-family: 'Poppins', sans-serif;
     padding: 12px 20px;
@@ -589,125 +581,25 @@ details[open] .collapsible-content {
     transition: all 0.3s ease;
     text-align: center;
 }
-.btn-cart {
-    background-color: #f4f4f4;
-    color: #333;
-    border: 1px solid #ddd;
-}
-.btn-cart:hover {
-    background-color: #e9e9e9;
-    border-color: #ccc;
-}
-.btn-buy {
-    background-color: var(--accent-color);
-    color: white;
-    border: 1px solid var(--accent-color);
-}
-.btn-buy:hover {
-    background-color: var(--accent-color-dark);
-    border-color: var(--accent-color-dark);
-}
-
-/* 3. Product Detail Page (PDP) */
-.product-detail-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
-}
-@media (min-width: 768px) {
-    .product-detail-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-.product-detail-image img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-.product-detail-title {
-    font-size: 2.5rem;
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-.product-detail-price {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #000;
-    display: block;
-    margin-bottom: 15px;
-}
-.product-detail-category {
-    font-size: 1rem;
-    color: #777;
-    text-transform: capitalize;
-    display: block;
-    margin-bottom: 25px;
-}
-.product-detail-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 25px;
-}
-.product-detail-description h3 {
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-}
-.product-detail-description p {
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #555;
-}
-
-/* 4. Cart Page */
-.cart-item {
-    display: grid;
-    grid-template-columns: 80px 1fr auto;
-    gap: 15px;
-    align-items: center;
-    padding: 15px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-.cart-item-image img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-.cart-item-info h4 {
-    margin: 0 0 5px 0;
-    font-size: 1.1rem;
-}
-.cart-item-info p {
-    margin: 0;
-    color: #777;
-}
-.cart-item-remove-btn {
-    background: none;
-    border: none;
-    color: #900;
-    font-size: 1rem;
-    cursor: pointer;
-    font-weight: 600;
-}
-#cart-summary {
-    margin-top: 30px;
-    border-top: 2px solid #333;
-    padding-top: 20px;
-    text-align: right;
-}
-#cart-total {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-}
-#cart-summary .btn-buy {
-    width: 100%;
-}
-@media (min-width: 768px) {
-    #cart-summary .btn-buy {
-        width: auto;
-        min-width: 300px;
-    }
-}
+.btn-cart { background-color: #f4f4f4; color: #333; border: 1px solid #ddd; }
+.btn-cart:hover { background-color: #e9e9e9; border-color: #ccc; }
+.btn-buy { background-color: var(--accent-color); color: white; border: 1px solid var(--accent-color); }
+.btn-buy:hover { background-color: var(--accent-color-dark); border-color: var(--accent-color-dark); }
+.product-detail-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+@media (min-width: 768px) { .product-detail-grid { grid-template-columns: 1fr 1fr; } }
+.product-detail-image img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.product-detail-title { font-size: 2.5rem; margin-top: 0; margin-bottom: 10px; }
+.product-detail-price { font-size: 1.8rem; font-weight: 700; color: #000; display: block; margin-bottom: 15px; }
+.product-detail-category { font-size: 1rem; color: #777; text-transform: capitalize; display: block; margin-bottom: 25px; }
+.product-detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+.product-detail-description h3 { border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 10px; }
+.product-detail-description p { font-size: 1rem; line-height: 1.7; color: #555; }
+.cart-item { display: grid; grid-template-columns: 80px 1fr auto; gap: 15px; align-items: center; padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
+.cart-item-image img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
+.cart-item-info h4 { margin: 0 0 5px 0; font-size: 1.1rem; }
+.cart-item-info p { margin: 0; color: #777; }
+.cart-item-remove-btn { background: none; border: none; color: #900; font-size: 1rem; cursor: pointer; font-weight: 600; }
+#cart-summary { margin-top: 30px; border-top: 2px solid #333; padding-top: 20px; text-align: right; }
+#cart-total { font-size: 1.5rem; margin-bottom: 20px; }
+#cart-summary .btn-buy { width: 100%; }
+@media (min-width: 768px) { #cart-summary .btn-buy { width: auto; min-width: 300px; } }
