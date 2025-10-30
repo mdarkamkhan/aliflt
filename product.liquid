@@ -34,15 +34,7 @@ eleventyComputed:
             <!-- Add to Cart & Buy Now Buttons -->
             <div class="product-detail-actions">
                 <button class="btn-cart" id="addToCartBtn" 
-                        
-                        <!-- 
-                        ==================================================
-                        ===== 💡 THE REAL FIX  =============================
-                        ================================================== 
-                        Removed the "| slugify" filter from the line below.
-                        -->
                         data-product-id="{{ product.fileSlug }}" 
-                        
                         data-title="{{ product.data.title | escape }}" 
                         data-price="{{ product.data.price }}" 
                         data-image="{{ product.data.image | url }}">
@@ -59,9 +51,17 @@ eleventyComputed:
             {% if product.templateContent %}
                 <div class="product-detail-description">
                     <h3>Description</h3>
-                    <p>{{ product.templateContent | safe }}</p>
+                    <!-- 
+                    ==================================================
+                    ===== 💡 THE REAL FIX  =============================
+                    ================================================== 
+                    Removed the "| safe" filter. Liquid renders this correctly by default.
+                    -->
+                    <p>{{ product.templateContent }}</p>
                 </div>
             {% endif %}
         </div>
     </div>
 </div>
+
+
