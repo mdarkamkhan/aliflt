@@ -5,16 +5,15 @@ module.exports = function(eleventyConfig) {
     
     // --- Passthrough Copies ---
     // These folders and files will be copied directly to the output folder (_site)
-    // We've added 'js' for your new script file and the root favicon.
     eleventyConfig.addPassthroughCopy("css");
-    eleventyConfig.addPassthroughCopy("js"); // 💡 ADDED: For main.js
+    eleventyConfig.addPassthroughCopy("js"); 
     eleventyConfig.addPassthroughCopy("uploads");
     eleventyConfig.addPassthroughCopy("admin");
-    eleventyConfig.addPassthroughCopy("favicon.png"); // 💡 ADDED: For root favicon
+    eleventyConfig.addPassthroughCopy("favicon.png"); 
 
-    // --- Collections ---
+    // --- 💡 COLLECTIONS (This is the critical part) ---
     // This tells Eleventy to create "collections" of content.
-    // We will use these to build your galleries statically.
+    // The new product.liquid file NEEDS these to exist.
     eleventyConfig.addCollection("products", function(collectionApi) {
         return collectionApi.getFilteredByGlob("products/*.md");
     });
