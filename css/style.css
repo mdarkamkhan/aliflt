@@ -41,7 +41,7 @@ header h1 {
     color: #555;
 }
 
-/* 💡 OLD nav styles removed */
+/* 💡 OLD nav styles removed, as it's replaced by .fixed-top-nav */
 
 /* Set .section margin to 0 so panels are the only thing with margin */
 .section {
@@ -271,15 +271,21 @@ footer {
          bottom: 15vh;
     }
 }
+
+/* ==================================================
+===== 💡 VISIBILITY FIX 1 ========================
+================================================== 
+*/
 .fade-in-section {
-    opacity: 0;
-    transform: translateY(30px);
+    opacity: 1; /* 💡 FIX: Was 0. Makes footer visible. */
+    transform: translateY(0); /* 💡 FIX: Was 30px. */
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 .fade-in-section.is-visible {
     opacity: 1;
     transform: translateY(0);
 }
+
 #chat-widget {
     position: fixed;
     bottom: 20px;
@@ -379,11 +385,6 @@ footer {
  #chat-window.hidden { display: none; }
  #chat-window.visible { display: flex; }
 
-/* ==================================================
-===== 💡 DEBUG BOX REMOVED =======================
-================================================== 
-*/
-
 
 /* ==================================================
 ===== PRADA-STYLE HOMEPAGE PANELS (CARD-STYLE) ====
@@ -479,19 +480,22 @@ footer {
     gap: 20px; 
 }
 
+/* ==================================================
+===== 💡 VISIBILITY FIX 2 ========================
+================================================== 
+*/
 .product-card {
     text-decoration: none;
     color: #333;
     display: block;
     border-radius: 8px; /* Match panel radius */
     
-    /* "Infinite scroll" reveal - hidden by default */
-    opacity: 0;
-    transform: translateY(20px);
+    opacity: 1; /* 💡 FIX: Was 0. Makes product cards visible. */
+    transform: translateY(0); /* 💡 FIX: Was 20px. */
     transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
 }
 
-/* This class is added by JS when the card scrolls into view */
+/* This class is now redundant but harmless */
 .product-card.is-visible {
     opacity: 1;
     transform: translateY(0);
