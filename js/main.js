@@ -2,7 +2,7 @@
 /* This file handles all client-side interactivity */
 
 /* ==================================================
-===== 💡 NEW E-COMMERCE CART LOGIC ================
+===== 💡 E-COMMERCE CART LOGIC ===================
 ================================================== 
 */
 const cart = {
@@ -139,39 +139,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSwapper('.services-swapper', { autoplay: 4000 });
     initializeSwapper('.works-swapper', { autoplay: 3000 });
 
-    // --- SCROLL ANIMATION LOGIC (for .fade-in-section) ---
-    const sectionsToFade = document.querySelectorAll('.fade-in-section');
-    if (sectionsToFade.length > 0) {
-        const sectionObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target); 
-                }
-            });
-        }, { threshold: 0.1 });
-        sectionsToFade.forEach(section => {
-            sectionObserver.observe(section);
-        });
-    }
-
-    // --- "INFINITE SCROLL" for Product Grid ---
-    const productCards = document.querySelectorAll('.product-card');
-    if (productCards.length > 0) {
-        const cardObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('is-visible');
-                    }, 100 * (index % 10));
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { rootMargin: '0px 0px -50px 0px' }); 
-        productCards.forEach(card => {
-            cardObserver.observe(card);
-        });
-    }
+    /* ==================================================
+    ===== 💡 FADE-IN SCRIPT REMOVED ==================
+    ================================================== 
+    The IntersectionObserver scripts for .fade-in-section
+    and .product-card have been removed as they are no
+    longer needed with the new CSS.
+    */
 
     // --- SIDEBAR MENU LOGIC ---
     const navToggleBtn = document.getElementById('navToggleBtn');
@@ -204,17 +178,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // --- 💡 NEW: PRODUCT DETAIL PAGE LOGIC ---
+    // --- PRODUCT DETAIL PAGE LOGIC ---
     const addToCartBtn = document.getElementById('addToCartBtn');
     const buyNowBtn = document.getElementById('buyNowBtn');
     const whatsappNumber = '7488611845'; // Your WhatsApp number
     const whatsappBaseUrl = `https://wa.me/${whatsappNumber}?text=`;
 
-    // Check if we're on a PDP page
     if (addToCartBtn) {
         const productId = addToCartBtn.dataset.productId;
         
-        // Check if item is already in cart and update button
         if (cart.items[productId]) {
             addToCartBtn.textContent = 'Go to Cart';
             addToCartBtn.classList.add('btn-buy'); 
@@ -230,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const { title, price, image } = addToCartBtn.dataset;
             cart.add(productId, title, parseFloat(price), image);
             
-            // Update button
             addToCartBtn.textContent = 'Go to Cart';
             addToCartBtn.classList.add('btn-buy');
             addToCartBtn.classList.remove('btn-cart');
@@ -239,24 +210,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // "Buy Now" button on PDP
     if (buyNowBtn) {
         buyNowBtn.addEventListener('click', () => {
             const { title, price, image } = buyNowBtn.dataset;
-            // Create a temporary cart with just this one item
             const tempCart = {
                 items: {
                     'temp': { title, price: parseFloat(price), image, qty: 1 }
                 },
-                generateWhatsAppMessage: cart.generateWhatsAppMessage // Borrow function
+                generateWhatsAppMessage: cart.generateWhatsAppMessage
             };
-            
             const message = tempCart.generateWhatsAppMessage();
             window.open(whatsappBaseUrl + message, '_blank');
         });
     }
     
-    // --- 💡 NEW: CART PAGE LOGIC ---
+    // --- CART PAGE LOGIC ---
     const cartContainer = document.getElementById('cart-items-container');
     if (cartContainer) {
         renderCartPage();
@@ -267,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const emptyMsg = document.getElementById('cart-empty-message');
         const cartSummary = document.getElementById('cart-summary');
         
-        cartContainer.innerHTML = ''; // Clear previous render
+        cartContainer.innerHTML = '';
         
         if (cart.getTotalCount() === 0) {
             emptyMsg.style.display = 'block';
@@ -299,16 +267,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.addEventListener('click', () => {
                     const removeId = btn.dataset.removeId;
                     cart.remove(removeId);
-                    renderCartPage(); // Re-render the cart
+                    renderCartPage();
                 });
             });
             
             document.getElementById('proceedToOrderBtn').addEventListener('click', () => {
                 const message = cart.generateWhatsAppMessage();
                 window.open(whatsappBaseUrl + message, '_blank');
-                // You can clear the cart after ordering if you want
-                // cart.clear();
-                // renderCartPage();
             });
         }
     }
