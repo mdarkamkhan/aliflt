@@ -4,122 +4,63 @@ title: Our Services & Works
 permalink: /services-works/
 ---
 
-<div class="section container fade-in-section">
-  <h2>Our Services & Works</h2>
+<div class="container section fade-in-section">
+    <h2>Our Services & Works</h2>
 
-  <!-- 🌸 Filter Buttons -->
-  <div class="filter-bar">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="blouse">Blouse</button>
-    <button class="filter-btn" data-filter="kurti">Kurti</button>
-    <button class="filter-btn" data-filter="frock">frock</button>
-    <button class="filter-btn" data-filter="kurti patyala">kurti-patyala</button>
-    <button class="filter-btn" data-filter="kurti pant">Kurti-pant</button>
-    <button class="filter-btn" data-filter="kurti palazzo">Kurti-palazzo</button>
-    <button class="filter-btn" data-filter="lehanga">Lehenga</button>
-    <button class="filter-btn" data-filter="trendy lehanga">trendy-lehanga</button>
-    <button class="filter-btn" data-filter="anarkali gown">anarkali-gown</button>
-    <button class="filter-btn" data-filter="gown">Gown</button>
-    <button class="filter-btn" data-filter="sharara">Sharara</button>
-    <button class="filter-btn" data-filter="garara">Garara</button>
-    <button class="filter-btn" data-filter="saree fall & pico">fall-pico</button>
-  </div>
+    <div class="product-grid">
+        
+        {% assign combined_list = collections.services | concat: collections.works %}
+        
+        {% for item in combined_list %}
+        <a href="{{ item.url | url }}" class="product-card">
+            <div class="product-card-image-wrapper">
+                <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+            </div>
+            
+            <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
+                
+                <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
+                    {{ item.data.title }}
+                </div>
+                
+                {% if item.data.price %}
+                <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
+                    ₹{{ item.data.price }}
+                </div>
+                {% endif %}
+                
+                {% if item.data.category %}
+                <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+                    {{ item.data.category }}
+                </div>
+                {% endif %}
+                
+                {% if item.data.description %}
+                <details style="margin-top: 10px; font-size: 0.9rem; color: #555; line-height: 1.4;">
+                    <summary style="cursor: pointer; font-weight: 600; color: #333; font-size: 0.9rem; text-transform: none;">
+                        Description
+                    </summary>
+                    <p style="margin-top: 5px; margin-bottom: 0; font-weight: normal;">
+                        {{ item.data.description }}
+                    </p>
+                </details>
+                {% endif %}
 
-  <div class="product-grid">
-    {% assign combined_list = collections.services | concat: collections.works %}
+            </div>
+        </a>
+        {% endfor %}
 
-    {% for item in combined_list %}
-    <a href="{{ item.data.image }}" target="_blank" class="product-card">
-      <div class="product-card-image-wrapper">
-        <img src="{{ item.data.image }}" alt="{{ item.data.title }}">
-      </div>
-
-      <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
-        <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
-          {{ item.data.title }}
-        </div>
-
-        {% if item.data.price %}
-        <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
-          ₹{{ item.data.price }}
-        </div>
+        <!-- This message shows if the collection is empty -->
+        {% if combined_list | size == 0 %}
+            <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
+                No services or works found. Please check back soon.
+            </p>
+        <!-- 
+        ==================================================
+        ===== 💡 THE REAL FIX ============================
+        ================================================== 
+        Added the missing 'endif' tag.
+        -->
         {% endif %}
-
-        {% if item.data.category %}
-        <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
-          {{ item.data.category }}
-        </div>
-        {% endif %}
-
-        {% if item.data.description %}
-        <details style="margin-top: 10px; font-size: 0.9rem; color: #555; line-height: 1.4;">
-          <summary style="cursor: pointer; font-weight: 600; color: #333; font-size: 0.9rem; text-transform: none;">
-            Description
-          </summary>
-          <p style="margin-top: 5px; margin-bottom: 0; font-weight: normal;">
-            {{ item.data.description }}
-          </p>
-        </details>
-        {% endif %}
-      </div>
-    </a>
-    {% endfor %}
-
-    {% if combined_list.length == 0 %}
-      <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
-        No services or works found. Please check back soon.
-      </p>
-    {% endif %}
-  </div>
+    </div>
 </div>
-
-<!-- 🌼 Filter Styling -->
-<style>
-.filter-bar {
-  margin: 25px 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
-.filter-btn {
-  background-color: #eee;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-weight: 500;
-}
-.filter-btn.active,
-.filter-btn:hover {
-  background-color: #222;
-  color: #fff;
-}
-</style>
-
-<!-- 🌼 Filter Script -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const buttons = document.querySelectorAll(".filter-btn");
-  const cards = document.querySelectorAll(".product-card");
-
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const filter = btn.dataset.filter;
-
-      buttons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      cards.forEach(card => {
-        const category = card.querySelector(".product-card-category")?.textContent.toLowerCase() || "";
-        if (filter === "all" || category.includes(filter)) {
-          card.style.display = "block";
-        } else {
-          card.style.display = "none";
-        }
-      });
-    });
-  });
-});
-</script>
