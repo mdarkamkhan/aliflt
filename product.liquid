@@ -4,8 +4,8 @@ pagination:
   data: collections.products
   size: 1
   alias: product
-  # This creates the URL, e.g., /products/bridal-lehenga/
-  permalink: "products/{{ product.fileSlug | slugify }}/"
+  # 💡 FIX: Removed the "| slugify" filter which was causing the build to fail.
+  permalink: "products/{{ product.fileSlug }}/"
 eleventyComputed:
   title: "{{ product.data.title }}"
 ---
@@ -58,5 +58,3 @@ eleventyComputed:
         </div>
     </div>
 </div>
-
-
