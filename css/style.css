@@ -12,7 +12,7 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    background-color: #f4f4f4;
+    background-color: #f4f4f4; /* This is the "white" background for margins */
     padding-bottom: 80px;
     padding-top: 70px; 
 }
@@ -26,6 +26,17 @@ body.sidebar-open {
     margin: auto;
     overflow: hidden;
     padding: 0 20px;
+}
+header {
+    background: #fff;
+    padding: 1rem 0;
+    border-bottom: #ccc 1px solid;
+    text-align: center;
+}
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    color: #555;
 }
 
 /* Set .section margin to 0 so panels are the only thing with margin */
@@ -182,26 +193,22 @@ footer {
     color: #777;
 }
 
-/* ==================================================
-===== 💡 BANNER STYLES (FIXED) ===================
-================================================== 
-*/
+/* BANNER STYLES */
 #top-banner {
     position: relative;
     width: 100%;
-    height: 100vh; /* 💡 FIX: Reverted to 100vh. This makes it visible. */
+    height: 100vh; /* Full screen height */
     overflow: hidden;
 }
 #top-banner .swapper-container {
     width: 100%;
-    height: 100%; /* 💡 FIX: Reverted to 100%. */
+    height: 100%; 
     max-width: none;
-    min-height: auto; /* 💡 FIX: Reverted to auto. */
+    min-height: auto; 
 }
-/* 💡 Make banner images fill the container */
 #top-banner .swapper-item img {
     width: 100%;
-    height: 100%; /* 💡 FIX: Ensures image fills the 100vh container */
+    height: 100%; /* Fills the 100vh container */
     object-fit: cover; 
     min-height: 0; 
 }
@@ -218,12 +225,9 @@ footer {
 .banner-content h2 {
     display: none;
 }
-
-/* 💡 .banner-cta-btn and .close-banner-btn styles are removed */
-
 @media (max-width: 900px) {
     #top-banner {
-        height: 100vh; /* 💡 FIX: Reverted to 100vh. */
+        height: 100vh;
     }
     .banner-content {
          bottom: 15vh;
@@ -241,7 +245,7 @@ footer {
     transform: translateY(0);
 }
 
-/* ... (all chat styles remain unchanged) ... */
+/* Chat Styles */
 #chat-widget {
     position: fixed;
     bottom: 20px;
@@ -396,20 +400,48 @@ footer {
 }
 
 
-/* PRODUCT PAGE GRID LAYOUT */
+/* ==================================================
+===== 💡 PRODUCT PAGE GRID LAYOUT (UPDATED) ========
+================================================== 
+*/
+
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 20px; 
+    /* 💡 Mobile-first: 2 columns */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px; /* Mobile gap */
 }
-/* Visibility fix for product cards */
+
+/* 💡 Tablet: 3 columns */
+@media (min-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px; /* Desktop/Tablet gap */
+    }
+}
+
+/* 💡 Desktop: 4 columns */
+@media (min-width: 1024px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* 💡 Large Desktop: 5 columns */
+@media (min-width: 1400px) {
+    .product-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+
 .product-card {
     text-decoration: none;
     color: #333;
     display: block;
     border-radius: 8px;
-    opacity: 1; /* Was 0 */
-    transform: translateY(0); /* Was 20px */
+    opacity: 1;
+    transform: translateY(0);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
 }
 .product-card.is-visible {
@@ -431,21 +463,33 @@ footer {
 }
 .product-card:hover img { transform: scale(1.05); }
 .product-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
 .product-card-name {
+    /* This style is overridden by inline styles in the liquid file */
     text-align: center;
     font-weight: bold;
     padding: 15px 10px;
     font-size: 1.1rem;
     text-transform: capitalize;
 }
+
+/* 💡 Responsive rules for sections/cards on mobile */
 @media (max-width: 600px) {
-    .product-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
+    /* 💡 .product-grid rule removed from here (it's now the default) */
+    
+    .section {
+        padding: 20px; /* Smaller padding on mobile */
     }
-    .section { padding: 20px; }
-    .container .section { margin: 10px 0; }
-    .product-card-name { font-size: 1rem; padding: 10px; }
+
+    .container .section {
+        margin: 10px 0;
+    }
+    
+    .product-card-name {
+        /* This style is overridden by inline styles in the liquid file */
+        font-size: 1rem;
+        padding: 10px;
+    }
 }
 
 
@@ -666,3 +710,5 @@ details[open] .collapsible-content {
 .sidebar-socials .footer-socials {
     gap: 20px;
 }
+
+
