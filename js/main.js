@@ -1,9 +1,5 @@
 /* js/main.js */
-/* 💡 CLEANUP: This file has been simplified.
-  All GitHub API fetching (fetchCollectionItems, renderSwapper) 
-  has been REMOVED because Eleventy now builds your galleries statically.
-  This file now ONLY handles client-side interactivity.
-*/
+/* This file handles all client-side interactivity */
 
 /* ==================================================
 ===== Swapper and Gallery Logic ==================
@@ -23,9 +19,7 @@ function initializeSwapper(swapperSelector, options = {}) {
         if (prevBtn) prevBtn.style.display = 'none';
         if (nextBtn) nextBtn.style.display = 'none';
         
-        // If it's a banner, we don't need to do anything else
         if (options.isBanner) {
-            // But if it's NOT a banner and only 1 item, show it
             if (items.length === 1) {
                 showItem(0);
             }
@@ -85,22 +79,14 @@ function initializeSwapper(swapperSelector, options = {}) {
 */
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 💡 UPDATED: We now just INITIALIZE the static galleries
-    
-    // --- Galleries on ALL pages ---
+    // --- Initialize Galleries ---
     initializeSwapper('.banner-swapper', { isBanner: true, autoplay: 5000 });
-
-    // --- Galleries on Homepage (index.liquid) ---
     initializeSwapper('.products-panel-gallery', { autoplay: 4000 });
     initializeSwapper('.works-panel-gallery', { autoplay: 3000 });
     initializeSwapper('.services-panel-gallery', { autoplay: 3500 });
-
-    // --- Galleries on Products page (products.html) ---
-    // 💡 REMOVED: initializeSwapper('.product-swapper', ...);
-
-    // --- Galleries on Services page (services-works.liquid) ---
-    initializeSwapper('.services-swapper', { autoplay: 4000 });
-    initializeSwapper('.works-swapper', { autoplay: 3000 });
+    initializeSwapper('.product-swapper', { autoplay: 4000 }); // For products page
+    initializeSwapper('.services-swapper', { autoplay: 4000 }); // For services page
+    initializeSwapper('.works-swapper', { autoplay: 3000 }); // For services page
 
 
     // --- Close banner button ---
@@ -130,29 +116,142 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 💡 NEW: "INFINITE SCROLL" for Product Grid ---
+    // --- "INFINITE SCROLL" for Product Grid ---
     const productCards = document.querySelectorAll('.product-card');
     
     if (productCards.length > 0) {
         const cardObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
-                    // Add a slight delay based on the item's index
-                    // This creates a nice "staggered" load-in effect
                     setTimeout(() => {
                         entry.target.classList.add('is-visible');
-                    }, 100 * (index % 10)); // 100ms delay per item, resets every 10
+                    }, 100 * (index % 10));
                     
                     observer.unobserve(entry.target);
                 }
             });
-        }, { rootMargin: '0px 0px -50px 0px' }); // Start loading 50px before it's fully in view
+        }, { rootMargin: '0px 0px -50px 0px' }); 
 
         productCards.forEach(card => {
             cardObserver.observe(card);
         });
     }
 
-    // --- CHATBOT LOGIC --- 
-    // (Your existing chatbot code would go here)
+    // --- SIDEBAR MENU LOGIC ---
+    const navToggleBtn = document.getElementById('navToggleBtn');
+    const sidebarMenu = document.getElementById('sidebarMenu');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+    const sidebarLinks = document.querySelectorAll('.sidebar-links a');
+
+    const openSidebar = () => {
+        sidebarMenu.classList.add('is-open');
+        sidebarOverlay.classList.add('is-open');
+        document.body.classList.add('sidebar-open');
+    };
+
+    const closeSidebar = () => {
+        sidebarMenu.classList.remove('is-open');
+        sidebarOverlay.classList.remove('is-open');
+        document.body.classList.remove('sidebar-open');
+    };
+
+    if (navToggleBtn && sidebarMenu && sidebarOverlay && sidebarCloseBtn) {
+        navToggleBtn.addEventListener('click', openSidebar);
+        sidebarCloseBtn.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+        
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', closeSidebar);
+        });
+    }
+
+    // --- 💡 NEW CHATBOT LOGIC ---
+    const chatButton = document.getElementById('chat-button');
+    const chatWindow = document.getElementById('chat-window');
+    const closeChat = document.getElementById('close-chat');
+    const sendButton = document.getElementById('send-button');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById('chat-messages');
+
+    if (chatButton && chatWindow && closeChat && sendButton && chatInput && chatMessages) {
+        
+        chatButton.addEventListener('click', () => {
+            chatWindow.classList.toggle('hidden');
+            chatWindow.classList.toggle('visible');
+            if (chatWindow.classList.contains('visible')) {
+                chatInput.focus();
+            }
+        });
+
+        closeChat.addEventListener('click', () => {
+            chatWindow.classList.add('hidden');
+            chatWindow.classList.remove('visible');
+        });
+
+        const sendMessage = () => {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // 1. Display user message
+            appendMessage(message, 'user-message');
+            chatInput.value = '';
+
+            // 2. Show thinking indicator
+            appendMessage('...', 'ai-message thinking-message');
+            scrollToBottom();
+
+            // 3. Send to Netlify function
+            fetch('/.netlify/functions/ask-ai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                removeThinking();
+                if (data.reply) {
+                    appendMessage(data.reply, 'ai-message');
+                } else {
+                    appendMessage('Sorry, I had a problem. Please try again.', 'ai-message');
+                }
+                scrollToBottom();
+            })
+            .catch(error => {
+                removeThinking();
+                console.error('Chatbot error:', error);
+                appendMessage('Sorry, I couldn't connect. Please check your internet.', 'ai-message');
+                scrollToBottom();
+            });
+        }
+        
+        sendButton.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // Prevent new line on Enter
+                sendMessage();
+            }
+        });
+
+        function appendMessage(text, className) {
+            const div = document.createElement('div');
+            div.className = `message ${className}`;
+            div.textContent = text; // Use textContent to prevent HTML injection
+            chatMessages.appendChild(div);
+            scrollToBottom();
+        }
+
+        function removeThinking() {
+            const thinking = chatMessages.querySelector('.thinking-message');
+            if (thinking) {
+                thinking.remove();
+            }
+        }
+
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+    // --- END CHATBOT LOGIC ---
+
 });
