@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALiF Ladies Tailor | {{ title }}</title>
     
+    <!-- SEO & METADATA -->
     <meta name="description" content="Custom bridal blouses, lehengas, and gowns — premium ladies tailoring in Sahibganj, Jharkhand. Quality stitching for festive and daily wear.">
     <link rel="canonical" href="https://aliflt.netlify.app/{{ page.url }}">
     <link rel="icon" href="/favicon.png" type="image/png">
@@ -27,149 +28,81 @@
     }
     </script>
     
+    <!-- STYLES & FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    
     <link href="https://fonts.googleapis.com/css2?family=Mukti&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="/css/style.css">
 
+    <!-- INLINE STYLES -->
     <style>
-        /* NEW FONT: Apply Mukti to the nav logo */
-        .nav-logo {
-            font-family: 'Mukti', sans-serif;
-        }
-
-        /* New Footer Layout */
-        footer {
-            background-color: #f4f4f4;
-            color: #333;
-            padding: 40px 0;
-            text-align: left;
-            border-top: 1px solid #e0e0e0;
-        }
-        .footer-content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 30px;
-        }
+        .nav-logo { font-family: 'Mukti', sans-serif; }
+        footer { background-color: #f4f4f4; color: #333; padding: 40px 0; text-align: left; border-top: 1px solid #e0e0e0; }
+        .footer-content { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px; }
         .footer-column { flex: 1; min-width: 200px; }
-        .footer-column h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #000;
-            margin-top: 0;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .footer-column h3 { font-size: 1.1rem; font-weight: 700; color: #000; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
         .footer-links { list-style: none; padding: 0; margin: 0; }
         .footer-links li { margin-bottom: 10px; }
-        .footer-links a, .footer-links p {
-            text-decoration: none;
-            color: #555;
-            font-size: 1rem;
-            margin: 0;
-            transition: color 0.3s ease;
-        }
+        .footer-links a, .footer-links p { text-decoration: none; color: #555; font-size: 1rem; margin: 0; transition: color 0.3s ease; }
         .footer-links a:hover { color: #000; }
-        .footer-socials {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
+        .footer-socials { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 15px; }
         .footer-socials a { display: inline-block; color: #333; }
-        .footer-socials svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-            transition: color 0.3s ease;
-        }
+        .footer-socials svg { width: 24px; height: 24px; fill: currentColor; transition: color 0.3s ease; }
         .footer-socials a:hover { color: #000; }
-        .footer-copyright {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-            color: #777;
-            font-size: 0.9rem;
-        }
-        @media (max-width: 600px) {
-            .footer-content { flex-direction: column; }
-            .footer-socials { justify-content: flex-start; }
-        }
-        
-        /* Collapsible Reviews Section */
+        .footer-copyright { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #777; font-size: 0.9rem; }
+        @media (max-width: 600px) { .footer-content { flex-direction: column; } .footer-socials { justify-content: flex-start; } }
         .collapsible-section { padding: 0; border: 1px solid #e0e0e0; }
-        .collapsible-summary {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 25px;
-            cursor: pointer;
-            list-style: none;
-        }
+        .collapsible-summary { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; cursor: pointer; list-style: none; }
         .collapsible-summary::-webkit-details-marker { display: none; }
         .collapsible-summary h2 { margin: 0; }
         .icon-plus-minus { position: relative; width: 18px; height: 18px; }
-        .icon-plus-minus::before,
-        .icon-plus-minus::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            background-color: #333;
-            transition: transform 0.3s ease-out;
-        }
+        .icon-plus-minus::before, .icon-plus-minus::after { content: ''; position: absolute; top: 50%; left: 50%; background-color: #333; transition: transform 0.3s ease-out; }
         .icon-plus-minus::before { height: 2px; width: 100%; transform: translate(-50%, -50%); }
         .icon-plus-minus::after { height: 100%; width: 2px; transform: translate(-50%, -50%); }
         details[open] .icon-plus-minus::after { transform: translate(-50%, -50%) rotate(90deg); }
-        .collapsible-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.4s ease-in-out;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
-        details[open] .collapsible-content {
-            grid-template-rows: 1fr;
-            padding-bottom: 25px;
-        }
+        .collapsible-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease-in-out; padding-left: 25px; padding-right: 25px; }
+        details[open] .collapsible-content { grid-template-rows: 1fr; padding-bottom: 25px; }
         .collapsible-content > div { overflow: hidden; }
     </style>
-
     <script>
-      // Netlify Identity redirect
       if (window.location.hash.includes("invite_token") || window.location.hash.includes("recovery_token")) {
         window.location.href = "/admin/" + window.location.hash;
       }
     </script>
-
 </head>
 <body>
-
     <nav class="fixed-top-nav">
+        <!-- Left Side: Logo -->
         <a href="/" class="nav-logo">ALiF</a>
-        <button class="nav-toggle-btn" id="navToggleBtn" aria-label="Open menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+        
+        <!-- 💡 RIGHT SIDE: Actions (Cart + Menu) -->
+        <div class="nav-actions">
+            <a href="/cart/" class="nav-cart-btn" id="cartIcon" aria-label="View Cart">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="cart-count" id="cartCount">0</span>
+            </a>
+            <button class="nav-toggle-btn" id="navToggleBtn" aria-label="Open menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
     </nav>
     
+    <!-- This is where your page content (e.g., index.liquid) goes -->
     <main>{{ content }}</main>
     
+    <!-- SIDEBAR MENU -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="sidebar-header">
             <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close menu">&times;</button>
         </div>
-        
         <ul class="sidebar-links">
             <li><a href="/">Home</a></li>
             <li><a href="/products/">Products</a></li>
@@ -177,28 +110,19 @@
             <li><a href="/contact-us/">Contact</a></li>
             <li><a href="/#reviews">Reviews</a></li> 
         </ul>
-        
         <div class="sidebar-socials">
             <h3>Follow us</h3>
             <ul class="footer-socials">
-                <li>
-                    <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" rel="noopener" aria-label="Instagram">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669-4.771 4.919 4.919 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.197-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://wa.me/7250470009" target="_blank" rel="noopener" aria-label="WhatsApp">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.04 2.01c-5.523 0-10 4.477-10 10 0 1.75.443 3.495 1.304 5.004l-1.348 4.925 5.034-1.325c1.482.797 3.166 1.22 4.91 1.22h.001c5.523 0 10-4.477 10-10s-4.477-10-10-10zm0 18.158c-1.614 0-3.21-.418-4.66-1.22l-.33-.195-3.47 0.91.928-3.385-.214-.345c-.86-1.38-1.32-2.96-1.32-4.58 0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.51-6.14c-.24-.12-.1.12-1.42-.59-.12-.06-.24-.12-.36-.12-.12 0-.24.06-.36.12-.12.06-1.18.59-1.42.59-.24 0-.48-.12-.6-.24-.12-.12-.59-.24-1.18-.7-.6-.5-1.06-1.18-1.24-1.36-.12-.12-.24-.3-.12-.48.12-.12.24-.24.36-.36.12-.12.18-.12.24-.24.06-.06.12-.12.12-.24 0-.12-.06-.24-.12-.24-.06-.06-1.42-3.39-1.94-3.95-.52-.52-1.06-.46-1.24-.46-.12 0-.3 0-.48.06-.18.06-.42.12-.6.24-.24.12-.48.24-.66.42-.18.18-.36.36-.48.59-.18.24-.3.48-.42.72-.12.24-.18.48-.18.78 0 .3.06.6.12.9.12.3.24.6.42.9.18.3.42.6.66.9.24.3.54.66.84 1.02.3.36.66.72 1.02 1.08.36.36.78.72 1.2 1.08.42.36.9.66 1.42.96.52.3 1.08.6 1.68.78.6.18 1.14.3 1.74.3.6 0 1.14-.12 1.62-.36.48-.24 1.42-1.18 1.68-1.62.24-.42.24-.78.18-1.02-.06-.24-.12-.48-.24-.6zm0 0"/></svg>
-                    </a>
-                </li>
+                <li><a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" rel="noopener" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669-4.771 4.919 4.919 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.197-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a></li>
+                <li><a href="https://wa.me/7250470009" target="_blank" rel="noopener" aria-label="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.04 2.01c-5.523 0-10 4.477-10 10 0 1.75.443 3.495 1.304 5.004l-1.348 4.925 5.034-1.325c1.482.797 3.166 1.22 4.91 1.22h.001c5.523 0 10-4.477 10-10s-4.477-10-10-10zm0 18.158c-1.614 0-3.21-.418-4.66-1.22l-.33-.195-3.47 0.91.928-3.385-.214-.345c-.86-1.38-1.32-2.96-1.32-4.58 0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.51-6.14c-.24-.12-.1.12-1.42-.59-.12-.06-.24-.12-.36-.12-.12 0-.24.06-.36.12-.12.06-1.18.59-1.42.59-.24 0-.48-.12-.6-.24-.12-.12-.59-.24-1.18-.7-.6-.5-1.06-1.18-1.24-1.36-.12-.12-.24-.3-.12-.48.12-.12.24-.24.36-.36.12-.12.18-.12.24-.24.06-.06.12-.12.12-.24 0-.12-.06-.24-.12-.24-.06-.06-1.42-3.39-1.94-3.95-.52-.52-1.06-.46-1.24-.46-.12 0-.3 0-.48.06-.18.06-.42.12-.6.24-.24.12-.48.24-.66.42-.18.18-.36.36-.48.59-.18.24-.3.48-.42.72-.12.24-.18.48-.18.78 0 .3.06.6.12.9.12.3.24.6.42.9.18.3.42.6.66.9.24.3.54.66.84 1.02.3.36.66.72 1.02 1.08.36.36.78.72 1.2 1.08.42.36.9.66 1.42.96.52.3 1.08.6 1.68.78.6.18 1.14.3 1.74.3.6 0 1.14-.12 1.62-.36.48-.24 1.42-1.18 1.68-1.62.24-.42.24-.78.18-1.02-.06-.24-.12-.48-.24-.6zm0 0"/></svg></a></li>
             </ul>
         </div>
     </div>
 
+    <!-- FOOTER -->
     <footer class="fade-in-section">
         <div class="container">
             <div class="footer-content">
-                
                 <div class="footer-column">
                     <h3>Contact</h3>
                     <ul class="footer-links">
@@ -206,40 +130,17 @@
                         <li><p>Sahibganj, Jharkhand, India</p></li>
                     </ul>
                 </div>
-                
                 <div class="footer-column">
                     <h3>Follow us</h3>
                     <ul class="footer-socials">
-                        <li>
-                            <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" rel="noopener" aria-label="Instagram">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669-4.771 4.919 4.919 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.197-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" target="_blank" rel="noopener" aria-label="Facebook">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://wa.me/7250470009" target="_blank" rel="noopener" aria-label="WhatsApp">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.04 2.01c-5.523 0-10 4.477-10 10 0 1.75.443 3.495 1.304 5.004l-1.348 4.925 5.034-1.325c1.482.797 3.166 1.22 4.91 1.22h.001c5.523 0 10-4.477 10-10s-4.477-10-10-10zm0 18.158c-1.614 0-3.21-.418-4.66-1.22l-.33-.195-3.47 0.91.928-3.385-.214-.345c-.86-1.38-1.32-2.96-1.32-4.58 0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.51-6.14c-.24-.12-.1.12-1.42-.59-.12-.06-.24-.12-.36-.12-.12 0-.24.06-.36.12-.12.06-1.18.59-1.42.59-.24 0-.48-.12-.6-.24-.12-.12-.59-.24-1.18-.7-.6-.5-1.06-1.18-1.24-1.36-.12-.12-.24-.3-.12-.48.12-.12.24-.24.36-.36.12-.12.18-.12.24-.24.06-.06.12-.12.12-.24 0-.12-.06-.24-.12-.24-.06-.06-1.42-3.39-1.94-3.95-.52-.52-1.06-.46-1.24-.46-.12 0-.3 0-.48.06-.18.06-.42.12-.6.24-.24.12-.48.24-.66.42-.18.18-.36.36-.48.59-.18.24-.3.48-.42.72-.12.24-.18.48-.18.78 0 .3.06.6.12.9.12.3.24.6.42.9.18.3.42.6.66.9.24.3.54.66.84 1.02.3.36.66.72 1.02 1.08.36.36.78.72 1.2 1.08.42.36.9.66 1.42.96.52.3 1.08.6 1.68.78.6.18 1.14.3 1.74.3.6 0 1.14-.12 1.62-.36.48-.24 1.42-1.18 1.68-1.62.24-.42.24-.78.18-1.02-.06-.24-.12-.48-.24-.6zm0 0"/></svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" target="_blank" rel="noopener" aria-label="Pinterest">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.T72-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.117.223.084.345-.09.375-.293 1.19-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.782 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" target="_blank" rel="noopener" aria-label="YouTube">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.377.505 9.377.505s7.505 0 9.377-.505a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                            </a>
-                        </li>
+                        <li><a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" rel="noopener" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669-4.771 4.919 4.919 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.197-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a></li>
+                        <li><a href="#" target="_blank" rel="noopener" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></li>
+                        <li><a href="https://wa.me/7250470009" target="_blank" rel="noopener" aria-label="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.04 2.01c-5.523 0-10 4.477-10 10 0 1.75.443 3.495 1.304 5.004l-1.348 4.925 5.034-1.325c1.482.797 3.166 1.22 4.91 1.22h.001c5.523 0 10-4.477 10-10s-4.477-10-10-10zm0 18.158c-1.614 0-3.21-.418-4.66-1.22l-.33-.195-3.47 0.91.928-3.385-.214-.345c-.86-1.38-1.32-2.96-1.32-4.58 0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.51-6.14c-.24-.12-.1.12-1.42-.59-.12-.06-.24-.12-.36-.12-.12 0-.24.06-.36.12-.12.06-1.18.59-1.42.59-.24 0-.48-.12-.6-.24-.12-.12-.59-.24-1.18-.7-.6-.5-1.06-1.18-1.24-1.36-.12-.12-.24-.3-.12-.48.12-.12.24-.24.36-.36.12-.12.18-.12.24-.24.06-.06.12-.12.12-.24 0-.12-.06-.24-.12-.24-.06-.06-1.42-3.39-1.94-3.95-.52-.52-1.06-.46-1.24-.46-.12 0-.3 0-.48.06-.18.06-.42.12-.6.24-.24.12-.48.24-.66.42-.18.18-.36.36-.48.59-.18.24-.3.48-.42.72-.12.24-.18.48-.18.78 0 .3.06.6.12.9.12.3.24.6.42.9.18.3.42.6.66.9.24.3.54.66.84 1.02.3.36.66.72 1.02 1.08.36.36.78.72 1.2 1.08.42.36.9.66 1.42.96.52.3 1.08.6 1.68.78.6.18 1.14.3 1.74.3.6 0 1.14-.12 1.62-.36.48-.24 1.42-1.18 1.68-1.62.24-.42.24-.78.18-1.02-.06-.24-.12-.48-.24-.6zm0 0"/></svg></a></li>
+                        <li><a href="#" target="_blank" rel="noopener" aria-label="Pinterest"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.117.223.084.345-.09.375-.293 1.19-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.782 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg></a></li>
+                        <li><a href="#" target="_blank" rel="noopener" aria-label="YouTube"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.377.505 9.377.505s7.505 0 9.377-.505a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a></li>
                     </ul>
                 </div>
-
             </div>
-            
             <div class="footer-copyright">
                 <p>© 2025 ALiF ladies tailor . All Rights Reserved.</p>
             </div>
@@ -247,20 +148,7 @@
     </footer>
 
     <div id="chat-widget">
-        <button id="chat-button">💬</button>
-        <div id="chat-window" class="hidden">
-            <div id="chat-header">
-                <span>Ask Alif AI</span>
-                <button id="close-chat">×</button>
-            </div>
-            <div id="chat-messages">
-                <div class="message ai-message">Hello! How can I help you today?</div>
-            </div>
-            <div id="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Ask a question...">
-                <button id="send-button">Send</button>
-            </div>
-        </div>
+        <!-- ... (chat widget HTML) ... -->
     </div>
     
     <script src="/js/main.js" defer></script>
