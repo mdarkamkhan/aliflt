@@ -605,3 +605,6 @@ details[open] .collapsible-content {
 #cart-total { font-size: 1.5rem; margin-bottom: 20px; }
 #cart-summary .btn-buy { width: 100%; }
 @media (min-width: 768px) { #cart-summary .btn-buy { width: auto; min-width: 300px; } }
+
+
+           
