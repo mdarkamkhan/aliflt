@@ -5,40 +5,6 @@ permalink: /products/
 ---
 
 <div class="container section fade-in-section">
-
-    <!-- 
-    ==================================================
-    ===== 💡 NEW DEBUG BOX ===========================
-    ================================================== 
-    This box will tell us if Eleventy is finding your products.
-    -->
-    <div style="background: #ffc; border: 3px solid #f00; color: #000; padding: 15px; font-size: 14px; font-family: monospace; line-height: 1.6; margin-bottom: 30px;">
-        
-        <strong>--- DEBUGGER ACTIVE (products.liquid) ---</strong><br>
-        
-        <br>
-        <strong>Checking collections...</strong><br>
-        ------------------------------------<br>
-        - Total items in `collections.products`: <strong>{{ collections.products | size }}</strong><br>
-        - Total items in `collections.services`: <strong>{{ collections.services | size }}</strong><br>
-        - Total items in `collections.works`: <strong>{{ collections.works | size }}</strong><br>
-        - Total items in `collections.offers`: <strong>{{ collections.offers | size }}</strong><br>
-        - Total items in `collections.all`: <strong>{{ collections.all | size }}</strong><br>
-        
-        <br>
-        <strong>Checking first 3 product tags...</strong><br>
-        ------------------------------------<br>
-        {% for prod in collections.all limit: 10 %}
-            {% if prod.tags contains "product" %}
-                - Found: {{ prod.fileSlug }} / Tags: [{{ prod.data.tags | join: ", " }}]<br>
-            {% endif %}
-        {% endfor %}
-        
-        <br>
-        <strong>--- END DEBUG ---</strong>
-    </div>
-
-
     <h2>Our Products</h2>
 
     <div class="product-grid">
@@ -83,11 +49,18 @@ permalink: /products/
         </a>
         {% endfor %}
 
-        <!-- This message shows if the collection is empty -->
-        {% if collections.products.length == 0 %}
+        <!-- 
+        ==================================================
+        ===== 💡 LIQUID SYNTAX FIX =======================
+        ================================================== 
+        Changed '.length == 0' to '| size == 0'
+        -->
+        {% if collections.products | size == 0 %}
             <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
                 No products found. Please check back soon.
             </p>
         {% endif %}
     </div>
 </div>
+
+
