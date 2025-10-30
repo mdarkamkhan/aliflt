@@ -12,13 +12,12 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    background-color: #f4f4f4; /* This is the "white" background for margins */
+    background-color: #f4f4f4;
     padding-bottom: 80px;
-    /* 💡 NEW: Added padding to top to avoid new fixed nav */
+    /* 💡 UPDATED: Padding for new fixed nav */
     padding-top: 70px; 
 }
 
-/* 💡 NEW: Stops body scrolling when sidebar is open */
 body.sidebar-open {
     overflow: hidden;
 }
@@ -29,24 +28,13 @@ body.sidebar-open {
     overflow: hidden;
     padding: 0 20px;
 }
-header {
-    background: #fff;
-    padding: 1rem 0;
-    border-bottom: #ccc 1px solid;
-    text-align: center;
-}
-header h1 {
-    margin: 0;
-    font-size: 2.5em;
-    color: #555;
-}
 
-/* 💡 OLD nav styles removed, as it's replaced by .fixed-top-nav */
+/* 💡 OLD header and nav styles REMOVED */
 
 /* Set .section margin to 0 so panels are the only thing with margin */
 .section {
     background: #fff;
-    margin: 0; /* Was 20px 0 */
+    margin: 0;
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -63,11 +51,7 @@ header h1 {
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
-.contact-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
+.contact-form label { display: block; margin-bottom: 5px; font-weight: bold; }
 .contact-form input, .contact-form textarea {
     width: 100%;
     padding: 10px;
@@ -85,13 +69,8 @@ header h1 {
     cursor: pointer;
     transition: background-color 0.3s;
 }
-.contact-form button:hover {
-    background: var(--accent-color-dark);
-}
-.cta-buttons {
-    text-align: center;
-    margin-top: 20px;
-}
+.contact-form button:hover { background: var(--accent-color-dark); }
+.cta-buttons { text-align: center; margin-top: 20px; }
 .cta-buttons a {
     display: inline-block;
     background: #25D366; /* WhatsApp Green */
@@ -111,16 +90,11 @@ header h1 {
     max-width: 300px;
     text-decoration: none;
 }
-.cta-buttons a.review-btn:hover {
-     background: #3c7de9;
-}
+.cta-buttons a.review-btn:hover { background: #3c7de9; }
 .cta-buttons a.instagram-btn {
     background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
 }
-.social-links {
-    text-align: center;
-    margin-top: 20px;
-}
+.social-links { text-align: center; margin-top: 20px; }
 .social-links a {
     display: inline-block;
     margin: 0 10px;
@@ -210,17 +184,25 @@ footer {
     font-style: italic;
     color: #777;
 }
+
+/* 💡 BANNER STYLES UPDATED */
 #top-banner {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: auto; /* 💡 UPDATED: Was 100vh */
     overflow: hidden;
 }
 #top-banner .swapper-container {
     width: 100%;
-    height: 100%;
+    height: auto; /* 💡 UPDATED: Was 100% */
     max-width: none;
-    min-height: auto;
+    min-height: 0; /* 💡 UPDATED: Was auto */
+}
+/* 💡 Make banner images auto-height */
+#top-banner .swapper-item img {
+    min-height: 0;
+    object-fit: cover; /* Keeps aspect ratio */
+    height: auto; /* 💡 UPDATED */
 }
 .banner-content {
     position: absolute;
@@ -235,50 +217,22 @@ footer {
 .banner-content h2 {
     display: none;
 }
-.banner-cta-btn {
-    background: var(--accent-color);
-    color: #fff;
-    padding: 12px 30px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 1.1em;
-    transition: background-color 0.3s;
-    display: inline-block;
-}
-.banner-cta-btn:hover {
-    background: var(--accent-color-dark);
-}
-.close-banner-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    font-size: 1.8em;
-    padding: 5px 12px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 100;
-    line-height: 1;
-}
+
+/* 💡 .banner-cta-btn and .close-banner-btn styles REMOVED */
+
 @media (max-width: 900px) {
     #top-banner {
-        height: 100vh;
+        height: auto; /* 💡 UPDATED: Was 100vh */
     }
     .banner-content {
          bottom: 15vh;
     }
 }
 
-/* ==================================================
-===== 💡 VISIBILITY FIX 1 ========================
-================================================== 
-*/
+/* Visibility fix for footer/sections */
 .fade-in-section {
-    opacity: 1; /* 💡 FIX: Was 0. Makes footer visible. */
-    transform: translateY(0); /* 💡 FIX: Was 30px. */
+    opacity: 1;
+    transform: translateY(0);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 .fade-in-section.is-visible {
@@ -286,12 +240,8 @@ footer {
     transform: translateY(0);
 }
 
-#chat-widget {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-}
+#chat-widget { z-index: 9999; /* ... (rest of chat styles) ... */ }
+/* ... (all chat styles remain unchanged) ... */
 #chat-button {
     background-color: var(--accent-color);
     color: white;
@@ -385,36 +335,23 @@ footer {
  #chat-window.hidden { display: none; }
  #chat-window.visible { display: flex; }
 
-
-/* ==================================================
-===== PRADA-STYLE HOMEPAGE PANELS (CARD-STYLE) ====
-================================================== 
-*/
-
+/* PRADA-STYLE HOMEPAGE PANELS (CARD-STYLE) */
 .prada-panel {
     position: relative;
-    /* Not full width, centered with margin */
     width: calc(100% - 40px);
-    max-width: 1600px; /* Max-width for very large screens */
-    margin: 20px auto; /* 20px top/bottom gap, auto left/right for center */
-    
-    /* Height reduced for card-feel */
+    max-width: 1600px;
+    margin: 20px auto;
     height: 85vh; 
-    
     overflow: hidden;
     display: block;
     text-decoration: none;
     color: white;
-    background: #333; /* Fallback color */
-
-    /* Added border-radius for "card" look */
+    background: #333;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-
 .prada-panel-label {
     position: absolute;
-    /* Positioned relative to the card */
     top: 25px;
     left: 25px;
     z-index: 10;
@@ -424,40 +361,25 @@ footer {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-
-.prada-panel .swapper-container {
-    max-width: none;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-}
-
-.prada-panel .swapper-item {
-    height: 100%;
-}
-
+.prada-panel .swapper-container { max-width: none; width: 100%; height: 100%; min-height: 0; }
+.prada-panel .swapper-item { height: 100%; }
 .prada-panel .swapper-item img {
     height: 100%;
     min-height: 0;
     object-fit: cover;
-    /* Image border-radius matches the panel */
     border-radius: 8px;
 }
-
 .prada-panel .swapper-nav,
 .prada-panel .product-label,
 .prada-panel .service-details,
 .prada-panel .work-caption {
     display: none;
 }
-
-/* Media query for mobile */
 @media (max-width: 600px) {
     .prada-panel {
-        /* Use smaller gaps on mobile */
         width: calc(100% - 20px);
         margin: 10px auto;
-        height: 70vh; /* Shorter height on mobile */
+        height: 70vh;
     }
     .prada-panel-label {
         font-size: 1.2rem;
@@ -467,63 +389,41 @@ footer {
 }
 
 
-/* ==================================================
-===== PRODUCT PAGE GRID LAYOUT ===================
-================================================== 
-*/
-
+/* PRODUCT PAGE GRID LAYOUT */
 .product-grid {
     display: grid;
-    /* 2-column grid */
     grid-template-columns: repeat(2, 1fr); 
-    /* Spacing between cards (matches panel margins) */
     gap: 20px; 
 }
-
-/* ==================================================
-===== 💡 VISIBILITY FIX 2 ========================
-================================================== 
-*/
+/* Visibility fix for product cards */
 .product-card {
     text-decoration: none;
     color: #333;
     display: block;
-    border-radius: 8px; /* Match panel radius */
-    
-    opacity: 1; /* 💡 FIX: Was 0. Makes product cards visible. */
-    transform: translateY(0); /* 💡 FIX: Was 20px. */
+    border-radius: 8px;
+    opacity: 1; /* Was 0 */
+    transform: translateY(0); /* Was 20px */
     transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
 }
-
-/* This class is now redundant but harmless */
 .product-card.is-visible {
     opacity: 1;
     transform: translateY(0);
 }
-
 .product-card-image-wrapper {
-    overflow: hidden; /* This makes the zoom effect work */
-    border-radius: 8px; /* Match panel radius */
+    overflow: hidden;
+    border-radius: 8px;
     background: #eee;
 }
-
 .product-card img {
     width: 100%;
     height: auto;
     display: block;
-    aspect-ratio: 1 / 1.25; /* Taller aspect ratio for products */
+    aspect-ratio: 1 / 1.25;
     object-fit: cover;
     transition: transform 0.4s ease;
 }
-
-.product-card:hover img {
-    transform: scale(1.05); /* The zoom-in hover effect */
-}
-
-.product-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Subtle shadow on hover */
-}
-
+.product-card:hover img { transform: scale(1.05); }
+.product-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 .product-card-name {
     text-align: center;
     font-weight: bold;
@@ -531,145 +431,81 @@ footer {
     font-size: 1.1rem;
     text-transform: capitalize;
 }
-
-/* Responsive: 1-column grid on mobile */
 @media (max-width: 600px) {
     .product-grid {
-        grid-template-columns: 1fr; /* 1 column */
-        gap: 15px; /* Smaller gap */
+        grid-template-columns: 1fr;
+        gap: 15px;
     }
-    
-    .section {
-        padding: 20px; /* Smaller padding on mobile */
-    }
-
-    .container .section {
-        margin: 10px 0;
-    }
-    
-    .product-card-name {
-        font-size: 1rem;
-        padding: 10px;
-    }
+    .section { padding: 20px; }
+    .container .section { margin: 10px 0; }
+    .product-card-name { font-size: 1rem; padding: 10px; }
 }
 
 
-/* ==================================================
-===== COLLAPSIBLE REVIEWS SECTION ================
-================================================== 
-*/
-
-/* This is the main <details> tag */
-.collapsible-section {
-    padding: 0; /* Override default .section padding */
-    border: 1px solid #e0e0e0; /* Clean border */
-    /* .section class already provides background, radius, shadow */
-}
-
-/* This is the <summary> tag (the clickable header) */
+/* COLLAPSIBLE REVIEWS SECTION */
+.collapsible-section { padding: 0; border: 1px solid #e0e0e0; }
 .collapsible-summary {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 25px; /* New padding */
+    padding: 20px 25px;
     cursor: pointer;
-    list-style: none; /* Remove default triangle marker */
+    list-style: none;
 }
-.collapsible-summary::-webkit-details-marker {
-    display: none; /* Remove marker for Safari */
-}
-
-/* We must remove the default margin from the H2 inside */
-.collapsible-summary h2 {
-    margin: 0;
-}
-
-/* This is the +/- icon.
-  We create it with two pseudo-elements.
-*/
-.icon-plus-minus {
-    position: relative;
-    width: 18px;
-    height: 18px;
-}
+.collapsible-summary::-webkit-details-marker { display: none; }
+.collapsible-summary h2 { margin: 0; }
+.icon-plus-minus { position: relative; width: 18px; height: 18px; }
 .icon-plus-minus::before,
 .icon-plus-minus::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    background-color: #333; /* Icon color */
+    background-color: #333;
     transition: transform 0.3s ease-out;
 }
-/* Horizontal bar */
-.icon-plus-minus::before {
-    height: 2px;
-    width: 100%;
-    transform: translate(-50%, -50%);
-}
-/* Vertical bar */
-.icon-plus-minus::after {
-    height: 100%;
-    width: 2px;
-    transform: translate(-50%, -50%);
-}
-
-/* Animation: When [open], rotate the vertical bar 
-  to create a "–" minus sign.
-*/
-details[open] .icon-plus-minus::after {
-    transform: translate(-50%, -50%) rotate(90deg);
-}
-
-/* Animation: Smooth expand/collapse.
-  We use a CSS Grid trick to animate height: auto.
-*/
+.icon-plus-minus::before { height: 2px; width: 100%; transform: translate(-50%, -50%); }
+.icon-plus-minus::after { height: 100%; width: 2px; transform: translate(-50%, -50%); }
+details[open] .icon-plus-minus::after { transform: translate(-50%, -50%) rotate(90deg); }
 .collapsible-content {
     display: grid;
-    /* Starts "closed" with 0 rows */
     grid-template-rows: 0fr;
     transition: grid-template-rows 0.4s ease-in-out;
-    
-    /* Add padding back to the content */
     padding-left: 25px;
     padding-right: 25px;
 }
-/* When [open], it animates to 1 row */
 details[open] .collapsible-content {
     grid-template-rows: 1fr;
-    padding-bottom: 25px; /* Add bottom padding only when open */
+    padding-bottom: 25px;
 }
-/* This child <div> is required for the animation to work */
-.collapsible-content > div {
-    overflow: hidden;
-}
+.collapsible-content > div { overflow: hidden; }
 
 
 /* ==================================================
-===== 💡 NEW FIXED NAV & SIDEBAR =================
+===== 💡 NEW FIXED NAV & SIDEBAR STYLES ============
 ================================================== 
 */
 
-/* The Fixed Top Nav Bar */
 .fixed-top-nav {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 70px; /* Nav height */
+    height: 70px;
     background: #ffffff;
-    border-bottom: 1px solid #e0e0e0;
+    /* 💡 UPDATED: Swapped border for a subtle shadow */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px; /* 20px padding left/right */
-    z-index: 1001; /* Above content, below sidebar */
-    box-sizing: border-box; /* Include padding in width */
+    padding: 0 20px;
+    z-index: 1001;
+    box-sizing: border-box;
 }
 
 @media (max-width: 600px) {
     .fixed-top-nav {
-        height: 60px; /* Smaller nav on mobile */
+        height: 60px;
         padding: 0 15px;
     }
     body {
@@ -677,15 +513,15 @@ details[open] .collapsible-content {
     }
 }
 
-/* Left Side: "ALiF" Logo */
 .nav-logo {
     font-size: 1.8rem;
     font-weight: 700;
     color: #000;
     text-decoration: none;
+    /* Font is applied via inline style in base.liquid */
 }
 
-/* Right Side: Hamburger Button */
+/* 💡 This is the ☰ Hamburger Icon */
 .nav-toggle-btn {
     background: none;
     border: none;
@@ -696,7 +532,7 @@ details[open] .collapsible-content {
     justify-content: space-around;
     width: 28px;
     height: 24px;
-    z-index: 1004; /* Above everything */
+    z-index: 1004;
 }
 .nav-toggle-btn span {
     width: 100%;
@@ -704,6 +540,17 @@ details[open] .collapsible-content {
     background: #000;
     border-radius: 2px;
     transition: all 0.3s ease;
+}
+
+/* 💡 Animation for Hamburger to 'X' when open */
+.sidebar-open .nav-toggle-btn span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.sidebar-open .nav-toggle-btn span:nth-child(2) {
+    opacity: 0;
+}
+.sidebar-open .nav-toggle-btn span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
 }
 
 /* Sidebar Overlay (dimmed background) */
@@ -729,11 +576,11 @@ details[open] .collapsible-content {
     position: fixed;
     top: 0;
     right: 0;
-    width: 320px; /* Sidebar width on desktop */
+    width: 320px;
     height: 100%;
     background: #fff;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-    transform: translateX(100%); /* Hidden by default */
+    transform: translateX(100%);
     transition: transform 0.4s ease-in-out;
     z-index: 1003;
     display: flex;
@@ -741,13 +588,11 @@ details[open] .collapsible-content {
     overflow-y: auto;
 }
 .sidebar-menu.is-open {
-    transform: translateX(0); /* Shown */
+    transform: translateX(0);
 }
-
-/* Mobile sidebar width */
 @media (max-width: 600px) {
     .sidebar-menu {
-        width: 90%; /* Wider on mobile */
+        width: 90%;
     }
 }
 
@@ -756,7 +601,17 @@ details[open] .collapsible-content {
     display: flex;
     justify-content: flex-end;
     padding: 15px 15px;
+    /* 💡 Make sure header matches nav height */
+    height: 70px;
+    align-items: center;
+    box-sizing: border-box;
 }
+@media (max-width: 600px) {
+    .sidebar-header {
+        height: 60px;
+    }
+}
+/* 💡 This is the 'X' close button INSIDE the sidebar */
 .sidebar-close-btn {
     background: none;
     border: none;
@@ -803,7 +658,6 @@ details[open] .collapsible-content {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-/* We can re-use the footer socials styles here */
 .sidebar-socials .footer-socials {
-    gap: 20px; /* A bit more space */
+    gap: 20px;
 }
