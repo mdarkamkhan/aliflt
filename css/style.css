@@ -50,7 +50,7 @@ nav a {
 nav a:hover {
     background: #555;
 }
-/* 💡 UPDATED: Set .section margin to 0 so panels are the only thing with margin */
+/* Set .section margin to 0 so panels are the only thing with margin */
 .section {
     background: #fff;
     margin: 0; /* Was 20px 0 */
@@ -135,6 +135,7 @@ nav a:hover {
     text-decoration: none;
     color: #333;
 }
+/* This footer style is now overridden by the inline <style> in base.liquid */
 footer {
     text-align: center;
     padding: 20px 0;
@@ -343,7 +344,7 @@ footer {
     border-radius: 15px;
     max-width: 80%;
  }
- .user-.message {
+ .user-message {
     background-color: #eee;
     align-self: flex-end;
     margin-left: auto;
@@ -408,12 +409,12 @@ footer {
 
 .prada-panel {
     position: relative;
-    /* 💡 UPDATED: Not full width, centered with margin */
+    /* Not full width, centered with margin */
     width: calc(100% - 40px);
     max-width: 1600px; /* Max-width for very large screens */
     margin: 20px auto; /* 20px top/bottom gap, auto left/right for center */
     
-    /* 💡 UPDATED: Height reduced for card-feel */
+    /* Height reduced for card-feel */
     height: 85vh; 
     
     overflow: hidden;
@@ -422,14 +423,14 @@ footer {
     color: white;
     background: #333; /* Fallback color */
 
-    /* 💡 UPDATED: Added border-radius for "card" look */
+    /* Added border-radius for "card" look */
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .prada-panel-label {
     position: absolute;
-    /* 💡 UPDATED: Positioned relative to the card */
+    /* Positioned relative to the card */
     top: 25px;
     left: 25px;
     z-index: 10;
@@ -455,7 +456,7 @@ footer {
     height: 100%;
     min-height: 0;
     object-fit: cover;
-    /* 💡 UPDATED: Image border-radius matches the panel */
+    /* Image border-radius matches the panel */
     border-radius: 8px;
 }
 
@@ -466,7 +467,7 @@ footer {
     display: none;
 }
 
-/* 💡 UPDATED: Media query for mobile */
+/* Media query for mobile */
 @media (max-width: 600px) {
     .prada-panel {
         /* Use smaller gaps on mobile */
@@ -483,7 +484,7 @@ footer {
 
 
 /* ==================================================
-===== PRODUCT PAGE GRID LAYOUT (NEW) =============
+===== PRODUCT PAGE GRID LAYOUT ===================
 ================================================== 
 */
 
@@ -565,5 +566,92 @@ footer {
     }
 }
 
+/* ==================================================
+===== COLLAPSIBLE REVIEWS SECTION ================
+================================================== 
+*/
 
-     
+/* This is the main <details> tag */
+.collapsible-section {
+    padding: 0; /* Override default .section padding */
+    border: 1px solid #e0e0e0; /* Clean border */
+    /* .section class already provides background, radius, shadow */
+}
+
+/* This is the <summary> tag (the clickable header) */
+.collapsible-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px; /* New padding */
+    cursor: pointer;
+    list-style: none; /* Remove default triangle marker */
+}
+.collapsible-summary::-webkit-details-marker {
+    display: none; /* Remove marker for Safari */
+}
+
+/* We must remove the default margin from the H2 inside */
+.collapsible-summary h2 {
+    margin: 0;
+}
+
+/* This is the +/- icon.
+  We create it with two pseudo-elements.
+*/
+.icon-plus-minus {
+    position: relative;
+    width: 18px;
+    height: 18px;
+}
+.icon-plus-minus::before,
+.icon-plus-minus::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: #333; /* Icon color */
+    transition: transform 0.3s ease-out;
+}
+/* Horizontal bar */
+.icon-plus-minus::before {
+    height: 2px;
+    width: 100%;
+    transform: translate(-50%, -50%);
+}
+/* Vertical bar */
+.icon-plus-minus::after {
+    height: 100%;
+    width: 2px;
+    transform: translate(-50%, -50%);
+}
+
+/* Animation: When [open], rotate the vertical bar 
+  to create a "–" minus sign.
+*/
+details[open] .icon-plus-minus::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* Animation: Smooth expand/collapse.
+  We use a CSS Grid trick to animate height: auto.
+*/
+.collapsible-content {
+    display: grid;
+    /* Starts "closed" with 0 rows */
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease-in-out;
+    
+    /* Add padding back to the content */
+    padding-left: 25px;
+    padding-right: 25px;
+}
+/* When [open], it animates to 1 row */
+details[open] .collapsible-content {
+    grid-template-rows: 1fr;
+    padding-bottom: 25px; /* Add bottom padding only when open */
+}
+/* This child <div> is required for the animation to work */
+.collapsible-content > div {
+    overflow: hidden;
+}
