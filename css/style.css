@@ -41,7 +41,7 @@ header h1 {
     color: #555;
 }
 
-/* 💡 OLD nav styles removed, as it's replaced by .fixed-top-nav */
+/* 💡 OLD nav styles removed */
 
 /* Set .section margin to 0 so panels are the only thing with margin */
 .section {
@@ -379,20 +379,10 @@ footer {
  #chat-window.hidden { display: none; }
  #chat-window.visible { display: flex; }
 
-/* DEBUG BOX STYLE */
-#eleventy-debug-box {
-    position: fixed; 
-    bottom: 0; 
-    left: 0; 
-    background: rgba(255, 255, 0, 0.9); /* Yellow background */
-    color: #000; 
-    padding: 5px 10px; 
-    font-size: 10px; 
-    border-top: 1px solid #000; 
-    z-index: 99999;
-    width: 100%;
-    text-align: center;
-}
+/* ==================================================
+===== 💡 DEBUG BOX REMOVED =======================
+================================================== 
+*/
 
 
 /* ==================================================
