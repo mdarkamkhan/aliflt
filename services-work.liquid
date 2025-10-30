@@ -12,6 +12,10 @@ permalink: /services-works/
         {% assign combined_list = collections.services | concat: collections.works %}
         
         {% for item in combined_list %}
+        <!-- 
+          This link must also go to the detail page.
+          We need to create 'service-work.liquid' template next.
+        -->
         <a href="{{ item.url | url }}" class="product-card">
             <div class="product-card-image-wrapper">
                 <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
@@ -50,17 +54,18 @@ permalink: /services-works/
         </a>
         {% endfor %}
 
-        <!-- This message shows if the collection is empty -->
-        {% if combined_list | size == 0 %}
+        <!-- 
+        ==================================================
+        ===== 💡 LIQUID SYNTAX FIX =======================
+        ================================================== 
+        Changed '| size == 0' to '.size == 0'
+        -->
+        {% if combined_list.size == 0 %}
             <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
                 No services or works found. Please check back soon.
             </p>
-        <!-- 
-        ==================================================
-        ===== 💡 THE REAL FIX ============================
-        ================================================== 
-        Added the missing 'endif' tag.
-        -->
         {% endif %}
     </div>
 </div>
+
+
