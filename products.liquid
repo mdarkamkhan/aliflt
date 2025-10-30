@@ -49,16 +49,17 @@ permalink: /products/
         </a>
         {% endfor %}
 
-        <!-- 
-        ==================================================
-        ===== 💡 LIQUID SYNTAX FIX =======================
-        ================================================== 
-        Changed '.length == 0' to '| size == 0'
-        -->
+        <!-- This message shows if the collection is empty -->
         {% if collections.products | size == 0 %}
             <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
                 No products found. Please check back soon.
             </p>
+        <!-- 
+        ==================================================
+        ===== 💡 THE REAL FIX ============================
+        ================================================== 
+        Added the missing 'endif' tag.
+        -->
         {% endif %}
     </div>
 </div>
