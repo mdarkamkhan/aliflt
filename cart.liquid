@@ -1,0 +1,24 @@
+---
+layout: base.liquid
+title: Your Cart
+permalink: /cart/
+---
+
+<div class="container section fade-in-section">
+    <h2>Your Cart</h2>
+    
+    <!-- Cart items will be injected here by JS -->
+    <div id="cart-items-container"></div>
+    
+    <!-- Cart Summary -->
+    <div id="cart-summary" style="display: none;">
+        <h3 id="cart-total">Total: ₹0.00</h3>
+        <button class="btn-buy" id="proceedToOrderBtn">Proceed to Order on WhatsApp</button>
+    </div>
+    
+    <!-- Empty Cart Message -->
+    <div id="cart-empty-message" style="display: none; text-align: center; padding: 40px 0;">
+        <p style="font-size: 1.2rem; margin-bottom: 20px;">Your cart is empty.</p>
+        <a href="/products/" class="btn-cart" style="text-decoration: none;">Continue Shopping</a>
+    </div>
+</div>
