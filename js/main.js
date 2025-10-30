@@ -19,11 +19,12 @@ function initializeSwapper(swapperSelector, options = {}) {
         if (prevBtn) prevBtn.style.display = 'none';
         if (nextBtn) nextBtn.style.display = 'none';
         
+        // This is a special rule for the banner
         if (options.isBanner) {
             if (items.length === 1) {
-                showItem(0);
+                showItem(0); // Make sure the single item is visible
             }
-            return;
+            return; // Don't start autoplay if 1 or 0 items
         }
     }
 
@@ -80,15 +81,15 @@ function initializeSwapper(swapperSelector, options = {}) {
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- Initialize Galleries ---
-    // 💡 BANNER SWAPPER REMOVED
+    // 💡 RESTORED: This line activates the banner swapper on the homepage
+    initializeSwapper('.banner-swapper', { isBanner: true, autoplay: 5000 }); 
+    
     initializeSwapper('.products-panel-gallery', { autoplay: 4000 });
     initializeSwapper('.works-panel-gallery', { autoplay: 3000 });
     initializeSwapper('.services-panel-gallery', { autoplay: 3500 });
     initializeSwapper('.product-swapper', { autoplay: 4000 }); // For products page
     initializeSwapper('.services-swapper', { autoplay: 4000 }); // For services page
     initializeSwapper('.works-swapper', { autoplay: 3000 }); // For services page
-
-    // --- 💡 Banner close button logic REMOVED ---
 
     // --- SCROLL ANIMATION LOGIC (for .fade-in-section) ---
     const sectionsToFade = document.querySelectorAll('.fade-in-section');
@@ -124,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 💡 UPDATED SIDEBAR MENU LOGIC ---
+    // --- SIDEBAR MENU LOGIC ---
     const navToggleBtn = document.getElementById('navToggleBtn');
     const sidebarMenu = document.getElementById('sidebarMenu');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -145,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (navToggleBtn && sidebarMenu && sidebarOverlay && sidebarCloseBtn) {
         navToggleBtn.addEventListener('click', () => {
-            // Check if it's already open, then close it. Otherwise open.
             if (sidebarMenu.classList.contains('is-open')) {
                 closeSidebar();
             } else {
@@ -173,6 +173,9 @@ document.addEventListener('DOMContentLoaded', () => {
         chatButton.addEventListener('click', () => {
             chatWindow.classList.toggle('hidden');
             chatWindow.classList.toggle('visible');
+            if (chatWindow.classList.contains('visible')) {
+                chatInput.focus();
+            }
         });
 
         closeChat.addEventListener('click', () => {
@@ -180,69 +183,64 @@ document.addEventListener('DOMContentLoaded', () => {
             chatWindow.classList.remove('visible');
         });
 
-        sendButton.addEventListener('click', () => {
-            sendMessage();
-        });
+        const sendMessage = () => {
+            const message = chatInput.value.trim();
+            if (!message) return;
 
-        chatInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
+            appendMessage(message, 'user-message');
+            chatInput.value = '';
+
+            appendMessage('...', 'ai-message thinking-message');
+            scrollToBottom();
+
+            fetch('/.netlify/functions/ask-ai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                removeThinking();
+                if (data.reply) {
+                    appendMessage(data.reply, 'ai-message');
+                } else {
+                    appendMessage('Sorry, I had a problem. Please try again.', 'ai-message');
+                }
+                scrollToBottom();
+            })
+            .catch(error => {
+                removeThinking();
+                console.error('Chatbot error:', error);
+                appendMessage('Sorry, I couldn\'t connect. Please check your internet.', 'ai-message');
+                scrollToBottom();
+            });
+        }
+        
+        sendButton.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
                 sendMessage();
             }
         });
 
-        function addMessage(message, sender) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'ai-message');
-            messageElement.textContent = message;
-            chatMessages.appendChild(messageElement);
-            chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll
+        function appendMessage(text, className) {
+            const div = document.createElement('div');
+            div.className = `message ${className}`;
+            div.textContent = text;
+            chatMessages.appendChild(div);
+            scrollToBottom();
         }
 
-        async function sendMessage() {
-            const message = chatInput.value.trim();
-            if (message === '') return;
-
-            addMessage(message, 'user');
-            chatInput.value = '';
-
-            // Add thinking indicator
-            const thinkingElement = document.createElement('div');
-            thinkingElement.classList.add('message', 'ai-message', 'thinking-message');
-            thinkingElement.textContent = '...';
-            chatMessages.appendChild(thinkingElement);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            try {
-                // Send to Netlify function
-                const response = await fetch('/.netlify/functions/ask-ai', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: message })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-                
-                // Remove thinking indicator
-                chatMessages.removeChild(thinkingElement);
-                
-                if (data.text) {
-                    addMessage(data.text, 'ai');
-                } else {
-                    addMessage('Sorry, I had trouble thinking. Please try again.', 'ai');
-                }
-
-            } catch (error) {
-                console.error('Error fetching from AI:', error);
-                // Remove thinking indicator and show error
-                if (chatMessages.contains(thinkingElement)) {
-                    chatMessages.removeChild(thinkingElement);
-                }
-                addMessage('Sorry, I couldn\'t connect to Alif AI. Please check your connection.', 'ai');
+        function removeThinking() {
+            const thinking = chatMessages.querySelector('.thinking-message');
+            if (thinking) {
+                thinking.remove();
             }
+        }
+
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     }
 });
