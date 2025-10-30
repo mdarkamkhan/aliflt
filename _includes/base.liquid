@@ -5,12 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALiF Ladies Tailor | {{ title }}</title>
     
-    <!-- SEO & METADATA -->
+    <!-- 
+    ==================================================
+    ===== SEO & METADATA =============================
+    ================================================== 
+    -->
+    
+    <!-- Basic Meta -->
     <meta name="description" content="Custom bridal blouses, lehengas, and gowns — premium ladies tailoring in Sahibganj, Jharkhand. Quality stitching for festive and daily wear.">
     <meta name="keywords" content="ladies tailor, tailor, silai, tailoring, bridal blouse stitching, designer lehenga, gown stitching, hand embroidery blouse, wedding outfit design, ladies boutique Sahibganj, Jharkhand tailor, Alif ladies tailor, custom clothing, ethnic wear stitching, festive collection tailor, saree blouse , traditional tailor work">
     <link rel="canonical" href="https://aliflt.netlify.app/{{ page.url }}">
+    
+    <!-- Favicon Links -->
     <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/favicon.png">
+
+    <!-- Open Graph (for Facebook, LinkedIn, etc.) -->
     <meta property="og:title" content="ALiF Ladies Tailor | {{ title }}">
     <meta property="og:description" content="Custom bridal blouses, lehengas, and gowns — premium ladies tailoring in Sahibganj, Jharkhand.">
     <meta property="og:type" content="website">
@@ -19,11 +29,15 @@
     <meta property="og:image" content="https://aliflt.netlify.app/uploads/alif-og-image.jpg">
     <meta property="og:image:alt" content="A custom-stitched garment by ALiF Ladies Tailor">
     <meta property="og:locale" content="en_IN">
+
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="ALiF Ladies Tailor | {{ title }}">
     <meta name="twitter:description" content="Custom bridal blouses, lehengas, and gowns — premium ladies tailoring in Sahibganj, Jharkhand.">
     <meta name="twitter:image" content="https://aliflt.netlify.app/uploads/alif-og-image.jpg">
     <meta name="twitter:url" content="https://aliflt.netlify.app/{{ page.url }}">
+
+    <!-- JSON-LD Structured Data (for Google) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -42,25 +56,36 @@
     }
     </script>
     
-    <!-- STYLES & FONTS -->
+    <!-- 
+    ==================================================
+    ===== STYLES & FONTS =============================
+    ================================================== 
+    -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Main stylesheet -->
     <link rel="stylesheet" href="/css/style.css">
 
-    <!-- 💡 INLINE STYLES (Footer, Collapsible, and New Nav) -->
+    <!-- 
+    ==================================================
+    ===== 💡 INLINE FOOTER & COLLAPSIBLE STYLES ======
+    ================================================== 
+    -->
     <style>
         /* New Footer Layout */
         footer {
-            background-color: #f4f4f4;
+            background-color: #f4f4f4; /* Match body background */
             color: #333;
             padding: 40px 0;
-            text-align: left;
+            text-align: left; /* Override default center alignment */
             border-top: 1px solid #e0e0e0;
         }
         .footer-content {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* Stack on mobile */
             justify-content: space-between;
             gap: 30px;
         }
@@ -164,38 +189,24 @@
 
     <!-- 
     ==================================================
-    ===== 💡 NEW FIXED NAVIGATION BAR ================
+    ===== 💡 DEBUG BOX REMOVED =======================
+    ================================================== 
+    -->
+    
+    <!-- 
+    ==================================================
+    ===== FIXED NAVIGATION BAR =======================
     ================================================== 
     -->
     <nav class="fixed-top-nav">
-        <!-- Left Side: Logo -->
         <a href="/" class="nav-logo">ALiF</a>
-        
-        <!-- Right Side: Hamburger Button -->
         <button class="nav-toggle-btn" id="navToggleBtn" aria-label="Open menu">
-            <!-- Simple hamburger icon -->
             <span></span>
             <span></span>
             <span></span>
         </button>
     </nav>
     
-    <!-- 
-      This padding is added by the new CSS in css/style.css
-      to prevent content from being hidden by the fixed nav
-    -->
-
-    <div id="eleventy-debug-box" style="top: 70px;"> <!-- Adjusted top for new nav -->
-        <p style="margin:0;">
-            **DEBUG INFO:** | 
-            **Title:** "{{ title }}" | 
-            **Layout:** "{{ layout }}" |
-            **Path:** "{{ page.url }}" |
-            **Content Size:** {{ content | size }} bytes |
-            **SUCCESS CHECK:** Layout Loaded!
-        </p>
-    </div>
-
     <div id="top-banner">
         <button class="close-banner-btn">×</button>
         <div class="swapper-container banner-swapper">
@@ -221,25 +232,15 @@
         </div>
     </header>
 
-    <!-- 
-    ==================================================
-    ===== 💡 OLD NAV REMOVED =========================
-    ================================================== 
-    -->
-    <!-- The old <nav class="fade-in-section">..._</nav> has been deleted. -->
-
     <!-- This is where your page content (e.g., index.liquid) goes -->
     <main>{{ content }}</main>
     
     <!-- 
     ==================================================
-    ===== 💡 NEW SIDEBAR MENU ========================
+    ===== SIDEBAR MENU ===============================
     ================================================== 
     -->
-    <!-- Overlay for closing menu when clicking outside -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    
-    <!-- The Sidebar Menu Itself -->
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="sidebar-header">
             <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close menu">&times;</button>
@@ -250,14 +251,7 @@
             <li><a href="/products/">Products</a></li>
             <li><a href="/services-works/">Services & Works</a></li>
             <li><a href="/contact-us/">Contact</a></li>
-            <!-- You can create a new page for 'Offers' if you like -->
-            <!-- <li><a href="/offers/">Offers</a></li> -->
-            
-            <!-- Link to the reviews section on homepage -->
             <li><a href="/#reviews">Reviews</a></li> 
-            
-            <!-- You can create a new page for 'Location' or link to maps -->
-            <!-- <li><a href="/location/">Location</a></li> -->
         </ul>
         
         <div class="sidebar-socials">
@@ -265,7 +259,7 @@
             <ul class="footer-socials">
                 <li>
                     <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" rel="noopener" aria-label="Instagram">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669-4.771 4.919-4.919 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.197-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669-4.771 4.919 4.919 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.197-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                     </a>
                 </li>
                 <li>
@@ -279,7 +273,7 @@
 
     <!-- 
     ==================================================
-    ===== 💡 NEW FOOTER ==============================
+    ===== FOOTER =====================================
     ================================================== 
     -->
     <footer class="fade-in-section">
@@ -301,7 +295,7 @@
                     <ul class="footer-socials">
                         <!-- Instagram -->
                         <li>
-                            <a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" rel="noopener" aria-label="Instagram">
+                            <a href="https.www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" rel="noopener" aria-label="Instagram">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669-4.771 4.919 4.919 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.197-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                             </a>
                         </li>
