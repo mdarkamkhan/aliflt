@@ -80,7 +80,7 @@ function initializeSwapper(swapperSelector, options = {}) {
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- Initialize Galleries ---
-    initializeSwapper('.banner-swapper', { isBanner: true, autoplay: 5000 });
+    // 💡 BANNER SWAPPER REMOVED
     initializeSwapper('.products-panel-gallery', { autoplay: 4000 });
     initializeSwapper('.works-panel-gallery', { autoplay: 3000 });
     initializeSwapper('.services-panel-gallery', { autoplay: 3500 });
@@ -88,19 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSwapper('.services-swapper', { autoplay: 4000 }); // For services page
     initializeSwapper('.works-swapper', { autoplay: 3000 }); // For services page
 
-
-    // --- Close banner button ---
-    const closeBtn = document.querySelector('.close-banner-btn');
-    if(closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            const banner = document.getElementById('top-banner');
-            if (banner) banner.style.display = 'none';
-        });
-    }
+    // --- 💡 Banner close button logic REMOVED ---
 
     // --- SCROLL ANIMATION LOGIC (for .fade-in-section) ---
     const sectionsToFade = document.querySelectorAll('.fade-in-section');
-    
     if (sectionsToFade.length > 0) {
         const sectionObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
@@ -110,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }, { threshold: 0.1 });
-
         sectionsToFade.forEach(section => {
             sectionObserver.observe(section);
         });
@@ -118,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- "INFINITE SCROLL" for Product Grid ---
     const productCards = document.querySelectorAll('.product-card');
-    
     if (productCards.length > 0) {
         const cardObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach((entry, index) => {
@@ -126,18 +115,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         entry.target.classList.add('is-visible');
                     }, 100 * (index % 10));
-                    
                     observer.unobserve(entry.target);
                 }
             });
         }, { rootMargin: '0px 0px -50px 0px' }); 
-
         productCards.forEach(card => {
             cardObserver.observe(card);
         });
     }
 
-    // --- SIDEBAR MENU LOGIC ---
+    // --- 💡 UPDATED SIDEBAR MENU LOGIC ---
     const navToggleBtn = document.getElementById('navToggleBtn');
     const sidebarMenu = document.getElementById('sidebarMenu');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -147,17 +134,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const openSidebar = () => {
         sidebarMenu.classList.add('is-open');
         sidebarOverlay.classList.add('is-open');
-        document.body.classList.add('sidebar-open');
+        document.body.classList.add('sidebar-open'); // For hamburger animation
     };
 
     const closeSidebar = () => {
         sidebarMenu.classList.remove('is-open');
         sidebarOverlay.classList.remove('is-open');
-        document.body.classList.remove('sidebar-open');
+        document.body.classList.remove('sidebar-open'); // For hamburger animation
     };
 
     if (navToggleBtn && sidebarMenu && sidebarOverlay && sidebarCloseBtn) {
-        navToggleBtn.addEventListener('click', openSidebar);
+        navToggleBtn.addEventListener('click', () => {
+            // Check if it's already open, then close it. Otherwise open.
+            if (sidebarMenu.classList.contains('is-open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
         sidebarCloseBtn.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
         
@@ -166,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 💡 NEW CHATBOT LOGIC ---
+    // --- CHATBOT LOGIC ---
     const chatButton = document.getElementById('chat-button');
     const chatWindow = document.getElementById('chat-window');
     const closeChat = document.getElementById('close-chat');
@@ -179,9 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
         chatButton.addEventListener('click', () => {
             chatWindow.classList.toggle('hidden');
             chatWindow.classList.toggle('visible');
-            if (chatWindow.classList.contains('visible')) {
-                chatInput.focus();
-            }
         });
 
         closeChat.addEventListener('click', () => {
@@ -189,69 +180,69 @@ document.addEventListener('DOMContentLoaded', () => {
             chatWindow.classList.remove('visible');
         });
 
-        const sendMessage = () => {
-            const message = chatInput.value.trim();
-            if (!message) return;
+        sendButton.addEventListener('click', () => {
+            sendMessage();
+        });
 
-            // 1. Display user message
-            appendMessage(message, 'user-message');
-            chatInput.value = '';
-
-            // 2. Show thinking indicator
-            appendMessage('...', 'ai-message thinking-message');
-            scrollToBottom();
-
-            // 3. Send to Netlify function
-            fetch('/.netlify/functions/ask-ai', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: message })
-            })
-            .then(res => res.json())
-            .then(data => {
-                removeThinking();
-                if (data.reply) {
-                    appendMessage(data.reply, 'ai-message');
-                } else {
-                    appendMessage('Sorry, I had a problem. Please try again.', 'ai-message');
-                }
-                scrollToBottom();
-            })
-            .catch(error => {
-                removeThinking();
-                console.error('Chatbot error:', error);
-                appendMessage('Sorry, I couldn't connect. Please check your internet.', 'ai-message');
-                scrollToBottom();
-            });
-        }
-        
-        sendButton.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault(); // Prevent new line on Enter
+        chatInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
                 sendMessage();
             }
         });
 
-        function appendMessage(text, className) {
-            const div = document.createElement('div');
-            div.className = `message ${className}`;
-            div.textContent = text; // Use textContent to prevent HTML injection
-            chatMessages.appendChild(div);
-            scrollToBottom();
+        function addMessage(message, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'ai-message');
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll
         }
 
-        function removeThinking() {
-            const thinking = chatMessages.querySelector('.thinking-message');
-            if (thinking) {
-                thinking.remove();
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message === '') return;
+
+            addMessage(message, 'user');
+            chatInput.value = '';
+
+            // Add thinking indicator
+            const thinkingElement = document.createElement('div');
+            thinkingElement.classList.add('message', 'ai-message', 'thinking-message');
+            thinkingElement.textContent = '...';
+            chatMessages.appendChild(thinkingElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                // Send to Netlify function
+                const response = await fetch('/.netlify/functions/ask-ai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: message })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                
+                // Remove thinking indicator
+                chatMessages.removeChild(thinkingElement);
+                
+                if (data.text) {
+                    addMessage(data.text, 'ai');
+                } else {
+                    addMessage('Sorry, I had trouble thinking. Please try again.', 'ai');
+                }
+
+            } catch (error) {
+                console.error('Error fetching from AI:', error);
+                // Remove thinking indicator and show error
+                if (chatMessages.contains(thinkingElement)) {
+                    chatMessages.removeChild(thinkingElement);
+                }
+                addMessage('Sorry, I couldn\'t connect to Alif AI. Please check your connection.', 'ai');
             }
         }
-
-        function scrollToBottom() {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
     }
-    // --- END CHATBOT LOGIC ---
-
 });
