@@ -4,7 +4,7 @@ pagination:
   data: collections.products
   size: 1
   alias: product
-  # This permalink is correct
+  # FIX 1: Removed "| slugify"
   permalink: "products/{{ product.fileSlug }}/"
 eleventyComputed:
   title: "{{ product.data.title }}"
@@ -37,9 +37,8 @@ eleventyComputed:
                         
                         <!-- 
                         ==================================================
-                        ===== 💡 THE FIX IS HERE =========================
+                        ===== 💡 FIX 2: Removed "| slugify" =============
                         ================================================== 
-                        Removed the "| slugify" filter that was crashing the build.
                         -->
                         data-product-id="{{ product.fileSlug }}" 
                         
@@ -59,10 +58,11 @@ eleventyComputed:
             {% if product.templateContent %}
                 <div class="product-detail-description">
                     <h3>Description</h3>
-                    <!-- Use 'safe' filter to render any markdown/HTML in the description -->
                     <p>{{ product.templateContent | safe }}</p>
                 </div>
             {% endif %}
         </div>
     </div>
 </div>
+
+
