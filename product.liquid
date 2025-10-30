@@ -4,7 +4,7 @@ pagination:
   data: collections.products
   size: 1
   alias: product
-  # FIX 1: Removed "| slugify"
+  # This permalink is correct
   permalink: "products/{{ product.fileSlug }}/"
 eleventyComputed:
   title: "{{ product.data.title }}"
@@ -37,8 +37,9 @@ eleventyComputed:
                         
                         <!-- 
                         ==================================================
-                        ===== 💡 FIX 2: Removed "| slugify" =============
+                        ===== 💡 THE REAL FIX  =============================
                         ================================================== 
+                        Removed the "| slugify" filter from the line below.
                         -->
                         data-product-id="{{ product.fileSlug }}" 
                         
@@ -64,5 +65,3 @@ eleventyComputed:
         </div>
     </div>
 </div>
-
-
