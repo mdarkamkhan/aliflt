@@ -1,0 +1,62 @@
+---
+layout: base.liquid
+pagination:
+  data: collections.products
+  size: 1
+  alias: product
+  # This creates the URL, e.g., /products/bridal-lehenga/
+  permalink: "products/{{ product.fileSlug | slugify }}/"
+eleventyComputed:
+  title: "{{ product.data.title }}"
+---
+
+<!-- This is the Product Detail Page (PDP) -->
+<div class="container section fade-in-section">
+    <div class="product-detail-grid">
+        
+        <!-- Column 1: Image -->
+        <div class="product-detail-image">
+            <img src="{{ product.data.image | url }}" alt="{{ product.data.title }}">
+        </div>
+        
+        <!-- Column 2: Info -->
+        <div class="product-detail-info">
+            <h1 class="product-detail-title">{{ product.data.title }}</h1>
+            
+            {% if product.data.price %}
+                <span class="product-detail-price">₹{{ product.data.price }}</span>
+            {% endif %}
+            
+            {% if product.data.category %}
+                <span class="product-detail-category">{{ product.data.category }}</span>
+            {% endif %}
+
+            <!-- Add to Cart & Buy Now Buttons -->
+            <div class="product-detail-actions">
+                <button class="btn-cart" id="addToCartBtn" 
+                        data-product-id="{{ product.fileSlug | slugify }}" 
+                        data-title="{{ product.data.title | escape }}" 
+                        data-price="{{ product.data.price }}" 
+                        data-image="{{ product.data.image | url }}">
+                    Add to Cart
+                </button>
+                <button class="btn-buy" id="buyNowBtn" 
+                        data-title="{{ product.data.title | escape }}" 
+                        data-price="{{ product.data.price }}" 
+                        data-image="{{ product.data.image | url }}">
+                    Buy Now
+                </button>
+            </div>
+            
+            {% if product.templateContent %}
+                <div class="product-detail-description">
+                    <h3>Description</h3>
+                    <!-- Use 'safe' filter to render any markdown/HTML in the description -->
+                    <p>{{ product.templateContent | safe }}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
