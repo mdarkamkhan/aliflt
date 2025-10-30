@@ -12,7 +12,7 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    background-color: #f4f4f4; /* This is the "white" background for margins */
+    background-color: #f4f4f4;
     padding-bottom: 80px;
     padding-top: 70px; 
 }
@@ -26,17 +26,6 @@ body.sidebar-open {
     margin: auto;
     overflow: hidden;
     padding: 0 20px;
-}
-header {
-    background: #fff;
-    padding: 1rem 0;
-    border-bottom: #ccc 1px solid;
-    text-align: center;
-}
-header h1 {
-    margin: 0;
-    font-size: 2.5em;
-    color: #555;
 }
 
 /* Set .section margin to 0 so panels are the only thing with margin */
@@ -246,12 +235,7 @@ footer {
 }
 
 /* Chat Styles */
-#chat-widget {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-}
+#chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
 #chat-button {
     background-color: var(--accent-color);
     color: white;
@@ -290,47 +274,13 @@ footer {
     justify-content: space-between;
     align-items: center;
  }
-  #close-chat {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-  }
- .message {
-    margin-bottom: 10px;
-    padding: 8px 12px;
-    border-radius: 15px;
-    max-width: 80%;
- }
- .user-message {
-    background-color: #eee;
-    align-self: flex-end;
-    margin-left: auto;
- }
- .ai-message {
-    background-color: var(--accent-color);
-    color: white;
-    align-self: flex-start;
-    margin-right: auto;
- }
-  .thinking-message {
-    font-style: italic;
-    color: #888;
-    align-self: flex-start;
-  }
- #chat-input-area {
-    display: flex;
-    padding: 10px;
-    border-top: 1px solid #eee;
- }
- #chat-input {
-    flex-grow: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 5px;
- }
+  #close-chat { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+ .message { margin-bottom: 10px; padding: 8px 12px; border-radius: 15px; max-width: 80%; }
+ .user-message { background-color: #eee; align-self: flex-end; margin-left: auto; }
+ .ai-message { background-color: var(--accent-color); color: white; align-self: flex-start; margin-right: auto; }
+  .thinking-message { font-style: italic; color: #888; align-self: flex-start; }
+ #chat-input-area { display: flex; padding: 10px; border-top: 1px solid #eee; }
+ #chat-input { flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 5px; margin-right: 5px; }
  #send-button {
     background-color: var(--accent-color);
     color: white;
@@ -339,9 +289,7 @@ footer {
     border-radius: 5px;
     cursor: pointer;
  }
- #send-button:hover {
-     background-color: var(--accent-color-dark);
- }
+ #send-button:hover { background-color: var(--accent-color-dark); }
  #chat-window.hidden { display: none; }
  #chat-window.visible { display: flex; }
 
@@ -374,12 +322,7 @@ footer {
 }
 .prada-panel .swapper-container { max-width: none; width: 100%; height: 100%; min-height: 0; }
 .prada-panel .swapper-item { height: 100%; }
-.prada-panel .swapper-item img {
-    height: 100%;
-    min-height: 0;
-    object-fit: cover;
-    border-radius: 8px;
-}
+.prada-panel .swapper-item img { height: 100%; min-height: 0; object-fit: cover; border-radius: 8px; }
 .prada-panel .swapper-nav,
 .prada-panel .product-label,
 .prada-panel .service-details,
@@ -387,54 +330,26 @@ footer {
     display: none;
 }
 @media (max-width: 600px) {
-    .prada-panel {
-        width: calc(100% - 20px);
-        margin: 10px auto;
-        height: 70vh;
-    }
-    .prada-panel-label {
-        font-size: 1.2rem;
-        top: 20px;
-        left: 20px;
-    }
+    .prada-panel { width: calc(100% - 20px); margin: 10px auto; height: 70vh; }
+    .prada-panel-label { font-size: 1.2rem; top: 20px; left: 20px; }
 }
 
 
-/* ==================================================
-===== 💡 PRODUCT PAGE GRID LAYOUT (UPDATED) ========
-================================================== 
-*/
-
+/* PRODUCT PAGE GRID LAYOUT */
 .product-grid {
     display: grid;
-    /* 💡 Mobile-first: 2 columns */
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px; /* Mobile gap */
+    gap: 15px; 
 }
-
-/* 💡 Tablet: 3 columns */
 @media (min-width: 768px) {
-    .product-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px; /* Desktop/Tablet gap */
-    }
+    .product-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
 }
-
-/* 💡 Desktop: 4 columns */
 @media (min-width: 1024px) {
-    .product-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
+    .product-grid { grid-template-columns: repeat(4, 1fr); }
 }
-
-/* 💡 Large Desktop: 5 columns */
 @media (min-width: 1400px) {
-    .product-grid {
-        grid-template-columns: repeat(5, 1fr);
-    }
+    .product-grid { grid-template-columns: repeat(5, 1fr); }
 }
-
-
 .product-card {
     text-decoration: none;
     color: #333;
@@ -444,10 +359,7 @@ footer {
     transform: translateY(0);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
 }
-.product-card.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
+.product-card.is-visible { opacity: 1; transform: translateY(0); }
 .product-card-image-wrapper {
     overflow: hidden;
     border-radius: 8px;
@@ -463,33 +375,17 @@ footer {
 }
 .product-card:hover img { transform: scale(1.05); }
 .product-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-
 .product-card-name {
-    /* This style is overridden by inline styles in the liquid file */
     text-align: center;
     font-weight: bold;
     padding: 15px 10px;
     font-size: 1.1rem;
     text-transform: capitalize;
 }
-
-/* 💡 Responsive rules for sections/cards on mobile */
 @media (max-width: 600px) {
-    /* 💡 .product-grid rule removed from here (it's now the default) */
-    
-    .section {
-        padding: 20px; /* Smaller padding on mobile */
-    }
-
-    .container .section {
-        margin: 10px 0;
-    }
-    
-    .product-card-name {
-        /* This style is overridden by inline styles in the liquid file */
-        font-size: 1rem;
-        padding: 10px;
-    }
+    .section { padding: 20px; }
+    .container .section { margin: 10px 0; }
+    .product-card-name { font-size: 1rem; padding: 10px; }
 }
 
 
@@ -532,11 +428,7 @@ details[open] .collapsible-content {
 .collapsible-content > div { overflow: hidden; }
 
 
-/* ==================================================
-===== NEW FIXED NAV & SIDEBAR STYLES =============
-================================================== 
-*/
-
+/* FIXED NAV & SIDEBAR STYLES */
 .fixed-top-nav {
     position: fixed;
     top: 0;
@@ -552,26 +444,16 @@ details[open] .collapsible-content {
     z-index: 1001;
     box-sizing: border-box;
 }
-
 @media (max-width: 600px) {
-    .fixed-top-nav {
-        height: 60px;
-        padding: 0 15px;
-    }
-    body {
-        padding-top: 60px;
-    }
+    .fixed-top-nav { height: 60px; padding: 0 15px; }
+    body { padding-top: 60px; }
 }
-
 .nav-logo {
     font-size: 1.8rem;
     font-weight: 700;
     color: #000;
     text-decoration: none;
-    /* Font is applied via inline style in base.liquid */
 }
-
-/* This is the ☰ Hamburger Icon */
 .nav-toggle-btn {
     background: none;
     border: none;
@@ -591,19 +473,9 @@ details[open] .collapsible-content {
     border-radius: 2px;
     transition: all 0.3s ease;
 }
-
-/* Animation for Hamburger to 'X' when open */
-.sidebar-open .nav-toggle-btn span:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-}
-.sidebar-open .nav-toggle-btn span:nth-child(2) {
-    opacity: 0;
-}
-.sidebar-open .nav-toggle-btn span:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-}
-
-/* Sidebar Overlay (dimmed background) */
+.sidebar-open .nav-toggle-btn span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.sidebar-open .nav-toggle-btn span:nth-child(2) { opacity: 0; }
+.sidebar-open .nav-toggle-btn span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 .sidebar-overlay {
     position: fixed;
     top: 0;
@@ -616,12 +488,7 @@ details[open] .collapsible-content {
     visibility: hidden;
     transition: opacity 0.4s ease, visibility 0.4s;
 }
-.sidebar-overlay.is-open {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* The Sidebar Menu */
+.sidebar-overlay.is-open { opacity: 1; visibility: visible; }
 .sidebar-menu {
     position: fixed;
     top: 0;
@@ -637,16 +504,8 @@ details[open] .collapsible-content {
     flex-direction: column;
     overflow-y: auto;
 }
-.sidebar-menu.is-open {
-    transform: translateX(0);
-}
-@media (max-width: 600px) {
-    .sidebar-menu {
-        width: 90%;
-    }
-}
-
-/* Sidebar Header (for Close button) */
+.sidebar-menu.is-open { transform: translateX(0); }
+@media (max-width: 600px) { .sidebar-menu { width: 90%; } }
 .sidebar-header {
     display: flex;
     justify-content: flex-end;
@@ -655,31 +514,10 @@ details[open] .collapsible-content {
     align-items: center;
     box-sizing: border-box;
 }
-@media (max-width: 600px) {
-    .sidebar-header {
-        height: 60px;
-    }
-}
-/* This is the 'X' close button INSIDE the sidebar */
-.sidebar-close-btn {
-    background: none;
-    border: none;
-    font-size: 2.5rem;
-    color: #555;
-    cursor: pointer;
-    line-height: 1;
-}
-
-/* Sidebar Links */
-.sidebar-links {
-    list-style: none;
-    padding: 0 25px;
-    margin: 0;
-    flex-grow: 1;
-}
-.sidebar-links li {
-    margin-bottom: 5px;
-}
+@media (max-width: 600px) { .sidebar-header { height: 60px; } }
+.sidebar-close-btn { background: none; border: none; font-size: 2.5rem; color: #555; cursor: pointer; line-height: 1; }
+.sidebar-links { list-style: none; padding: 0 25px; margin: 0; flex-grow: 1; }
+.sidebar-links li { margin-bottom: 5px; }
 .sidebar-links a {
     display: block;
     padding: 15px 0;
@@ -689,15 +527,8 @@ details[open] .collapsible-content {
     font-weight: 600;
     transition: color 0.3s ease;
 }
-.sidebar-links a:hover {
-    color: #000;
-}
-
-/* Socials inside the sidebar */
-.sidebar-socials {
-    padding: 25px;
-    border-top: 1px solid #e0e0e0;
-}
+.sidebar-links a:hover { color: #000; }
+.sidebar-socials { padding: 25px; border-top: 1px solid #e0e0e0; }
 .sidebar-socials h3 {
     font-size: 1.1rem;
     font-weight: 700;
@@ -707,8 +538,176 @@ details[open] .collapsible-content {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-.sidebar-socials .footer-socials {
-    gap: 20px;
+.sidebar-socials .footer-socials { gap: 20px; }
+
+
+/* ==================================================
+===== E-COMMERCE STYLES (NEW) ====================
+================================================== 
+*/
+
+/* 1. Nav Bar Cart Icon */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.nav-cart-btn {
+    position: relative;
+    color: #333;
+    padding: 5px;
+}
+.nav-cart-btn svg {
+    width: 24px;
+    height: 24px;
+    stroke: #333;
+}
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    border-radius: 50%;
+    padding: 4px 6px;
+    min-width: 10px;
+    text-align: center;
 }
 
+/* 2. Generic Buttons (Cart/Buy) */
+.btn-cart, .btn-buy {
+    font-family: 'Poppins', sans-serif;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+.btn-cart {
+    background-color: #f4f4f4;
+    color: #333;
+    border: 1px solid #ddd;
+}
+.btn-cart:hover {
+    background-color: #e9e9e9;
+    border-color: #ccc;
+}
+.btn-buy {
+    background-color: var(--accent-color);
+    color: white;
+    border: 1px solid var(--accent-color);
+}
+.btn-buy:hover {
+    background-color: var(--accent-color-dark);
+    border-color: var(--accent-color-dark);
+}
 
+/* 3. Product Detail Page (PDP) */
+.product-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+@media (min-width: 768px) {
+    .product-detail-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.product-detail-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.product-detail-title {
+    font-size: 2.5rem;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.product-detail-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #000;
+    display: block;
+    margin-bottom: 15px;
+}
+.product-detail-category {
+    font-size: 1rem;
+    color: #777;
+    text-transform: capitalize;
+    display: block;
+    margin-bottom: 25px;
+}
+.product-detail-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+.product-detail-description h3 {
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+.product-detail-description p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #555;
+}
+
+/* 4. Cart Page */
+.cart-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 15px;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.cart-item-image img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.cart-item-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+}
+.cart-item-info p {
+    margin: 0;
+    color: #777;
+}
+.cart-item-remove-btn {
+    background: none;
+    border: none;
+    color: #900;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+#cart-summary {
+    margin-top: 30px;
+    border-top: 2px solid #333;
+    padding-top: 20px;
+    text-align: right;
+}
+#cart-total {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+#cart-summary .btn-buy {
+    width: 100%;
+}
+@media (min-width: 768px) {
+    #cart-summary .btn-buy {
+        width: auto;
+        min-width: 300px;
+    }
+}
