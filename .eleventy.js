@@ -10,10 +10,9 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy("uploads");
     eleventyConfig.addPassthroughCopy("admin");
     eleventyConfig.addPassthroughCopy("favicon.png"); 
-
-    // --- 💡 COLLECTIONS (This is the critical part) ---
-    // This tells Eleventy to create "collections" of content.
-    // The new product.liquid file NEEDS these to exist.
+    
+    // --- Collections ---
+    // This defines the collections that your pages use.
     eleventyConfig.addCollection("products", function(collectionApi) {
         return collectionApi.getFilteredByGlob("products/*.md");
     });
