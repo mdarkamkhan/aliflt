@@ -3,94 +3,97 @@ layout: base.liquid
 pagination:
   data: collections.products
   size: 1
-  alias: product
-  permalink: "products/{{ product.fileSlug }}/"
+  # 💡 FIX: Changed alias to 'item' to be safe
+  alias: item 
+
+# 💡 FIX: Use the 'pagination' variable to build the permalink.
+# This is the correct way.
+permalink: "products/{{ pagination.items[0].fileSlug }}/"
+
 eleventyComputed:
-  title: "{{ product.data.title }}"
+  # 💡 FIX: Use the 'pagination' variable to get the title.
+  title: "{{ pagination.items[0].data.title }}"
 ---
 
 <!-- 
 ==================================================
-===== 💡 VISIBILITY FIX ==========================
+===== 💡 DEBUG BOX (FIXED) =======================
 ================================================== 
-REMOVED "fade-in-section" class to make this page
-visible by default and fix the blank page bug.
+This will now show up, because the page will build.
+It now uses the correct 'item' variable.
+-->
+<div style="position: fixed; top: 80px; left: 10px; right: 10px; z-index: 99999; background: #ffc; border: 3px solid #f00; color: #000; padding: 15px; font-size: 14px; font-family: monospace; line-height: 1.6;">
+    
+    <strong>--- DEBUGGER ACTIVE ---</strong><br>
+    
+    {% if item %}
+        Page is rendering. Checking item data...<br>
+        ------------------------------------<br>
+        <strong>Title:</strong> {{ item.data.title | default: "MISSING" }}<br>
+        <strong>Price:</strong> {{ item.data.price | default: "MISSING" }}<br>
+        <strong>Image:</strong> {{ item.data.image | default: "MISSING" }}<br>
+        <strong>Slug:</strong> {{ item.fileSlug | default: "MISSING" }}<br>
+        <strong>URL:</strong> {{ item.url | default: "MISSING" }}<br>
+    {% else %}
+        <strong>ERROR:</strong> The 'item' variable is empty.
+    {% endif %}
+    
+    <br><strong>--- END DEBUG ---</strong>
+</div>
+
+
+<!-- 
+==================================================
+===== 💡 PAGE CONTENT ============================
+================================================== 
+This content also now uses the correct 'item' variable.
 -->
 <div class="container section">
-    
-    <!-- 
-    ==================================================
-    ===== 💡 DEBUG BOX (FIXED) =======================
-    ================================================== 
-    This box is to find out why the page is blank.
-    I have fixed the typo (a stray <p> tag) that was breaking the page.
-    -->
-    <div style="position: fixed; top: 80px; left: 10px; right: 10px; z-index: 99999; background: #ffc; border: 3px solid #f00; color: #000; padding: 15px; font-size: 14px; font-family: monospace; line-height: 1.6;">
-        
-        <strong>--- DEBUGGER ACTIVE ---</strong><br>
-        
-        {% if product %}
-            Page is rendering. Checking product data...<br>
-            ------------------------------------<br>
-            <strong>Title:</strong> {{ product.data.title | default: "MISSING" }}<br>
-            <strong>Price:</strong> {{ product.data.price | default: "MISSING" }}<br>
-            <strong>Image:</strong> {{ product.data.image | default: "MISSING" }}<br>
-            <strong>Description:</strong> {{ product.data.description | default: "MISSING" }}<br>
-            <strong>Slug:</strong> {{ product.fileSlug | default: "MISSING" }}<br>
-            <strong>URL:</strong> {{ product.url | default: "MISSING" }}<br>
-        {% else %}
-            <strong>ERROR:</strong> The 'product' variable is empty or does not exist.
-            This means the pagination is failing.
-            Check 'collections.products' in .eleventy.js.
-        {% endif %}
-        
-        <br>
-        <strong>--- END DEBUG ---</strong>
-    </div>
-
     
     <div class="product-detail-grid">
         
         <!-- Column 1: Image -->
         <div class="product-detail-image">
-            <img src="{{ product.data.image | url }}" alt="{{ product.data.title }}">
+            <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
         </div>
         
         <!-- Column 2: Info -->
         <div class="product-detail-info">
-            <h1 class="product-detail-title">{{ product.data.title }}</h1>
+            <h1 class="product-detail-title">{{ item.data.title }}</h1>
             
-            {% if product.data.price %}
-                <span class="product-detail-price">₹{{ product.data.price }}</span>
+            {% if item.data.price %}
+                <span class="product-detail-price">₹{{ item.data.price }}</span>
             {% endif %}
             
-            {% if product.data.category %}
-                <span class="product-detail-category">{{ product.data.category }}</span>
+            {% if item.data.category %}
+                <span class="product-detail-category">{{ item.data.category }}</span>
             {% endif %}
 
             <!-- Add to Cart & Buy Now Buttons -->
             <div class="product-detail-actions">
                 <button class="btn-cart" id="addToCartBtn" 
-                        data-product-id="{{ product.fileSlug }}" 
-                        data-title="{{ product.data.title | escape }}" 
-                        data-price="{{ product.data.price }}" 
-                        data-image="{{ product.data.image | url }}">
+                        data-product-id="{{ item.fileSlug }}" 
+                        data-title="{{ item.data.title | escape }}" 
+                        data-price="{{ item.data.price }}" 
+                        data-image="{{ item.data.image | url }}">
                     Add to Cart
                 </button>
                 <button class="btn-buy" id="buyNowBtn" 
-                        data-title="{{ product.data.title | escape }}" 
-                        data-price="{{ product.data.price }}" 
-                        data-image="{{ product.data.image | url }}">
+                        data-title="{{ item.data.title | escape }}" 
+                        data-price="{{ item.data.price }}" 
+                        data-image="{{ item.data.image | url }}">
                     Buy Now
                 </button>
             </div>
             
-            {% if product.data.description %}
+            {% if item.data.description %}
                 <div class="product-detail-description">
                     <h3>Description</h3>
-                    <p>{{ product.data.description }}</p>
+                    <p>{{ item.data.description }}</p>
                 </div>
             {% endif %}
         </div>
     </div>
 </div>
+
+
