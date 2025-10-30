@@ -18,6 +18,37 @@ visible by default and fix the blank page bug.
 -->
 <div class="container section">
     
+    <!-- 
+    ==================================================
+    ===== 💡 NEW DEBUG BOX ===========================
+    ================================================== 
+    This box is to find out why the page is blank.
+    It will be bright yellow with a red border.
+    -->
+    <div style="position: fixed; top: 80px; left: 10px; right: 10px; z-index: 99999; background: #ffc; border: 3px solid #f00; color: #000; padding: 15px; font-size: 14px; font-family: monospace; line-height: 1.6;">
+        
+        <strong>--- DEBUGGER ACTIVE ---</strong><br>
+        
+        {% if product %}
+            Page is rendering. Checking product data...<br>
+            ------------------------------------<br>
+            <strong>Title:</strong> {{ product.data.title | default: "MISSING" }}<br>
+            <strong>Price:</strong> {{ product.data.price | default: "MISSING" }}<p>
+            <strong>Image:</strong> {{ product.data.image | default: "MISSING" }}<br>
+            <strong>Description:</strong> {{ product.data.description | default: "MISSING" }}<br>
+            <strong>Slug:</strong> {{ product.fileSlug | default: "MISSING" }}<br>
+            <strong>URL:</strong> {{ product.url | default: "MISSING" }}<br>
+        {% else %}
+            <strong>ERROR:</strong> The 'product' variable is empty or does not exist.
+            This means the pagination is failing.
+            Check 'collections.products' in .eleventy.js.
+        {% endif %}
+        
+        <br>
+        <strong>--- END DEBUG ---</strong>
+    </div>
+
+    
     <div class="product-detail-grid">
         
         <!-- Column 1: Image -->
@@ -54,13 +85,6 @@ visible by default and fix the blank page bug.
                 </button>
             </div>
             
-            <!-- 
-            ==================================================
-            ===== 💡 DESCRIPTION FIX =========================
-            ================================================== 
-            Changed 'product.templateContent' to 'product.data.description'
-            to correctly show the description from the CMS.
-            -->
             {% if product.data.description %}
                 <div class="product-detail-description">
                     <h3>Description</h3>
@@ -70,5 +94,3 @@ visible by default and fix the blank page bug.
         </div>
     </div>
 </div>
-
-
