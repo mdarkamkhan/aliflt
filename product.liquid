@@ -20,10 +20,10 @@ visible by default and fix the blank page bug.
     
     <!-- 
     ==================================================
-    ===== 💡 NEW DEBUG BOX ===========================
+    ===== 💡 DEBUG BOX (FIXED) =======================
     ================================================== 
     This box is to find out why the page is blank.
-    It will be bright yellow with a red border.
+    I have fixed the typo (a stray <p> tag) that was breaking the page.
     -->
     <div style="position: fixed; top: 80px; left: 10px; right: 10px; z-index: 99999; background: #ffc; border: 3px solid #f00; color: #000; padding: 15px; font-size: 14px; font-family: monospace; line-height: 1.6;">
         
@@ -33,7 +33,7 @@ visible by default and fix the blank page bug.
             Page is rendering. Checking product data...<br>
             ------------------------------------<br>
             <strong>Title:</strong> {{ product.data.title | default: "MISSING" }}<br>
-            <strong>Price:</strong> {{ product.data.price | default: "MISSING" }}<p>
+            <strong>Price:</strong> {{ product.data.price | default: "MISSING" }}<br>
             <strong>Image:</strong> {{ product.data.image | default: "MISSING" }}<br>
             <strong>Description:</strong> {{ product.data.description | default: "MISSING" }}<br>
             <strong>Slug:</strong> {{ product.fileSlug | default: "MISSING" }}<br>
