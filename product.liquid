@@ -4,14 +4,20 @@ pagination:
   data: collections.products
   size: 1
   alias: product
-  # This permalink is correct
   permalink: "products/{{ product.fileSlug }}/"
 eleventyComputed:
   title: "{{ product.data.title }}"
 ---
 
-<!-- This is the Product Detail Page (PDP) -->
-<div class="container section fade-in-section">
+<!-- 
+==================================================
+===== 💡 THE FIX =================================
+================================================== 
+I have REMOVED the "fade-in-section" class from this div
+to make the product page visible by default.
+-->
+<div class="container section">
+    
     <div class="product-detail-grid">
         
         <!-- Column 1: Image -->
@@ -51,17 +57,9 @@ eleventyComputed:
             {% if product.templateContent %}
                 <div class="product-detail-description">
                     <h3>Description</h3>
-                    <!-- 
-                    ==================================================
-                    ===== 💡 THE REAL FIX  =============================
-                    ================================================== 
-                    Removed the "| safe" filter. Liquid renders this correctly by default.
-                    -->
                     <p>{{ product.templateContent }}</p>
                 </div>
             {% endif %}
         </div>
     </div>
 </div>
-
-
