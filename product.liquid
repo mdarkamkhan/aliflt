@@ -11,10 +11,10 @@ eleventyComputed:
 
 <!-- 
 ==================================================
-===== 💡 THE FIX =================================
+===== 💡 VISIBILITY FIX ==========================
 ================================================== 
-I have REMOVED the "fade-in-section" class from this div
-to make the product page visible by default.
+REMOVED "fade-in-section" class to make this page
+visible by default and fix the blank page bug.
 -->
 <div class="container section">
     
@@ -54,12 +54,21 @@ to make the product page visible by default.
                 </button>
             </div>
             
-            {% if product.templateContent %}
+            <!-- 
+            ==================================================
+            ===== 💡 DESCRIPTION FIX =========================
+            ================================================== 
+            Changed 'product.templateContent' to 'product.data.description'
+            to correctly show the description from the CMS.
+            -->
+            {% if product.data.description %}
                 <div class="product-detail-description">
                     <h3>Description</h3>
-                    <p>{{ product.templateContent }}</p>
+                    <p>{{ product.data.description }}</p>
                 </div>
             {% endif %}
         </div>
     </div>
 </div>
+
+
