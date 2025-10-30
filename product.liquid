@@ -4,7 +4,7 @@ pagination:
   data: collections.products
   size: 1
   alias: product
-  # 💡 FIX: Removed the "| slugify" filter which was causing the build to fail.
+  # This permalink is correct
   permalink: "products/{{ product.fileSlug }}/"
 eleventyComputed:
   title: "{{ product.data.title }}"
@@ -34,7 +34,15 @@ eleventyComputed:
             <!-- Add to Cart & Buy Now Buttons -->
             <div class="product-detail-actions">
                 <button class="btn-cart" id="addToCartBtn" 
-                        data-product-id="{{ product.fileSlug | slugify }}" 
+                        
+                        <!-- 
+                        ==================================================
+                        ===== 💡 THE FIX IS HERE =========================
+                        ================================================== 
+                        Removed the "| slugify" filter that was crashing the build.
+                        -->
+                        data-product-id="{{ product.fileSlug }}" 
+                        
                         data-title="{{ product.data.title | escape }}" 
                         data-price="{{ product.data.price }}" 
                         data-image="{{ product.data.image | url }}">
