@@ -1,10 +1,12 @@
-# netlify.toml
-# This file tells Netlify how to build and deploy your site.
+# This file tells Netlify exactly how to build your site.
 
 [build]
-  command = "npx @11ty/eleventy"  # The command to build your site
-  publish = "_site"               # The folder to deploy (Eleventy's output)
+  # This is the command to build your Eleventy site.
+  command = "npx @11ty/eleventy"
+  
+  # This is the folder that Eleventy builds.
+  publish = "_site"
 
 [context.production.environment]
-  # Sets the Node.js version
+  # We set a modern, stable Node.js version.
   NODE_VERSION = "18"
