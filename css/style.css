@@ -14,7 +14,6 @@ body {
     color: #333;
     background-color: #f4f4f4;
     padding-bottom: 80px;
-    /* 💡 UPDATED: Padding for new fixed nav */
     padding-top: 70px; 
 }
 
@@ -28,8 +27,6 @@ body.sidebar-open {
     overflow: hidden;
     padding: 0 20px;
 }
-
-/* 💡 OLD header and nav styles REMOVED */
 
 /* Set .section margin to 0 so panels are the only thing with margin */
 .section {
@@ -185,24 +182,28 @@ footer {
     color: #777;
 }
 
-/* 💡 BANNER STYLES UPDATED */
+/* ==================================================
+===== 💡 BANNER STYLES (FIXED) ===================
+================================================== 
+*/
 #top-banner {
     position: relative;
     width: 100%;
-    height: auto; /* 💡 UPDATED: Was 100vh */
+    height: 100vh; /* 💡 FIX: Reverted to 100vh. This makes it visible. */
     overflow: hidden;
 }
 #top-banner .swapper-container {
     width: 100%;
-    height: auto; /* 💡 UPDATED: Was 100% */
+    height: 100%; /* 💡 FIX: Reverted to 100%. */
     max-width: none;
-    min-height: 0; /* 💡 UPDATED: Was auto */
+    min-height: auto; /* 💡 FIX: Reverted to auto. */
 }
-/* 💡 Make banner images auto-height */
+/* 💡 Make banner images fill the container */
 #top-banner .swapper-item img {
-    min-height: 0;
-    object-fit: cover; /* Keeps aspect ratio */
-    height: auto; /* 💡 UPDATED */
+    width: 100%;
+    height: 100%; /* 💡 FIX: Ensures image fills the 100vh container */
+    object-fit: cover; 
+    min-height: 0; 
 }
 .banner-content {
     position: absolute;
@@ -218,11 +219,11 @@ footer {
     display: none;
 }
 
-/* 💡 .banner-cta-btn and .close-banner-btn styles REMOVED */
+/* 💡 .banner-cta-btn and .close-banner-btn styles are removed */
 
 @media (max-width: 900px) {
     #top-banner {
-        height: auto; /* 💡 UPDATED: Was 100vh */
+        height: 100vh; /* 💡 FIX: Reverted to 100vh. */
     }
     .banner-content {
          bottom: 15vh;
@@ -240,8 +241,13 @@ footer {
     transform: translateY(0);
 }
 
-#chat-widget { z-index: 9999; /* ... (rest of chat styles) ... */ }
 /* ... (all chat styles remain unchanged) ... */
+#chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
 #chat-button {
     background-color: var(--accent-color);
     color: white;
@@ -334,6 +340,7 @@ footer {
  }
  #chat-window.hidden { display: none; }
  #chat-window.visible { display: flex; }
+
 
 /* PRADA-STYLE HOMEPAGE PANELS (CARD-STYLE) */
 .prada-panel {
@@ -482,7 +489,7 @@ details[open] .collapsible-content {
 
 
 /* ==================================================
-===== 💡 NEW FIXED NAV & SIDEBAR STYLES ============
+===== NEW FIXED NAV & SIDEBAR STYLES =============
 ================================================== 
 */
 
@@ -493,7 +500,6 @@ details[open] .collapsible-content {
     width: 100%;
     height: 70px;
     background: #ffffff;
-    /* 💡 UPDATED: Swapped border for a subtle shadow */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
@@ -521,7 +527,7 @@ details[open] .collapsible-content {
     /* Font is applied via inline style in base.liquid */
 }
 
-/* 💡 This is the ☰ Hamburger Icon */
+/* This is the ☰ Hamburger Icon */
 .nav-toggle-btn {
     background: none;
     border: none;
@@ -542,7 +548,7 @@ details[open] .collapsible-content {
     transition: all 0.3s ease;
 }
 
-/* 💡 Animation for Hamburger to 'X' when open */
+/* Animation for Hamburger to 'X' when open */
 .sidebar-open .nav-toggle-btn span:nth-child(1) {
     transform: translateY(8px) rotate(45deg);
 }
@@ -601,7 +607,6 @@ details[open] .collapsible-content {
     display: flex;
     justify-content: flex-end;
     padding: 15px 15px;
-    /* 💡 Make sure header matches nav height */
     height: 70px;
     align-items: center;
     box-sizing: border-box;
@@ -611,7 +616,7 @@ details[open] .collapsible-content {
         height: 60px;
     }
 }
-/* 💡 This is the 'X' close button INSIDE the sidebar */
+/* This is the 'X' close button INSIDE the sidebar */
 .sidebar-close-btn {
     background: none;
     border: none;
