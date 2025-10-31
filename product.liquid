@@ -1,12 +1,9 @@
 ---
-# This file PAGINATES (creates pages from) your products.
-# It MUST be in your ROOT folder.
-
 layout: base.liquid
 pagination:
   data: collections.products
   size: 1
-  alias: item # We will call each product 'item'
+  alias: item # We call each product 'item'
   
 # This is the correct permalink using the 'item' alias
 permalink: "products/{{ item.fileSlug }}/"
@@ -17,8 +14,14 @@ eleventyComputed:
 ---
 
 <!-- 
-This is the HTML for each individual product page.
-It uses the 'item' variable from the pagination above.
+==================================================
+===== 💡 DEBUG BOX REMOVED ======================
+================================================== 
+-->
+
+<!-- 
+This page now correctly uses the 'item' variable
+that was defined in the pagination 'alias' above.
 -->
 <div class="container section">
     
@@ -67,3 +70,5 @@ It uses the 'item' variable from the pagination above.
         </div>
     </div>
 </div>
+
+
