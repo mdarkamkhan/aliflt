@@ -223,17 +223,13 @@ footer {
     }
 }
 
-/* ==================================================
-===== 💡 VISIBILITY FIX 1 ========================
-================================================== 
-*/
+/* VISIBILITY FIX 1 */
 .fade-in-section {
-    opacity: 1; /* 💡 FIX: Was 0. Makes footer & product pages visible. */
-    transform: translateY(0); /* 💡 FIX: Was 30px. */
+    opacity: 1; 
+    transform: translateY(0);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 .fade-in-section.is-visible {
-    /* This class is no longer needed but is harmless */
     opacity: 1;
     transform: translateY(0);
 }
@@ -339,37 +335,51 @@ footer {
 }
 
 
-/* PRODUCT PAGE GRID LAYOUT */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px; 
-}
-@media (min-width: 768px) {
-    .product-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-}
-@media (min-width: 1024px) {
-    .product-grid { grid-template-columns: repeat(4, 1fr); }
-}
-@media (min-width: 1400px) {
-    .product-grid { grid-template-columns: repeat(5, 1fr); }
-}
-
 /* ==================================================
-===== 💡 VISIBILITY FIX 2 ========================
+===== 💡 PRODUCT PAGE GRID LAYOUT (UPDATED) ========
 ================================================== 
 */
+
+.product-grid {
+    display: grid;
+    /* 💡 1. Mobile-first: 2 columns */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px; /* Mobile gap */
+}
+
+/* 💡 2. Tablet: 3 columns */
+@media (min-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px; /* Desktop/Tablet gap */
+    }
+}
+
+/* 💡 3. Desktop: 4 columns */
+@media (min-width: 1024px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* 💡 4. Large Desktop: 5 columns (satisfies 4-6) */
+@media (min-width: 1400px) {
+    .product-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+/* VISIBILITY FIX 2 */
 .product-card {
     text-decoration: none;
     color: #333;
     display: block;
     border-radius: 8px;
-    opacity: 1; /* 💡 FIX: Was 0. Makes product cards visible. */
-    transform: translateY(0); /* 💡 FIX: Was 20px. */
+    opacity: 1; /* Was 0 */
+    transform: translateY(0); /* Was 20px */
     transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
 }
 .product-card.is-visible {
-    /* This class is no longer needed but is harmless */
     opacity: 1;
     transform: translateY(0);
 }
@@ -396,6 +406,8 @@ footer {
     text-transform: capitalize;
 }
 @media (max-width: 600px) {
+    /* 💡 REMOVED 1-column grid rule from here */
+    
     .section { padding: 20px; }
     .container .section { margin: 10px 0; }
     .product-card-name { font-size: 1rem; padding: 10px; }
