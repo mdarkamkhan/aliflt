@@ -5,13 +5,45 @@ permalink: /products/
 ---
 
 <div class="container section fade-in-section">
+
+    <!-- 
+    ==================================================
+    ===== 💡 DEBUG BOX ===============================
+    ================================================== 
+    This confirms the links are being fixed.
+    -->
+    <div style="background: #ffc; border: 3px solid #f00; color: #000; padding: 15px; font-size: 14px; font-family: monospace; line-height: 1.6; margin-bottom: 30px;">
+        
+        <strong>--- DEBUGGER ACTIVE (products.liquid) ---</strong><br>
+        
+        <br>
+        <strong>Checking product links...</strong><br>
+        ------------------------------------<br>
+        {% assign first_product = collections.products[0] %}
+        - Total Products Found: <strong>{{ collections.products.size }}</strong><br>
+        - First Product Slug: <strong>{{ first_product.fileSlug }}</strong><br>
+        - <strong>BROKEN LINK (item.url):</strong> {{ first_product.url | url }} <br>
+        - <strong>FIXED LINK (new href):</strong> /products/{{ first_product.fileSlug }}/<br>
+        
+        <br>
+        <strong>--- END DEBUG ---</strong>
+    </div>
+
+
     <h2>Our Products</h2>
 
-    <div class="product-grid">
+    <div class.product-grid">
         
         {% for item in collections.products %}
-        <!-- This link points to the product detail page -->
-        <a href="{{ item.url | url }}" class="product-card">
+        <!-- 
+        ==================================================
+        ===== 💡 LINK FIXED ==============================
+        ================================================== 
+        The href is now built manually to match the
+        permalink in product.liquid.
+        -->
+        <a href="/products/{{ item.fileSlug }}/" class="product-card">
+            
             <div class="product-card-image-wrapper">
                 <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
             </div>
@@ -23,7 +55,7 @@ permalink: /products/
                 </div>
                 
                 {% if item.data.price %}
-                <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
+                <div class.product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
                     ₹{{ item.data.price }}
                 </div>
                 {% endif %}
@@ -49,12 +81,7 @@ permalink: /products/
         </a>
         {% endfor %}
 
-        <!-- 
-        ==================================================
-        ===== 💡 LIQUID SYNTAX FIX =======================
-        ================================================== 
-        Changed '| size == 0' to '.size == 0'
-        -->
+        <!-- This message shows if the collection is empty -->
         {% if collections.products.size == 0 %}
             <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
                 No products found. Please check back soon.
