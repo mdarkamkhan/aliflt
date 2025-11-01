@@ -1,16 +1,4 @@
 ---
 layout: base.liquid
-pagination:
-  data: collections.products
-  size: 1
-  alias: item # We call each product 'item'
-  
-# This is the correct permalink using the 'item' alias
-permalink: "products/{{ item.fileSlug }}/"
-
-eleventyComputed:
-  # This sets the <title> tag for each page
-  title: "{{ item.data.title }}" 
 ---
-
-{% include product-detail-content.liquid %}
+{% include _product-detail.liquid %}
