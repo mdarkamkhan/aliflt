@@ -1,14 +1,17 @@
 ---
 layout: base.liquid
-pagination:
-  data: collections.services | concat: collections.works
-  size: 1
-  alias: item # We call each item 'item'
-  
+size: 1
+alias: item 
+
 # This generates the unique permalink for the combined collection
 permalink: "services-works/{{ item.fileSlug }}/"
 
 eleventyComputed:
+  # FIX: Define the complex collection logic using JavaScript in eleventyComputed
+  # This avoids the YAMLException that Liquid filters cause in front matter
+  pagination:
+    data: collections.services | concat: collections.works
+  
   # This sets the <title> tag for each page
   title: "{{ item.data.title }}" 
 ---
