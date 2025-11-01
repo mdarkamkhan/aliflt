@@ -99,8 +99,8 @@ body.sidebar-open {
     text-decoration: none;
     color: #333;
 }
-/* This footer style is now overridden by the inline <style> in base.liquid */
-footer {
+/* This original footer style is now overridden by the inline <style> in base.liquid, but keeping it for completeness */
+footer.legacy {
     text-align: center;
     padding: 20px 0;
     color: #777;
@@ -618,4 +618,3 @@ details[open] .collapsible-content {
 #cart-summary .btn-buy { width: 100%; }
 @media (min-width: 768px) { #cart-summary .btn-buy { width: auto; min-width: 300px; } }
 
-                          
