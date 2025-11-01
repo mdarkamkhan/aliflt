@@ -6,11 +6,11 @@ alias: item
 # This generates the unique permalink for the combined collection
 permalink: "services-works/{{ item.fileSlug }}/"
 
+# CRITICAL FIX: Moving pagination inside eleventyComputed and quoting the Liquid logic
+# This prevents the YAML parser from breaking on the ':' and '|' characters.
 eleventyComputed:
-  # FIX: Define the complex collection logic using JavaScript in eleventyComputed
-  # This avoids the YAMLException that Liquid filters cause in front matter
-  pagination:
-    data: collections.services | concat: collections.works
+  pagination: 
+    data: '{{ collections.services | concat: collections.works }}'
   
   # This sets the <title> tag for each page
   title: "{{ item.data.title }}" 
@@ -55,3 +55,4 @@ eleventyComputed:
         </div>
     </div>
 </div>
+
