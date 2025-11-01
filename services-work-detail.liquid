@@ -1,23 +1,19 @@
 ---
 layout: base.liquid
-size: 1
-alias: item 
-
-# This generates the unique permalink for the combined collection
-permalink: "services-works/{{ item.fileSlug }}/"
-
-# CRITICAL FIX: Moving pagination inside eleventyComputed and quoting the Liquid logic
-# This prevents the YAML parser from breaking on the ':' and '|' characters.
-eleventyComputed:
-  pagination: 
-    data: '{{ collections.services | concat: collections.works }}'
-  
-  # This sets the <title> tag for each page
-  title: "{{ item.data.title }}" 
+title: Detail
+permalink: "/services-works/{{ item.fileSlug }}/"
 ---
 
-<div class="container section">
+{% comment %}
+    CRITICAL FIX: We are no longer using pagination here.
+    This page should only be rendered when a combined item is passed to it.
+    If you were using this for pagination, the content below will need adjustment.
     
+    If you still want pagination for services/works, the fix is to use
+    a JavaScript Data File (.js) to merge collections outside of YAML/Liquid.
+{% endcomment %}
+
+<div class="container section luxury-section">
     <div class="product-detail-grid">
         
         <!-- Column 1: Image -->
@@ -55,4 +51,3 @@ eleventyComputed:
         </div>
     </div>
 </div>
-
