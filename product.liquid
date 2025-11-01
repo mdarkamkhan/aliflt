@@ -1,49 +1,16 @@
 ---
 layout: base.liquid
-title: Our Products
-permalink: /products/
+pagination:
+  data: collections.products
+  size: 1
+  alias: item # We call each product 'item'
+  
+# This is the correct permalink using the 'item' alias
+permalink: "products/{{ item.fileSlug }}/"
+
+eleventyComputed:
+  # This sets the <title> tag for each page
+  title: "{{ item.data.title }}" 
 ---
 
-<div class="container section">
-    
-    <h2>Our Products</h2>
-
-    <div class="product-grid">
-        
-        {% for item in collections.products %}
-        <a href="/products/{{ item.fileSlug }}/" class="product-card">
-            
-            <div class="product-card-image-wrapper">
-                <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
-            </div>
-            
-            <div class="product-card-name" style="text-align: center; padding: 15px 0;">
-                
-                <!-- Title uses Libre Baskerville -->
-                <div class="product-card-title" style="text-transform: uppercase;">
-                    {{ item.data.title }}
-                </div>
-                
-                {% if item.data.category %}
-                <div class="product-card-category" style="margin-top: 5px; color: var(--color-text); font-weight: 300; text-transform: none;">
-                    {{ item.data.category }}
-                </div>
-                {% endif %}
-                
-                {% if item.data.price %}
-                <div class="product-card-price" style="margin-top: 10px;">
-                    ₹{{ item.data.price }}
-                </div>
-                {% endif %}
-                
-            </div>
-        </a>
-        {% endfor %}
-
-        {% if collections.products.size == 0 %}
-            <p class='empty-gallery-message' style="position: static; transform: none; color: var(--color-text);">
-                No products found. Please check back soon.
-            </p>
-        {% endif %}
-    </div>
-</div>
+{% include product-detail-content.liquid %}
