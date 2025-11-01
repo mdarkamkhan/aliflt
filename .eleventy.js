@@ -10,18 +10,13 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy("uploads");
     eleventyConfig.addPassthroughCopy("admin");
     eleventyConfig.addPassthroughCopy("favicon.png");
-    // We don't need to copy 'products' or 'services' folders
-    // as Eleventy is processing them.
 
     // --- Collections ---
-    // 💡 FIX: We now find items by their "tag"
-    // This works with the new products/products.json file.
+    // These collections find items by their "tag" (as defined in the front matter of your .md files)
     eleventyConfig.addCollection("products", function(collectionApi) {
         return collectionApi.getFilteredByTag("product");
     });
     
-    // We will do the same for services, works, and offers for consistency
-    // (You will need to create .json files in those folders too)
     eleventyConfig.addCollection("services", function(collectionApi) {
         return collectionApi.getFilteredByTag("service");
     });
@@ -42,3 +37,4 @@ module.exports = function(eleventyConfig) {
         }
     };
 };
+
