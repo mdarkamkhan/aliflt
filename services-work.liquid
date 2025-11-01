@@ -12,7 +12,8 @@ permalink: /services-works/
         {% assign combined_list = collections.services | concat: collections.works %}
         
         {% for item in combined_list %}
-        <a href="{{ item.url | url }}" class="product-card">
+        <!-- FIX: Using fileSlug explicitly to prevent undefined URL conflicts -->
+        <a href="/services-works/{{ item.fileSlug }}/" class="product-card">
             <div class="product-card-image-wrapper">
                 <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
             </div>
@@ -46,3 +47,4 @@ permalink: /services-works/
         {% endif %}
     </div>
 </div>
+
