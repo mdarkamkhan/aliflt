@@ -31,198 +31,147 @@
     <!-- STYLES & FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Mukti&display=swap" rel="stylesheet">
+    <!-- 💡 NEW LUXURY FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600&family=Libre+Baskerville:ital@0;1&family=Inter:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 
     <!-- INLINE STYLES -->
     <style>
-        .nav-logo { font-family: 'Mukti', sans-serif; }
+        /* 💡 NEW FONT SETUP */
+        :root {
+            --font-heading: 'Bodoni Moda', serif;
+            --font-subheading: 'Libre Baskerville', serif;
+            --font-body: 'Inter', sans-serif;
+            
+            /* 💡 NEW LUXURY PALETTE */
+            --color-background: #FFFFFF;
+            --color-text: #0A0A0A;
+            --color-accent: #E5E5E5; /* Soft Gray/Beige for dividers */
+            --color-primary-button: #0A0A0A;
+            --spacing-large: 60px; /* Increased vertical padding */
+            --spacing-medium: 40px;
+        }
+
+        /* Nav Logo uses Heading Font */
+        .nav-logo { 
+            font-family: var(--font-heading); 
+            font-size: 2.5rem; /* Larger, bolder logo */
+            font-weight: 600;
+        }
+        
+        /* 💡 Subtle Hamburger Icon (Prada style) */
+        .nav-toggle-btn span {
+            width: 100%;
+            height: 2px !important; 
+            background: var(--color-text);
+            border-radius: 0; /* Sharp corners */
+            transition: all 0.3s ease;
+            margin: 2px 0; 
+        }
+        .sidebar-open .nav-toggle-btn span:nth-child(1) { transform: translateY(4px) rotate(45deg) !important; }
+        .sidebar-open .nav-toggle-btn span:nth-child(2) { opacity: 0; }
+        .sidebar-open .nav-toggle-btn span:nth-child(3) { transform: translateY(-4px) rotate(-45deg) !important; }
+
         
         /* === NEW PRADA-STYLE FOOTER === */
         .prada-footer {
-            background-color: #f4f4f4;
-            color: #333;
-            padding: 40px 0 0 0;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            padding: var(--spacing-large) 0 0 0;
             text-align: center;
-            border-top: 1px solid #e0e0e0;
-            /* Changed to sans-serif as requested */
-            font-family: 'Poppins', sans-serif; 
+            border-top: 1px solid var(--color-accent);
+            font-family: var(--font-body); 
         }
         .prada-footer-container {
-            max-width: 960px;
+            max-width: 1100px; /* Wider container for luxury feel */
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 40px;
         }
         
         /* 1. Social Media Icons (Footer) */
         .footer-socials-prada {
             display: flex;
             justify-content: center;
-            gap: 25px; /* Clean, minimal spacing */
-            margin-bottom: 30px;
+            gap: 40px; /* Wider spacing */
+            margin-bottom: var(--spacing-medium);
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--color-accent);
         }
-        .footer-socials-prada a {
-            color: #333;
-            text-decoration: none;
-            /* Enforce minimal size */
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-        }
+        .footer-socials-prada a { color: var(--color-text); }
         .footer-socials-prada a svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-            transition: color 0.3s ease;
+            width: 20px; /* Slightly smaller icons */
+            height: 20px;
         }
-        .footer-socials-prada a:hover {
-            color: #000;
-        }
+        .footer-socials-prada a:hover { color: #555; }
 
         /* 2. Collapsible Sections (About, Reviews) */
         .footer-collapsible {
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid var(--color-accent);
         }
         .footer-collapsible summary {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            cursor: pointer;
-            list-style: none;
-            font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding: 25px 0;
+            font-size: 1.1rem;
+            font-family: var(--font-subheading);
+            letter-spacing: 1px;
         }
-        .footer-collapsible summary::-webkit-details-marker {
-            display: none;
-        }
-        /* Existing plus/minus icon style */
-        .footer-collapsible .icon-plus-minus {
-            position: relative;
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-        }
+        /* Icon adjustment */
         .footer-collapsible .icon-plus-minus::before,
         .footer-collapsible .icon-plus-minus::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            background-color: #333;
-            transition: transform 0.3s ease-out;
-        }
-        .footer-collapsible .icon-plus-minus::before {
-            height: 2px;
-            width: 100%;
-            transform: translate(-50%, -50%);
-        }
-        .footer-collapsible .icon-plus-minus::after {
-            height: 100%;
-            width: 2px;
-            transform: translate(-50%, -50%);
-        }
-        .footer-collapsible[open] .icon-plus-minus::after {
-            transform: translate(-50%, -50%) rotate(90deg);
+            background-color: var(--color-text);
         }
         /* Collapsible Content Area */
-        .footer-collapsible-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.4s ease-in-out;
-            text-align: left;
-        }
-        .footer-collapsible[open] .footer-collapsible-content {
-            grid-template-rows: 1fr;
-        }
         .footer-collapsible-content > div {
-            overflow: hidden;
-            padding-bottom: 25px;
+            padding-bottom: 30px;
             font-size: 0.95rem;
-            line-height: 1.6;
-            color: #555;
-            /* Ensure text uses sans-serif */
-            font-family: 'Poppins', sans-serif;
+            line-height: 1.8; /* Generous line height */
+            color: var(--color-text);
+            font-weight: 300;
         }
 
         /* 3. Static Contact Box */
         .footer-static-box {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 25px 0;
-            border-bottom: 1px solid #e0e0e0;
-            text-align: left;
-            text-decoration: none;
-            color: #333;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--color-accent);
         }
         .footer-static-box svg {
-            width: 22px;
-            height: 22px;
-            flex-shrink: 0;
-            /* Lucide Map Pin for Store Locator */
-            stroke: #333; 
+            stroke: var(--color-text); 
         }
         .footer-static-box-content {
-            font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            /* Ensure text uses sans-serif */
-            font-family: 'Poppins', sans-serif;
-        }
-        .footer-static-box-content a {
-            color: #333;
-            text-decoration: none;
+            font-size: 1.1rem;
+            font-family: var(--font-subheading);
+            letter-spacing: 1px;
+            color: var(--color-text);
+            font-weight: 400;
         }
         .footer-static-box-content p {
-            margin: 5px 0 0 0;
+            margin: 8px 0 0 0;
             font-size: 0.9rem;
-            font-weight: normal;
-            color: #555;
-            text-transform: none;
-            letter-spacing: 0;
-            /* Ensure text uses sans-serif */
-            font-family: 'Poppins', sans-serif;
+            font-family: var(--font-body);
+            color: var(--color-text);
+            font-weight: 300;
+            line-height: 1.6;
         }
 
         /* 4. Copyright */
         .footer-copyright-prada {
-            text-align: center;
-            padding: 30px 0;
-            color: #777;
-            font-size: 0.9rem;
-            /* Ensure text uses sans-serif */
-            font-family: 'Poppins', sans-serif;
+            padding: 40px 0;
+            color: var(--color-text);
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 1px;
         }
         
-        /* 💡 FIX: Sidebar Socials Sizing and Positioning */
-        /* This list is needed to align and size the icons correctly in the sidebar */
-        .sidebar-socials .footer-socials { 
-            gap: 20px; 
-            justify-content: flex-start; /* Align left */
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        /* Sidebar Link Styling for elegance */
+        .sidebar-links a {
+            font-family: var(--font-subheading);
+            font-weight: normal;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
-        .sidebar-socials .footer-socials svg {
-            width: 24px; /* Reset width to standard size */
-            height: 24px;
-            fill: currentColor;
-            color: #333; /* Ensure color is dark */
-            transition: color 0.3s ease;
+        .sidebar-socials h3 {
+            font-family: var(--font-subheading);
         }
-        .sidebar-socials .footer-socials a:hover svg {
-            color: #000;
-        }
-
-        /* * REMOVED old footer styles 
-         * REMOVED old .collapsible-section styles 
-        */
     </style>
     <script>
       if (window.location.hash.includes("invite_token") || window.location.hash.includes("recovery_token")) {
@@ -245,7 +194,7 @@
                 </svg>
                 <span class="cart-count" id="cartCount">0</span>
             </a>
-            <!-- This is your existing hamburger icon button. It works with your style.css -->
+            <!-- Hamburger button uses the corrected internal spacing/height via CSS -->
             <button class="nav-toggle-btn" id="navToggleBtn" aria-label="Open menu">
                 <span></span>
                 <span></span>
@@ -273,7 +222,6 @@
         </ul>
         <div class="sidebar-socials">
             <h3>Follow us</h3>
-            <!-- FIXED: Social icons now inherit size and color -->
             <ul class="footer-socials">
                 <li><a href="https://www.instagram.com/alif_lstr?igsh=MWRsY3ZkcWJjdDFuNw==" target="_blank" rel="noopener" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669-4.771 4.919 4.919 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.197-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a></li>
                 <li><a href="https://wa.me/7250470009" target="_blank" rel="noopener" aria-label="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.04 2.01c-5.523 0-10 4.477-10 10 0 1.75.443 3.495 1.304 5.004l-1.348 4.925 5.034-1.325c1.482.797 3.166 1.22 4.91 1.22h.001c5.523 0 10-4.477 10-10s-4.477-10-10-10zm0 18.158c-1.614 0-3.21-.418-4.66-1.22l-.33-.195-3.47 0.91.928-3.385-.214-.345c-.86-1.38-1.32-2.96-1.32-4.58 0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.51-6.14c-.24-.12-.1.12-1.42-.59-.12-.06-.24-.12-.36-.12-.12 0-.24.06-.36.12-.12.06-1.18.59-1.42.59-.24 0-.48-.12-.6-.24-.12-.12-.59-.24-1.18-.7-.6-.5-1.06-1.18-1.24-1.36-.12-.12-.24-.3-.12-.48.12-.12.24-.24.36-.36.12-.12.18-.12.24-.24.06-.06.12-.12.12-.24 0-.12-.06-.24-.12-.24-.06-.06-1.42-3.39-1.94-3.95-.52-.52-1.06-.46-1.24-.46-.12 0-.3 0-.48.06-.18.06-.42.12-.6.24-.24.12-.48.24-.66.42-.18.18-.36.36-.48.59-.18.24-.3.48-.42.72-.12.24-.18.48-.18.78 0 .3.06.6.12.9.12.3.24.6.42.9.18.3.42.6.66.9.24.3.54.66.84 1.02.3.36.66.72 1.02 1.08.36.36.78.72 1.2 1.08.42.36.9.66 1.42.96.52.3 1.08.6 1.68.78.6.18 1.14.3 1.74.3.6 0 1.14-.12 1.62-.36.48-.24 1.42-1.18 1.68-1.62.24-.42.24-.78.18-1.02-.06-.24-.12-.48-.24-.6zm0 0"/></svg></a></li>
@@ -331,8 +279,8 @@
                                 Write a Review on Google
                             </a>
                         </div>
-                        <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 30px;">
-                            <h3 style="text-align: center; color: #555;">What Our Clients Say</h3>
+                        <div style="margin-top: 40px; border-top: 1px solid var(--color-accent); padding-top: 30px;">
+                            <h3 style="text-align: center; color: var(--color-text); font-family: var(--font-subheading);">What Our Clients Say</h3>
                             <!-- Your existing Google Reviews widget -->
                             <script src="https://elfsightcdn.com/platform.js" async></script>
                             <div class="elfsight-app-2c83f037-ee5d-4d90-913e-2a5f353d7add" data-elfsight-app-lazy></div>
@@ -340,7 +288,8 @@
                     </div>
                 </div>
             </details>
-    <!-- 4. Contact (Static Box) -->
+    
+            <!-- 4. Contact (Static Box) -->
             <a href="/contact-us/" class="footer-static-box">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
