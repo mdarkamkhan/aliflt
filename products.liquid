@@ -4,47 +4,64 @@ title: Our Products
 permalink: /products/
 ---
 
-<div class="container section">
+<div class="container section fade-in-section">
     
+    <!-- 
+    ==================================================
+    ===== 💡 DEBUG BOX REMOVED ======================
+    ================================================== 
+    -->
+
     <h2>Our Products</h2>
 
     <div class="product-grid">
         
         {% for item in collections.products %}
+        <!-- This link is now correct -->
         <a href="/products/{{ item.fileSlug }}/" class="product-card">
             
             <div class="product-card-image-wrapper">
                 <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
             </div>
             
-            <div class="product-card-name" style="text-align: center; padding: 15px 0;">
+            <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
                 
-                <!-- Title uses Libre Baskerville -->
-                <div class="product-card-title" style="text-transform: uppercase;">
+                <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
                     {{ item.data.title }}
                 </div>
                 
-                {% if item.data.category %}
-                <div class="product-card-category" style="margin-top: 5px; color: var(--color-text); font-weight: 300; text-transform: none;">
-                    {{ item.data.category }}
-                </div>
-                {% endif %}
-                
                 {% if item.data.price %}
-                <div class="product-card-price" style="font-weight: 600; font-size: 1.1rem; margin-top: 10px; color: var(--color-text);">
+                <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
                     ₹{{ item.data.price }}
                 </div>
                 {% endif %}
                 
+                {% if item.data.category %}
+                <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+                    {{ item.data.category }}
+                </div>
+                {% endif %}
+                
+                {% if item.data.description %}
+                <details style="margin-top: 10px; font-size: 0.9rem; color: #555; line-height: 1.4;">
+                    <summary style="cursor: pointer; font-weight: 600; color: #333; font-size: 0.9rem; text-transform: none;">
+                        Description
+                    </summary>
+                    <p style="margin-top: 5px; margin-bottom: 0; font-weight: normal;">
+                        {{ item.data.description }}
+                    </p>
+                </details>
+                {% endif %}
+
             </div>
         </a>
         {% endfor %}
 
+        <!-- This 'if' statement is now correct -->
         {% if collections.products.size == 0 %}
-            <p class='empty-gallery-message' style="position: static; transform: none; color: var(--color-text);">
+            <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
                 No products found. Please check back soon.
             </p>
         {% endif %}
     </div>
 </div>
-
