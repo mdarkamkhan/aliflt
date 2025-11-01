@@ -6,7 +6,7 @@ permalink: /
 
 <!-- 
 ==================================================
-===== BANNER (AUTO-FRAMED LUXURY) ================
+===== BANNER (MOVED HERE FOR HOMEPAGE ONLY) ======
 ================================================== 
 -->
 <div id="top-banner">
@@ -15,13 +15,12 @@ permalink: /
         <div class="swapper-item {% if forloop.first %}active{% endif %}">
             <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
             <div class="banner-content">
-                <!-- Heading uses Bodoni Moda -->
-                <h2>{{ item.data.title }}</h2> 
+                <h2>{{ item.data.title }}</h2>
             </div>
         </div>
         {% endfor %}
         {% if collections.offers.length == 0 %}
-            <p class='empty-gallery-message' style="font-family: var(--font-body); color: var(--color-text);">Loading offers...</p>
+            <p class='empty-gallery-message'>Loading offers...</p>
         {% endif %}
     </div>
 </div>
@@ -82,3 +81,52 @@ permalink: /
         {% endif %}
     </div>
 </a>
+
+
+<!-- 
+==================================
+  COLLAPSIBLE REVIEWS SECTION
+==================================
+-->
+<div class="container">
+    
+    <!-- 
+    ==================================================
+    ===== 💡 VISIBILITY FIX ==========================
+    ================================================== 
+    REMOVED "fade-in-section" class from this <details> tag
+    to make the reviews visible on page load.
+    -->
+    <details id="reviews" class="section collapsible-section fade-in-section">
+        
+        <!-- The clickable <summary> (header) -->
+        <summary class="collapsible-summary">
+            <h2>Client Reviews</h2>
+            <div class="icon-plus-minus"></div>
+        </summary>
+        
+        <!-- This wrapper holds all your original content -->
+        <div class="collapsible-content">
+            <div> <!-- This inner div is required for the animation -->
+                <p style="text-align: center; margin-bottom: 25px;">Did you love our service? Help others find us by leaving a review!</p>
+                
+                <div class="cta-buttons">
+                    <a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" class="review-btn">
+                        Write a Review on Google
+                    </a>
+                </div>
+                
+                <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 30px;">
+                    <h3 style="text-align: center; color: #555;">What Our Clients Say</h3>
+                    
+                    <!-- Your existing Google Reviews widget -->
+                    <script src="https://elfsightcdn.com/platform.js" async></script>
+                    <div class="elfsight-app-2c83f037-ee5d-4d90-913e-2a5f353d7add" data-elfsight-app-lazy></div>
+                </div>
+            </div>
+        </div>
+        <!-- End of original content -->
+
+    </details>
+</div>
+
