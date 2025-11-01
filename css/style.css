@@ -625,4 +625,3 @@ details[open] .collapsible-content {
 #cart-summary .btn-buy { width: 100%; }
 @media (min-width: 768px) { #cart-summary .btn-buy { width: auto; min-width: 300px; } }
 
-    
