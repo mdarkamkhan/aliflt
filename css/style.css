@@ -1,4 +1,3 @@
-/* css/style.css */
 /* All your site styles */
 
 :root {
@@ -13,7 +12,8 @@ body {
     padding: 0;
     color: #333;
     background-color: #f4f4f4;
-    padding-bottom: 80px;
+    /* Adjusted padding to account for fixed header/footer if needed, but keeping existing for compatibility */
+    padding-bottom: 80px; 
     padding-top: 70px; 
 }
 
@@ -135,21 +135,6 @@ footer {
     min-height: 450px; 
     object-fit: cover;
 }
-.swapper-item .product-label, .swapper-item .service-details, .swapper-item .work-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 10px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    font-size: 0.9em;
-    text-transform: capitalize;
-    box-sizing: border-box;
-    text-align: center;
-}
 .swapper-nav {
     position: absolute;
     top: 50%;
@@ -182,24 +167,32 @@ footer {
     color: #777;
 }
 
-/* BANNER STYLES */
+/* 💡 FIX 2: BANNER STYLES - AUTO-FRAME */
 #top-banner {
     position: relative;
     width: 100%;
-    height: 100vh; /* Full screen height */
+    height: auto; /* Allow height to adapt */
+    min-height: 80vh; /* Minimum large size */
     overflow: hidden;
 }
 #top-banner .swapper-container {
     width: 100%;
-    height: 100%; 
+    height: auto; /* Allow container height to fit content */
     max-width: none;
-    min-height: auto; 
+    min-height: 80vh; /* Match min-height of parent */
+}
+#top-banner .swapper-item {
+    position: relative; /* Use relative to define natural height */
+    padding-bottom: 0;
+    height: auto; 
+    min-height: inherit; /* Inherit min-height */
 }
 #top-banner .swapper-item img {
     width: 100%;
-    height: 100%; /* Fills the 100vh container */
+    height: auto; /* IMPORTANT: Allows auto-framing based on aspect ratio */
+    display: block; 
     object-fit: cover; 
-    min-height: 0; 
+    min-height: 80vh; /* Keep images large */
 }
 .banner-content {
     position: absolute;
@@ -216,7 +209,11 @@ footer {
 }
 @media (max-width: 900px) {
     #top-banner {
-        height: 100vh;
+        min-height: 70vh; /* Adjust min-height for mobile screens */
+    }
+    #top-banner .swapper-container,
+    #top-banner .swapper-item img {
+        min-height: 70vh;
     }
     .banner-content {
          bottom: 15vh;
@@ -415,6 +412,8 @@ footer {
 
 
 /* COLLAPSIBLE REVIEWS SECTION */
+/* NOTE: The collapsible CSS is primarily in base.liquid now, 
+         but keeping this here to respect the original file content. */
 .collapsible-section { padding: 0; border: 1px solid #e0e0e0; }
 .collapsible-summary {
     display: flex;
@@ -492,6 +491,7 @@ details[open] .collapsible-content {
     z-index: 1004;
 }
 .nav-toggle-btn span {
+    /* These styles are overridden in base.liquid for the subtle Prada style */
     width: 100%;
     height: 3px;
     background: #000;
