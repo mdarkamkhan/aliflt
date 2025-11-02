@@ -11,6 +11,8 @@ Product Information:
   number_of_pieces: "2"
   work: Moti
   ideal_for: Blouse/dupatta/suit
+  fabric: ---
+  pattern: ---
 Delivery Details:
   delivery_charges: ₹20
   delivery_within: 2 days
