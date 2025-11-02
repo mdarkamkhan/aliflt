@@ -567,13 +567,13 @@ details[open] .collapsible-content {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    width: 32px;
-    height: 28px;
+    width: 36px;
+    height: 32px;
     z-index: 1004;
 }
 .nav-toggle-btn span {
     width: 100%;
-    height: 3px; /* Thinner lines */
+    height: 2px; /* Thinner lines */
     background: #000;
     border-radius: 0;
     transition: all 0.3s ease;
