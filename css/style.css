@@ -738,22 +738,13 @@ details[open] .collapsible-content {
     letter-spacing: 1.5px;
 }
 .product-detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-.product-detail-description h3 { 
-    border-bottom: 1px solid var(--border-color); 
-    padding-bottom: 5px; 
-    margin-bottom: 10px; 
-    font-family: var(--font-accent);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-size: 1.2rem;
-}
-.product-detail-description p { font-size: 1rem; line-height: 1.7; color: #555; font-weight: 300; }
+
+/* 💡 ALL OLD DESCRIPTION/SPEC STYLES REMOVED FROM HERE */
+/* .product-detail-description h3, p, .product-specs-container, etc. are gone */
 
 /* 💡 UPDATED CART ITEM STYLES */
 .cart-item { 
     display: grid; 
-    /* 💡 Updated grid: Image | Info | Controls */
     grid-template-columns: 80px 1fr auto; 
     gap: 15px; 
     align-items: center; 
@@ -771,7 +762,6 @@ details[open] .collapsible-content {
 .cart-item-controls {
     text-align: right;
 }
-/* 💡 REMOVED old .cart-item-remove-btn style */
 
 #cart-summary { 
     margin-top: 30px; 
@@ -788,78 +778,23 @@ details[open] .collapsible-content {
 #cart-summary .btn-buy { width: 100%; }
 @media (min-width: 768px) { #cart-summary .btn-buy { width: auto; min-width: 300px; } }
 
-/* ==================================================
-===== 💡 PRODUCT DETAIL SPECS ===========
-================================================== */
-.product-specs-container {
-    margin-top: 30px;
-    border-top: 1px solid var(--border-color);
-}
-.product-spec-section {
-    margin-top: 25px;
-}
-.product-spec-section h3 {
-    font-family: var(--font-accent); /* Cormorant Garamond */
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-size: 1.2rem;
-    margin-top: 0;
-    margin-bottom: 15px;
-    border-bottom: none; /* Override any h3 defaults */
-    padding-bottom: 0;
-}
-.spec-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border-color);
-    font-family: var(--font-body); /* Poppins */
-    font-size: 1rem;
-}
-.spec-row:last-child {
-    border-bottom: none;
-}
-.spec-label {
-    font-weight: 400; /* Poppins Regular */
-    color: #333;
-    padding-right: 15px;
-}
-.spec-value {
-    font-weight: 300; /* Poppins Light */
-    color: #000;
-    text-align: right;
-    text-transform: capitalize;
-}
-
-/* 💡 NEW RULE: This adds "----" to empty fields */
-.spec-value:empty::after {
-    content: "----";
-    color: #999;
-    text-transform: none;
-}
-
-
-/* ==================================================
-===== 💡 CART QUANTITY CONTROLS (MODIFIED) ========
-================================================== */
+/* 💡 UPDATED CART QUANTITY CONTROLS */
 .cart-item-quantity {
     font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 300;
     color: #333;
-    margin-top: 8px; /* Add some space above */
-    display: flex; /* 💡 Make it a flex row */
-    align-items: center; /* 💡 Vertically center items */
+    margin-top: 8px; 
+    display: flex; 
+    align-items: center; 
 }
 .cart-item-qty-text {
     margin: 0 10px;
-    font-weight: 400; /* Make 'Qty: 1' slightly stronger */
-    min-width: 50px; /* 💡 Give it space so it doesn't jump */
+    font-weight: 400; 
+    min-width: 50px; 
     text-align: center;
 }
-.cart-item-qty-btn { /* 💡 Renamed from .cart-item-increase-btn */
+.cart-item-qty-btn { 
     background: none;
     border: 1px solid #000;
     color: #000;
@@ -869,16 +804,14 @@ details[open] .collapsible-content {
     padding: 2px 8px;
     font-size: 0.9rem;
     transition: all 0.3s ease;
-    border-radius: 0; /* Match theme */
+    border-radius: 0; 
 }
 .cart-item-qty-btn:hover {
     background: #000;
     color: #fff;
 }
 
-/* ==================================================
-===== 💡 NEW DELIVERY PROMO STYLES ===========
-================================================== */
+/* 💡 DELIVERY PROMO STYLES */
 .product-delivery-promo {
     font-family: var(--font-body);
     font-size: 0.9rem;
@@ -921,9 +854,7 @@ details[open] .collapsible-content {
     background: #006400; /* Dark, elegant green */
 }
 
-/* ==================================================
-===== 💡 NEW CONFIRMATION MODAL STYLES ========
-================================================== */
+/* 💡 CONFIRMATION MODAL STYLES */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -959,72 +890,103 @@ details[open] .collapsible-content {
     grid-template-columns: 1fr 1fr;
     gap: 15px;
 }
-/* --- Collapsible Product Details --- */
+/* Modal buttons use the existing .btn-cart and .btn-buy styles */
 
-/* Style the main <details> container */
-.collapsible-section {
-    border-bottom: 1px solid var(--border-color); /* Uses your existing variable */
+
+/* ==================================================
+===== 💡 NEW PRADA-STYLE ACCORDION ===========
+================================================== */
+.product-accordion-container {
+    width: 100%;
+    background: var(--bg-color);
+    margin-top: 20px; /* Space from the grid above */
 }
 
-/* Remove default marker from summary */
-.collapsible-summary::-webkit-details-marker {
-    display: none;
+.accordion-item {
+    border-top: 1px solid var(--border-color);
+}
+.accordion-item:last-child {
+    border-bottom: 1px solid var(--border-color);
 }
 
-/* Style the clickable <summary> bar */
-.collapsible-summary {
+.accordion-summary {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 0;
+    padding: 20px 25px; /* Same padding as review section */
     cursor: pointer;
-    list-style: none; /* Removes the default triangle/marker */
+    list-style: none; /* Remove default marker */
+}
+.accordion-summary::-webkit-details-marker { 
+    display: none; 
 }
 
-/* Style the <h3> inside the summary */
-.collapsible-summary h3 {
-    /* Uses your existing .product-spec-section h3 styles */
-    font-family: var(--font-accent); 
+.accordion-heading {
+    margin: 0;
+    font-family: var(--font-accent); /* Cormorant Garamond */
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     font-size: 1.2rem;
-    margin: 0; /* Remove default margins */
-    border-bottom: none; 
-    padding-bottom: 0;
 }
 
-/* Style the '+' icon */
-.collapsible-icon {
+.accordion-caret {
+    display: inline-block;
+    font-family: var(--font-heading);
     font-size: 1.5rem;
-    font-weight: 300;
+    line-height: 1;
+    transform: rotate(0deg); /* Start pointing up */
+    transition: transform 0.4s ease;
+}
+
+/* 💡 This rotates the caret when the accordion is open */
+details[open] > .accordion-summary .accordion-caret {
+    transform: rotate(180deg);
+}
+
+/* 💡 This is the smooth-slide animation */
+.accordion-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease-in-out;
+}
+details[open] > .accordion-content {
+    grid-template-rows: 1fr;
+}
+.accordion-content > div {
+    overflow: hidden;
+    padding: 0 25px 30px 25px; /* Padding for the content */
+}
+
+/* 💡 Styles for the content *inside* the accordion */
+.accordion-description-text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
     color: #555;
-    transition: transform 0.2s ease; /* Smooth rotation */
+    font-weight: 300;
+    margin: 0;
 }
 
-/* Style the content box that slides open */
-.collapsible-content {
-    padding-bottom: 16px;
-    /* This contains your existing .spec-row divs */
+.spec-row-wrapper {
+    max-width: 960px; /* Optional: constrain width */
 }
 
-/* --- State changes when open --- */
-
-/* Rotate the '+' icon to an 'x' when the section is open */
-.collapsible-section[open] .collapsible-icon {
-    transform: rotate(45deg);
-}
-
-/* Your existing .spec-row styles will apply perfectly here */
-/* These are just here to confirm they are part of the design */
+/* 💡 Re-adding spec-row styles for inside the accordion */
 .spec-row {
     display: flex;
     justify-content: space-between;
-    padding: 8px 0;
-    border-top: 1px solid #f5f5f5; /* Light line for each spec */
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-family: var(--font-body); /* Poppins */
+    font-size: 1rem;
 }
 .spec-row:first-child {
-    border-top: none;
+    padding-top: 0;
+}
+.spec-row:last-child {
+    border-bottom: none;
 }
 .spec-label {
     font-weight: 400; /* Poppins Regular */
@@ -1036,9 +998,4 @@ details[open] .collapsible-content {
     color: #000;
     text-align: right;
     text-transform: capitalize;
-}
-.spec-value:empty::after {
-    content: "----";
-    color: #999;
-    text-transform: none;
 }
