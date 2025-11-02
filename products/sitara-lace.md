@@ -12,6 +12,7 @@ Product Information:
   fabric: Net
   work: Jari
   ideal_for: Lehanga/suit/frock/gown
+  pattern: "Zig zag "
 Delivery Details:
   delivery_charges: "20"
   delivery_within: 2 days
