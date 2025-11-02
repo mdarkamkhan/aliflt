@@ -17,12 +17,10 @@ eleventyComputed:
     
     <div class="product-detail-grid">
         
-        <!-- Column 1: Image -->
         <div class="product-detail-image">
             <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
         </div>
         
-        <!-- Column 2: Info -->
         <div class="product-detail-info">
             <h1 class="product-detail-title">{{ item.data.title }}</h1>
             
@@ -34,12 +32,10 @@ eleventyComputed:
                 <span class="product-detail-category">{{ item.data.category }}</span>
             {% endif %}
 
-            <!-- 💡 NEW: Static Delivery Promo Text -->
             <div class="product-delivery-promo">
                 Free delivery on orders above ₹199
             </div>
 
-            <!-- Add to Cart & Buy Now Buttons -->
             <div class="product-detail-actions">
                 <button class="btn-cart" id="addToCartBtn" 
                         data-product-id="{{ item.fileSlug }}" 
@@ -63,99 +59,100 @@ eleventyComputed:
                 </div>
             {% endif %}
 
-            <!-- Product Information & Delivery Details -->
             <div class="product-specs-container">
 
-                <!-- Section 1: Product Information -->
+                {% assign info = item.data.product_information %}
+                {% assign delivery = item.data.delivery_details %}
+
+                {% if info %}
                 <div class="product-spec-section">
                     <h3>Product Information</h3>
                     
-                    {% if item.data.size %}
+                    {% if info.size %}
                     <div class="spec-row">
                         <span class="spec-label">Size</span>
-                        <span class="spec-value">{{ item.data.size }}</span>
+                        <span class="spec-value">{{ info.size }}</span>
                     </div>
                     {% endif %}
                     
-                    {% if item.data.colour %}
+                    {% if info.colour %}
                     <div class="spec-row">
                         <span class="spec-label">Colour</span>
-                        <span class="spec-value">{{ item.data.colour }}</span>
+                        <span class="spec-value">{{ info.colour }}</span>
                     </div>
                     {% endif %}
                     
-                    {% if item.data.number_of_pieces %}
+                    {% if info.number_of_pieces %}
                     <div class="spec-row">
                         <span class="spec-label">Number of Pieces/meter</span>
-                        <span class="spec-value">{{ item.data.number_of_pieces }}</span>
+                        <span class="spec-value">{{ info.number_of_pieces }}</span>
                     </div>
                     {% endif %}
                     
-                    {% if item.data.fabric %}
+                    {% if info.fabric %}
                     <div class="spec-row">
                         <span class="spec-label">Fabric</span>
-                        <span class="spec-value">{{ item.data.fabric }}</span>
+                        <span class="spec-value">{{ info.fabric }}</span>
                     </div>
                     {% endif %}
                     
-                    {% if item.data.work %}
+                    {% if info.work %}
                     <div class="spec-row">
                         <span class="spec-label">Work</span>
-                        <span class="spec-value">{{ item.data.work }}</span>
+                        <span class="spec-value">{{ info.work }}</span>
                     </div>
                     {% endif %}
                     
-                    {% if item.data.pattern %}
+                    {% if info.pattern %}
                     <div class="spec-row">
                         <span class="spec-label">Pattern</span>
-                        <span class="spec-value">{{ item.data.pattern }}</span>
+                        <span class="spec-value">{{ info.pattern }}</span>
                     </div>
                     {% endif %}
                     
-                    {% if item.data.ideal_for %}
+                    {% if info.ideal_for %}
                     <div class="spec-row">
                         <span class="spec-label">Ideal For</span>
-                        <span class="spec-value">{{ item.data.ideal_for }}</span>
+                        <span class="spec-value">{{ info.ideal_for }}</span>
                     </div>
                     {% endif %}
                 </div>
+                {% endif %}
 
-                <!-- Section 2: Delivery Details -->
+                {% if delivery %}
                 <div class="product-spec-section">
                     <h3>Delivery Details</h3>
                     
-                    {% if item.data.delivery_charges %}
+                    {% if delivery.delivery_charges %}
                     <div class="spec-row">
                         <span class="spec-label">Delivery Charges</span>
-                        <span class="spec-value">{{ item.data.delivery_charges }}</span>
+                        <span class="spec-value">{{ delivery.delivery_charges }}</span>
                     </div>
                     {% endif %}
                     
-                    {% if item.data.delivery_within %}
+                    {% if delivery.delivery_within %}
                     <div class="spec-row">
                         <span class="spec-label">Delivery within</span>
-                        <span class="spec-value">{{ item.data.delivery_within }}</span>
+                        <span class="spec-value">{{ delivery.delivery_within }}</span>
                     </div>
                     {% endif %}
                     
-                    {% if item.data.payment_type %}
+                    {% if delivery.payment_type %}
                     <div class="spec-row">
                         <span class="spec-label">Payment Type</span>
-                        <span class="spec-value">{{ item.data.payment_type }}</span>
+                        <span class="spec-value">{{ delivery.payment_type }}</span>
                     </div>
                     {% endif %}
                     
-                    {% if item.data.return_policy %}
+                    {% if delivery.return_policy %}
                     <div class="spec-row">
                         <span class="spec-label">Return Policy</span>
-                        <span class="spec-value">{{ item.data.return_policy }}</span>
+                        <span class="spec-value">{{ delivery.return_policy }}</span>
                     </div>
                     {% endif %}
                 </div>
+                {% endif %}
             </div>
-            <!-- END: New Sections -->
-
-        </div>
+            </div>
     </div>
 </div>
-
