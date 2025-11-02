@@ -17,10 +17,12 @@ eleventyComputed:
     
     <div class="product-detail-grid">
         
+        <!-- Column 1: Image -->
         <div class="product-detail-image">
             <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
         </div>
         
+        <!-- Column 2: Info -->
         <div class="product-detail-info">
             <h1 class="product-detail-title">{{ item.data.title }}</h1>
             
@@ -32,6 +34,12 @@ eleventyComputed:
                 <span class="product-detail-category">{{ item.data.category }}</span>
             {% endif %}
 
+            <!-- 💡 NEW: Static Delivery Promo Text -->
+            <div class="product-delivery-promo">
+                Free delivery on orders above ₹199
+            </div>
+
+            <!-- Add to Cart & Buy Now Buttons -->
             <div class="product-detail-actions">
                 <button class="btn-cart" id="addToCartBtn" 
                         data-product-id="{{ item.fileSlug }}" 
@@ -55,8 +63,10 @@ eleventyComputed:
                 </div>
             {% endif %}
 
+            <!-- Product Information & Delivery Details -->
             <div class="product-specs-container">
 
+                <!-- Section 1: Product Information -->
                 <div class="product-spec-section">
                     <h3>Product Information</h3>
                     
@@ -110,6 +120,7 @@ eleventyComputed:
                     {% endif %}
                 </div>
 
+                <!-- Section 2: Delivery Details -->
                 <div class="product-spec-section">
                     <h3>Delivery Details</h3>
                     
@@ -142,6 +153,9 @@ eleventyComputed:
                     {% endif %}
                 </div>
             </div>
-            </div>
+            <!-- END: New Sections -->
+
+        </div>
     </div>
 </div>
+
