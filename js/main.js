@@ -26,8 +26,7 @@ const cart = {
     // Add an item
     add(id, title, price, image) {
         if (this.items[id]) {
-            // Already in cart, do nothing (or change to qty++)
-            // Note: product page logic handles this, cart page uses increaseQuantity
+            // Already in cart, do nothing (product page logic handles this)
         } else {
             this.items[id] = { title, price, image, qty: 1 };
         }
@@ -42,17 +41,24 @@ const cart = {
         this.save();
     },
 
-    // 💡 NEW: Increase quantity
+    // Increase quantity
     increaseQuantity(id) {
         if (this.items[id]) {
             this.items[id].qty++;
         }
         this.save();
     },
+
+    // 💡 NEW: Decrease quantity
+    decreaseQuantity(id) {
+        if (this.items[id] && this.items[id].qty > 1) {
+            this.items[id].qty--;
+        }
+        this.save();
+    },
     
     // Get total items
     getTotalCount() {
-        // This now correctly counts total *quantity* not just unique items
         let count = 0;
         for (const id in this.items) {
             count += this.items[id].qty;
@@ -85,9 +91,8 @@ const cart = {
         for (const id in this.items) {
             const item = this.items[id];
             message += `*${item.title}*\n`;
-            message += `Qty: ${item.qty}\n`; // 💡 Added Qty to message
+            message += `Qty: ${item.qty}\n`;
             message += `Price: ₹${item.price} (each)\n`;
-            // Use window.location.origin to create an absolute URL
             message += `Image: ${window.location.origin}${item.image}\n\n`;
             total += item.price * item.qty;
         }
@@ -112,6 +117,7 @@ cart.load();
 ================================================== 
 */
 function initializeSwapper(swapperSelector, options = {}) {
+    // ... (This function is unchanged)
     const swapper = document.querySelector(swapperSelector);
     if (!swapper) return;
     const items = swapper.querySelectorAll('.swapper-item');
@@ -154,16 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSwapper('.services-swapper', { autoplay: 4000 });
     initializeSwapper('.works-swapper', { autoplay: 3000 });
 
-    /* ==================================================
-    ===== 💡 FADE-IN SCRIPT REMOVED ==================
-    ================================================== 
-    The IntersectionObserver scripts for .fade-in-section
-    and .product-card have been removed as they are no
-    longer needed with the new CSS.
-    */
-
     // --- SIDEBAR MENU LOGIC ---
     const navToggleBtn = document.getElementById('navToggleBtn');
+    // ... (This section is unchanged)
     const sidebarMenu = document.getElementById('sidebarMenu');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
@@ -195,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- PRODUCT DETAIL PAGE LOGIC ---
     const addToCartBtn = document.getElementById('addToCartBtn');
+    // ... (This section is unchanged)
     const buyNowBtn = document.getElementById('buyNowBtn');
     const whatsappNumber = '7488611845'; // Your WhatsApp number
     const whatsappBaseUrl = `https://wa.me/${whatsappNumber}?text=`;
@@ -239,6 +239,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    // 💡 --- NEW: Confirmation Modal Logic ---
+    const modal = document.getElementById('confirm-modal');
+    const modalMessage = document.getElementById('modal-message');
+    let modalCancel = document.getElementById('modal-cancel');
+    let modalConfirm = document.getElementById('modal-confirm');
+
+    function showConfirmationModal(message, onConfirm) {
+        if (!modal || !modalMessage) return;
+
+        modalMessage.textContent = message;
+        modal.style.display = 'flex';
+        
+        // --- This is crucial to prevent multiple listeners ---
+        // Clone and replace buttons to remove all old event listeners
+        let newCancel = modalCancel.cloneNode(true);
+        modalCancel.parentNode.replaceChild(newCancel, modalCancel);
+        modalCancel = newCancel;
+        
+        let newConfirm = modalConfirm.cloneNode(true);
+        modalConfirm.parentNode.replaceChild(newConfirm, modalConfirm);
+        modalConfirm = newConfirm;
+        // --- End of listener cleanup ---
+
+        modalCancel.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modalConfirm.addEventListener('click', () => {
+            onConfirm(); // Run the remove action
+            modal.style.display = 'none';
+        });
+    }
+    // 💡 --- End of Modal Logic ---
+
+
     // --- CART PAGE LOGIC ---
     const cartContainer = document.getElementById('cart-items-container');
     if (cartContainer) {
@@ -250,25 +285,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const cartItems = cart.items;
         const emptyMsg = document.getElementById('cart-empty-message');
         const cartSummary = document.getElementById('cart-summary');
-        const cartActions = document.getElementById('cart-actions'); // Get the new button container
+        const cartActions = document.getElementById('cart-actions');
         
+        const deliveryContainer = document.getElementById('delivery-progress-container');
+        const deliveryText = document.getElementById('delivery-progress-text');
+        const deliveryBarInner = document.getElementById('delivery-progress-bar-inner');
+
         cartContainer.innerHTML = ''; // Clear the cart display
         
         if (Object.keys(cartItems).length === 0) {
             emptyMsg.style.display = 'block';
             cartSummary.style.display = 'none';
-            cartActions.style.display = 'none'; // Hide actions if cart is empty
+            cartActions.style.display = 'none';
+            if (deliveryContainer) deliveryContainer.style.display = 'none';
         } else {
             emptyMsg.style.display = 'none';
             cartSummary.style.display = 'block';
-            cartActions.style.display = 'block'; // Show actions if cart has items
+            cartActions.style.display = 'block';
             
             for (const id in cartItems) {
                 const item = cartItems[id];
                 const itemEl = document.createElement('div');
                 itemEl.className = 'cart-item';
                 
-                // Updated innerHTML with quantity controls
+                // 💡 Updated innerHTML with new controls, removing the old 'Remove' button
                 itemEl.innerHTML = `
                     <div class="cart-item-image">
                         <img src="${item.image}" alt="${item.title}">
@@ -276,34 +316,62 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="cart-item-info">
                         <h4>${item.title}</h4>
                         <p>₹${item.price}</p>
+                    </div>
+                    <div class="cart-item-controls">
                         <div class="cart-item-quantity">
-                            <span>Qty: ${item.qty}</span>
-                            <button class="cart-item-increase-btn" data-increase-id="${id}">[+]</button>
+                            <button class="cart-item-qty-btn" data-id="${id}" data-action="decrease" aria-label="Decrease quantity">[-]</button>
+                            <span class="cart-item-qty-text">Qty: ${item.qty}</span>
+                            <button class="cart-item-qty-btn" data-id="${id}" data-action="increase" aria-label="Increase quantity">[+]</button>
                         </div>
                     </div>
-                    <button class="cart-item-remove-btn" data-remove-id="${id}">Remove</button>
                 `;
                 cartContainer.appendChild(itemEl);
             }
             
             // Update total price
-            document.getElementById('cart-total').textContent = `Total: ₹${cart.getTotalPrice()}`;
+            const currentTotal = parseFloat(cart.getTotalPrice());
+            document.getElementById('cart-total').textContent = `Total: ₹${currentTotal.toFixed(2)}`;
             
-            // Add listener for REMOVE buttons
-            document.querySelectorAll('.cart-item-remove-btn').forEach(btn => {
+            // Update Delivery Progress Logic
+            const freeDeliveryThreshold = 199;
+            if (deliveryContainer && deliveryText && deliveryBarInner) {
+                deliveryContainer.style.display = 'block';
+                
+                if (currentTotal >= freeDeliveryThreshold) {
+                    deliveryContainer.classList.add('is-unlocked');
+                    deliveryText.textContent = "You’ve unlocked FREE delivery!";
+                    deliveryBarInner.style.width = '100%';
+                } else {
+                    deliveryContainer.classList.remove('is-unlocked');
+                    const remaining = freeDeliveryThreshold - currentTotal;
+                    deliveryText.textContent = `Add ₹${remaining.toFixed(2)} more for FREE delivery!`;
+                    const progressPercent = (currentTotal / freeDeliveryThreshold) * 100;
+                    deliveryBarInner.style.width = `${progressPercent}%`;
+                }
+            }
+
+            // 💡 NEW: Add listeners for INCREASE/DECREASE buttons
+            document.querySelectorAll('.cart-item-qty-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    const removeId = btn.dataset.removeId;
-                    cart.remove(removeId);
-                    renderCartPage(); // Re-render the entire cart
-                });
-            });
-            
-            // Add listener for INCREASE buttons
-            document.querySelectorAll('.cart-item-increase-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const increaseId = btn.dataset.increaseId;
-                    cart.increaseQuantity(increaseId);
-                    renderCartPage(); // Re-render the entire cart
+                    const id = btn.dataset.id;
+                    const action = btn.dataset.action;
+
+                    if (action === 'increase') {
+                        cart.increaseQuantity(id);
+                        renderCartPage(); // Re-render
+                    } else if (action === 'decrease') {
+                        const item = cart.items[id];
+                        if (item.qty > 1) {
+                            cart.decreaseQuantity(id);
+                            renderCartPage(); // Re-render
+                        } else {
+                            // If quantity is 1, show confirmation
+                            showConfirmationModal(`Do you want to remove "${item.title}" from the cart?`, () => {
+                                cart.remove(id);
+                                renderCartPage(); // Re-render after removal
+                            });
+                        }
+                    }
                 });
             });
             
@@ -317,6 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Helper function to show a toast message
     function showToast(message) {
+        // ... (This function is unchanged)
         let toast = document.createElement('div');
         toast.className = 'toast-message';
         toast.textContent = message;
@@ -338,6 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- CHATBOT LOGIC ---
     const chatButton = document.getElementById('chat-button');
+    // ... (This whole chat logic section is unchanged)
     const chatWindow = document.getElementById('chat-window');
     const closeChat = document.getElementById('close-chat');
     const sendButton = document.getElementById('send-button');
@@ -369,12 +439,12 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch('/.netlify/functions/ask-ai', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: message }) // Changed to 'message' to match your function
+                body: JSON.stringify({ message: message })
             })
             .then(res => res.json())
             .then(data => {
                 removeThinking();
-                if (data.reply) { // Changed to 'reply' to match your function
+                if (data.reply) {
                     appendMessage(data.reply, 'ai-message');
                 } else {
                     appendMessage('Sorry, I had a problem. Please try again.', 'ai-message');
@@ -438,4 +508,3 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(toastStyle);
     
 });
-                             
