@@ -733,7 +733,7 @@ details[open] .collapsible-content {
     color: #555; 
     text-transform: uppercase; 
     display: block; 
-    margin-bottom: 25px; 
+    margin-bottom: 5px; /* 💡 Reduced margin */
     font-family: var(--font-accent);
     letter-spacing: 1.5px;
 }
@@ -749,7 +749,17 @@ details[open] .collapsible-content {
     font-size: 1.2rem;
 }
 .product-detail-description p { font-size: 1rem; line-height: 1.7; color: #555; font-weight: 300; }
-.cart-item { display: grid; grid-template-columns: 80px 1fr auto; gap: 15px; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-color); }
+
+/* 💡 UPDATED CART ITEM STYLES */
+.cart-item { 
+    display: grid; 
+    /* 💡 Updated grid: Image | Info | Controls */
+    grid-template-columns: 80px 1fr auto; 
+    gap: 15px; 
+    align-items: center; 
+    padding: 15px 0; 
+    border-bottom: 1px solid var(--border-color); 
+}
 .cart-item-image img { width: 80px; height: 80px; object-fit: cover; border-radius: 0; }
 .cart-item-info h4 { 
     margin: 0 0 5px 0; 
@@ -758,16 +768,11 @@ details[open] .collapsible-content {
     font-weight: 400;
 }
 .cart-item-info p { margin: 0; color: #000; font-family: var(--font-body); font-weight: 400; }
-.cart-item-remove-btn { 
-    background: none; 
-    border: none; 
-    color: #555; 
-    font-size: 0.9rem; 
-    cursor: pointer; 
-    font-weight: 300; 
-    text-decoration: underline;
-    font-family: var(--font-body);
+.cart-item-controls {
+    text-align: right;
 }
+/* 💡 REMOVED old .cart-item-remove-btn style */
+
 #cart-summary { 
     margin-top: 30px; 
     border-top: 1px solid #000; 
@@ -784,17 +789,15 @@ details[open] .collapsible-content {
 @media (min-width: 768px) { #cart-summary .btn-buy { width: auto; min-width: 300px; } }
 
 /* ==================================================
-===== 💡 PRODUCT DETAIL SPECS (NEW) ===========
+===== 💡 PRODUCT DETAIL SPECS ===========
 ================================================== */
 .product-specs-container {
     margin-top: 30px;
     border-top: 1px solid var(--border-color);
 }
-
 .product-spec-section {
     margin-top: 25px;
 }
-
 .product-spec-section h3 {
     font-family: var(--font-accent); /* Cormorant Garamond */
     font-weight: 500;
@@ -806,7 +809,6 @@ details[open] .collapsible-content {
     border-bottom: none; /* Override any h3 defaults */
     padding-bottom: 0;
 }
-
 .spec-row {
     display: flex;
     justify-content: space-between;
@@ -816,25 +818,23 @@ details[open] .collapsible-content {
     font-family: var(--font-body); /* Poppins */
     font-size: 1rem;
 }
-
 .spec-row:last-child {
     border-bottom: none;
 }
-
 .spec-label {
     font-weight: 400; /* Poppins Regular */
     color: #333;
     padding-right: 15px;
 }
-
 .spec-value {
     font-weight: 300; /* Poppins Light */
     color: #000;
     text-align: right;
     text-transform: capitalize;
 }
+
 /* ==================================================
-===== 💡 CART QUANTITY CONTROLS (NEW) ========
+===== 💡 CART QUANTITY CONTROLS (MODIFIED) ========
 ================================================== */
 .cart-item-quantity {
     font-family: var(--font-body);
@@ -842,14 +842,18 @@ details[open] .collapsible-content {
     font-weight: 300;
     color: #333;
     margin-top: 8px; /* Add some space above */
+    display: flex; /* 💡 Make it a flex row */
+    align-items: center; /* 💡 Vertically center items */
 }
 
-.cart-item-quantity span {
-    margin-right: 10px;
+.cart-item-qty-text {
+    margin: 0 10px;
     font-weight: 400; /* Make 'Qty: 1' slightly stronger */
+    min-width: 50px; /* 💡 Give it space so it doesn't jump */
+    text-align: center;
 }
 
-.cart-item-increase-btn {
+.cart-item-qty-btn { /* 💡 Renamed from .cart-item-increase-btn */
     background: none;
     border: 1px solid #000;
     color: #000;
@@ -862,7 +866,95 @@ details[open] .collapsible-content {
     border-radius: 0; /* Match theme */
 }
 
-.cart-item-increase-btn:hover {
+.cart-item-qty-btn:hover {
     background: #000;
     color: #fff;
 }
+
+/* ==================================================
+===== 💡 NEW DELIVERY PROMO STYLES ===========
+================================================== */
+.product-delivery-promo {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 300;
+    margin-bottom: 25px; /* Space before buttons */
+}
+#delivery-progress-container {
+    margin-top: 20px; /* Space from button above */
+    margin-bottom: 25px; /* Space from summary below */
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    text-align: center;
+}
+#delivery-progress-text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 300;
+    margin: 0 0 10px 0;
+    transition: color 0.4s ease;
+}
+.delivery-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #eee;
+    overflow: hidden;
+}
+#delivery-progress-bar-inner {
+    height: 100%;
+    width: 0; /* JS will set this */
+    background: var(--accent-color);
+    transition: width 0.4s ease, background-color 0.4s ease;
+}
+#delivery-progress-container.is-unlocked #delivery-progress-text {
+    color: #006400; /* Dark, elegant green */
+    font-weight: 400;
+}
+#delivery-progress-container.is-unlocked #delivery-progress-bar-inner {
+    background: #006400; /* Dark, elegant green */
+}
+
+/* ==================================================
+===== 💡 NEW CONFIRMATION MODAL STYLES ========
+================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10002;
+    padding: 20px;
+    box-sizing: border-box;
+    display: none; /* JS will control this */
+}
+
+.modal-content {
+    background: var(--bg-color);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.modal-content p {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    line-height: 1.4;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.modal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+/* Modal buttons use the existing .btn-cart and .btn-buy styles */
