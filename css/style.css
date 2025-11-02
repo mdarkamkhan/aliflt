@@ -833,3 +833,36 @@ details[open] .collapsible-content {
     text-align: right;
     text-transform: capitalize;
 }
+/* ==================================================
+===== 💡 CART QUANTITY CONTROLS (NEW) ========
+================================================== */
+.cart-item-quantity {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 300;
+    color: #333;
+    margin-top: 8px; /* Add some space above */
+}
+
+.cart-item-quantity span {
+    margin-right: 10px;
+    font-weight: 400; /* Make 'Qty: 1' slightly stronger */
+}
+
+.cart-item-increase-btn {
+    background: none;
+    border: 1px solid #000;
+    color: #000;
+    font-family: var(--font-body);
+    font-weight: 400;
+    cursor: pointer;
+    padding: 2px 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border-radius: 0; /* Match theme */
+}
+
+.cart-item-increase-btn:hover {
+    background: #000;
+    color: #fff;
+}
