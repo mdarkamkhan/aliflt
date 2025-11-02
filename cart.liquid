@@ -7,17 +7,29 @@ permalink: /cart/
 <div class="container section fade-in-section">
     <h2>Your Cart</h2>
     
+    <!-- Cart items will be injected here by JS -->
     <div id="cart-items-container"></div>
     
+    <!-- Add More Products Button -->
     <div id="cart-actions" style="display: none; text-align: center; margin: 30px 0 10px 0;">
         <a href="/products/" class="btn-cart" style="text-decoration: none;">+ Add More Products</a>
     </div>
 
+    <!-- 💡 NEW: Delivery Progress Bar -->
+    <div id="delivery-progress-container" style="display: none;">
+        <p id="delivery-progress-text"></p>
+        <div class="delivery-progress-bar">
+            <div id="delivery-progress-bar-inner"></div>
+        </div>
+    </div>
+
+    <!-- Cart Summary -->
     <div id="cart-summary" style="display: none;">
         <h3 id="cart-total">Total: ₹0.00</h3>
         <button class="btn-buy" id="proceedToOrderBtn">Proceed to Order on WhatsApp</button>
     </div>
     
+    <!-- Empty Cart Message -->
     <div id="cart-empty-message" style="display: none; text-align: center; padding: 40px 0;">
         <p style="font-size: 1.2rem; margin-bottom: 20px;">Your cart is empty.</p>
         <a href="/products/" class="btn-cart" style="text-decoration: none;">Continue Shopping</a>
