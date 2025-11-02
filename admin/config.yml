@@ -7,7 +7,7 @@ public_folder: "/uploads"
 
 collections:
   - name: "offers"
-    label: "Offers Banner (optional)"
+    label: "Offers Banner"
     folder: "offers"
     format: "frontmatter"
     create: true
@@ -17,7 +17,7 @@ collections:
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
 
-  -   - name: "products"
+  - name: "products"
     label: "Products"
     folder: "products"
     format: "frontmatter"
@@ -50,7 +50,7 @@ collections:
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
       
-      # --- 💡 NEW FIELDS START HERE ---
+      # --- NEW FIELDS START HERE ---
       - name: "Product Information"
         label: "Product Information (Optional)"
         widget: "object"
@@ -71,10 +71,10 @@ collections:
         fields:
           - { name: "delivery_charges", label: "Delivery Charges", widget: "string", required: false }
           - { name: "delivery_within", label: "Delivery within", widget: "string", required: false }
+          # --- 💡 THIS LINE IS NOW FIXED ---
           - { name: "payment_type", label: "Payment Type", widget: "string", required: false }
           - { name: "return_policy", label: "Return Policy", widget: "string", required: false }
-      # --- 💡 NEW FIELDS END HERE ---
-
+      # --- NEW FIELDS END HERE ---
 
   - name: "services"
     label: "Services"
