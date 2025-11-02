@@ -17,16 +17,16 @@ collections:
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
 
-  - name: "products"
+  -   - name: "products"
     label: "Products"
     folder: "products"
     format: "frontmatter"
     create: true
     slug: "{{slug}}"
     fields:
-      - { name: "date", label: "Date", widget: "datetime" }
-      - { name: "title", label: "Title", widget: "string" }
-      - { name: "image", label: "Image", widget: "image" }
+      - { name: "date", label: "Date", widget: "datetime", required: true } # <-- Added required: true
+      - { name: "title", label: "Title", widget: "string", required: true } # <-- Added required: true
+      - { name: "image", label: "Image", widget: "image", required: true } # <-- Added required: true
       - name: "category"
         label: "Category"
         widget: "select"
@@ -47,33 +47,23 @@ collections:
           - banarasi
           - velvet
           - cotton
-      - { name: "price", label: "Price", widget: "number" }
-      - { name: "description", label: "Description", widget: "text" }
+        required: true # <-- Added required: true
+      - { name: "price", label: "Price", widget: "number", required: true } # <-- Added required: true
+      - { name: "description", label: "Description", widget: "text", required: true } # <-- Added required: true
       
-      # --- 💡 FIXED FIELDS START HERE ---
-      - name: "product_information" # 💡 RENAMED (no space)
-        label: "Product Information (Optional)"
-        widget: "object"
-        collapsed: true
-        fields:
-          - { name: "size", label: "Size", widget: "string", required: false }
-          - { name: "colour", label: "Colour", widget: "string", required: false }
-          - { name: "number_of_pieces", label: "Number of Pieces/meter", widget: "string", required: false }
-          - { name: "fabric", label: "Fabric", widget: "string", required: false }
-          - { name: "work", label: "Work", widget: "string", required: false }
-          - { name: "pattern", label: "Pattern", widget: "string", required: false }
-          - { name: "ideal_for", label: "Ideal For", widget: "string", required: false }
-          
-      - name: "delivery_details" # 💡 RENAMED (no space)
-        label: "Delivery Details (Optional)"
-        widget: "object"
-        collapsed: true
-        fields:
-          - { name: "delivery_charges", label: "Delivery Charges", widget: "string", required: false }
-          - { name: "delivery_within", label: "Delivery within", widget: "string", required: false }
-          - { name: "payment_type", label: "Payment Type", widget: "string", required: false }
-          - { name: "return_policy", label: "Return Policy", widget: "string", required: false }
-      # --- 💡 FIXED FIELDS END HERE ---
+      # --- 👇 ALL FIELDS BELOW ARE NOW MANDATORY ---
+      - { name: "size", label: "Size", widget: "string", required: true }
+      - { name: "colour", label: "Colour", widget: "string", required: true }
+      - { name: "number_of_pieces", label: "Number of Pieces/meter", widget: "string", required: true }
+      - { name: "fabric", label: "Fabric", widget: "string", required: true }
+      - { name: "work", label: "Work", widget: "string", required: true }
+      - { name: "pattern", label: "Pattern", widget: "string", required: true }
+      - { name: "ideal_for", label: "Ideal For", widget: "string", required: true }
+      - { name: "delivery_charges", label: "Delivery Charges", widget: "string", required: true }
+      - { name: "delivery_within", label: "Delivery within", widget: "string", required: true }
+      - { name: "payment_type", label: "Payment Type", widget: "string", required: true }
+      - { name: "return_policy", label: "Return Policy", widget: "string", required: true }
+      # --- 👆 END OF CHANGES ---
 
   - name: "services"
     label: "Services"
