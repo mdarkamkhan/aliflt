@@ -22,11 +22,9 @@ eleventyComputed:
         </div>
         
         <div class="product-detail-info">
-                <h1 class="product-detail-title">{{ item.data.title }}</h1>
-    
-    <pre style="font-size: 10px; background: #eee; padding: 10px; white-space: pre-wrap; word-break: break-all;">{{ item.data | json }}</pre>
-          
-{% if item.data.price %}
+            <h1 class="product-detail-title">{{ item.data.title }}</h1>
+            
+            {% if item.data.price %}
                 <span class="product-detail-price">₹{{ item.data.price }}</span>
             {% endif %}
             
