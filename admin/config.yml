@@ -50,8 +50,8 @@ collections:
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
       
-      # --- NEW FIELDS START HERE ---
-      - name: "Product Information"
+      # --- 💡 FIXED FIELDS START HERE ---
+      - name: "product_information" # 💡 RENAMED (no space)
         label: "Product Information (Optional)"
         widget: "object"
         collapsed: true
@@ -64,17 +64,16 @@ collections:
           - { name: "pattern", label: "Pattern", widget: "string", required: false }
           - { name: "ideal_for", label: "Ideal For", widget: "string", required: false }
           
-      - name: "Delivery Details"
+      - name: "delivery_details" # 💡 RENAMED (no space)
         label: "Delivery Details (Optional)"
         widget: "object"
         collapsed: true
         fields:
           - { name: "delivery_charges", label: "Delivery Charges", widget: "string", required: false }
           - { name: "delivery_within", label: "Delivery within", widget: "string", required: false }
-          # --- 💡 THIS LINE IS NOW FIXED ---
           - { name: "payment_type", label: "Payment Type", widget: "string", required: false }
           - { name: "return_policy", label: "Return Policy", widget: "string", required: false }
-      # --- NEW FIELDS END HERE ---
+      # --- 💡 FIXED FIELDS END HERE ---
 
   - name: "services"
     label: "Services"
@@ -137,3 +136,4 @@ collections:
           - saree fall & pico
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
+      
