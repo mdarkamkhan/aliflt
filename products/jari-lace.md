@@ -7,10 +7,10 @@ price: 59
 description: A beautiful golden lace.
 Product Information:
   size: 1.5 inch
-  colour: "Golden "
+  colour: Golden
   number_of_pieces: 1 mt
   fabric: Net base
-  work: Jaru
+  work: Jari
   pattern: Leaf
   ideal_for: Blouse, suit, lehanga, frock etc...
 Delivery Details:
