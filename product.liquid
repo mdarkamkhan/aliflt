@@ -67,89 +67,66 @@ eleventyComputed:
                 <div class="product-spec-section">
                     <h3>Product Information</h3>
                     
-                    {% if info.size %}
                     <div class="spec-row">
                         <span class="spec-label">Size</span>
                         <span class="spec-value">{{ info.size }}</span>
                     </div>
-                    {% endif %}
                     
-                    {% if info.colour %}
                     <div class="spec-row">
                         <span class="spec-label">Colour</span>
                         <span class="spec-value">{{ info.colour }}</span>
                     </div>
-                    {% endif %}
                     
-                    {% if info.number_of_pieces %}
                     <div class="spec-row">
                         <span class="spec-label">Number of Pieces/meter</span>
                         <span class="spec-value">{{ info.number_of_pieces }}</span>
                     </div>
-                    {% endif %}
                     
-                    {% if info.fabric %}
                     <div class="spec-row">
                         <span class="spec-label">Fabric</span>
                         <span class="spec-value">{{ info.fabric }}</span>
                     </div>
-                    {% endif %}
                     
-                    {% if info.work %}
                     <div class="spec-row">
                         <span class="spec-label">Work</span>
                         <span class="spec-value">{{ info.work }}</span>
                     </div>
-                    {% endif %}
                     
-                    {% if info.pattern %}
                     <div class="spec-row">
                         <span class="spec-label">Pattern</span>
                         <span class="spec-value">{{ info.pattern }}</span>
                     </div>
-                    {% endif %}
                     
-                    {% if info.ideal_for %}
                     <div class="spec-row">
                         <span class="spec-label">Ideal For</span>
                         <span class="spec-value">{{ info.ideal_for }}</span>
                     </div>
-                    {% endif %}
                 </div>
 
                 <div class="product-spec-section">
                     <h3>Delivery Details</h3>
                     
-                    {% if delivery.delivery_charges %}
                     <div class="spec-row">
                         <span class="spec-label">Delivery Charges</span>
                         <span class="spec-value">{{ delivery.delivery_charges }}</span>
                     </div>
-                    {% endif %}
                     
-                    {% if delivery.delivery_within %}
                     <div class="spec-row">
                         <span class="spec-label">Delivery within</span>
                         <span class="spec-value">{{ delivery.delivery_within }}</span>
                     </div>
-                    {% endif %}
                     
-                    {% if delivery.payment_type %}
                     <div class="spec-row">
                         <span class="spec-label">Payment Type</span>
                         <span class="spec-value">{{ delivery.payment_type }}</span>
                     </div>
-                    {% endif %}
                     
-                    {% if delivery.return_policy %}
                     <div class="spec-row">
                         <span class="spec-label">Return Policy</span>
                         <span class="spec-value">{{ delivery.return_policy }}</span>
                     </div>
-                    {% endif %}
                 </div>
             </div>
             </div>
     </div>
 </div>
-
