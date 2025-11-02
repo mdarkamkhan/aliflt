@@ -481,13 +481,24 @@ footer {
 }
 
 
-/* COLLAPSIBLE REVIEWS SECTION */
+
+
+/* FIXED NAV & SIDEBAR STYLES */
+.fixed-top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: var(--bg-color);
+ /* COLLAPSIBLE REVIEWS SECTION */
 .collapsible-section { 
-    .collapsible-section { 
     padding: 0; 
     border: 1px solid var(--border-color); 
     background: #fff; /* Give it a white bg to stand out slightly */
-    }
+    position: relative; /* Helps ensure it stacks correctly */
+    z-index: 10;
+}
 .collapsible-summary {
     display: flex;
     justify-content: space-between;
@@ -528,17 +539,7 @@ details[open] .collapsible-content {
     padding-bottom: 25px;
 }
 .collapsible-content > div { overflow: hidden; }
-
-
-/* FIXED NAV & SIDEBAR STYLES */
-.fixed-top-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-    background: var(--bg-color);
-    box-shadow: none;
+   box-shadow: none;
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
