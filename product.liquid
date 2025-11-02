@@ -61,68 +61,79 @@ eleventyComputed:
 
             <div class="product-specs-container">
 
-                <div class="product-spec-section">
-                    <h3>Product Information</h3>
+                <details class="collapsible-section" open>
+                    <summary class="collapsible-summary">
+                        <h3>Product Information</h3>
+                        <span class="collapsible-icon">+</span>
+                    </summary>
                     
-                    <div class="spec-row">
-                        <span class="spec-label">Size</span>
-                        <span class="spec-value">{{ item.data.size }}</span>
+                    <div class="collapsible-content">
+                        <div class="spec-row">
+                            <span class="spec-label">Size</span>
+                            <span class="spec-value">{{ item.data.size }}</span>
+                        </div>
+                        
+                        <div class="spec-row">
+                            <span class="spec-label">Colour</span>
+                            <span class="spec-value">{{ item.data.colour }}</span>
+                        </div>
+                        
+                        <div class="spec-row">
+                            <span class="spec-label">Number of Pieces/meter</span>
+                            <span class="spec-value">{{ item.data.number_of_pieces }}</span>
+                        </div>
+                        
+                        <div class="spec-row">
+                            <span class="spec-label">Fabric</span>
+                            <span class="spec-value">{{ item.data.fabric }}</span>
+                        </div>
+                        
+                        <div class="spec-row">
+                            <span class="spec-label">Work</span>
+                            <span class="spec-value">{{ item.data.work }}</span>
+                        </div>
+                        
+                        <div class="spec-row">
+                            <span class="spec-label">Pattern</span>
+                            <span class="spec-value">{{ item.data.pattern }}</span>
+                        </div>
+                        
+                        <div class="spec-row">
+                            <span class="spec-label">Ideal For</span>
+                            <span class="spec-value">{{ item.data.ideal_for }}</span>
+                        </div>
                     </div>
-                    
-                    <div class="spec-row">
-                        <span class="spec-label">Colour</span>
-                        <span class="spec-value">{{ item.data.colour }}</span>
-                    </div>
-                    
-                    <div class="spec-row">
-                        <span class="spec-label">Number of Pieces/meter</span>
-                        <span class="spec-value">{{ item.data.number_of_pieces }}</span>
-                    </div>
-                    
-                    <div class="spec-row">
-                        <span class="spec-label">Fabric</span>
-                        <span class="spec-value">{{ item.data.fabric }}</span>
-                    </div>
-                    
-                    <div class="spec-row">
-                        <span class="spec-label">Work</span>
-                        <span class="spec-value">{{ item.data.work }}</span>
-                    </div>
-                    
-                    <div class="spec-row">
-                        <span class="spec-label">Pattern</span>
-                        <span class="spec-value">{{ item.data.pattern }}</span>
-                    </div>
-                    
-                    <div class="spec-row">
-                        <span class="spec-label">Ideal For</span>
-                        <span class="spec-value">{{ item.data.ideal_for }}</span>
-                    </div>
-                </div>
+                </details>
 
-                <div class="product-spec-section">
-                    <h3>Delivery Details</h3>
-                    
-                    <div class="spec-row">
-                        <span class="spec-label">Delivery Charges</span>
-                        <span class="spec-value">{{ item.data.delivery_charges }}</span>
+                <details class="collapsible-section">
+                    <summary class="collapsible-summary">
+                        <h3>Delivery Details</h3>
+                        <span class="collapsible-icon">+</span>
+                    </summary>
+
+                    <div class="collapsible-content">
+                        <div class="spec-row">
+                            <span class="spec-label">Delivery Charges</span>
+                            <span class="spec-value">{{ item.data.delivery_charges }}</span>
+                        </div>
+                        
+                        <div class="spec-row">
+                            <span class="spec-label">Delivery within</span>
+                            <span class="spec-value">{{ item.data.delivery_within }}</span>
+                        </div>
+                        
+                        <div class="spec-row">
+                            <span class="spec-label">Payment Type</span>
+                            <span class="spec-value">{{ item.data.payment_type }}</span>
+                        </div>
+                        
+                        <div class="spec-row">
+                            <span class="spec-label">Return Policy</span>
+                            <span class="spec-value">{{ item.data.return_policy }}</span>
+                        </div>
                     </div>
-                    
-                    <div class="spec-row">
-                        <span class="spec-label">Delivery within</span>
-                        <span class="spec-value">{{ item.data.delivery_within }}</span>
-                    </div>
-                    
-                    <div class="spec-row">
-                        <span class="spec-label">Payment Type</span>
-                        <span class="spec-value">{{ item.data.payment_type }}</span>
-                    </div>
-                    
-                    <div class="spec-row">
-                        <span class="spec-label">Return Policy</span>
-                        <span class="spec-value">{{ item.data.return_policy }}</span>
-                    </div>
-                </div>
+                </details>
+
             </div>
             </div>
     </div>
