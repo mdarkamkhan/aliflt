@@ -1,5 +1,5 @@
 ---
-date: 2025-11-02T12:07:00.000+05:30
+date: 2025-11-02T12:18:00.000+05:30
 title: Sitara lace
 image: /uploads/1000023576.jpg
 category: lace
