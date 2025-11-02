@@ -487,13 +487,7 @@ footer {
     padding: 0; 
     border: 1px solid var(--border-color); 
     background: #fff; /* Give it a white bg to stand out slightly */
-
-    /* === 💡 DEBUG STYLES === */
-    position: relative; /* Needed for z-index to apply */
-    z-index: 10000 !important;
-    background-color: red !important; /* This will be very obvious */
-    /* === 💡 END DEBUG STYLES === */
-}
+    }
 .collapsible-summary {
     display: flex;
     justify-content: space-between;
