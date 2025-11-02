@@ -1,5 +1,5 @@
 ---
-date: 2025-11-02T10:32:00.000+05:30
+date: 2025-11-02T12:02:00.000+05:30
 title: Stone lace
 image: /uploads/1000023501.jpg
 category: lace
