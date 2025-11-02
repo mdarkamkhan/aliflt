@@ -833,6 +833,14 @@ details[open] .collapsible-content {
     text-transform: capitalize;
 }
 
+/* 💡 NEW RULE: This adds "----" to empty fields */
+.spec-value:empty::after {
+    content: "----";
+    color: #999;
+    text-transform: none;
+}
+
+
 /* ==================================================
 ===== 💡 CART QUANTITY CONTROLS (MODIFIED) ========
 ================================================== */
@@ -845,14 +853,12 @@ details[open] .collapsible-content {
     display: flex; /* 💡 Make it a flex row */
     align-items: center; /* 💡 Vertically center items */
 }
-
 .cart-item-qty-text {
     margin: 0 10px;
     font-weight: 400; /* Make 'Qty: 1' slightly stronger */
     min-width: 50px; /* 💡 Give it space so it doesn't jump */
     text-align: center;
 }
-
 .cart-item-qty-btn { /* 💡 Renamed from .cart-item-increase-btn */
     background: none;
     border: 1px solid #000;
@@ -865,7 +871,6 @@ details[open] .collapsible-content {
     transition: all 0.3s ease;
     border-radius: 0; /* Match theme */
 }
-
 .cart-item-qty-btn:hover {
     background: #000;
     color: #fff;
@@ -934,7 +939,6 @@ details[open] .collapsible-content {
     box-sizing: border-box;
     display: none; /* JS will control this */
 }
-
 .modal-content {
     background: var(--bg-color);
     padding: 30px;
@@ -943,7 +947,6 @@ details[open] .collapsible-content {
     text-align: center;
     border: 1px solid var(--border-color);
 }
-
 .modal-content p {
     font-family: var(--font-heading);
     font-size: 1.5rem;
@@ -951,7 +954,6 @@ details[open] .collapsible-content {
     margin-top: 0;
     margin-bottom: 25px;
 }
-
 .modal-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
