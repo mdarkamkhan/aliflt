@@ -25,33 +25,6 @@ eleventyComputed:
             <h1 class="product-detail-title">{{ item.data.title }}</h1>
             
             {% if item.data.price %}
----
-layout: base.liquid
-pagination:
-  data: collections.products
-  size: 1
-  alias: item # We call each product 'item'
-  
-# This is the correct permalink using the 'item' alias
-permalink: "products/{{ item.fileSlug }}/"
-
-eleventyComputed:
-  # This sets the <title> tag for each page
-  title: "{{ item.data.title }}" 
----
-
-<div class="container section">
-    
-    <div class="product-detail-grid">
-        
-        <div class="product-detail-image">
-            <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
-        </div>
-        
-        <div class="product-detail-info">
-            <h1 class="product-detail-title">{{ item.data.title }}</h1>
-            
-            {% if item.data.price %}
                 <span class="product-detail-price">₹{{ item.data.price }}</span>
             {% endif %}
             
@@ -179,3 +152,4 @@ eleventyComputed:
             </div>
     </div>
 </div>
+
