@@ -959,4 +959,86 @@ details[open] .collapsible-content {
     grid-template-columns: 1fr 1fr;
     gap: 15px;
 }
-/* Modal buttons use the existing .btn-cart and .btn-buy styles */
+/* --- Collapsible Product Details --- */
+
+/* Style the main <details> container */
+.collapsible-section {
+    border-bottom: 1px solid var(--border-color); /* Uses your existing variable */
+}
+
+/* Remove default marker from summary */
+.collapsible-summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Style the clickable <summary> bar */
+.collapsible-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    cursor: pointer;
+    list-style: none; /* Removes the default triangle/marker */
+}
+
+/* Style the <h3> inside the summary */
+.collapsible-summary h3 {
+    /* Uses your existing .product-spec-section h3 styles */
+    font-family: var(--font-accent); 
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 1.2rem;
+    margin: 0; /* Remove default margins */
+    border-bottom: none; 
+    padding-bottom: 0;
+}
+
+/* Style the '+' icon */
+.collapsible-icon {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #555;
+    transition: transform 0.2s ease; /* Smooth rotation */
+}
+
+/* Style the content box that slides open */
+.collapsible-content {
+    padding-bottom: 16px;
+    /* This contains your existing .spec-row divs */
+}
+
+/* --- State changes when open --- */
+
+/* Rotate the '+' icon to an 'x' when the section is open */
+.collapsible-section[open] .collapsible-icon {
+    transform: rotate(45deg);
+}
+
+/* Your existing .spec-row styles will apply perfectly here */
+/* These are just here to confirm they are part of the design */
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-top: 1px solid #f5f5f5; /* Light line for each spec */
+}
+.spec-row:first-child {
+    border-top: none;
+}
+.spec-label {
+    font-weight: 400; /* Poppins Regular */
+    color: #333;
+    padding-right: 15px;
+}
+.spec-value {
+    font-weight: 300; /* Poppins Light */
+    color: #000;
+    text-align: right;
+    text-transform: capitalize;
+}
+.spec-value:empty::after {
+    content: "----";
+    color: #999;
+    text-transform: none;
+}
