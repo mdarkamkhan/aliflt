@@ -17,16 +17,16 @@ collections:
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
 
-  -   - name: "products"
+  - name: "products"
     label: "Products"
     folder: "products"
     format: "frontmatter"
     create: true
     slug: "{{slug}}"
     fields:
-      - { name: "date", label: "Date", widget: "datetime", required: true } # <-- Added required: true
-      - { name: "title", label: "Title", widget: "string", required: true } # <-- Added required: true
-      - { name: "image", label: "Image", widget: "image", required: true } # <-- Added required: true
+      - { name: "date", label: "Date", widget: "datetime", required: true }
+      - { name: "title", label: "Title", widget: "string", required: true }
+      - { name: "image", label: "Image", widget: "image", required: true }
       - name: "category"
         label: "Category"
         widget: "select"
@@ -47,11 +47,9 @@ collections:
           - banarasi
           - velvet
           - cotton
-        required: true # <-- Added required: true
-      - { name: "price", label: "Price", widget: "number", required: true } # <-- Added required: true
-      - { name: "description", label: "Description", widget: "text", required: true } # <-- Added required: true
-      
-      # --- 👇 ALL FIELDS BELOW ARE NOW MANDATORY ---
+        required: true
+      - { name: "price", label: "Price", widget: "number", required: true }
+      - { name: "description", label: "Description", widget: "text", required: true }
       - { name: "size", label: "Size", widget: "string", required: true }
       - { name: "colour", label: "Colour", widget: "string", required: true }
       - { name: "number_of_pieces", label: "Number of Pieces/meter", widget: "string", required: true }
@@ -63,7 +61,6 @@ collections:
       - { name: "delivery_within", label: "Delivery within", widget: "string", required: true }
       - { name: "payment_type", label: "Payment Type", widget: "string", required: true }
       - { name: "return_policy", label: "Return Policy", widget: "string", required: true }
-      # --- 👆 END OF CHANGES ---
 
   - name: "services"
     label: "Services"
