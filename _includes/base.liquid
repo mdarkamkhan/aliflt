@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALiF Ladies Tailor | {{ title }}</title>
     
+    <!-- SEO & METADATA -->
     <meta name="description" content="Custom bridal blouses, lehengas, and gowns — premium ladies tailoring in Sahibganj, Jharkhand. Quality stitching for festive and daily wear.">
     <link rel="canonical" href="https://aliflt.netlify.app/{{ page.url }}">
     <link rel="icon" href="/favicon.png" type="image/png">
@@ -27,11 +28,13 @@
     }
     </script>
     
+    <!-- STYLES & FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Cormorant+Garamond:wght@400;500&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 
+    <!-- INLINE STYLES -->
     <style>
         footer { background-color: #f4f4f4; color: #333; padding: 40px 0; text-align: left; border-top: 1px solid #e0e0e0; }
         .footer-content { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px; }
@@ -47,18 +50,6 @@
         .footer-socials a:hover { color: #000; }
         .footer-copyright { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #777; font-size: 0.9rem; }
         @media (max-width: 600px) { .footer-content { flex-direction: column; } .footer-socials { justify-content: flex-start; } }
-        .collapsible-section { padding: 0; border: 1px solid #e0e0e0; }
-        .collapsible-summary { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; cursor: pointer; list-style: none; }
-        .collapsible-summary::-webkit-details-marker { display: none; }
-        .collapsible-summary h2 { margin: 0; }
-        .icon-plus-minus { position: relative; width: 18px; height: 18px; }
-        .icon-plus-minus::before, .icon-plus-minus::after { content: ''; position: absolute; top: 50%; left: 50%; background-color: #333; transition: transform 0.3s ease-out; }
-        .icon-plus-minus::before { height: 2px; width: 100%; transform: translate(-50%, -50%); }
-        .icon-plus-minus::after { height: 100%; width: 2px; transform: translate(-50%, -50%); }
-        details[open] .icon-plus-minus::after { transform: translate(-50%, -50%) rotate(90deg); }
-        .collapsible-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease-in-out; padding-left: 25px; padding-right: 25px; }
-        details[open] .collapsible-content { grid-template-rows: 1fr; padding-bottom: 25px; }
-        .collapsible-content > div { overflow: hidden; }
     </style>
     <script>
       if (window.location.hash.includes("invite_token") || window.location.hash.includes("recovery_token")) {
@@ -68,8 +59,10 @@
 </head>
 <body>
     <nav class="fixed-top-nav">
+        <!-- Left Side: Logo -->
         <a href="/" class="nav-logo">ALiF</a>
         
+        <!-- RIGHT SIDE: Actions (Cart + Menu) -->
         <div class="nav-actions">
             <a href="/cart/" class="nav-cart-btn" id="cartIcon" aria-label="View Cart">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -87,8 +80,10 @@
         </div>
     </nav>
     
+    <!-- This is where your page content (e.g., index.liquid) goes -->
     <main>{{ content }}</main>
     
+    <!-- SIDEBAR MENU -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="sidebar-header">
@@ -110,6 +105,7 @@
         </div>
     </div>
 
+    <!-- FOOTER -->
     <footer class="fade-in-section">
         <div class="container">
             <div class="footer-content">
@@ -138,9 +134,21 @@
     </footer>
 
     <div id="chat-widget">
-        </div>
+        <!-- ... (chat widget HTML) ... -->
+    </div>
     
     <script src="/js/main.js" defer></script>
+
+    <!-- 💡 NEW: Confirmation Modal HTML -->
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-content">
+            <p id="modal-message">Do you want to remove this product from the cart?</p>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="btn-cart">Cancel</button>
+                <button id="modal-confirm" class="btn-buy">Remove</button>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
