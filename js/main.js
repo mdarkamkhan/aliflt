@@ -27,6 +27,7 @@ const cart = {
     add(id, title, price, image) {
         if (this.items[id]) {
             // Already in cart, do nothing (or change to qty++)
+            // Note: product page logic handles this, cart page uses increaseQuantity
         } else {
             this.items[id] = { title, price, image, qty: 1 };
         }
@@ -40,10 +41,23 @@ const cart = {
         }
         this.save();
     },
+
+    // 💡 NEW: Increase quantity
+    increaseQuantity(id) {
+        if (this.items[id]) {
+            this.items[id].qty++;
+        }
+        this.save();
+    },
     
     // Get total items
     getTotalCount() {
-        return Object.keys(this.items).length;
+        // This now correctly counts total *quantity* not just unique items
+        let count = 0;
+        for (const id in this.items) {
+            count += this.items[id].qty;
+        }
+        return count;
     },
     
     // Get total price
@@ -71,7 +85,8 @@ const cart = {
         for (const id in this.items) {
             const item = this.items[id];
             message += `*${item.title}*\n`;
-            message += `Price: ₹${item.price}\n`;
+            message += `Qty: ${item.qty}\n`; // 💡 Added Qty to message
+            message += `Price: ₹${item.price} (each)\n`;
             // Use window.location.origin to create an absolute URL
             message += `Image: ${window.location.origin}${item.image}\n\n`;
             total += item.price * item.qty;
@@ -230,24 +245,30 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCartPage();
     }
     
+    // 💡 COMPLETELY REPLACED FUNCTION
     function renderCartPage() {
         const cartItems = cart.items;
         const emptyMsg = document.getElementById('cart-empty-message');
         const cartSummary = document.getElementById('cart-summary');
+        const cartActions = document.getElementById('cart-actions'); // Get the new button container
         
-        cartContainer.innerHTML = '';
+        cartContainer.innerHTML = ''; // Clear the cart display
         
-        if (cart.getTotalCount() === 0) {
+        if (Object.keys(cartItems).length === 0) {
             emptyMsg.style.display = 'block';
             cartSummary.style.display = 'none';
+            cartActions.style.display = 'none'; // Hide actions if cart is empty
         } else {
             emptyMsg.style.display = 'none';
             cartSummary.style.display = 'block';
+            cartActions.style.display = 'block'; // Show actions if cart has items
             
             for (const id in cartItems) {
                 const item = cartItems[id];
                 const itemEl = document.createElement('div');
                 itemEl.className = 'cart-item';
+                
+                // Updated innerHTML with quantity controls
                 itemEl.innerHTML = `
                     <div class="cart-item-image">
                         <img src="${item.image}" alt="${item.title}">
@@ -255,22 +276,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="cart-item-info">
                         <h4>${item.title}</h4>
                         <p>₹${item.price}</p>
+                        <div class="cart-item-quantity">
+                            <span>Qty: ${item.qty}</span>
+                            <button class="cart-item-increase-btn" data-increase-id="${id}">[+]</button>
+                        </div>
                     </div>
                     <button class="cart-item-remove-btn" data-remove-id="${id}">Remove</button>
                 `;
                 cartContainer.appendChild(itemEl);
             }
             
+            // Update total price
             document.getElementById('cart-total').textContent = `Total: ₹${cart.getTotalPrice()}`;
             
+            // Add listener for REMOVE buttons
             document.querySelectorAll('.cart-item-remove-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const removeId = btn.dataset.removeId;
                     cart.remove(removeId);
-                    renderCartPage();
+                    renderCartPage(); // Re-render the entire cart
                 });
             });
             
+            // Add listener for INCREASE buttons
+            document.querySelectorAll('.cart-item-increase-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const increaseId = btn.dataset.increaseId;
+                    cart.increaseQuantity(increaseId);
+                    renderCartPage(); // Re-render the entire cart
+                });
+            });
+            
+            // Add listener for Proceed to Order button
             document.getElementById('proceedToOrderBtn').addEventListener('click', () => {
                 const message = cart.generateWhatsAppMessage();
                 window.open(whatsappBaseUrl + message, '_blank');
@@ -401,3 +438,4 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(toastStyle);
     
 });
+                             
