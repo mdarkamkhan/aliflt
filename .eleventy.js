@@ -4,15 +4,17 @@
 module.exports = function(eleventyConfig) {
     
     // --- Passthrough Copies ---
-    // These folders and files will be copied directly to the output folder (_site)
     eleventyConfig.addPassthroughCopy("css");
     eleventyConfig.addPassthroughCopy("js");
     eleventyConfig.addPassthroughCopy("uploads");
     eleventyConfig.addPassthroughCopy("admin");
     eleventyConfig.addPassthroughCopy("favicon.png");
+    
+    // 💡 NEW: Add these two lines for the PWA files
+    eleventyConfig.addPassthroughCopy("manifest.webmanifest");
+    eleventyConfig.addPassthroughCopy("sw.js");
 
     // --- Collections ---
-    // These collections find items by their "tag" (as defined in the front matter of your .md files)
     eleventyConfig.addCollection("products", function(collectionApi) {
         return collectionApi.getFilteredByTag("product");
     });
@@ -37,4 +39,3 @@ module.exports = function(eleventyConfig) {
         }
     };
 };
-
