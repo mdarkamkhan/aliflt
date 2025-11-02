@@ -71,7 +71,7 @@ collections:
         fields:
           - { name: "delivery_charges", label: "Delivery Charges", widget: "string", required: false }
           - { name: "delivery_within", label: "Delivery within", widget: "string", required: false }
-          - { name:Z: "payment_type", label: "Payment Type", widget: "string", required: false }
+          - { name: "payment_type", label: "Payment Type", widget: "string", required: false }
           - { name: "return_policy", label: "Return Policy", widget: "string", required: false }
       # --- 💡 NEW FIELDS END HERE ---
 
