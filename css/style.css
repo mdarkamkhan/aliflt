@@ -573,7 +573,7 @@ details[open] .collapsible-content {
 }
 .nav-toggle-btn span {
     width: 100%;
-    height: 2px; /* Thinner lines */
+    height: 1px; /* Thinner lines */
     background: #000;
     border-radius: 0;
     transition: all 0.3s ease;
@@ -628,9 +628,11 @@ details[open] .collapsible-content {
     padding: 15px 0;
     text-decoration: none;
     color: var(--text-color);
-    font-size: 1.8rem; /* Larger, elegant font */
-    font-weight: 400;
-    font-family: var(--font-heading);
+    font-size: 1.3rem; /* 💡 Reduced from 1.8rem */
+    font-weight: 300;  /* 💡 Use Poppins Light */
+    font-family: var(--font-body); /* 💡 Switched from --font-heading (Playfair) */
+    text-transform: uppercase; /* 💡 Added for a sleek, high-fashion feel */
+    letter-spacing: 1.5px;   /* 💡 Added for elegance */
     transition: opacity 0.3s ease;
 }
 .sidebar-links a:hover { color: #000; opacity: 0.7; }
