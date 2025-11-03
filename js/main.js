@@ -49,7 +49,7 @@ const cart = {
         this.save();
     },
 
-    // 💡 NEW: Decrease quantity
+    // Decrease quantity
     decreaseQuantity(id) {
         if (this.items[id] && this.items[id].qty > 1) {
             this.items[id].qty--;
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // 💡 --- NEW: Confirmation Modal Logic ---
+    // --- Confirmation Modal Logic ---
     const modal = document.getElementById('confirm-modal');
     const modalMessage = document.getElementById('modal-message');
     let modalCancel = document.getElementById('modal-cancel');
@@ -252,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = 'flex';
         
         // --- This is crucial to prevent multiple listeners ---
-        // Clone and replace buttons to remove all old event listeners
         let newCancel = modalCancel.cloneNode(true);
         modalCancel.parentNode.replaceChild(newCancel, modalCancel);
         modalCancel = newCancel;
@@ -271,7 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = 'none';
         });
     }
-    // 💡 --- End of Modal Logic ---
 
 
     // --- CART PAGE LOGIC ---
@@ -280,7 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCartPage();
     }
     
-    // 💡 COMPLETELY REPLACED FUNCTION
     function renderCartPage() {
         const cartItems = cart.items;
         const emptyMsg = document.getElementById('cart-empty-message');
@@ -308,7 +305,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const itemEl = document.createElement('div');
                 itemEl.className = 'cart-item';
                 
-                // 💡 Updated innerHTML with new controls, removing the old 'Remove' button
                 itemEl.innerHTML = `
                     <div class="cart-item-image">
                         <img src="${item.image}" alt="${item.title}">
@@ -350,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // 💡 NEW: Add listeners for INCREASE/DECREASE buttons
+            // Add listeners for INCREASE/DECREASE buttons
             document.querySelectorAll('.cart-item-qty-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = btn.dataset.id;
@@ -506,5 +502,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
     document.head.appendChild(toastStyle);
+    
+
+    // 💡 --- NEW: PWA Install Prompt Logic ---
+    let deferredPrompt;
+    const installButton = document.getElementById('install-pwa-btn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent the browser's default mini-infobar
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Show our custom install button
+        if (installButton) {
+            installButton.style.display = 'block';
+        }
+    });
+
+    if (installButton) {
+        installButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Hide our button
+            installButton.style.display = 'none';
+            // Show the browser's install prompt
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the PWA install');
+                    } else {
+                        console.log('User dismissed the PWA install');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        });
+    }
+    // 💡 --- End of PWA Logic ---
     
 });
