@@ -4,15 +4,17 @@
 module.exports = function(eleventyConfig) {
     
     // --- Passthrough Copies ---
+    // These folders are copied as-is
     eleventyConfig.addPassthroughCopy("css");
     eleventyConfig.addPassthroughCopy("js");
     eleventyConfig.addPassthroughCopy("uploads");
     eleventyConfig.addPassthroughCopy("admin");
-    eleventyConfig.addPassthroughCopy("favicon.png");
     
-    // 💡 NEW: Add these two lines for the PWA files
-    eleventyConfig.addPassthroughCopy("manifest.webmanifest");
-    eleventyConfig.addPassthroughCopy("sw.js");
+    // 💡 NEW, ROBUST PWA/STATIC FILE HANDLING:
+    // This copies everything from "public/" to the root of the site (e.g., "public/favicon.png" becomes "/favicon.png")
+    eleventyConfig.addPassthroughCopy({ "public/": "/" });
+    
+    // 💡 We no longer need the old, broken passthrough lines for favicon, sw.js, etc.
 
     // --- Collections ---
     eleventyConfig.addCollection("products", function(collectionApi) {
