@@ -8,10 +8,23 @@ permalink: /products/
     
     <h2>Our Products</h2>
 
+    <div class="filter-bar-scroll-container">
+        <button class="filter-btn active" data-filter-values="all">
+            <img src="/icons/all-categories.png" alt="All Categories" class="filter-icon">
+            <span class="filter-name">All</span>
+        </button>
+
+        {% for category in categoryFilters.categories %}
+        <button class="filter-btn" data-filter-values="{{ category.values | join: ',' | downcase }}">
+            <img src="/icons/{{ category.icon }}" alt="{{ category.name }}" class="filter-icon">
+            <span class="filter-name">{{ category.name }}</span>
+        </button>
+        {% endfor %}
+    </div>
     <div class="product-grid">
         
         {% for item in collections.products %}
-        <a href="/products/{{ item.fileSlug }}/" class="product-card">
+        <a href="/products/{{ item.fileSlug }}/" class="product-card" data-category="{{ item.data.category | downcase }}">
             
             <div class="product-card-image-wrapper">
                 <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
@@ -40,7 +53,7 @@ permalink: /products/
                 {% endif %}
             </div>
 
-            </a>
+        </a>
         {% endfor %}
 
         {% if collections.products.size == 0 %}
