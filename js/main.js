@@ -504,7 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(toastStyle);
     
 
-    // 💡 --- NEW: PWA Install Prompt Logic ---
+    // --- PWA Install Prompt Logic ---
     let deferredPrompt;
     const installButton = document.getElementById('install-pwa-btn');
 
@@ -527,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show the browser's install prompt
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
+                       // Wait for the user to respond to the prompt
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         console.log('User accepted the PWA install');
@@ -539,6 +539,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    // 💡 --- End of PWA Logic ---
+
+    
+    // 💡 --- NEW: PRODUCT FILTER LOGIC ---
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const productCards = document.querySelectorAll('.product-grid .product-card');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Get the values to filter by (e.g., "cotton,blouse piece,net")
+            const filterValues = button.dataset.filterValues;
+            
+            // Update active button state
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            if (filterValues === 'all') {
+                // Show all products
+                productCards.forEach(card => card.classList.remove('hidden'));
+            } else {
+                // Show only filtered products
+                const filterArray = filterValues.split(','); // Create an array of categories
+                
+                productCards.forEach(card => {
+                    const cardCategory = card.dataset.category;
+                    
+                    if (filterArray.includes(cardCategory)) {
+                        card.classList.remove('hidden'); // Show this card
+                    } else {
+                        card.classList.add('hidden'); // Hide this card
+                    }
+                });
+            }
+        });
+    });
     
 });
