@@ -576,8 +576,8 @@ details[open] .collapsible-content {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    width: 32px; /* 💡 Made wider */
-    height: 28px; /* 💡 Made taller */
+    width: 36px; /* 💡 Made wider */
+    height: 32px; /* 💡 Made taller */
     z-index: 1004;
 }
 .nav-toggle-btn span {
