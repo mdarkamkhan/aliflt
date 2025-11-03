@@ -248,6 +248,7 @@ footer {
     width: 100%;
     height: 100vh; /* Full screen height */
     overflow: hidden;
+    background-color: #000; /* 💡 NEW: Adds black "frame" background */
 }
 #top-banner .swapper-container {
     width: 100%;
@@ -258,7 +259,7 @@ footer {
 #top-banner .swapper-item img {
     width: 100%;
     height: 100%; /* Fills the 100vh container */
-    object-fit: cover; 
+    object-fit: contain; /* 💡 CHANGED from 'cover' to 'contain' */
     min-height: 0; 
 }
 .banner-content {
@@ -740,7 +741,6 @@ details[open] .collapsible-content {
 .product-detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
 
 /* 💡 ALL OLD DESCRIPTION/SPEC STYLES REMOVED FROM HERE */
-/* .product-detail-description h3, p, .product-specs-container, etc. are gone */
 
 /* 💡 UPDATED CART ITEM STYLES */
 .cart-item { 
@@ -778,7 +778,7 @@ details[open] .collapsible-content {
 #cart-summary .btn-buy { width: 100%; }
 @media (min-width: 768px) { #cart-summary .btn-buy { width: auto; min-width: 300px; } }
 
-/* 💡 UPDATED CART QUANTITY CONTROLS */
+/* 💡 CART QUANTITY CONTROLS */
 .cart-item-quantity {
     font-family: var(--font-body);
     font-size: 1rem;
@@ -820,8 +820,8 @@ details[open] .collapsible-content {
     margin-bottom: 25px; /* Space before buttons */
 }
 #delivery-progress-container {
-    margin-top: 20px; /* Space from button above */
-    margin-bottom: 25px; /* Space from summary below */
+    margin-top: 20px; 
+    margin-bottom: 25px; 
     padding: 15px;
     border: 1px solid var(--border-color);
     background: #fff;
