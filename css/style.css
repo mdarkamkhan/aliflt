@@ -242,26 +242,32 @@ footer {
     font-size: 1.2rem;
 }
 
-/* BANNER STYLES */
+/* ==================================================
+===== 💡 BANNER STYLES (AUTO-FRAME FIX) ========
+================================================== */
 #top-banner {
     position: relative;
     width: 100%;
-    height: 100vh; /* Full screen height */
+    /* 💡 REMOVED height: 100vh; */
     overflow: hidden;
-    /* 💡 REVERTED: Removed black background */
 }
 #top-banner .swapper-container {
     width: 100%;
-    height: 100%; 
+    /* 💡 REMOVED height: 100%; */
     max-width: none;
-    min-height: auto; 
+    /* 💡 REMOVED min-height: auto; */
 }
 #top-banner .swapper-item img {
     width: 100%;
-    height: 100%; /* Fills the 100vh container */
-    object-fit: cover; /* 💡 REVERTED: Back to 'cover' */
+    height: auto; /* 💡 CHANGED to 'auto' */
+    object-fit: fill; /* 💡 CHANGED to 'fill' */
+    display: block; /* 💡 ADDED this */
     min-height: 0; 
 }
+/* ==================================================
+===== 💡 END BANNER STYLES FIX ==================
+================================================== */
+
 .banner-content {
     position: absolute;
     bottom: 10vh;
@@ -280,7 +286,7 @@ footer {
 }
 @media (max-width: 900px) {
     #top-banner {
-        height: 100vh;
+        /* No 100vh height needed */
     }
     .banner-content {
          bottom: 15vh;
