@@ -248,20 +248,17 @@ footer {
 #top-banner {
     position: relative;
     width: 100%;
-    /* 💡 REMOVED height: 100vh; */
     overflow: hidden;
 }
 #top-banner .swapper-container {
     width: 100%;
-    /* 💡 REMOVED height: 100%; */
     max-width: none;
-    /* 💡 REMOVED min-height: auto; */
 }
 #top-banner .swapper-item img {
     width: 100%;
-    height: auto; /* 💡 CHANGED to 'auto' */
-    object-fit: fill; /* 💡 CHANGED to 'fill' */
-    display: block; /* 💡 ADDED this */
+    height: auto; 
+    object-fit: fill; 
+    display: block; 
     min-height: 0; 
 }
 /* ==================================================
@@ -452,12 +449,20 @@ footer {
     border-radius: 0;
     opacity: 1; 
     transform: translateY(0);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
+    /* 💡 ADDED transition for display */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, display 0.3s ease;
 }
 .product-card.is-visible {
     opacity: 1;
     transform: translateY(0);
 }
+/* 💡 NEW: Class for hiding filtered products */
+.product-card.hidden {
+    opacity: 0;
+    transform: translateY(10px);
+    display: none;
+}
+
 .product-card-image-wrapper {
     overflow: hidden;
     border-radius: 0;
@@ -568,6 +573,8 @@ details[open] .collapsible-content {
     text-transform: uppercase;
     letter-spacing: 2px;
 }
+
+/* 💡 USER REQUESTED CHANGES APPLIED HERE 💡 */
 .nav-toggle-btn {
     background: none;
     border: none;
@@ -576,20 +583,23 @@ details[open] .collapsible-content {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    width: 36px; /* 💡 Made wider */
-    height: 32px; /* 💡 Made taller */
+    width: 36px; /* 💡 CHANGED */
+    height: 32px; /* 💡 CHANGED */
     z-index: 1004;
 }
 .nav-toggle-btn span {
     width: 100%;
-    height: 2px; /* 💡 Made thicker */
+    height: 2px; /* 💡 CHANGED */
     background: #000;
     border-radius: 0;
     transition: all 0.3s ease;
 }
-.sidebar-open .nav-toggle-btn span:nth-child(1) { transform: translateY(9px) rotate(45deg); } /* 💡 Adjusted */
+/* 💡 Adjusted transform to match new dimensions */
+.sidebar-open .nav-toggle-btn span:nth-child(1) { transform: translateY(14px) rotate(45deg); } 
 .sidebar-open .nav-toggle-btn span:nth-child(2) { opacity: 0; }
-.sidebar-open .nav-toggle-btn span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); } /* 💡 Adjusted */
+.sidebar-open .nav-toggle-btn span:nth-child(3) { transform: translateY(-14px) rotate(-45deg); } 
+/* 💡 END OF USER CHANGES 💡 */
+
 .sidebar-overlay {
     position: fixed;
     top: 0;
@@ -637,11 +647,11 @@ details[open] .collapsible-content {
     padding: 15px 0;
     text-decoration: none;
     color: var(--text-color);
-    font-size: 1.3rem; /* 💡 Reduced from 1.8rem */
-    font-weight: 300;  /* 💡 Use Poppins Light */
-    font-family: var(--font-body); /* 💡 Switched from --font-heading (Playfair) */
-    text-transform: uppercase; /* 💡 Added for a sleek, high-fashion feel */
-    letter-spacing: 1.5px;   /* 💡 Added for elegance */
+    font-size: 1.3rem;
+    font-weight: 300; 
+    font-family: var(--font-body); 
+    text-transform: uppercase; 
+    letter-spacing: 1.5px;   
     transition: opacity 0.3s ease;
 }
 .sidebar-links a:hover { color: #000; opacity: 0.7; }
@@ -740,7 +750,7 @@ details[open] .collapsible-content {
     color: #555; 
     text-transform: uppercase; 
     display: block; 
-    margin-bottom: 5px; /* 💡 Reduced margin */
+    margin-bottom: 5px; 
     font-family: var(--font-accent);
     letter-spacing: 1.5px;
 }
@@ -768,7 +778,7 @@ details[open] .collapsible-content {
 }
 
 #cart-summary { 
-    margin-top: 30px; 
+    margin-top: 30p;
     border-top: 1px solid #000; 
     padding-top: 20px; 
     text-align: right; 
@@ -1002,4 +1012,67 @@ details[open] > .accordion-content {
     color: #000;
     text-align: right;
     text-transform: capitalize;
+}
+
+/* ==================================================
+===== 💡 NEW FILTER BAR STYLES ===============
+================================================== */
+.filter-bar-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+    padding: 10px 0 20px 0; /* Space above/below the bar */
+    margin-bottom: 20px; /* Space between bar and grid */
+}
+
+/* Hide scrollbar for a cleaner look */
+.filter-bar-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+.filter-bar-scroll-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.filter-btn {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px 12px;
+    margin-right: 10px;
+    border-radius: 0;
+    min-width: 80px; /* Ensures buttons have some space */
+    border-bottom: 2px solid transparent; /* Placeholder for active state */
+    transition: border-color 0.3s ease;
+}
+
+.filter-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-bottom: 8px;
+    border-radius: 50%; /* Makes the icons circular */
+    border: 1px solid var(--border-color); /* Subtle border */
+    padding: 2px;
+}
+
+.filter-name {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    text-transform: capitalize;
+}
+
+/* Active state for the button */
+.filter-btn.active {
+    border-bottom: 2px solid var(--accent-color);
+}
+.filter-btn.active .filter-name {
+    font-weight: 600; /* Make active text slightly bolder */
 }
