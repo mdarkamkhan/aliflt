@@ -1,0 +1,44 @@
+{
+  "categories": [
+    {
+      "name": "Lace",
+      "icon": "lace.png",
+      "values": ["lace"]
+    },
+    {
+      "name": "Latkan",
+      "icon": "latkan.png",
+      "values": ["latkan"]
+    },
+    {
+      "name": "Fabrics",
+      "icon": "fabrics.png",
+      "values": [
+        "cotton",
+        "blouse piece",
+        "banarasi",
+        "velvet",
+        "jorget",
+        "organza",
+        "net"
+      ]
+    },
+    {
+      "name": "Plain Fabrics",
+      "icon": "plain-fabrics.png",
+      "values": [
+        "plain reyon",
+        "plain cotton",
+        "plain saten",
+        "plain crape",
+        "aster",
+        "blouse piece"
+      ]
+    },
+    {
+      "name": "Tailoring Material",
+      "icon": "tailoring-metrial.png",
+      "values": ["fall", "aster", "thread"]
+    }
+  ]
+}
