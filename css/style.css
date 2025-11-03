@@ -248,17 +248,20 @@ footer {
 #top-banner {
     position: relative;
     width: 100%;
+    /* 💡 REMOVED height: 100vh; */
     overflow: hidden;
 }
 #top-banner .swapper-container {
     width: 100%;
+    /* 💡 REMOVED height: 100%; */
     max-width: none;
+    /* 💡 REMOVED min-height: auto; */
 }
 #top-banner .swapper-item img {
     width: 100%;
-    height: auto; 
-    object-fit: fill; 
-    display: block; 
+    height: auto; /* 💡 CHANGED to 'auto' */
+    object-fit: fill; /* 💡 CHANGED to 'fill' */
+    display: block; /* 💡 ADDED this */
     min-height: 0; 
 }
 /* ==================================================
@@ -778,7 +781,7 @@ details[open] .collapsible-content {
 }
 
 #cart-summary { 
-    margin-top: 30p;
+    margin-top: 30px; 
     border-top: 1px solid #000; 
     padding-top: 20px; 
     text-align: right; 
@@ -1015,7 +1018,7 @@ details[open] > .accordion-content {
 }
 
 /* ==================================================
-===== 💡 NEW FILTER BAR STYLES ===============
+===== 💡 FILTER BAR STYLES (FIXED) =============
 ================================================== */
 .filter-bar-scroll-container {
     display: flex;
@@ -1081,5 +1084,3 @@ details[open] > .accordion-content {
 .filter-btn.active .filter-name {
     font-weight: 600; /* Make active text slightly bolder */
 }
-
-
