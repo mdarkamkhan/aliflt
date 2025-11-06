@@ -1,0 +1,96 @@
+---
+layout: base.liquid
+pagination:
+  data: collections.services
+  size: 1
+  alias: item # We call each service 'item'
+  
+permalink: "services/{{ item.fileSlug }}/"
+
+eleventyComputed:
+  title: "{{ item.data.title }}" 
+---
+
+<div class="container section">
+    
+    <div class="product-detail-grid">
+        
+        <!-- Column 1: Image -->
+        <div class="product-detail-image">
+            <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+        </div>
+        
+        <!-- Column 2: Info -->
+        <div class="product-detail-info">
+            <h1 class="product-detail-title">{{ item.data.title }}</h1>
+            
+            {% if item.data.price %}
+                <span class="product-detail-price">₹{{ item.data.price }}</span>
+            {% endif %}
+            
+            {% if item.data.category %}
+                <span class="product-detail-category">{{ item.data.category }}</span>
+            {% endif %}
+
+            <!-- "Book Now" Button -->
+            <div class="product-detail-actions" style="grid-template-columns: 1fr;">
+                <button class="btn-buy" id="bookNowBtn" 
+                        data-service-name="{{ item.data.title | escape }}">
+                    Book Now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Full-Width Accordion for Details -->
+<div class="product-accordion-container">
+
+    <!-- 1. Service Information Accordion -->
+    {% if item.data.service_information %}
+    <details class="accordion-item" open> <!-- Starts open -->
+        <summary class="accordion-summary">
+            <h3 class="accordion-heading">Service Information</h3>
+            <span class="accordion-caret">^</span>
+        </summary>
+        <div class="accordion-content">
+            <div>
+                <p class="accordion-description-text">{{ item.data.service_information }}</p>
+            </div>
+        </div>
+    </details>
+    {% endif %}
+
+    <!-- 2. "Our Works" Gallery Accordion -->
+    <details class="accordion-item" open>
+        <summary class="accordion-summary">
+            <h3 class="accordion-heading">Our Works</h3>
+            <span class="accordion-caret">^</span>
+        </summary>
+        <div class="accordion-content">
+            <div>
+                
+                {% assign currentCategory = item.data.category | downcase %}
+                {% assign works_found = false %}
+                
+                <div class="works-gallery-container">
+                    {% for work in collections.works %}
+                        {% if work.data.category | downcase == currentCategory %}
+                            {% assign works_found = true %}
+                            <div class="work-gallery-item">
+                                <img src="{{ work.data.image | url }}" alt="{{ work.data.title }}">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% if works_found == false %}
+                    <p class="accordion-description-text" style="text-align: center;">
+                        No works found for this category yet.
+                    </p>
+                {% endif %}
+
+            </div>
+        </div>
+    </details>
+</div>
