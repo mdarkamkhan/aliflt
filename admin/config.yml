@@ -24,9 +24,9 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - { name: "date", label: "Date", widget: "datetime", required: true }
-      - { name: "title", label: "Title", widget: "string", required: true }
-      - { name: "image", label: "Image", widget: "image", required: true }
+      - { name: "date", label: "Date", widget: "datetime" }
+      - { name: "title", label: "Title", widget: "string" }
+      - { name: "image", label: "Image", widget: "image" }
       - name: "category"
         label: "Category"
         widget: "select"
@@ -47,20 +47,21 @@ collections:
           - banarasi
           - velvet
           - cotton
-        required: true
-      - { name: "price", label: "Price", widget: "number", required: true }
-      - { name: "description", label: "Description", widget: "text", required: true }
-      - { name: "size", label: "Size", widget: "string", required: true }
-      - { name: "colour", label: "Colour", widget: "string", required: true }
-      - { name: "number_of_pieces", label: "Number of Pieces/meter", widget: "string", required: true }
-      - { name: "fabric", label: "Fabric", widget: "string", required: true }
-      - { name: "work", label: "Work", widget: "string", required: true }
-      - { name: "pattern", label: "Pattern", widget: "string", required: true }
-      - { name: "ideal_for", label: "Ideal For", widget: "string", required: true }
-      - { name: "delivery_charges", label: "Delivery Charges", widget: "string", required: true }
-      - { name: "delivery_within", label: "Delivery within", widget: "string", required: true }
-      - { name: "payment_type", label: "Payment Type", widget: "string", required: true }
-      - { name: "return_policy", label: "Return Policy", widget: "string", required: true }
+      - { name: "price", label: "Price", widget: "number" }
+      - { name: "description", label: "Description", widget: "text" }
+      
+      # --- Product Information Fields ---
+      - { name: "size", label: "Size (Optional)", widget: "string", required: false }
+      - { name: "colour", label: "Colour (Optional)", widget: "string", required: false }
+      - { name: "number_of_pieces", label: "Number of Pieces/meter (Optional)", widget: "string", required: false }
+      - { name: "fabric", label: "Fabric (Optional)", widget: "string", required: false }
+      - { name: "work", label: "Work (Optional)", widget: "string", required: false }
+      - { name: "pattern", label: "Pattern (Optional)", widget: "string", required: false }
+      - { name: "ideal_for", label: "Ideal For (Optional)", widget: "string", required: false }
+      - { name: "delivery_charges", label: "Delivery Charges (Optional)", widget: "string", required: false }
+      - { name: "delivery_within", label: "Delivery within (Optional)", widget: "string", required: false }
+      - { name: "payment_type", label: "Payment Type (Optional)", widget: "string", required: false }
+      - { name: "return_policy", label: "Return Policy (Optional)", widget: "string", required: false }
 
   - name: "services"
     label: "Services"
@@ -92,6 +93,9 @@ collections:
           - saree fall & pico
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
+      # 💡 NEW FIELD ADDED HERE
+      - { name: "service_information", label: "Service Information", widget: "text", required: false }
+
 
   - name: "works"
     label: "Our Works"
@@ -103,6 +107,7 @@ collections:
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
+      # This category field is what we use for filtering
       - name: "category"
         label: "Category"
         widget: "select"
@@ -123,4 +128,3 @@ collections:
           - saree fall & pico
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
-    
