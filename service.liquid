@@ -1,97 +1,79 @@
 ---
 layout: base.liquid
-pagination:
-  data: collections.services
-  size: 1
-  alias: item # We call each service 'item'
-  
-# This creates the permalink (e.g., /services/blouse-stitching/)
-permalink: "services/{{ item.fileSlug }}/"
-
-eleventyComputed:
-  # This sets the <title> tag for each page
-  title: "{{ item.data.title }}" 
+title: Our Services & Works
+permalink: /services-works/
 ---
 
-<div class="container section">
-    
-    <div class="product-detail-grid">
+<div class="container section fade-in-section">
+    <h2>Our Services & Works</h2>
+
+    <div class="product-grid">
         
-        <!-- Column 1: Image -->
-        <div class="product-detail-image">
-            <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
-        </div>
+        {% assign combined_list = collections.services | concat: collections.works %}
         
-        <!-- Column 2: Info -->
-        <div class="product-detail-info">
-            <h1 class="product-detail-title">{{ item.data.title }}</h1>
-            
-            {% if item.data.price %}
-                <span class="product-detail-price">₹{{ item.data.price }}</span>
-            {% endif %}
-            
-            {% if item.data.category %}
-                <span class="product-detail-category">{{ item.data.category }}</span>
+        {% for item in combined_list %}
+        
+            {% comment %}
+                We must check if the item is a 'service' or a 'work'.
+                'service' items have tags, 'work' items also have tags.
+                We check for the 'service' tag.
+            {% endcomment %}
+            {% assign item_is_service = false %}
+            {% for tag in item.data.tags %}
+                {% if tag == 'service' %}
+                    {% assign item_is_service = true %}
+                {% endif %}
+            {% endfor %}
+
+
+            {% if item_is_service %}
+                <!-- 💡 IT'S A SERVICE: Make a clickable link -->
+                <a href="/services/{{ item.fileSlug }}/" class="product-card">
+                    <div class="product-card-image-wrapper">
+                        <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+                    </div>
+                    <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
+                        <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
+                            {{ item.data.title }}
+                        </div>
+                        {% if item.data.price %}
+                        <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
+                            ₹{{ item.data.price }}
+                        </div>
+                        {% endif %}
+                        {% if item.data.category %}
+                        <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+                            {{ item.data.category }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </a>
+            {% else %}
+                <!-- 💡 IT'S A WORK: Make a non-clickable card -->
+                <div class="product-card" style="opacity: 0.8;">
+                    <div class="product-card-image-wrapper">
+                        <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+                    </div>
+                    <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
+                        <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
+                            {{ item.data.title }}
+                        </div>
+                        {% if item.data.category %}
+                        <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+                            (Work) {{ item.data.category }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
             {% endif %}
 
-            <!-- "Book Now" Button -->
-            <div class="product-detail-actions" style="grid-template-columns: 1fr;">
-                <button class="btn-buy" id="bookNowBtn" 
-                        data-service-title="{{ item.data.title | escape }}">
-                    Book Now
-                </button>
-            </div>
-        </div>
+        {% endfor %}
+
+        {% if combined_list.size == 0 %}
+            <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
+                No services or works found. Please check back soon.
+            </p>
+        {% endif %}
     </div>
 </div>
 
-<!-- 
-==================================================
-===== 💡 NEW FULL-WIDTH ACCORDION ================
-================================================== 
--->
-<div class="product-accordion-container">
-
-    <!-- 1. Service Information Accordion -->
-    {% if item.data.service_information %}
-    <details class="accordion-item" open> <!-- Starts open -->
-        <summary class="accordion-summary">
-            <h3 class="accordion-heading">Service Information</h3>
-            <span class="accordion-caret">^</span>
-        </summary>
-        <div class="accordion-content">
-            <div>
-                <p class="accordion-description-text">{{ item.data.service_information }}</p>
-            </div>
-        </div>
-    </details>
-    {% endif %}
-
-    <!-- 2. Related "Our Works" Gallery -->
-    {%- comment -%}
-        First, we find all works that match this service's category.
-    {%- endcomment -%}
-    {% assign current_category = item.data.category | downcase %}
-    {% assign related_works = collections.works | where_exp: "work", "work.data.category == item.data.category" %}
-
-    {% if related_works.size > 0 %}
-    <details class="accordion-item" open>
-        <summary class="accordion-summary">
-            <h3 class="accordion-heading">Our Works</h3>
-            <span class="accordion-caret">^</span>
-        </summary>
-        <div class="accordion-content">
-            <div>
-                <div class="works-gallery-container">
-                    {% for work in related_works %}
-                    <div class="work-gallery-item">
-                        <img src="{{ work.data.image | url }}" alt="{{ work.data.title }}">
-                        <p class="work-gallery-title">{{ work.data.title }}</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </details>
-    {% endif %}
-</div>
