@@ -12,54 +12,56 @@ permalink: /services-works/
         {% assign combined_list = collections.services | concat: collections.works %}
         
         {% for item in combined_list %}
-        <!-- 
-          This link must also go to the detail page.
-          We need to create 'service-work.liquid' template next.
-        -->
-        <a href="{{ item.url | url }}" class="product-card">
-            <div class="product-card-image-wrapper">
-                <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
-            </div>
+        
+            {% comment %}
+                💡 LOGIC FIX:
+                We check if the 'tags' value is the string "service".
+                This is much simpler and matches your services/services.json file.
+            {% endcomment %}
             
-            <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
-                
-                <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
-                    {{ item.data.title }}
+            {% if item.data.tags == 'service' %}
+                <!-- ✅ IT'S A SERVICE: Make a clickable link -->
+                <a href="/services/{{ item.fileSlug }}/" class="product-card">
+                    <div class="product-card-image-wrapper">
+                        <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+                    </div>
+                    <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
+                        <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
+                            {{ item.data.title }}
+                        </div>
+                        {% if item.data.price %}
+                        <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
+                            ₹{{ item.data.price }}
+                        </div>
+                        {% endif %}
+                        {% if item.data.category %}
+                        <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+                            {{ item.data.category }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </a>
+            {% else %}
+                <!-- 💡 IT'S A WORK: Make a non-clickable card -->
+                <div class="product-card" style="opacity: 0.8;">
+                    <div class="product-card-image-wrapper">
+                        <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+                    </div>
+                    <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
+                        <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
+                            {{ item.data.title }}
+                        </div>
+                        {% if item.data.category %}
+                        <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+                            (Work) {{ item.data.category }}
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
-                
-                {% if item.data.price %}
-                <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
-                    ₹{{ item.data.price }}
-                </div>
-                {% endif %}
-                
-                {% if item.data.category %}
-                <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
-                    {{ item.data.category }}
-                </div>
-                {% endif %}
-                
-                {% if item.data.description %}
-                <details style="margin-top: 10px; font-size: 0.9rem; color: #555; line-height: 1.4;">
-                    <summary style="cursor: pointer; font-weight: 600; color: #333; font-size: 0.9rem; text-transform: none;">
-                        Description
-                    </summary>
-                    <p style="margin-top: 5px; margin-bottom: 0; font-weight: normal;">
-                        {{ item.data.description }}
-                    </p>
-                </details>
-                {% endif %}
+            {% endif %}
 
-            </div>
-        </a>
         {% endfor %}
 
-        <!-- 
-        ==================================================
-        ===== 💡 LIQUID SYNTAX FIX =======================
-        ================================================== 
-        Changed '| size == 0' to '.size == 0'
-        -->
         {% if combined_list.size == 0 %}
             <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
                 No services or works found. Please check back soon.
