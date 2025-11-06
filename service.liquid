@@ -4,13 +4,10 @@ pagination:
   data: collections.services
   size: 1
   alias: item # We call each service 'item'
-  
-# 💡 THIS IS THE FIX:
-# This stops the template file itself from rendering a page
-permalink: false
-  
-# This creates the permalink (e.g., /services/blouse-stitching/)
-pagination.permalink: "services/{{ item.fileSlug }}/"
+
+# 💡 FIX: Using the same permalink structure as product.liquid
+# This will generate pages like /services/blouse-stitching/
+permalink: "services/{{ item.fileSlug }}/"
 
 eleventyComputed:
   # This sets the <title> tag for each page
@@ -72,10 +69,6 @@ eleventyComputed:
     {% endif %}
 
     <!-- 2. Related "Our Works" Gallery -->
-    {%- comment -%}
-        This is the other fix:
-        We find works where the category matches this service's category.
-    {%- endcomment -%}
     {% assign related_works = collections.works | where_exp: "work", "work.data.category == item.data.category" %}
 
     {% if related_works.size > 0 %}
@@ -99,5 +92,3 @@ eleventyComputed:
     </details>
     {% endif %}
 </div>
-
-
