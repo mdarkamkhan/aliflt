@@ -5,9 +5,11 @@ pagination:
   size: 1
   alias: item # We call each service 'item'
   
+# This creates the permalink (e.g., /services/blouse-stitching/)
 permalink: "services/{{ item.fileSlug }}/"
 
 eleventyComputed:
+  # This sets the <title> tag for each page
   title: "{{ item.data.title }}" 
 ---
 
@@ -35,7 +37,7 @@ eleventyComputed:
             <!-- "Book Now" Button -->
             <div class="product-detail-actions" style="grid-template-columns: 1fr;">
                 <button class="btn-buy" id="bookNowBtn" 
-                        data-service-name="{{ item.data.title | escape }}">
+                        data-service-title="{{ item.data.title | escape }}">
                     Book Now
                 </button>
             </div>
@@ -43,7 +45,11 @@ eleventyComputed:
     </div>
 </div>
 
-<!-- Full-Width Accordion for Details -->
+<!-- 
+==================================================
+===== 💡 NEW FULL-WIDTH ACCORDION ================
+================================================== 
+-->
 <div class="product-accordion-container">
 
     <!-- 1. Service Information Accordion -->
@@ -61,7 +67,14 @@ eleventyComputed:
     </details>
     {% endif %}
 
-    <!-- 2. "Our Works" Gallery Accordion -->
+    <!-- 2. Related "Our Works" Gallery -->
+    {%- comment -%}
+        First, we find all works that match this service's category.
+    {%- endcomment -%}
+    {% assign current_category = item.data.category | downcase %}
+    {% assign related_works = collections.works | where_exp: "work", "work.data.category | downcase == current_category" %}
+
+    {% if related_works.size > 0 %}
     <details class="accordion-item" open>
         <summary class="accordion-summary">
             <h3 class="accordion-heading">Our Works</h3>
@@ -69,28 +82,17 @@ eleventyComputed:
         </summary>
         <div class="accordion-content">
             <div>
-                
-                {% assign currentCategory = item.data.category | downcase %}
-                {% assign works_found = false %}
-                
                 <div class="works-gallery-container">
-                    {% for work in collections.works %}
-                        {% if work.data.category | downcase == currentCategory %}
-                            {% assign works_found = true %}
-                            <div class="work-gallery-item">
-                                <img src="{{ work.data.image | url }}" alt="{{ work.data.title }}">
-                            </div>
-                        {% endif %}
+                    {% for work in related_works %}
+                    <div class="work-gallery-item">
+                        <img src="{{ work.data.image | url }}" alt="{{ work.data.title }}">
+                        <p class="work-gallery-title">{{ work.data.title }}</p>
+                    </div>
                     {% endfor %}
                 </div>
-
-                {% if works_found == false %}
-                    <p class="accordion-description-text" style="text-align: center;">
-                        No works found for this category yet.
-                    </p>
-                {% endif %}
-
             </div>
         </div>
     </details>
+    {% endif %}
 </div>
+
