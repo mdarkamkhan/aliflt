@@ -9,10 +9,10 @@
     <meta name="description" content="Custom bridal blouses, lehengas, and gowns — premium ladies tailoring in Sahibganj, Jharkhand. Quality stitching for festive and daily wear.">
     <link rel="canonical" href="https://aliflt.netlify.app/{{ page.url }}">
     
-    <!-- 💡 NEW: PWA & Manifest Links -->
+    <!-- PWA & Manifest Links -->
     <meta name="theme-color" content="#FBF9F6"/>
     <link rel="manifest" href="/manifest.webmanifest">
-    <link rel="apple-touch-icon" href="/favicon.png"> <!-- This already existed -->
+    <link rel="apple-touch-icon" href="/favicon.png">
     <link rel="icon" href="/favicon.png" type="image/png">
 
     <script type="application/ld+json">
@@ -97,7 +97,8 @@
         <ul class="sidebar-links">
             <li><a href="/">Home</a></li>
             <li><a href="/products/">Products</a></li>
-            <li><a href="/services-works/">Services & Works</a></li>
+            <!-- 💡 THE FIX: Removed the extra "s" from this link -->
+            <li><a href="/services-work/">Services & Works</a></li>
             <li><a href="/contact-us/">Contact</a></li>
             <li><a href="/#reviews">Reviews</a></li> 
         </ul>
@@ -161,7 +162,7 @@
         </div>
     </div>
 
-    <!-- 💡 NEW: Booking Modal HTML -->
+    <!-- Booking Modal HTML -->
     <div id="booking-modal" class="modal-overlay">
         <div class="modal-content">
             <h3 class="modal-title">Book Service</h3>
