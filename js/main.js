@@ -194,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- PRODUCT DETAIL PAGE LOGIC ---
     const addToCartBtn = document.getElementById('addToCartBtn');
+    // ... (This section is unchanged)
     const buyNowBtn = document.getElementById('buyNowBtn');
     const whatsappNumber = '7488611845'; // Your WhatsApp number
     const whatsappBaseUrl = `https://wa.me/${whatsappNumber}?text=`;
@@ -526,4 +527,4 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show the browser's install prompt
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                // Wait for the user to respon
+       
