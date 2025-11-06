@@ -1018,7 +1018,7 @@ details[open] > .accordion-content {
 }
 
 /* ==================================================
-===== 💡 FILTER BAR STYLES (FIXED) =============
+===== 💡 FILTER BAR STYLES (72px ICON FIX) =============
 ================================================== */
 .filter-bar-scroll-container {
     display: flex;
@@ -1049,17 +1049,17 @@ details[open] > .accordion-content {
     padding: 10px 5px; /* Reduced side padding */
     margin-right: 10px;
     border-radius: 0;
-    width: 85px; /* 💡 Set a fixed width */
+    width: 90px; /* 💡 Set a fixed width */
     flex-shrink: 0; /* 💡 Prevent button from shrinking */
     border-bottom: 2px solid transparent; /* Placeholder for active state */
     transition: border-color 0.3s ease;
 }
 
 .filter-icon {
-    width: 40px;
-    height: 40px;
+    width: 72px;  /* 💡 CHANGED to 72px */
+    height: 72px; /* 💡 CHANGED to 72px */
     object-fit: contain;
-    margin-bottom: 0; /* 💡 Removed margin */
+    margin-bottom: 0; 
     border-radius: 50%; /* Makes the icons circular */
     border: 1px solid var(--border-color); /* Subtle border */
     padding: 2px;
@@ -1083,4 +1083,58 @@ details[open] > .accordion-content {
 }
 .filter-btn.active .filter-name {
     font-weight: 600; /* Make active text slightly bolder */
+}
+
+/* ==================================================
+===== 💡 NEW BOOKING MODAL & GALLERY STYLES ======
+================================================== */
+
+/* Styles for the booking modal title */
+.modal-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* Styles for the horizontal works gallery */
+.works-gallery-container {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+    scroll-snap-type: x mandatory; /* Creates the snapping effect */
+    padding-bottom: 15px; /* Space for scrollbar */
+}
+
+/* Hide scrollbar for a cleaner look */
+.works-gallery-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+.works-gallery-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.work-gallery-item {
+    flex: 0 0 70%; /* Each item takes 70% of the container width */
+    max-width: 300px; /* Max width for larger screens */
+    scroll-snap-align: start; /* Snap to the start of the item */
+    margin-right: 15px;
+    text-align: center;
+}
+
+.work-gallery-item img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1.1; /* Slightly taller than wide */
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+}
+
+.work-gallery-title {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 400;
+    color: #333;
+    margin-top: 10px;
 }
