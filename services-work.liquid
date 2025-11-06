@@ -1,7 +1,7 @@
 ---
 layout: base.liquid
 title: Our Services & Works
-permalink: /services-works/
+permalink: /services-work/
 ---
 
 <div class="container section fade-in-section">
@@ -9,63 +9,71 @@ permalink: /services-works/
 
     <div class="product-grid">
         
-        {% assign combined_list = collections.services | concat: collections.works %}
-        
-        {% for item in combined_list %}
-        
-            {% comment %}
-                💡 LOGIC FIX:
-                We check if the 'tags' value is the string "service".
-                This is much simpler and matches your services/services.json file.
-            {% endcomment %}
+        {%- comment -%}
+            💡 FIX: We loop through services first, which ALL get a link.
+        {%- endcomment -%}
+        {% for item in collections.services %}
+        <a href="/services/{{ item.fileSlug }}/" class="product-card">
+            <div class="product-card-image-wrapper">
+                <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+            </div>
             
-            {% if item.data.tags == 'service' %}
-                <!-- ✅ IT'S A SERVICE: Make a clickable link -->
-                <a href="/services/{{ item.fileSlug }}/" class="product-card">
-                    <div class="product-card-image-wrapper">
-                        <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
-                    </div>
-                    <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
-                        <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
-                            {{ item.data.title }}
-                        </div>
-                        {% if item.data.price %}
-                        <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
-                            ₹{{ item.data.price }}
-                        </div>
-                        {% endif %}
-                        {% if item.data.category %}
-                        <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
-                            {{ item.data.category }}
-                        </div>
-                        {% endif %}
-                    </div>
-                </a>
-            {% else %}
-                <!-- 💡 IT'S A WORK: Make a non-clickable card -->
-                <div class="product-card" style="opacity: 0.8;">
-                    <div class="product-card-image-wrapper">
-                        <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
-                    </div>
-                    <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
-                        <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
-                            {{ item.data.title }}
-                        </div>
-                        {% if item.data.category %}
-                        <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
-                            (Work) {{ item.data.category }}
-                        </div>
-                        {% endif %}
-                    </div>
+            <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
+                
+                <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
+                    {{ item.data.title }}
                 </div>
-            {% endif %}
-
+                
+                {% if item.data.price %}
+                <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
+                    ₹{{ item.data.price }}
+                </div>
+                {% endif %}
+                
+                {% if item.data.category %}
+                <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+                    {{ item.data.category }}
+                </div>
+                {% endif %}
+            </div>
+        </a>
         {% endfor %}
 
-        {% if combined_list.size == 0 %}
+        {%- comment -%}
+            💡 FIX: We loop through works second, which are NOT clickable.
+        {%- endcomment -%}
+        {% for item in collections.works %}
+        <div class="product-card" style="opacity: 0.8; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div class="product-card-image-wrapper">
+                <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+            </div>
+            
+            <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
+                
+                <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
+                    {{ item.data.title }}
+                </div>
+                
+                {% if item.data.category %}
+                <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+                    (Our Work) {{ item.data.category }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+        
+        {%- comment -%} Check if both collections are empty {%- endcomment -%}
+        {% assign services_size = collections.services.size %}
+        {% assign works_size = collections.works.size %}
+        {% assign combined_size = services_size | plus: works_size %}
+
+        {% if combined_size == 0 %}
             <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
                 No services or works found. Please check back soon.
             </p>
         {% endif %}
     </div>
 </div>
+
