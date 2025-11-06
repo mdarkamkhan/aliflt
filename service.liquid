@@ -72,7 +72,7 @@ eleventyComputed:
         First, we find all works that match this service's category.
     {%- endcomment -%}
     {% assign current_category = item.data.category | downcase %}
-    {% assign related_works = collections.works | where_exp: "work", "work.data.category | downcase == current_category" %}
+    {% assign related_works = collections.works | where_exp: "work", "work.data.category == item.data.category" %}
 
     {% if related_works.size > 0 %}
     <details class="accordion-item" open>
@@ -95,4 +95,3 @@ eleventyComputed:
     </details>
     {% endif %}
 </div>
-
