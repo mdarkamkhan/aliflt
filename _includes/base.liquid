@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALiF Ladies Tailor | {{ title }}</title>
     
+    <!-- SEO & METADATA -->
     <meta name="description" content="Custom bridal blouses, lehengas, and gowns — premium ladies tailoring in Sahibganj, Jharkhand. Quality stitching for festive and daily wear.">
     <link rel="canonical" href="https://aliflt.netlify.app/{{ page.url }}">
     
+    <!-- PWA & Manifest Links -->
     <meta name="theme-color" content="#FBF9F6"/>
     <link rel="manifest" href="/manifest.webmanifest">
-    <link rel="apple-touch-icon" href="/favicon.png"> <link rel="icon" href="/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <link rel="icon" href="/favicon.png" type="image/png">
 
     <script type="application/ld+json">
     {
@@ -30,11 +33,13 @@
     }
     </script>
     
+    <!-- STYLES & FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Cormorant+Garamond:wght@400;500&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 
+    <!-- INLINE STYLES -->
     <style>
         footer { background-color: #f4f4f4; color: #333; padding: 40px 0; text-align: left; border-top: 1px solid #e0e0e0; }
         .footer-content { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px; }
@@ -59,8 +64,10 @@
 </head>
 <body>
     <nav class="fixed-top-nav">
+        <!-- Left Side: Logo -->
         <a href="/" class="nav-logo">ALiF</a>
         
+        <!-- RIGHT SIDE: Actions (Cart + Menu) -->
         <div class="nav-actions">
             <a href="/cart/" class="nav-cart-btn" id="cartIcon" aria-label="View Cart">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -78,8 +85,10 @@
         </div>
     </nav>
     
+    <!-- This is where your page content (e.g., index.liquid) goes -->
     <main>{{ content }}</main>
     
+    <!-- SIDEBAR MENU -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="sidebar-header">
@@ -88,7 +97,8 @@
         <ul class="sidebar-links">
             <li><a href="/">Home</a></li>
             <li><a href="/products/">Products</a></li>
-            <li><a href="/services-works/">Services & Works</a></li>
+            <!-- 💡 This link now correctly points to your page's permalink -->
+            <li><a href="/services-work/">Services & Works</a></li>
             <li><a href="/contact-us/">Contact</a></li>
             <li><a href="/#reviews">Reviews</a></li> 
         </ul>
@@ -99,6 +109,7 @@
                 <li><a href="https://wa.me/7250470009" target="_blank" rel="noopener" aria-label="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.04 2.01c-5.523 0-10 4.477-10 10 0 1.75.443 3.495 1.304 5.004l-1.348 4.925 5.034-1.325c1.482.797 3.166 1.22 4.91 1.22h.001c5.523 0 10-4.477 10-10s-4.477-10-10-10zm0 18.158c-1.614 0-3.21-.418-4.66-1.22l-.33-.195-3.47 0.91.928-3.385-.214-.345c-.86-1.38-1.32-2.96-1.32-4.58 0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.51-6.14c-.24-.12-.1.12-1.42-.59-.12-.06-.24-.12-.36-.12-.12 0-.24.06-.36.12-.12.06-1.18.59-1.42.59-.24 0-.48-.12-.6-.24-.12-.12-.59-.24-1.18-.7-.6-.5-1.06-1.18-1.24-1.36-.12-.12-.24-.3-.12-.48.12-.12.24-.24.36-.36.12-.12.18-.12.24-.24.06-.06.12-.12.12-.24 0-.12-.06-.24-.12-.24-.06-.06-1.42-3.39-1.94-3.95-.52-.52-1.06-.46-1.24-.46-.12 0-.3 0-.48.06-.18.06-.42.12-.6.24-.24.12-.48.24-.66.42-.18.18-.36.36-.48.59-.18.24-.3.48-.42.72-.12.24-.18.48-.18.78 0 .3.06.6.12.9.12.3.24.6.42.9.18.3.42.6.66.9.24.3.54.66.84 1.02.3.36.66.72 1.02 1.08.36.36.78.72 1.2 1.08.42.36.9.66 1.42.96.52.3 1.08.6 1.68.78.6.18 1.14.3 1.74.3.6 0 1.14-.12 1.62-.36.48-.24 1.42-1.18 1.68-1.62.24-.42.24-.78.18-1.02-.06-.24-.12-.48-.24-.6zm0 0"/></svg></a></li>
             </ul>
             
+            <!-- PWA Install Button -->
             <button class="btn-cart" id="install-pwa-btn" style="display: none; width: 100%; margin-top: 20px;">
                 Install App
             </button>
@@ -106,6 +117,7 @@
         </div>
     </div>
 
+    <!-- FOOTER -->
     <footer class="fade-in-section">
         <div class="container">
             <div class="footer-content">
@@ -134,10 +146,12 @@
     </footer>
 
     <div id="chat-widget">
-        </div>
+        <!-- ... (chat widget HTML) ... -->
+    </div>
     
     <script src="/js/main.js" defer></script>
 
+    <!-- Confirmation Modal HTML -->
     <div id="confirm-modal" class="modal-overlay">
         <div class="modal-content">
             <p id="modal-message">Do you want to remove this product from the cart?</p>
@@ -148,6 +162,9 @@
         </div>
     </div>
 
+    <!-- 💡 Booking Modal REMOVED -->
+
+    <!-- PWA Service Worker Registration Script -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -164,3 +181,5 @@
 
 </body>
 </html>
+
+
