@@ -527,4 +527,4 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show the browser's install prompt
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-       
+      
