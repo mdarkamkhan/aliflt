@@ -774,4 +774,233 @@ details[open] .collapsible-content {
     font-size: 1.3rem; 
     font-family: var(--font-heading);
     font-weight: 400;
-        
+                                 }
+.cart-item-info p { margin: 0; color: #000; font-family: var(--font-body); font-weight: 400; }
+.cart-item-controls {
+    text-align: right;
+}
+
+#cart-summary { 
+    margin-top: 30px; 
+    border-top: 1px solid #000; 
+    padding-top: 20px; 
+    text-align: right; 
+}
+#cart-total { 
+    font-size: 1.5rem; 
+    margin-bottom: 20px; 
+    font-family: var(--font-heading);
+    font-weight: 400;
+}
+#cart-summary .btn-buy { width: 100%; }
+@media (min-width: 768px) { #cart-summary .btn-buy { width: auto; min-width: 300px; } }
+
+/* 💡 CART QUANTITY CONTROLS */
+.cart-item-quantity {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 300;
+    color: #333;
+    margin-top: 8px; 
+    display: flex; 
+    align-items: center; 
+}
+.cart-item-qty-text {
+    margin: 0 10px;
+    font-weight: 400; 
+    min-width: 50px; 
+    text-align: center;
+}
+.cart-item-qty-btn { 
+    background: none;
+    border: 1px solid #000;
+    color: #000;
+    font-family: var(--font-body);
+    font-weight: 400;
+    cursor: pointer;
+    padding: 2px 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border-radius: 0; 
+}
+.cart-item-qty-btn:hover {
+    background: #000;
+    color: #fff;
+}
+
+/* 💡 DELIVERY PROMO STYLES */
+.product-delivery-promo {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 300;
+    margin-bottom: 25px; /* Space before buttons */
+}
+#delivery-progress-container {
+    margin-top: 20px; 
+    margin-bottom: 25px; 
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    text-align: center;
+}
+#delivery-progress-text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 300;
+    margin: 0 0 10px 0;
+    transition: color 0.4s ease;
+}
+.delivery-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #eee;
+    overflow: hidden;
+}
+#delivery-progress-bar-inner {
+    height: 100%;
+    width: 0; /* JS will set this */
+    background: var(--accent-color);
+    transition: width 0.4s ease, background-color 0.4s ease;
+}
+#delivery-progress-container.is-unlocked #delivery-progress-text {
+    color: #006400; /* Dark, elegant green */
+    font-weight: 400;
+}
+#delivery-progress-container.is-unlocked #delivery-progress-bar-inner {
+    background: #006400; /* Dark, elegant green */
+}
+
+/* 💡 CONFIRMATION MODAL STYLES */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10002;
+    padding: 20px;
+    box-sizing: border-box;
+    display: none; /* JS will control this */
+}
+.modal-content {
+    background: var(--bg-color);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+.modal-content p {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    line-height: 1.4;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+.modal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+/* Modal buttons use the existing .btn-cart and .btn-buy styles */
+
+
+/* ==================================================
+===== 💡 PRADA-STYLE ACCORDION ===========
+================================================== */
+.product-accordion-container {
+    width: 100%;
+    background: var(--bg-color);
+    margin-top: 20px; /* Space from the grid above */
+}
+
+.accordion-item {
+    border-top: 1px solid var(--border-color);
+}
+.accordion-item:last-child {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.accordion-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px; /* Same padding as review section */
+    cursor: pointer;
+    list-style: none; /* Remove default marker */
+}
+.accordion-summary::-webkit-details-marker { 
+    display: none; 
+}
+
+.accordion-heading {
+    margin: 0;
+    font-family: var(--font-accent); /* Cormorant Garamond */
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 1.2rem;
+}
+
+.accordion-caret {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    line-height: 1;
+    transform: rotate(0deg); /* Start pointing up */
+    transition: transform 0.4s ease;
+}
+
+/* 💡 This rotates the caret when the accordion is open */
+details[open] > .accordion-summary .accordion-caret {
+    transform: rotate(180deg);
+}
+
+/* 💡 This is the smooth-slide animation */
+.accordion-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease-in-out;
+}
+details[open] > .accordion-content {
+    grid-template-rows: 1fr;
+}
+.accordion-content > div {
+    overflow: hidden;
+    padding: 0 25px 30px 25px; /* Padding for the content */
+}
+
+/* 💡 Styles for the content *inside* the accordion */
+.accordion-description-text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #555;
+    font-weight: 300;
+    margin: 0;
+}
+
+.spec-row-wrapper {
+    max-width: 960px; /* Optional: constrain width */
+}
+
+/* 💡 Re-adding spec-row styles for inside the accordion */
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-family: var(--font-body); /* Poppins */
+    font-size: 1rem;
+}
+.spec-row:first-child {
+    padding-top: 0;
+}
+.spec-row:last-child {
+    border-bottom:
