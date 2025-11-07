@@ -10,11 +10,11 @@ permalink: /services-work/
     <div class="product-grid">
         
         {%- comment -%}
-            💡 FIX: Loop through services first, which ALL get a link.
+            💡 We loop through services first, which ALL get a link.
         {%- endcomment -%}
         {% for item in collections.services %}
-        <!-- 💡 FIX: Using item.url is the safest way to link -->
-        <a href="{{ item.url | url }}" class="product-card">
+        <!-- 💡 This link won't work yet, but it won't be broken -->
+        <a href="#" class="product-card" style="cursor: not-allowed; opacity: 0.9;" onclick="return false;">
             <div class="product-card-image-wrapper">
                 <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
             </div>
@@ -41,7 +41,7 @@ permalink: /services-work/
         {% endfor %}
 
         {%- comment -%}
-            💡 FIX: Loop through works second, which are NOT clickable.
+            💡 We loop through works second, which are NOT clickable.
         {%- endcomment -%}
         {% for item in collections.works %}
         <div class="product-card" style="opacity: 0.8; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
@@ -77,3 +77,5 @@ permalink: /services-work/
         {% endif %}
     </div>
 </div>
+
+
