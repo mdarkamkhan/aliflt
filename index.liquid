@@ -126,18 +126,6 @@ permalink: /
             </div>
         </div>
         {% endfor %}
-
-        
-        {%- comment -%} Check if both collections are empty {%- endcomment -%}
-        {% assign services_size = collections.services.size %}
-        {% assign works_size = collections.works.size %}
-        {% assign combined_size = services_size | plus: works_size %}
-
-        {% if combined_size == 0 %}
-            <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
-                No services or works found. Please check back soon.
-            </p>
-        {% endif %}
     </div>
 </div>
 <div class="container">
