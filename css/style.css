@@ -774,7 +774,7 @@ details[open] .collapsible-content {
     font-size: 1.3rem; 
     font-family: var(--font-heading);
     font-weight: 400;
-                                 }
+}
 .cart-item-info p { margin: 0; color: #000; font-family: var(--font-body); font-weight: 400; }
 .cart-item-controls {
     text-align: right;
@@ -1003,4 +1003,84 @@ details[open] > .accordion-content {
     padding-top: 0;
 }
 .spec-row:last-child {
-    border-bottom:
+    border-bottom: none;
+}
+.spec-label {
+    font-weight: 400; /* Poppins Regular */
+    color: #333;
+    padding-right: 15px;
+}
+.spec-value {
+    font-weight: 300; /* Poppins Light */
+    color: #000;
+    text-align: right;
+    text-transform: capitalize;
+}
+
+/* ==================================================
+===== 💡 FILTER BAR STYLES (72px ICON FIX) =============
+================================================== */
+.filter-bar-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+    padding: 10px 0 20px 0; /* Space above/below the bar */
+    margin-bottom: 20px; /* Space between bar and grid */
+}
+
+/* Hide scrollbar for a cleaner look */
+.filter-bar-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+.filter-bar-scroll-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.filter-btn {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px 5px; /* Reduced side padding */
+    margin-right: 10px;
+    border-radius: 0;
+    width: 90px; /* 💡 Set a fixed width */
+    flex-shrink: 0; /* 💡 Prevent button from shrinking */
+    border-bottom: 2px solid transparent; /* Placeholder for active state */
+    transition: border-color 0.3s ease;
+}
+
+.filter-icon {
+    width: 72px;  /* 💡 CHANGED to 72px */
+    height: 72px; /* 💡 CHANGED to 72px */
+    object-fit: contain;
+    margin-bottom: 0; 
+    border-radius: 50%; /* Makes the icons circular */
+    border: 1px solid var(--border-color); /* Subtle border */
+    padding: 2px;
+}
+
+.filter-name {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    text-transform: capitalize;
+    white-space: normal; /* 💡 Allow text to wrap */
+    text-align: center; /* 💡 Center the wrapped text */
+    line-height: 1.2; /* 💡 Added for better wrapped text spacing */
+    margin-top: 4px; /* 💡 Space from icon */
+}
+
+/* Active state for the button */
+.filter-btn.active {
+    border-bottom: 2px solid var(--accent-color);
+}
+.filter-btn.active .filter-name {
+    font-weight: 600; /* Make active text slightly bolder */
+}
