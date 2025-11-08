@@ -1,0 +1,7 @@
+# This stops Eleventy from building pages from our CMS content files,
+# which fixes the 404 error.
+
+services/**/*.md
+products/**/*.md
+works/**/*.md
+offers/**/*.md
