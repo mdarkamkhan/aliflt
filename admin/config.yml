@@ -13,6 +13,7 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
+      - { name: "tags", label: "Tag", widget: "hidden", default: "offer" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
@@ -24,7 +25,6 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      # 💡 ADDED TAGS FIELD
       - { name: "tags", label: "Tag", widget: "hidden", default: "product" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
@@ -63,7 +63,8 @@ collections:
       - { name: "delivery_charges", label: "Delivery Charges (Optional)", widget: "string", required: false }
       - { name: "delivery_within", label: "Delivery within (Optional)", widget: "string", required: false }
       - { name: "payment_type", label: "Payment Type (Optional)", widget: "string", required: false }
-      - { name:As: "return_policy", label: "Return Policy (Optional)", widget: "string", required: false }
+      # 💡 This was the first typo, it is fixed here
+      - { name: "return_policy", label: "Return Policy (Optional)", widget: "string", required: false }
 
   - name: "services"
     label: "Services"
@@ -72,7 +73,6 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      # 💡 ADDED TAGS FIELD
       - { name: "tags", label: "Tag", widget: "hidden", default: "service" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
@@ -107,10 +107,10 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      # 💡 ADDED TAGS FIELD
       - { name: "tags", label: "Tag", widget: "hidden", default: "work" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
+      # 💡 This was the second typo ('label:Top:'), it is now fixed
       - { name: "image", label: "Image", widget: "image" }
       - name: "category"
         label: "Category"
@@ -132,4 +132,4 @@ collections:
           - saree fall & pico
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
-
+      
