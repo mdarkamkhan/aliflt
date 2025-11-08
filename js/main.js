@@ -527,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show the browser's install prompt
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
+           // Wait for the user to respond to the prompt
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         console.log('User accepted the PWA install');
@@ -541,7 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     
-    // 💡 --- NEW: PRODUCT FILTER LOGIC ---
+    // --- PRODUCT FILTER LOGIC ---
     const filterButtons = document.querySelectorAll('.filter-btn');
     const productCards = document.querySelectorAll('.product-grid .product-card');
 
