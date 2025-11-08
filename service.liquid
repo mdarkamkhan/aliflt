@@ -5,10 +5,11 @@ pagination:
   size: 1
   alias: item # We call each service 'item'
   
-# This stops the template file itself from creating a page
+# 💡 This is the CRITICAL fix:
+# It stops this template file from creating its own page and prevents build errors.
 permalink: false
   
-# This tells pagination to create pages like /services/blouse-stitching/
+# This tells pagination to create the pages for each service
 pagination.permalink: "services/{{ item.fileSlug }}/"
 
 eleventyComputed:
@@ -71,10 +72,6 @@ eleventyComputed:
     {% endif %}
 
     <!-- 2. Related "Our Works" Gallery -->
-    {%- comment -%}
-        Find all works where the category (e.g., "blouse")
-        matches this service's category.
-    {%- endcomment -%}
     {% assign related_works = collections.works | where_exp: "work", "work.data.category == item.data.category" %}
 
     {% if related_works.size > 0 %}
@@ -98,5 +95,3 @@ eleventyComputed:
     </details>
     {% endif %}
 </div>
-
-
