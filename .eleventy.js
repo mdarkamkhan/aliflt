@@ -9,12 +9,15 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy("js");
     eleventyConfig.addPassthroughCopy("uploads");
     eleventyConfig.addPassthroughCopy("admin");
-    
-    // 💡 NEW, ROBUST PWA/STATIC FILE HANDLING:
-    // This copies everything from "public/" to the root of the site (e.g., "public/favicon.png" becomes "/favicon.png")
     eleventyConfig.addPassthroughCopy({ "public/": "/" });
-    
-    // 💡 We no longer need the old, broken passthrough lines for favicon, sw.js, etc.
+
+    // 💡 THE FIX:
+    // Tell Eleventy to NOT process the .md files in /services/ as pages.
+    // This stops the permalink conflict.
+    eleventyConfig.ignoring.add("services/**/*.md");
+    eleventyConfig.ignoring.add("products/**/*.md");
+    eleventyConfig.ignoring.add("works/**/*.md");
+    eleventyConfig.ignoring.add("offers/**/*.md");
 
     // --- Collections ---
     eleventyConfig.addCollection("products", function(collectionApi) {
