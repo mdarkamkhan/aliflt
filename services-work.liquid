@@ -13,6 +13,7 @@ permalink: /services-work/
             Loop through services first, which ALL get a link.
         {%- endcomment -%}
         {% for item in collections.services %}
+        <!-- 💡 This now correctly links to the service page -->
         <a href="{{ item.url | url }}" class="product-card">
             <div class="product-card-image-wrapper">
                 <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
