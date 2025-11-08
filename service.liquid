@@ -1,21 +1,86 @@
 ---
 layout: base.liquid
 pagination:
-  data: services  # 🎯 FIX 1: Point to 'services' (your data), not 'collections.services'
+  data: collections.services
   size: 1
-  alias: item 
+  alias: item # We call each service 'item'
   
+# This stops this template file from creating its own page and prevents build errors.
 permalink: false
   
-# 🎯 FIX 2: Use the 'slug' filter for reliable URLs
-pagination.permalink: "services/{{ item.title | slug }}/"
+# 💡 THIS IS THE CORRECTED LINE:
+# It now builds the URL from the service's title
+pagination.permalink: "services/{{ item.data.title | slug }}/"
 
 eleventyComputed:
-  # 💡 Note: It's 'item.title' now, not 'item.data.title'
-  # (because 'item' is the object from the data file directly)
-  title: "{{ item.title }}" 
+  # This sets the <title> tag for each page
+  title: "{{ item.data.title }}" 
 ---
 
-<h1 class="product-detail-title">{{ item.title }}</h1>
-<span class="product-detail-price">₹{{ item.price }}</span>
-<p class="accordion-description-text">{{ item.service_information }}</p>
+<div class="container section">
+    
+    <div class="product-detail-grid">
+        
+        <div class="product-detail-image">
+            <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+        </div>
+        
+        <div class="product-detail-info">
+            <h1 class="product-detail-title">{{ item.data.title }}</h1>
+            
+            {% if item.data.price %}
+                <span class="product-detail-price">₹{{ item.data.price }}</span>
+            {% endif %}
+            
+            {% if item.data.category %}
+                <span class="product-detail-category">{{ item.data.category }}</span>
+            {% endif %}
+
+            <div class="product-detail-actions" style="grid-template-columns: 1fr;">
+                <button class="btn-buy" id="bookNowBtn" 
+                        data-service-title="{{ item.data.title | escape }}">
+                    Book Now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="product-accordion-container">
+
+    {% if item.data.service_information %}
+    <details class="accordion-item" open> <summary class="accordion-summary">
+            <h3 class="accordion-heading">Service Information</h3>
+            <span class="accordion-caret">^</span>
+        </summary>
+        <div class="accordion-content">
+            <div>
+                <p class="accordion-description-text">{{ item.data.service_information }}</p>
+            </div>
+        </div>
+    </details>
+    {% endif %}
+
+    {% assign related_works = collections.works | where_exp: "work", "work.data.category == item.data.category" %}
+
+    {% if related_works.size > 0 %}
+    <details class="accordion-item" open>
+        <summary class="accordion-summary">
+            <h3 class="accordion-heading">Our Works</h3>
+            <span class="accordion-caret">^</span>
+        </summary>
+        <div class="accordion-content">
+            <div>
+                <div class="works-gallery-container">
+                    {% for work in related_works %}
+                    <div class="work-gallery-item">
+                        <img src="{{ work.data.image | url }}" alt="{{ work.data.title }}">
+                        <p class="work-gallery-title">{{ work.data.title }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </details>
+    {% endif %}
+</div>
