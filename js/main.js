@@ -162,7 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- SIDEBAR MENU LOGIC ---
     const navToggleBtn = document.getElementById('navToggleBtn');
-    // ... (This section is unchanged)
     const sidebarMenu = document.getElementById('sidebarMenu');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
@@ -194,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- PRODUCT DETAIL PAGE LOGIC ---
     const addToCartBtn = document.getElementById('addToCartBtn');
-    // ... (This section is unchanged)
     const buyNowBtn = document.getElementById('buyNowBtn');
     const whatsappNumber = '7488611845'; // Your WhatsApp number
     const whatsappBaseUrl = `https://wa.me/${whatsappNumber}?text=`;
@@ -291,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cartContainer.innerHTML = ''; // Clear the cart display
         
         if (Object.keys(cartItems).length === 0) {
-            emptyMsg.style.display = 'block';
+            emptyMsg.style.display = 'block'; // 💡 This un-hides the "Continue Shopping" button
             cartSummary.style.display = 'none';
             cartActions.style.display = 'none';
             if (deliveryContainer) deliveryContainer.style.display = 'none';
@@ -527,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show the browser's install prompt
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-// Wait for the user to respond to the prompt
+                // Wait for the user to respond to the prompt
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         console.log('User accepted the PWA install');
@@ -574,4 +572,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-});
+}); // 💡 MOVED ALL SCRIPT TO INSIDE THIS LISTENER
