@@ -24,6 +24,8 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
+      # 💡 ADDED TAGS FIELD
+      - { name: "tags", label: "Tag", widget: "hidden", default: "product" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
@@ -61,7 +63,7 @@ collections:
       - { name: "delivery_charges", label: "Delivery Charges (Optional)", widget: "string", required: false }
       - { name: "delivery_within", label: "Delivery within (Optional)", widget: "string", required: false }
       - { name: "payment_type", label: "Payment Type (Optional)", widget: "string", required: false }
-      - { name: "return_policy", label: "Return Policy (Optional)", widget: "string", required: false }
+      - { name:As: "return_policy", label: "Return Policy (Optional)", widget: "string", required: false }
 
   - name: "services"
     label: "Services"
@@ -70,6 +72,8 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
+      # 💡 ADDED TAGS FIELD
+      - { name: "tags", label: "Tag", widget: "hidden", default: "service" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
@@ -93,7 +97,6 @@ collections:
           - saree fall & pico
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
-      # 💡 NEW FIELD ADDED HERE
       - { name: "service_information", label: "Service Information", widget: "text", required: false }
 
 
@@ -104,10 +107,11 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
+      # 💡 ADDED TAGS FIELD
+      - { name: "tags", label: "Tag", widget: "hidden", default: "work" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
-      # This category field is what we use for filtering
       - name: "category"
         label: "Category"
         widget: "select"
@@ -128,3 +132,4 @@ collections:
           - saree fall & pico
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
+
