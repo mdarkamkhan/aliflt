@@ -11,15 +11,8 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy("admin");
     eleventyConfig.addPassthroughCopy({ "public/": "/" });
 
-    // 💡 THE FIX:
-    // Tell Eleventy to NOT process the .md files in /services/ as pages.
-    // This stops the permalink conflict.
-    eleventyConfig.ignoring.add("services/**/*.md");
-    eleventyConfig.ignoring.add("products/**/*.md");
-    eleventyConfig.ignoring.add("works/**/*.md");
-    eleventyConfig.ignoring.add("offers/**/*.md");
-
     // --- Collections ---
+    // (The broken 'ignoring' lines have been REMOVED)
     eleventyConfig.addCollection("products", function(collectionApi) {
         return collectionApi.getFilteredByTag("product");
     });
