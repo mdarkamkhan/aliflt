@@ -4,11 +4,6 @@ title: Home
 permalink: /
 ---
 
-<!-- 
-==================================================
-===== BANNER (MOVED HERE FOR HOMEPAGE ONLY) ======
-================================================== 
--->
 <div id="top-banner">
     <div class="swapper-container banner-swapper">
         {% for item in collections.offers %}
@@ -25,9 +20,6 @@ permalink: /
     </div>
 </div>
 
-<!-- ================================= 
-     PANEL 1: ALIF PRODUCTS 
-================================== -->
 <a href="/products/" class="prada-panel">
     <div class="prada-panel-label">ALiF Products</div>
     
@@ -44,10 +36,6 @@ permalink: /
     </div>
 </a>
 
-<!-- ================================= 
-     PANEL 2: ALIF SERVICES
-================================== -->
-<!-- 💡 FIX: This link now points to the correct URL (no "s") -->
 <a href="/services-work/" class="prada-panel">
     <div class="prada-panel-label">ALiF Services</div>
     
@@ -64,10 +52,6 @@ permalink: /
     </div>
 </a>
 
-<!-- ================================= 
-     PANEL 3: ALIF WORKS
-================================== -->
-<!-- 💡 FIX: This link now points to the correct URL (no "s") -->
 <a href="/services-work/" class="prada-panel">
     <div class="prada-panel-label">ALiF Works</div>
     
@@ -84,26 +68,89 @@ permalink: /
     </div>
 </a>
 
+<div class="container section">
+    <h2>Our Services & Works</h2>
 
-<!-- 
-==================================
-  COLLAPSIBLE REVIEWS SECTION
-==================================
--->
+    <div class="product-grid">
+        
+        {%- comment -%}
+            Loop through services first, which ALL get a link.
+        {%- endcomment -%}
+        {% for item in collections.services %}
+        <a href="{{ item.url | url }}" class="product-card">
+            <div class="product-card-image-wrapper">
+                <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+            </div>
+            
+            <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
+                
+                <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
+                    {{ item.data.title }}
+                </div>
+                
+                {% if item.data.price %}
+                <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
+                    ₹{{ item.data.price }}
+                </div>
+                {% endif %}
+                
+                {% if item.data.category %}
+                <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+                    {{ item.data.category }}
+                </div>
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+
+        {%- comment -%}
+            Loop through works second, which are NOT clickable.
+        {%- endcomment -%}
+        {% for item in collections.works %}
+        <div class="product-card" style="opacity: 0.8; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div class="product-card-image-wrapper">
+                <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+            </div>
+            
+            <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
+                
+                <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
+                    {{ item.data.title }}
+                </div>
+                
+                {% if item.data.category %}
+                <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
+                    (Our Work) {{ item.data.category }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+        
+        {%- comment -%} Check if both collections are empty {%- endcomment -%}
+        {% assign services_size = collections.services.size %}
+        {% assign works_size = collections.works.size %}
+        {% assign combined_size = services_size | plus: works_size %}
+
+        {% if combined_size == 0 %}
+            <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
+                No services or works found. Please check back soon.
+            </p>
+        {% endif %}
+    </div>
+</div>
 <div class="container">
     
     <details id="reviews" class="section collapsible-section">
         
-        <!-- The clickable <summary> (header) -->
         <summary class="collapsible-summary">
             <h2>Client Reviews</h2>
             <div class="icon-plus-minus"></div>
         </summary>
         
-        <!-- This wrapper holds all your original content -->
         <div class="collapsible-content">
-            <div> <!-- This inner div is required for the animation -->
-                <p style="text-align: center; margin-bottom: 25px;">Did you love our service? Help others find us by leaving a review!</p>
+            <div> <p style="text-align: center; margin-bottom: 25px;">Did you love our service? Help others find us by leaving a review!</p>
                 
                 <div class="cta-buttons">
                     <a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" class="review-btn">
@@ -114,14 +161,10 @@ permalink: /
                 <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 30px;">
                     <h3 style="text-align: center; color: #555;">What Our Clients Say</h3>
                     
-                    <!-- Your existing Google Reviews widget -->
                     <script src="https://elfsightcdn.com/platform.js" async></script>
                     <div class="elfsight-app-2c83f037-ee5d-4d90-913e-2a5f353d7add" data-elfsight-app-lazy></div>
                 </div>
             </div>
         </div>
-        <!-- End of original content -->
-
-    </details>
+        </details>
 </div>
-
