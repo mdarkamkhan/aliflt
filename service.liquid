@@ -8,8 +8,8 @@ pagination:
 # This stops this template file from creating its own page and prevents build errors.
 permalink: false
   
-# 💡 THIS IS THE CORRECTED LINE:
-# It now builds the URL from the service's title
+# 💡 THIS IS THE CORRECT PERMALINK
+# It builds the URL from the service's title
 pagination.permalink: "services/{{ item.data.title | slug }}/"
 
 eleventyComputed:
@@ -65,7 +65,7 @@ eleventyComputed:
 
     {% if related_works.size > 0 %}
     <details class="accordion-item" open>
-        <summary class="accordion-summary">
+        <summary class="summary-summary">
             <h3 class="accordion-heading">Our Works</h3>
             <span class="accordion-caret">^</span>
         </summary>
