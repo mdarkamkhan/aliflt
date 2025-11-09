@@ -53,8 +53,6 @@ collections:
           - cotton
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
-      
-      # --- Product Information Fields ---
       - { name: "size", label: "Size (Optional)", widget: "string", required: false }
       - { name: "colour", label: "Colour (Optional)", widget: "string", required: false }
       - { name: "number_of_pieces", label: "Number of Pieces/meter (Optional)", widget: "string", required: false }
@@ -67,43 +65,40 @@ collections:
       - { name: "payment_type", label: "Payment Type (Optional)", widget: "string", required: false }
       - { name: "return_policy", label: "Return Policy (Optional)", widget: "string", required: false }
 
-      - name: "services"
-        label: "Services"
-        folder: "services"
-        format: "frontmatter"
-        create: true
-        slug: "{{slug}}"
-        fields:
-          # ✅ NEW FIELDS TO AUTOMATICALLY ADD
-          - { name: "layout", label: "Layout", widget: "hidden", default: "service-layout.liquid" }
-          - { name: "permalink", label: "Permalink", widget: "hidden", default: "services/{{ page.fileSlug }}/" }
-          
-          # --- ORIGINAL FIELDS (all correct) ---
-          - { name: "tags", label: "Tag", widget: "hidden", default: "service" }
-          - { name: "date", label: "Date", widget: "datetime" }
-          - { name: "title", label: "Title", widget: "string" }
-          - { name: "image", label: "Image", widget: "image" }
-          - name: "category"
-            label: "Category"
-            widget: "select"
-            options:
-              - blouse
-              - kurti pant
-              - kurti patyala
-              - kurti palazzo
-              - kurti
-              - garara
-              - sharara
-              - gown
-              - anarkali gown
-              - frock
-              - afgani kurti
-              - lehanga
-              - trendy lehanga
-              - saree fall & pico
-          - { name: "price", label: "Price", widget: "number" }
-          - { name: "description", label: "Description", widget: "text" }
-          - { name: "service_information", label: "Service Information", widget: "text", required: false }
+  - name: "services"
+    label: "Services"
+    folder: "services"
+    format: "frontmatter"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: "permalink", label: "Permalink", widget: "hidden", default: false }
+      - { name: "tags", label: "Tag", widget: "hidden", default: "service" }
+      - { name: "date", label: "Date", widget: "datetime" }
+      - { name: "title", label: "Title", widget: "string" }
+      - { name: "image", label: "Image", widget: "image" }
+      - name: "category"
+        label: "Category"
+        widget: "select"
+        options:
+          - blouse
+          - kurti pant
+          - kurti patyala
+          - kurti palazzo
+          - kurti
+          - garara
+          - sharara
+          - gown
+          - anarkali gown
+          - frock
+          - afgani kurti
+          - lehanga
+          - trendy lehanga
+          - saree fall & pico
+      - { name: "price", label: "Price", widget: "number" }
+      - { name: "description", label: "Description", widget: "text" }
+      - { name: "service_information", label: "Service Information", widget: "text", required: false }
+
 
   - name: "works"
     label: "Our Works"
