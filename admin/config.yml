@@ -74,7 +74,7 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - { name: "permalink", label: "Permalink", widget: "hidden", default: false }
+      - { name: "permalink", label: "Permalink", widget: "hidden"}
       - { name: "tags", label: "Tag", widget: "hidden", default: "service" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
