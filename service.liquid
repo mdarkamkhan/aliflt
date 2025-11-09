@@ -6,7 +6,7 @@ pagination:
   alias: item
   # ✅ THIS IS THE FIX:
   # The permalink for paginated items goes *inside* the pagination object.
-  permalink: "services/{{ item.data.title | slug }}/"
+  permalink: "services/{{ item.data.title | slugify }}/"
   
 # This is correct and should stay.
 # It prevents Eleventy from creating a page for the template file itself
