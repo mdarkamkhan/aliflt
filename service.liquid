@@ -8,8 +8,7 @@ pagination:
 # This stops this template file from creating its own page.
 permalink: false
   
-# This builds the unique page for each service, e.g., /services/suit-patyala/
-# This is the line that was failing because item.data.title was empty.
+# This builds the unique page for each service
 pagination.permalink: "services/{{ item.data.title | slug }}/"
 
 eleventyComputed:
@@ -61,8 +60,17 @@ eleventyComputed:
     </details>
     {% endif %}
 
-    {% assign related_works = collections.works | where_exp: "work", "work.data.category == item.data.category" %}
+    {%- comment -%}
+        First, we safely get the category for the current service
+    {%- endcomment -%}
+    {% assign current_category = item.data.category %}
 
+    {%- comment -%}
+        Only run the filter if that category actually exists
+    {%- endcomment -%}
+    {% if current_category %}
+        {% assign related_works = collections.works | where_exp: "work", "work.data.category == current_category" %}
+    {% endif %}
     {% if related_works.size > 0 %}
     <details class="accordion-item" open>
         <summary class="accordion-summary">
@@ -84,4 +92,3 @@ eleventyComputed:
     </details>
     {% endif %}
 </div>
-
