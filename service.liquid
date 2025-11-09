@@ -3,15 +3,16 @@ layout: base.liquid
 pagination:
   data: collections.services
   size: 1
-  alias: item # We call each service 'item'
+  alias: item
+  # ✅ THIS IS THE FIX:
+  # The permalink for paginated items goes *inside* the pagination object.
+  permalink: "services/{{ item.data.title | slug }}/"
   
-# This stops this template file from creating its own page and prevents build errors.
+# This is correct and should stay.
+# It prevents Eleventy from creating a page for the template file itself
+# (e.g., /service/index.html)
 permalink: false
   
-# 💡 THIS IS THE CORRECT PERMALINK
-# It builds the URL from the service's title
-pagination.permalink: "services/{{ item.data.title | slug }}/"
-
 eleventyComputed:
   # This sets the <title> tag for each page
   title: "{{ item.data.title }}" 
