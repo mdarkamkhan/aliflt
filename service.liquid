@@ -60,35 +60,4 @@ eleventyComputed:
     </details>
     {% endif %}
 
-    {%- comment -%}
-        First, we safely get the category for the current service
-    {%- endcomment -%}
-    {% assign current_category = item.data.category %}
-
-    {%- comment -%}
-        Only run the filter if that category actually exists
-    {%- endcomment -%}
-    {% if current_category %}
-        {% assign related_works = collections.works | where_exp: "work", "work.data.category == current_category" %}
-    {% endif %}
-    {% if related_works.size > 0 %}
-    <details class="accordion-item" open>
-        <summary class="accordion-summary">
-            <h3 class="accordion-heading">Our Works</h3>
-            <span class="accordion-caret">^</span>
-        </summary>
-        <div class="accordion-content">
-            <div>
-                <div class="works-gallery-container">
-                    {% for work in related_works %}
-                    <div class="work-gallery-item">
-                        <img src="{{ work.data.image | url }}" alt="{{ work.data.title }}">
-                        <p class="work-gallery-title">{{ work.data.title }}</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </details>
-    {% endif %}
-</div>
+    </div>
