@@ -55,7 +55,9 @@ eleventyComputed:
       <span class="accordion-caret">^</span>
     </summary>
     <div class="accordion-content">
-      <p class="accordion-description-text">{{ item.data.service_information }}</p>
+      <div class="container">
+        <p class="accordion-description-text">{{ item.data.service_information }}</p>
+      </div>
     </div>
   </details>
   {% endif %}
@@ -72,13 +74,15 @@ eleventyComputed:
       <span class="accordion-caret">^</span>
     </summary>
     <div class="accordion-content">
-      <div class="works-gallery-container">
-        {% for work in related_works %}
-        <div class="work-gallery-item">
-          <img src="{{ work.data.image | url }}" alt="{{ work.data.title | escape }}">
-          <p class="work-gallery-title">{{ work.data.title }}</p>
+      <div class="container">
+        <div class="works-gallery-container">
+          {% for work in related_works %}
+          <div class="work-gallery-item">
+            <img src="{{ work.data.image | url }}" alt="{{ work.data.title | escape }}">
+            <p class="work-gallery-title">{{ work.data.title }}</p>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       </div>
     </div>
   </details>
