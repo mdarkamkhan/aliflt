@@ -36,10 +36,13 @@ eleventyComputed:
       {% endif %}
 
       <div class="product-detail-actions" style="grid-template-columns: 1fr;">
-        <button class="btn-buy" id="bookNowBtn"
-                data-service-title="{{ item.data.title | escape }}">
+        {% assign safe_title = item.data.title | replace: "'", "" %}
+        {% assign wapp_text = "Hello, I would like to book the '" | append: safe_title | append: "' service." %}
+        <a href="https://wa.me/7250470009?text={{ wapp_text | url_encode }}" 
+           class="btn-buy" 
+           target="_blank">
           Book Now
-        </button>
+        </a>
       </div>
     </div>
 
