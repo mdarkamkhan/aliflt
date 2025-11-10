@@ -8,10 +8,10 @@ pagination:
 # This stops this template file from creating its own page.
 permalink: false
   
-# 💡 THE FINAL FIX:
-# We are using item.fileSlug instead of item.data.title.
-# This is safer and guaranteed to exist.
-pagination.permalink: "services/{{ item.fileSlug }}/"
+# 💡 THE FINAL, CRITICAL FIX:
+# The output path is changed from "services/" to "service/" (singular)
+# to prevent a directory conflict with your /services/ input folder.
+pagination.permalink: "service/{{ item.fileSlug }}/"
 
 eleventyComputed:
   # This sets the <title> tag for each page
