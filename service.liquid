@@ -1,63 +1,23 @@
 ---
-layout: base.liquid
 pagination:
   data: collections.services
   size: 1
-  alias: item # We call each service 'item'
-  
-# This stops this template file from creating its own page.
+  alias: item
 permalink: false
-  
-# This builds the unique page for each service
 pagination.permalink: "services/{{ item.data.title | slug }}/"
-
-eleventyComputed:
-  # This sets the <title> tag for each page
-  title: "{{ item.data.title }}" 
 ---
-
-<div class="container section">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEBUG PAGE</title>
+</head>
+<body style="background: #fff; color: #000; font-size: 24px; padding: 20px;">
     
-    <div class="product-detail-grid">
-        
-        <div class="product-detail-image">
-            <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
-        </div>
-        
-        <div class="product-detail-info">
-            <h1 class="product-detail-title">{{ item.data.title }}</h1>
-            
-            {% if item.data.price %}
-                <span class="product-detail-price">₹{{ item.data.price }}</span>
-            {% endif %}
-            
-            {% if item.data.category %}
-                <span class="product-detail-category">{{ item.data.category }}</span>
-            {% endif %}
+    <h1>Testing the page for:</h1>
+    
+    <pre>{{ item.data.title }}</pre>
 
-            <div class="product-detail-actions" style="grid-template-columns: 1fr;">
-                <button class="btn-buy" id="bookNowBtn" 
-                        data-service-title="{{ item.data.title | escape }}">
-                    Book Now
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="product-accordion-container">
-
-    {% if item.data.service_information %}
-    <details class="accordion-item" open> <summary class="accordion-summary">
-            <h3 class="accordion-heading">Service Information</h3>
-            <span class="accordion-caret">^</span>
-        </summary>
-        <div class="accordion-content">
-            <div>
-                <p class="accordion-description-text">{{ item.data.service_information }}</p>
-            </div>
-        </div>
-    </details>
-    {% endif %}
-
-    </div>
+</body>
+</html>
