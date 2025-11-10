@@ -8,9 +8,7 @@ pagination:
 # This stops this template file from creating its own page.
 permalink: false
   
-# 💡 THE FINAL, CRITICAL FIX:
-# The output path is changed from "services/" to "service/" (singular)
-# to prevent a directory conflict with your /services/ input folder.
+# 💡 We are using item.fileSlug. This is the safest option.
 pagination.permalink: "service/{{ item.fileSlug }}/"
 
 eleventyComputed:
