@@ -4,7 +4,6 @@
 module.exports = function(eleventyConfig) {
     
     // --- Passthrough Copies ---
-    // These folders are copied as-is
     eleventyConfig.addPassthroughCopy("css");
     eleventyConfig.addPassthroughCopy("js");
     eleventyConfig.addPassthroughCopy("uploads");
@@ -12,19 +11,24 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy({ "public/": "/" });
 
     // --- Collections ---
-    // (The broken 'ignoring' lines have been REMOVED)
+    
+    // 💡 THIS IS THE BULLETPROOF FIX:
+    // We now get files by "glob" (path) instead of by "tag".
+    // This ignores all .json files and any other junk.
     eleventyConfig.addCollection("products", function(collectionApi) {
-        return collectionApi.getFilteredByTag("product");
+        return collectionApi.getFilteredByGlob("products/*.md");
     });
     
     eleventyConfig.addCollection("services", function(collectionApi) {
-        return collectionApi.getFilteredByTag("service");
+        return collectionApi.getFilteredByGlob("services/*.md");
     });
+
     eleventyConfig.addCollection("works", function(collectionApi) {
-        return collectionApi.getFilteredByTag("work");
+        return collectionApi.getFilteredByGlob("works/*.md");
     });
+
     eleventyConfig.addCollection("offers", function(collectionApi) {
-        return collectionApi.getFilteredByTag("offer");
+        return collectionApi.getFilteredByGlob("offers/*.md");
     });
 
     return {
