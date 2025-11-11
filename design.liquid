@@ -37,15 +37,33 @@ eleventyComputed:
 
       <div class="product-detail-actions" style="grid-template-columns: 1fr; margin-top: 25px;">
         
-  <button class="btn-buy" id="buyNowBtn" 
-                        data-title="{{ item.data.title | escape }}" 
-                        data-price="{{ item.data.price }}" 
-                        data-image="{{ item.data.image | url }}">
+        {%- comment -%}
+          We use 'capture' to build a clean, multi-line message.
+        {%- endcomment -%}
+        {%- capture wapp_message -%}
+        Hello,
+        Could you please apply this design to my dress?
+        Thank you.
+
+        ---
+        Design: {{ item.data.title | default: 'N/A' }}
+        {% if item.data.price %}Charges: ₹{{ item.data.price }}{% endif %}
+        {% if item.data.image %}Image: https://aliflt.netlify.app{{ item.data.image | url }}{% endif %}
+        {%- endcapture -%}
+
+        {%- comment -%}
+          We replace newlines with the WhatsApp code (%0A)
+          and then URL-encode the whole thing.
+        {%- endcomment -%}
+        {%- assign wapp_text = wapp_message | strip | replace: "
+", "%0A" -%}
+
         <a href="https://wa.me/7250470009?text={{ wapp_text | url_encode }}" 
            class="btn-buy" 
            target="_blank">
           Request This Design
         </a>
+        
       </div>
     </div>
 
