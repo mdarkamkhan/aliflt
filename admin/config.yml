@@ -146,10 +146,4 @@ collections:
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
       - { name: "price", label: "Charges", widget: "number" }
-      - name: "category"
-        label: "Widely Use For"
-        widget: "select"
-        options:
-          - Blouse
-          - Suit
-          - Lehenga
+      - { name: "category", label: "Widely Use For", widget: "string" }
