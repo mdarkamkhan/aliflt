@@ -35,16 +35,18 @@ eleventyComputed:
         <span class="product-detail-category">Use: {{ item.data.category }}</span>
       {% endif %}
 
-     <div class="product-detail-actions" style="grid-template-columns: 1fr; margin-top: 25px;">
-                <a href="https://wa.me/7250470009?text={{ wapp_text | url_encode }}" 
-                <button class="btn-buy" id="buyNowBtn" 
+      <div class="product-detail-actions" style="grid-template-columns: 1fr; margin-top: 25px;">
+        
+  <button class="btn-buy" id="buyNowBtn" 
                         data-title="{{ item.data.title | escape }}" 
                         data-price="{{ item.data.price }}" 
                         data-image="{{ item.data.image | url }}">
-                    REQUEST THE DESIGN 
-                </button>
-               </a>
-            </div>
+        <a href="https://wa.me/7250470009?text={{ wapp_text | url_encode }}" 
+           class="btn-buy" 
+           target="_blank">
+          Request This Design
+        </a>
+      </div>
     </div>
 
   </div>
