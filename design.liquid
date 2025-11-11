@@ -35,7 +35,7 @@ eleventyComputed:
         <span class="product-detail-category">Use: {{ item.data.category }}</span>
       {% endif %}
 
-<div class="product-detail-actions">
+     <div class="product-detail-actions" style="grid-template-columns: 1fr; margin-top: 25px;">
               
                 <button class="btn-buy" id="buyNowBtn" 
                         data-title="{{ item.data.title | escape }}" 
