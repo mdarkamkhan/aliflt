@@ -67,7 +67,8 @@ eleventyComputed:
 
   {% assign current_category = item.data.category %}
   {% if current_category %}
-    {% assign related_works = collections.works | where_exp: "work", "work.data.category == current_category" %}
+    {% comment %} This now checks if 'work.data.category' exists before comparing {% endcomment %}
+    {% assign related_works = collections.works | where_exp: "work", "work.data.category and work.data.category == current_category" %}
   {% endif %}
 
   {% if related_works and related_works.size > 0 %}
@@ -97,7 +98,6 @@ eleventyComputed:
     </div>
   </details>
   {% endif %}
-
   {% assign current_service_url = item.url %}
   {% assign related_services = collections.services | where_exp: "service", "service.url != current_service_url" %}
 
@@ -109,9 +109,7 @@ eleventyComputed:
     </summary>
     
     <div class="accordion-content" style="padding-top: 15px; padding-bottom: 15px;">
-      
       <div class="horizontal-scroll-wrapper" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-        
         <div class="related-services-container" style="display: flex; flex-wrap: nowrap; gap: 15px; padding-left: 1.5rem; padding-right: 1.5rem;">
           
           {% for service in related_services %}
@@ -133,7 +131,9 @@ eleventyComputed:
           </a>
           {% endfor %}
 
-        </div> </div> </div>
+        </div>
+      </div>
+    </div>
   </details>
   {% endif %}
   </div>
