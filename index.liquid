@@ -68,80 +68,72 @@ permalink: /
     </div>
 </a>
 
-{% comment %}
 <div class="container section">
     <h2>Our Services & Works</h2>
 
     <div class="product-grid">
         
-        {%- comment -%}
-            Loop through services first, which ALL get a link.
-        {%- endcomment -%}
         {% for item in collections.services %}
-        <a href="{{ item.url | url }}" class="product-card">
+        <a href="/service/{{ item.fileSlug }}/" class="product-card">
             <div class="product-card-image-wrapper">
-                <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+            {% if item.data.image %}
+                <img src="{{ item.data.image | url }}" alt="{{ item.data.title | escape }}">
+            {% endif %}
             </div>
-            
-            <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
-                
-                <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
-                    {{ item.data.title }}
-                </div>
-                
-                {% if item.data.price %}
-                <div class="product-card-price" style="font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #000;">
-                    ₹{{ item.data.price }}
-                </div>
-                {% endif %}
-                
-                {% if item.data.category %}
-                <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
-                    {{ item.data.category }}
-                </div>
-                {% endif %}
+
+            <div class="product-card-name" style="text-align:left; padding:15px; font-weight:normal;">
+            <div class="product-card-title" style="font-weight:bold; font-size:1.1rem; text-transform:capitalize; color:#333;">
+                {{ item.data.title | default: 'Service' }}
+            </div>
+
+            {% if item.data.price %}
+            <div class="product-card-price" style="font-weight:bold; font-size:1.1rem; margin-top:8px; color:#000;">
+                ₹{{ item.data.price }}
+            </div>
+            {% endif %}
+
+            {% if item.data.category %}
+            <div class="product-card-category" style="font-size:0.9rem; color:#777; margin-top:8px; text-transform:capitalize;">
+                {{ item.data.category }}
+            </div>
+            {% endif %}
             </div>
         </a>
         {% endfor %}
 
-        {%- comment -%}
-            Loop through works second, which are NOT clickable.
-        {%- endcomment -%}
         {% for item in collections.works %}
-        <div class="product-card" style="opacity: 0.8; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <div class="product-card" style="opacity:0.92; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
             <div class="product-card-image-wrapper">
-                <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+            {% if item.data.image %}
+                <img src="{{ item.data.image | url }}" alt="{{ item.data.title | escape }}">
+            {% endif %}
             </div>
-            
-            <div class="product-card-name" style="text-align: left; padding: 15px; font-weight: normal;">
-                
-                <div class="product-card-title" style="font-weight: bold; font-size: 1.1rem; text-transform: capitalize; color: #333;">
-                    {{ item.data.title }}
-                </div>
-                
-                {% if item.data.category %}
-                <div class="product-card-category" style="font-size: 0.9rem; color: #777; margin-top: 8px; text-transform: capitalize;">
-                    (Our Work) {{ item.data.category }}
-                </div>
-                {% endif %}
+
+            <div class="product-card-name" style="text-align:left; padding:15px; font-weight:normal;">
+            <div class="product-card-title" style="font-weight:bold; font-size:1.1rem; text-transform:capitalize; color:#333;">
+                {{ item.data.title | default: 'Our Work' }}
+            </div>
+
+            {% if item.data.category %}
+            <div class="product-card-category" style="font-size:0.9rem; color:#777; margin-top:8px; text-transform:capitalize;">
+                (Our Work) {{ item.data.category }}
+            </div>
+            {% endif %}
             </div>
         </div>
         {% endfor %}
 
-        
-        {%- comment -%} Check if both collections are empty {%- endcomment -%}
         {% assign services_size = collections.services.size %}
         {% assign works_size = collections.works.size %}
         {% assign combined_size = services_size | plus: works_size %}
 
         {% if combined_size == 0 %}
-            <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
-                No services or works found. Please check back soon.
-            </p>
+        <p class="empty-gallery-message" style="position:static; transform:none; color:#333;">
+            No services or works found. Please check back soon.
+        </p>
         {% endif %}
     </div>
 </div>
-{% endcomment %}
 <div class="container">
     
     <details id="reviews" class="section collapsible-section">
