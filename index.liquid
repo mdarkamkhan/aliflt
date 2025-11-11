@@ -71,12 +71,54 @@ permalink: /
 {% comment %}
 <div class="container section">
     <h2>Our Services & Works</h2>
+    <div class="product-grid">
+    </div>
+</div>
+{% endcomment %}
+<div class="container section">
+    <h2>Our Designs</h2>
 
     <div class="product-grid">
         
-        </div>
+      {% for item in collections.designs %}
+        <a href="/design/{{ item.fileSlug }}/" class="product-card">
+          
+          <div class="product-card-image-wrapper">
+            {% if item.data.image %}
+              <img src="{{ item.data.image | url }}" alt="{{ item.data.title | escape }}">
+            {% else %}
+              <img src="/icons/icon-512x512.png" alt="ALiF Design">
+            {% endif %}
+          </div>
+
+          <div class="product-card-name" style="text-align:left; padding:15px; font-weight:normal;">
+            <div class="product-card-title" style="font-weight:bold; font-size:1.1rem; text-transform:capitalize; color:#333;">
+              {{ item.data.title | default: 'Design' }}
+            </div>
+
+            {% if item.data.price %}
+            <div class="product-card-price" style="font-weight:bold; font-size:1.1rem; margin-top:8px; color:#000;">
+              ₹{{ item.data.price }}
+            </div>
+            {% endif %}
+
+            {% if item.data.category %}
+            <div class="product-card-category" style="font-size:0.9rem; color:#777; margin-top:8px; text-transform:capitalize;">
+              {{ item.data.category }}
+            </div>
+            {% endif %}
+          </div>
+        </a>
+      {% endfor %}
+      
+      {% if collections.designs.size == 0 %}
+        <p class="empty-gallery-message" style="position:static; transform:none; color:#333;">
+          No designs found. Please check back soon.
+        </p>
+      {% endif %}
+
+    </div>
 </div>
-{% endcomment %}
 <div class="container">
     
     <details id="reviews" class="section collapsible-section">
