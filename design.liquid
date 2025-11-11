@@ -38,7 +38,7 @@ eleventyComputed:
       <div class="product-detail-actions" style="grid-template-columns: 1fr; margin-top: 25px;">
         
         {%- comment -%}
-          We use 'capture' to build a clean, multi-line message.
+          We build the multi-line message.
         {%- endcomment -%}
         {%- capture wapp_message -%}
         Hello,
@@ -52,13 +52,10 @@ eleventyComputed:
         {%- endcapture -%}
 
         {%- comment -%}
-          We replace newlines with the WhatsApp code (%0A)
-          and then URL-encode the whole thing.
+          We just 'strip' whitespace and let 'url_encode' do all the work.
+          This correctly converts newlines to %0A and spaces to %20.
         {%- endcomment -%}
-        {%- assign wapp_text = wapp_message | strip | replace: "
-", "%0A" -%}
-
-        <a href="https://wa.me/7250470009?text={{ wapp_text | url_encode }}" 
+        <a href="https://wa.me/7250470009?text={{ wapp_message | strip | url_encode }}" 
            class="btn-buy" 
            target="_blank">
           Request This Design
