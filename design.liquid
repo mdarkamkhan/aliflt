@@ -1,0 +1,52 @@
+---
+layout: base.liquid
+
+pagination:
+  data: collections.designs
+  size: 1
+  alias: item
+
+# ✅ Generate one page per design like /design/<fileSlug>/
+permalink: "design/{{ item.fileSlug }}/"
+
+eleventyComputed:
+  title: "{{ item.data.title | default: 'Design' }}"
+---
+
+<div class="container section">
+  <div class="product-detail-grid">
+
+    <div class="product-detail-image">
+      {% if item.data.image %}
+        <img src="{{ item.data.image | url }}" alt="{{ item.data.title | escape }}">
+      {% else %}
+        <img src="/icons/icon-512x512.png" alt="Service image">
+      {% endif %}
+    </div>
+
+    <div class="product-detail-info">
+      <h1 class="product-detail-title">{{ item.data.title }}</h1>
+
+      {% if item.data.price %}
+        <span class="product-detail-price">Charges: ₹{{ item.data.price }}</span>
+      {% endif %}
+
+      {% if item.data.category %}
+        <span class="product-detail-category">Use: {{ item.data.category }}</span>
+      {% endif %}
+
+      <div class="product-detail-actions" style="grid-template-columns: 1fr; margin-top: 25px;">
+        
+        {% assign safe_title = item.data.title | replace: "'", "" %}
+        {% assign wapp_text = "Hello, I would like to inquire about your '" | append: safe_title | append: "' design." %}
+        <a href="https://wa.me/7250470009?text={{ wapp_text | url_encode }}" 
+           class="btn-buy" 
+           target="_blank">
+          Request This Design
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
