@@ -132,7 +132,7 @@ collections:
           - saree fall & pico
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
-      
+
   - name: "designs"
     label: "Designs"
     folder: "designs"
