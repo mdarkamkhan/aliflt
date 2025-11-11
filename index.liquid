@@ -76,6 +76,8 @@ permalink: /
         {%- comment -%}
             Loop through services first, which ALL get a link.
         {%- endcomment -%}
+        
+        {% comment %}
         {% for item in collections.services %}
         <a href="{{ item.url | url }}" class="product-card">
             <div class="product-card-image-wrapper">
@@ -102,10 +104,14 @@ permalink: /
             </div>
         </a>
         {% endfor %}
+        {% endcomment %}
+
 
         {%- comment -%}
             Loop through works second, which are NOT clickable.
         {%- endcomment -%}
+        
+        {% comment %}
         {% for item in collections.works %}
         <div class="product-card" style="opacity: 0.8; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
             <div class="product-card-image-wrapper">
@@ -126,6 +132,22 @@ permalink: /
             </div>
         </div>
         {% endfor %}
+        {% endcomment %}
+        
+
+        {%- comment -%} I'm also commenting out the "empty" message {%- endcomment -%}
+        {% comment %}
+        {% assign services_size = collections.services.size %}
+        {% assign works_size = collections.works.size %}
+        {% assign combined_size = services_size | plus: works_size %}
+
+        {% if combined_size == 0 %}
+            <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
+                No services or works found. Please check back soon.
+            </p>
+        {% endif %}
+        {% endcomment %}
+
     </div>
 </div>
 <div class="container">
@@ -156,4 +178,3 @@ permalink: /
         </div>
         </details>
 </div>
-
