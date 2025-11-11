@@ -36,7 +36,7 @@ eleventyComputed:
       {% endif %}
 
      <div class="product-detail-actions" style="grid-template-columns: 1fr; margin-top: 25px;">
-              
+                <a href="https://wa.me/7250470009?text={{ wapp_text | url_encode }}" 
                 <button class="btn-buy" id="buyNowBtn" 
                         data-title="{{ item.data.title | escape }}" 
                         data-price="{{ item.data.price }}" 
