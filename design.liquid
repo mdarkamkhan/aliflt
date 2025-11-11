@@ -35,16 +35,15 @@ eleventyComputed:
         <span class="product-detail-category">Use: {{ item.data.category }}</span>
       {% endif %}
 
-      <div class="product-detail-actions" style="grid-template-columns: 1fr; margin-top: 25px;">
-        
-        {% assign safe_title = item.data.title | replace: "'", "" %}
-        {% assign wapp_text = "Hello, I would like to inquire about your '" | append: safe_title | append: "' design." %}
-        <a href="https://wa.me/7250470009?text={{ wapp_text | url_encode }}" 
-           class="btn-buy" 
-           target="_blank">
-          Request This Design
-        </a>
-      </div>
+<div class="product-detail-actions">
+              
+                <button class="btn-buy" id="buyNowBtn" 
+                        data-title="{{ item.data.title | escape }}" 
+                        data-price="{{ item.data.price }}" 
+                        data-image="{{ item.data.image | url }}">
+                    REQUEST THE DESIGN 
+                </button>
+            </div>
     </div>
 
   </div>
