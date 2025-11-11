@@ -73,66 +73,7 @@ permalink: /
 
     <div class="product-grid">
         
-        {% for item in collections.services %}
-        <a href="/service/{{ item.fileSlug }}/" class="product-card">
-            <div class="product-card-image-wrapper">
-            {% if item.data.image %}
-                <img src="{{ item.data.image | url }}" alt="{{ item.data.title | escape }}">
-            {% endif %}
-            </div>
-
-            <div class="product-card-name" style="text-align:left; padding:15px; font-weight:normal;">
-            <div class="product-card-title" style="font-weight:bold; font-size:1.1rem; text-transform:capitalize; color:#333;">
-                {{ item.data.title | default: 'Service' }}
-            </div>
-
-            {% if item.data.price %}
-            <div class="product-card-price" style="font-weight:bold; font-size:1.1rem; margin-top:8px; color:#000;">
-                ₹{{ item.data.price }}
-            </div>
-            {% endif %}
-
-            {% if item.data.category %}
-            <div class="product-card-category" style="font-size:0.9rem; color:#777; margin-top:8px; text-transform:capitalize;">
-                {{ item.data.category }}
-            </div>
-            {% endif %}
-            </div>
-        </a>
-        {% endfor %}
-
-        {% for item in collections.works %}
-        <div class="product-card" style="opacity:0.92; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
-            <div class="product-card-image-wrapper">
-            {% if item.data.image %}
-                <img src="{{ item.data.image | url }}" alt="{{ item.data.title | escape }}">
-            {% endif %}
-            </div>
-
-            <div class="product-card-name" style="text-align:left; padding:15px; font-weight:normal;">
-            <div class="product-card-title" style="font-weight:bold; font-size:1.1rem; text-transform:capitalize; color:#333;">
-                {{ item.data.title | default: 'Our Work' }}
-            </div>
-
-            {% if item.data.category %}
-            <div class="product-card-category" style="font-size:0.9rem; color:#777; margin-top:8px; text-transform:capitalize;">
-                (Our Work) {{ item.data.category }}
-            </div>
-            {% endif %}
-            </div>
         </div>
-        {% endfor %}
-
-        {% assign services_size = collections.services.size %}
-        {% assign works_size = collections.works.size %}
-        {% assign combined_size = services_size | plus: works_size %}
-
-        {% if combined_size == 0 %}
-        <p class="empty-gallery-message" style="position:static; transform:none; color:#333;">
-            No services or works found. Please check back soon.
-        </p>
-        {% endif %}
-    </div>
 </div>
 <div class="container">
     
