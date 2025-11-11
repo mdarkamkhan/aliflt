@@ -9,6 +9,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addCollection("services",  api => api.getFilteredByGlob("services/*.md"));
   eleventyConfig.addCollection("works",     api => api.getFilteredByGlob("works/*.md"));
   eleventyConfig.addCollection("offers",    api => api.getFilteredByGlob("offers/*.md"));
+  eleventyConfig.addCollection("designs",   api => api.getFilteredByGlob("designs/*.md"));
 
   return {
     dir: { input: "./", includes: "_includes", data: "_data", output: "_site" }
