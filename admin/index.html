@@ -12,11 +12,22 @@
       /* --- MOBILE TRANSFORMATIONS --- */
       @media (max-width: 768px) {
         
-        /* 1. Hide the default Desktop Sidebar */
-        .nc-app-sidebar { display: none !important; }
+        /* 1. 🔴 FORCE HIDE SIDEBAR (The Fix) */
+        .nc-app-sidebar, 
+        aside, 
+        div[class*="Sidebar"], 
+        nav[aria-label="Collections"] { 
+            display: none !important; 
+            width: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+        }
         
         /* 2. Make Main Content Full Width */
         .nc-app-main { width: 100% !important; margin-left: 0 !important; padding-bottom: 80px !important; }
+        
+        /* Make list container wide */
+        .nc-collectionPage-list { width: 100% !important; }
 
         /* 3. Fix Header */
         .nc-app-header { position: sticky; top: 0; z-index: 1000; }
