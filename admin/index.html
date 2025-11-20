@@ -6,75 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
     <style>
-      /* --- RESET & BASE --- */
-      body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #eff3f6; }
+      /* --- 1. RESET & BASE --- */
+      body { margin: 0; background: #eff3f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
       
-      /* --- MOBILE TRANSFORMATIONS --- */
+      /* --- 2. HIDE DESKTOP ELEMENTS ON MOBILE --- */
       @media (max-width: 768px) {
+        /* Hide the default huge sidebar */
+        .nc-app-sidebar { display: none !important; }
         
-        /* 1. 🔴 FORCE HIDE SIDEBAR (The Fix) */
-        .nc-app-sidebar, 
-        aside, 
-        div[class*="Sidebar"], 
-        nav[aria-label="Collections"] { 
-            display: none !important; 
-            width: 0 !important;
-            height: 0 !important;
-            overflow: hidden !important;
-        }
-        
-        /* 2. Make Main Content Full Width */
+        /* Make main content fill the screen */
         .nc-app-main { width: 100% !important; margin-left: 0 !important; padding-bottom: 80px !important; }
         
-        /* Make list container wide */
-        .nc-collectionPage-list { width: 100% !important; }
-
-        /* 3. Fix Header */
-        .nc-app-header { position: sticky; top: 0; z-index: 1000; }
-        .nc-app-header-content { padding: 10px !important; }
-
-        /* 4. Card Style for Entries */
-        .nc-collectionPage-list { 
-            display: grid !important; 
-            grid-template-columns: 1fr 1fr !important; /* 2 Columns */
-            gap: 10px !important; 
-            padding: 10px !important; 
+        /* Fix the header to the top */
+        .nc-app-header { position: sticky !important; top: 0; z-index: 1000; }
+        
+        /* --- CARD STYLE LIST --- */
+        /* This turns the boring table into beautiful cards */
+        .nc-collectionPage-list {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important; /* 2 cards per row */
+            gap: 12px !important;
+            padding: 12px !important;
         }
         
-        /* Make the card look like an App Card */
         a.nc-collectionPage-entry {
             background: white !important;
             border-radius: 12px !important;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
             border: none !important;
             display: flex !important;
             flex-direction: column !important;
             overflow: hidden !important;
             height: auto !important;
+            transition: transform 0.1s ease;
         }
+        a.nc-collectionPage-entry:active { transform: scale(0.98); }
 
-        /* Adjust Text inside Cards */
-        .nc-collectionPage-entry-title { font-size: 14px !important; font-weight: 600 !important; padding: 8px !important; }
-        .nc-collectionPage-entry-detail { display: none !important; } /* Hide extra details to save space */
-
-        /* 5. Editor View (Writing a post) */
-        .nc-entryEditor-controlPane { padding: 15px !important; }
-        .nc-controlPane-widget { margin-bottom: 20px !important; }
-        input, textarea, select { 
-            font-size: 16px !important; /* Prevents zoom on iPhone */
-            padding: 12px !important; 
-            border-radius: 8px !important;
-            border: 1px solid #ddd !important;
-        }
+        /* Hide complex details in card view to keep it clean */
+        .nc-collectionPage-entry-detail { display: none !important; }
+        .nc-collectionPage-entry-title { font-size: 14px !important; font-weight: 600 !important; padding: 10px !important; }
       }
 
-      /* --- BOTTOM NAVIGATION BAR (APP STYLE) --- */
+      /* --- 3. BOTTOM NAVIGATION BAR (APP STYLE) --- */
       .mobile-nav {
         display: none; /* Hidden on Desktop */
         position: fixed; bottom: 0; left: 0; width: 100%;
         background: white; border-top: 1px solid #eee;
         height: 65px; justify-content: space-around; align-items: center;
         z-index: 9999; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        padding-bottom: env(safe-area-inset-bottom);
       }
       
       @media (max-width: 768px) { .mobile-nav { display: flex; } }
@@ -82,35 +62,37 @@
       .nav-item {
         display: flex; flex-direction: column; align-items: center;
         text-decoration: none; color: #888; font-size: 11px; flex: 1;
-        padding: 5px 0; cursor: pointer;
+        padding: 8px 0; cursor: pointer; -webkit-tap-highlight-color: transparent;
       }
       
       .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; fill: currentColor; }
-      .nav-item.active { color: #007bff; font-weight: bold; }
+      .nav-item.active { color: #0f62fe; font-weight: 700; }
 
-      /* --- MASS UPLOAD BUTTON (FLOATING) --- */
+      /* --- 4. FLOATING ACTION BUTTON (MASS UPLOAD) --- */
       #massUploadBtn {
-        position: fixed; bottom: 80px; right: 20px;
-        background: #28a745; color: white; border: none;
-        width: 50px; height: 50px; border-radius: 50%;
-        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4); cursor: pointer;
+        position: fixed; bottom: 85px; right: 20px;
+        background: #0f62fe; color: white; border: none;
+        width: 56px; height: 56px; border-radius: 50%;
+        box-shadow: 0 4px 15px rgba(15, 98, 254, 0.4); cursor: pointer;
         z-index: 9998; display: flex; align-items: center; justify-content: center;
-        font-size: 24px;
+        font-size: 24px; transition: transform 0.2s;
       }
+      #massUploadBtn:active { transform: scale(0.9); }
       
-      /* Modal Styles */
+      /* --- 5. MODAL STYLES --- */
       #massUploadModal {
         display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6); z-index: 10000; align-items: flex-end; /* Bottom sheet style */
+        background: rgba(0,0,0,0.6); z-index: 10000; align-items: flex-end;
       }
       .modal-content {
-        background: #fff; padding: 25px; border-radius: 20px 20px 0 0; width: 100%; 
+        background: #fff; padding: 24px; border-radius: 20px 20px 0 0; width: 100%; 
         box-sizing: border-box; animation: slideUp 0.3s ease-out;
+        padding-bottom: calc(24px + env(safe-area-inset-bottom));
       }
       @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
       
       .modal-content select, .modal-content input {
-        width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #eee; border-radius: 8px; background: #f9f9f9;
+        width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #eee; border-radius: 10px; background: #f9f9f9; font-size: 16px;
       }
     </style>
   </head>
@@ -119,16 +101,8 @@
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-    <script>
-      (function() {
-        if (document.location.hash.indexOf('invite_token') > -1) {
-          document.location.pathname = '/admin/';
-        }
-      })();
-    </script>
-
     <div class="mobile-nav">
-      <div class="nav-item" onclick="navigateTo('products', this)">
+      <div class="nav-item active" onclick="navigateTo('products', this)">
         <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h2v2H6zm4-4h6v2h-6zm0 4h6v2h-6z"/></svg>
         Products
       </div>
@@ -153,9 +127,10 @@
 
     <div id="massUploadModal">
       <div class="modal-content">
-        <h3 style="margin-top:0">Mass Upload</h3>
-        <p style="color:#666; font-size:14px;">Upload CSV to add items in bulk.</p>
+        <h3 style="margin-top:0; font-size: 20px;">Mass Upload</h3>
+        <p style="color:#666; font-size:14px; margin-bottom: 20px;">Upload a CSV file to add multiple items at once.</p>
         
+        <label style="font-size:12px; font-weight:bold; color:#555;">Select Collection:</label>
         <select id="massCollection">
           <option value="products">Products</option>
           <option value="services">Services</option>
@@ -163,23 +138,27 @@
           <option value="works">Works</option>
         </select>
 
+        <label style="font-size:12px; font-weight:bold; color:#555;">Choose CSV File:</label>
         <input type="file" id="massFile" accept=".csv" />
         
-        <button id="massConfirm" style="width:100%; padding:15px; background:#007bff; color:#white; font-weight:bold; border:none; border-radius:8px; font-size:16px;">Start Upload</button>
+        <button id="massConfirm" style="width:100%; padding:15px; background:#0f62fe; color:white; font-weight:bold; border:none; border-radius:12px; font-size:16px; margin-top: 10px;">Start Upload</button>
         <button id="closeMassModal" style="width:100%; padding:15px; background:transparent; color:#888; border:none; margin-top:5px;">Cancel</button>
-        <p id="massUploadStatus" style="margin-top:10px; font-size:14px; font-weight:bold;"></p>
+        <p id="massUploadStatus" style="margin-top:10px; font-size:14px; font-weight:bold; text-align:center;"></p>
       </div>
     </div>
 
     <script>
-      // Navigation Logic
+      // 1. Navigation Logic
       function navigateTo(collection, el) {
+        // Simply changing the hash tells Decap CMS to switch pages
         window.location.hash = `#/collections/${collection}`;
+        
+        // Update UI active state
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         el.classList.add('active');
       }
 
-      // Mass Upload Logic
+      // 2. Mass Upload Logic
       document.addEventListener("DOMContentLoaded", function () {
         const btn = document.getElementById("massUploadBtn");
         const modal = document.getElementById("massUploadModal");
@@ -187,9 +166,11 @@
         const confirmBtn = document.getElementById("massConfirm");
         const status = document.getElementById("massUploadStatus");
 
+        // Open/Close Modal
         btn.addEventListener("click", () => modal.style.display = "flex");
         closeBtn.addEventListener("click", () => modal.style.display = "none");
 
+        // Handle File Upload
         confirmBtn.addEventListener("click", () => {
           const collection = document.getElementById("massCollection").value;
           const file = document.getElementById("massFile").files[0];
@@ -197,6 +178,7 @@
           if (!file) return alert("Please select a CSV file!");
           
           status.textContent = "⏳ Reading file...";
+          status.style.color = "#007bff";
 
           const reader = new FileReader();
           reader.onload = async (e) => {
@@ -216,6 +198,7 @@
               const values = rows[i].split(",");
               let entryObj = {};
               headers.forEach((header, index) => {
+                // Basic CSV parsing
                 entryObj[header] = values[index] ? values[index].trim() : "";
               });
 
@@ -225,16 +208,17 @@
               // Dynamic YAML Builder
               let fileContent = "---\n";
               for (const key in entryObj) {
-                if (key !== 'description') {
+                if (key !== 'description' && key !== 'body') {
                    const val = entryObj[key];
-                   // Check if it looks like a number, save as number
-                   if (!isNaN(val) && val !== "" && key !== 'title' && key !== 'category') {
+                   // Save numbers as numbers, text as text
+                   if (!isNaN(val) && val !== "" && key !== 'title') {
                       fileContent += `${key}: ${val}\n`;
                    } else {
                       fileContent += `${key}: "${val}"\n`;
                    }
                 }
               }
+              // Add mandatory date
               fileContent += `date: "${new Date().toISOString()}"\n`;
               fileContent += "---\n";
               if (entryObj.description) fileContent += entryObj.description;
@@ -249,10 +233,12 @@
                 status.textContent = `✅ Uploaded ${successCount} / ${totalItems}`;
               } catch (err) {
                 console.error(err);
+                status.textContent = `❌ Error uploading item ${i}`;
               }
             }
             
-            status.textContent = "🎉 Done! Reloading...";
+            status.textContent = "🎉 Done! Refreshing...";
+            status.style.color = "green";
             setTimeout(() => location.reload(), 1500);
           };
           reader.readAsText(file);
