@@ -1,249 +1,183 @@
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>ALiF Admin App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-    <style>
-      /* --- 1. RESET & BASE --- */
-      body { margin: 0; background: #eff3f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-      
-      /* --- 2. HIDE DESKTOP ELEMENTS ON MOBILE --- */
-      @media (max-width: 768px) {
-        /* Hide the default huge sidebar */
-        .nc-app-sidebar { display: none !important; }
-        
-        /* Make main content fill the screen */
-        .nc-app-main { width: 100% !important; margin-left: 0 !important; padding-bottom: 80px !important; }
-        
-        /* Fix the header to the top */
-        .nc-app-header { position: sticky !important; top: 0; z-index: 1000; }
-        
-        /* --- CARD STYLE LIST --- */
-        /* This turns the boring table into beautiful cards */
-        .nc-collectionPage-list {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important; /* 2 cards per row */
-            gap: 12px !important;
-            padding: 12px !important;
-        }
-        
-        a.nc-collectionPage-entry {
-            background: white !important;
-            border-radius: 12px !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
-            border: none !important;
-            display: flex !important;
-            flex-direction: column !important;
-            overflow: hidden !important;
-            height: auto !important;
-            transition: transform 0.1s ease;
-        }
-        a.nc-collectionPage-entry:active { transform: scale(0.98); }
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>Mobile Admin Panel — Ready to Paste</title>
+  <style>
+    /* Mobile-first styles */
+    :root{--accent:#0f62fe;--bg:#f6f7fb;--card:#ffffff;--muted:#8b8e97}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{background:var(--bg);display:flex;flex-direction:column}
+    /* Top header */
+    .topbar{height:54px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;box-shadow:0 1px 0 rgba(0,0,0,.06);position:sticky;top:0;z-index:20}
+    .topbar .title{font-weight:600}
+    .icon-btn{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+    /* Drawer */
+    .drawer{position:fixed;left:0;top:0;bottom:0;width:260px;background:#fff;box-shadow:2px 0 12px rgba(12,12,12,.12);transform:translateX(-110%);transition:transform .22s ease;z-index:30;padding:14px}
+    .drawer.open{transform:translateX(0)}
+    .drawer h3{margin:6px 0 8px}
+    .drawer a{display:block;padding:10px;border-radius:8px;color:#111;text-decoration:none;margin-bottom:6px}
+    /* Content */
+    main{flex:1;overflow:auto;padding:12px 12px 96px}
+    .search{display:flex;gap:8px;margin-bottom:12px}
+    .search input{flex:1;padding:10px;border-radius:10px;border:1px solid #e6e8ee;background:#fff}
+    .card{background:var(--card);border-radius:12px;padding:10px;display:flex;gap:10px;align-items:center;margin-bottom:10px;box-shadow:0 1px 4px rgba(16,24,40,.04)}
+    .thumb{width:84px;height:84px;border-radius:8px;object-fit:cover;background:#eee;flex-shrink:0}
+    .meta{flex:1}
+    .meta .name{font-weight:600}
+    .meta .sub{color:var(--muted);font-size:13px;margin-top:6px}
+    .actions{display:flex;gap:8px}
+    .btn{padding:8px 10px;border-radius:10px;background:var(--accent);color:#fff;border:0;font-weight:600}
+    .ghost{background:#fff;border:1px solid #e6e8ee;color:#111}
+    /* Bottom nav */
+    .bottombar{position:fixed;left:0;right:0;bottom:0;height:68px;background:#fff;border-top:1px solid #eee;display:flex;align-items:center;justify-content:space-around;padding:8px 6px}
+    .bottombar button{background:transparent;border:0;display:flex;flex-direction:column;align-items:center;font-size:12px;color:var(--muted)}
+    .bottombar button.active{color:var(--accent);font-weight:700}
+    /* FAB */
+    .fab{position:fixed;right:16px;bottom:86px;width:56px;height:56px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-weight:700;border:0;box-shadow:0 6px 18px rgba(15,98,254,.16)}
+    /* Media grid */
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .video-thumb{width:100%;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:#000;display:flex;align-items:center;justify-content:center;color:#fff}
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.36);display:none;align-items:center;justify-content:center;z-index:60}
+    .modal{background:#fff;border-radius:12px;padding:12px;width:92%;max-width:420px}
+    /* Responsive tweaks */
+    @media(min-width:720px){main{max-width:720px;margin:0 auto}}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <button id="menuBtn" class="icon-btn" aria-label="menu">☰</button>
+    <div class="title">Admin Panel</div>
+    <button id="searchToggle" class="icon-btn" aria-label="search">🔍</button>
+  </div>  <aside id="drawer" class="drawer" aria-hidden>
+    <h3>Menu</h3>
+    <a href="#" data-tab="products">Products</a>
+    <a href="#" data-tab="media">Media</a>
+    <a href="#" data-tab="designs">Designs</a>
+    <a href="#" data-tab="services">Services</a>
+    <a href="#" data-tab="works">Works</a>
+  </aside>  <main>
+    <!-- SEARCH (hidden by default on small screens) -->
+    <div class="search" id="searchRow">
+      <input id="q" placeholder="Search products, designs..." />
+      <button id="addQuick" class="btn">Add</button>
+    </div><!-- PRODUCTS TAB -->
+<section id="productsTab">
+  <!-- Example product cards (ready to paste) -->
+  <div class="card">
+    <img class="thumb" src="https://via.placeholder.com/400x400?text=Velvet+Lace" alt="Velvet lace">
+    <div class="meta">
+      <div class="name">Velvet lace</div>
+      <div class="sub">SKU: VL-001 · 12 in stock</div>
+    </div>
+    <div class="actions">
+      <button class="ghost">Edit</button>
+    </div>
+  </div>
 
-        /* Hide complex details in card view to keep it clean */
-        .nc-collectionPage-entry-detail { display: none !important; }
-        .nc-collectionPage-entry-title { font-size: 14px !important; font-weight: 600 !important; padding: 10px !important; }
-      }
+  <div class="card">
+    <img class="thumb" src="https://via.placeholder.com/400x400?text=Daman+Lace" alt="Daman lace">
+    <div class="meta">
+      <div class="name">Daman lace</div>
+      <div class="sub">SKU: DL-002 · 6 in stock</div>
+    </div>
+    <div class="actions">
+      <button class="ghost">Edit</button>
+    </div>
+  </div>
 
-      /* --- 3. BOTTOM NAVIGATION BAR (APP STYLE) --- */
-      .mobile-nav {
-        display: none; /* Hidden on Desktop */
-        position: fixed; bottom: 0; left: 0; width: 100%;
-        background: white; border-top: 1px solid #eee;
-        height: 65px; justify-content: space-around; align-items: center;
-        z-index: 9999; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-        padding-bottom: env(safe-area-inset-bottom);
-      }
-      
-      @media (max-width: 768px) { .mobile-nav { display: flex; } }
+  <!-- Add more cards as needed; these are ready to paste for your real data -->
+</section>
 
-      .nav-item {
-        display: flex; flex-direction: column; align-items: center;
-        text-decoration: none; color: #888; font-size: 11px; flex: 1;
-        padding: 8px 0; cursor: pointer; -webkit-tap-highlight-color: transparent;
-      }
-      
-      .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; fill: currentColor; }
-      .nav-item.active { color: #0f62fe; font-weight: 700; }
-
-      /* --- 4. FLOATING ACTION BUTTON (MASS UPLOAD) --- */
-      #massUploadBtn {
-        position: fixed; bottom: 85px; right: 20px;
-        background: #0f62fe; color: white; border: none;
-        width: 56px; height: 56px; border-radius: 50%;
-        box-shadow: 0 4px 15px rgba(15, 98, 254, 0.4); cursor: pointer;
-        z-index: 9998; display: flex; align-items: center; justify-content: center;
-        font-size: 24px; transition: transform 0.2s;
-      }
-      #massUploadBtn:active { transform: scale(0.9); }
-      
-      /* --- 5. MODAL STYLES --- */
-      #massUploadModal {
-        display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6); z-index: 10000; align-items: flex-end;
-      }
-      .modal-content {
-        background: #fff; padding: 24px; border-radius: 20px 20px 0 0; width: 100%; 
-        box-sizing: border-box; animation: slideUp 0.3s ease-out;
-        padding-bottom: calc(24px + env(safe-area-inset-bottom));
-      }
-      @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-      
-      .modal-content select, .modal-content input {
-        width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #eee; border-radius: 10px; background: #f9f9f9; font-size: 16px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
-    <div class="mobile-nav">
-      <div class="nav-item active" onclick="navigateTo('products', this)">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h2v2H6zm4-4h6v2h-6zm0 4h6v2h-6z"/></svg>
-        Products
-      </div>
-      
-      <div class="nav-item" onclick="navigateTo('services', this)">
-        <svg viewBox="0 0 24 24"><path d="M20.41 4.94l-1.35-1.35c-.78-.78-2.05-.78-2.83 0L13.4 6.41 3 16.82V21h4.18l10.46-10.46 2.77-2.77c.79-.78.79-2.05 0-2.83zm-14 14.12L5 19v-1.36l9.82-9.82 1.41 1.41-9.82 9.83z"/></svg>
-        Services
-      </div>
-      
-      <div class="nav-item" onclick="navigateTo('designs', this)">
-         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.22-7.52-4.28z"/></svg>
-        Designs
-      </div>
-      
-      <div class="nav-item" onclick="navigateTo('works', this)">
-        <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM8 15c0-1.66 1.34-3 3-3 .35 0 .69.07 1 .18V6h5v2h-3v7.03c-.02 1.64-1.35 2.97-3 2.97-1.66 0-3-1.34-3-3z"/></svg>
-        Works
+<!-- MEDIA TAB -->
+<section id="mediaTab" style="display:none">
+  <div style="margin-bottom:10px;font-weight:600">Media library</div>
+  <div class="grid">
+    <!-- Example: showing the uploaded screen recording — path included below -->
+    <div>
+      <div class="video-thumb">
+        <!-- NOTE: This uses the uploaded file path from the session: /mnt/data/Record_2025-11-20-23-22-05.mp4 -->
+        <video controls style="width:100%;height:100%;object-fit:cover" src="/mnt/data/Record_2025-11-20-23-22-05.mp4"></video>
       </div>
     </div>
-
-    <button id="massUploadBtn">📂</button>
-
-    <div id="massUploadModal">
-      <div class="modal-content">
-        <h3 style="margin-top:0; font-size: 20px;">Mass Upload</h3>
-        <p style="color:#666; font-size:14px; margin-bottom: 20px;">Upload a CSV file to add multiple items at once.</p>
-        
-        <label style="font-size:12px; font-weight:bold; color:#555;">Select Collection:</label>
-        <select id="massCollection">
-          <option value="products">Products</option>
-          <option value="services">Services</option>
-          <option value="designs">Designs</option>
-          <option value="works">Works</option>
-        </select>
-
-        <label style="font-size:12px; font-weight:bold; color:#555;">Choose CSV File:</label>
-        <input type="file" id="massFile" accept=".csv" />
-        
-        <button id="massConfirm" style="width:100%; padding:15px; background:#0f62fe; color:white; font-weight:bold; border:none; border-radius:12px; font-size:16px; margin-top: 10px;">Start Upload</button>
-        <button id="closeMassModal" style="width:100%; padding:15px; background:transparent; color:#888; border:none; margin-top:5px;">Cancel</button>
-        <p id="massUploadStatus" style="margin-top:10px; font-size:14px; font-weight:bold; text-align:center;"></p>
+    <div>
+      <div class="video-thumb">
+        <img src="https://via.placeholder.com/400x600?text=Image+2" style="width:100%;height:100%;object-fit:cover" alt="img">
       </div>
     </div>
+  </div>
+</section>
 
-    <script>
-      // 1. Navigation Logic
-      function navigateTo(collection, el) {
-        // Simply changing the hash tells Decap CMS to switch pages
-        window.location.hash = `#/collections/${collection}`;
-        
-        // Update UI active state
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        el.classList.add('active');
-      }
+<!-- DESIGNS TAB -->
+<section id="designsTab" style="display:none">
+  <div style="margin-bottom:10px;font-weight:600">Designs</div>
+  <div class="card"><img class="thumb" src="https://via.placeholder.com/200x200?text=Design+1"><div class="meta"><div class="name">Front neck design</div><div class="sub">Tap to open</div></div></div>
+</section>
 
-      // 2. Mass Upload Logic
-      document.addEventListener("DOMContentLoaded", function () {
-        const btn = document.getElementById("massUploadBtn");
-        const modal = document.getElementById("massUploadModal");
-        const closeBtn = document.getElementById("closeMassModal");
-        const confirmBtn = document.getElementById("massConfirm");
-        const status = document.getElementById("massUploadStatus");
+<!-- SERVICES TAB -->
+<section id="servicesTab" style="display:none">
+  <div style="margin-bottom:10px;font-weight:600">Services</div>
+  <div class="card"><div class="meta"><div class="name">Tailoring</div><div class="sub">Price list & slots</div></div></div>
+</section>
 
-        // Open/Close Modal
-        btn.addEventListener("click", () => modal.style.display = "flex");
-        closeBtn.addEventListener("click", () => modal.style.display = "none");
+<!-- WORKS TAB -->
+<section id="worksTab" style="display:none">
+  <div style="margin-bottom:10px;font-weight:600">Works</div>
+  <div class="card"><div class="meta"><div class="name">Recent orders</div><div class="sub">Tap to view</div></div></div>
+</section>
 
-        // Handle File Upload
-        confirmBtn.addEventListener("click", () => {
-          const collection = document.getElementById("massCollection").value;
-          const file = document.getElementById("massFile").files[0];
+  </main><button class="fab" id="fab">+</button>
 
-          if (!file) return alert("Please select a CSV file!");
-          
-          status.textContent = "⏳ Reading file...";
-          status.style.color = "#007bff";
+  <nav class="bottombar">
+    <button data-tab-btn="products" class="active">🏷️<span>Products</span></button>
+    <button data-tab-btn="media">🖼️<span>Media</span></button>
+    <button data-tab-btn="designs">✂️<span>Designs</span></button>
+    <button data-tab-btn="works">📦<span>Works</span></button>
+  </nav>  <!-- Modal (add/edit) -->  <div id="modalBackdrop" class="modal-backdrop">
+    <div class="modal" role="dialog">
+      <div style="font-weight:700;margin-bottom:8px">Add Product</div>
+      <input placeholder="Product name" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee;margin-bottom:8px">
+      <div style="display:flex;gap:8px"><button class="btn">Save</button><button id="modalClose" class="ghost">Cancel</button></div>
+    </div>
+  </div>  <script>
+    // Simple tab switcher
+    const tabs = {
+      products: document.getElementById('productsTab'),
+      media: document.getElementById('mediaTab'),
+      designs: document.getElementById('designsTab'),
+      services: document.getElementById('servicesTab'),
+      works: document.getElementById('worksTab')
+    }
+    function showTab(name){
+      for(const k in tabs) tabs[k].style.display = (k===name? 'block':'none')
+      document.querySelectorAll('[data-tab-btn]').forEach(b=>b.classList.toggle('active', b.getAttribute('data-tab-btn')===name))
+      // close drawer on selection
+      drawer.classList.remove('open')
+    }
 
-          const reader = new FileReader();
-          reader.onload = async (e) => {
-            const text = e.target.result;
-            const rows = text.split("\n").map(row => row.trim()).filter(row => row.length > 0);
-            
-            if (rows.length < 2) return alert("CSV file is empty or invalid.");
+    // Drawer toggle
+    const menuBtn = document.getElementById('menuBtn')
+    const drawer = document.getElementById('drawer')
+    menuBtn.addEventListener('click', ()=> drawer.classList.toggle('open'))
+    document.querySelectorAll('#drawer a').forEach(a=>a.addEventListener('click', e=>{e.preventDefault(); showTab(a.dataset.tab)}))
 
-            const headers = rows[0].split(",").map(h => h.trim());
-            const totalItems = rows.length - 1;
-            status.textContent = `🚀 Uploading ${totalItems} items...`;
+    // Bottom nav
+    document.querySelectorAll('[data-tab-btn]').forEach(btn=>btn.addEventListener('click', ()=> showTab(btn.getAttribute('data-tab-btn'))))
 
-            const backend = window.CMS.getBackend();
-            let successCount = 0;
+    // FAB + modal
+    const fab = document.getElementById('fab')
+    const modal = document.getElementById('modalBackdrop')
+    const modalClose = document.getElementById('modalClose')
+    fab.addEventListener('click', ()=> modal.style.display = 'flex')
+    modalClose.addEventListener('click', ()=> modal.style.display = 'none')
 
-            for (let i = 1; i < rows.length; i++) {
-              const values = rows[i].split(",");
-              let entryObj = {};
-              headers.forEach((header, index) => {
-                // Basic CSV parsing
-                entryObj[header] = values[index] ? values[index].trim() : "";
-              });
+    // Quick add (example)
+    document.getElementById('addQuick').addEventListener('click', ()=> modal.style.display='flex')
 
-              const title = entryObj.title || "Untitled " + Date.now();
-              const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-
-              // Dynamic YAML Builder
-              let fileContent = "---\n";
-              for (const key in entryObj) {
-                if (key !== 'description' && key !== 'body') {
-                   const val = entryObj[key];
-                   // Save numbers as numbers, text as text
-                   if (!isNaN(val) && val !== "" && key !== 'title') {
-                      fileContent += `${key}: ${val}\n`;
-                   } else {
-                      fileContent += `${key}: "${val}"\n`;
-                   }
-                }
-              }
-              // Add mandatory date
-              fileContent += `date: "${new Date().toISOString()}"\n`;
-              fileContent += "---\n";
-              if (entryObj.description) fileContent += entryObj.description;
-
-              try {
-                await backend.persistEntry({
-                  collection: collection,
-                  slug: slug,
-                  entry: { path: `${collection}/${slug}.md`, raw: fileContent }
-                });
-                successCount++;
-                status.textContent = `✅ Uploaded ${successCount} / ${totalItems}`;
-              } catch (err) {
-                console.error(err);
-                status.textContent = `❌ Error uploading item ${i}`;
-              }
-            }
-            
-            status.textContent = "🎉 Done! Refreshing...";
-            status.style.color = "green";
-            setTimeout(() => location.reload(), 1500);
-          };
-          reader.readAsText(file);
-        });
-      });
-    </script>
-  </body>
+    // initial state
+    showTab('products')
+  </script></body>
 </html>
