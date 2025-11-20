@@ -2,47 +2,105 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>ALiF Admin</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALiF Admin App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
     <style>
-      /* Base Styles */
-      body { margin: 0; font-family: "Inter", system-ui, sans-serif; background: #f9fafb; }
+      /* --- RESET & BASE --- */
+      body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #eff3f6; }
+      
+      /* --- MOBILE TRANSFORMATIONS --- */
+      @media (max-width: 768px) {
+        
+        /* 1. Hide the default Desktop Sidebar */
+        .nc-app-sidebar { display: none !important; }
+        
+        /* 2. Make Main Content Full Width */
+        .nc-app-main { width: 100% !important; margin-left: 0 !important; padding-bottom: 80px !important; }
 
-      /* Mobile Bottom Nav */
-      .mobile-bottom-nav {
-        display: flex; justify-content: space-around; background: #fff;
-        border-top: 1px solid #ccc; position: fixed; bottom: 0; width: 100%;
-        height: 60px; align-items: center; z-index: 1000;
-      }
-      .mobile-bottom-nav button {
-        background: none; border: none; font-size: 14px; color: #333; flex: 1; cursor: pointer;
-      }
-      .mobile-bottom-nav button:hover { color: #007bff; font-weight: bold; }
+        /* 3. Fix Header */
+        .nc-app-header { position: sticky; top: 0; z-index: 1000; }
+        .nc-app-header-content { padding: 10px !important; }
 
-      /* Mass Upload Floating Button */
+        /* 4. Card Style for Entries */
+        .nc-collectionPage-list { 
+            display: grid !important; 
+            grid-template-columns: 1fr 1fr !important; /* 2 Columns */
+            gap: 10px !important; 
+            padding: 10px !important; 
+        }
+        
+        /* Make the card look like an App Card */
+        a.nc-collectionPage-entry {
+            background: white !important;
+            border-radius: 12px !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
+            border: none !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+            height: auto !important;
+        }
+
+        /* Adjust Text inside Cards */
+        .nc-collectionPage-entry-title { font-size: 14px !important; font-weight: 600 !important; padding: 8px !important; }
+        .nc-collectionPage-entry-detail { display: none !important; } /* Hide extra details to save space */
+
+        /* 5. Editor View (Writing a post) */
+        .nc-entryEditor-controlPane { padding: 15px !important; }
+        .nc-controlPane-widget { margin-bottom: 20px !important; }
+        input, textarea, select { 
+            font-size: 16px !important; /* Prevents zoom on iPhone */
+            padding: 12px !important; 
+            border-radius: 8px !important;
+            border: 1px solid #ddd !important;
+        }
+      }
+
+      /* --- BOTTOM NAVIGATION BAR (APP STYLE) --- */
+      .mobile-nav {
+        display: none; /* Hidden on Desktop */
+        position: fixed; bottom: 0; left: 0; width: 100%;
+        background: white; border-top: 1px solid #eee;
+        height: 65px; justify-content: space-around; align-items: center;
+        z-index: 9999; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      }
+      
+      @media (max-width: 768px) { .mobile-nav { display: flex; } }
+
+      .nav-item {
+        display: flex; flex-direction: column; align-items: center;
+        text-decoration: none; color: #888; font-size: 11px; flex: 1;
+        padding: 5px 0; cursor: pointer;
+      }
+      
+      .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; fill: currentColor; }
+      .nav-item.active { color: #007bff; font-weight: bold; }
+
+      /* --- MASS UPLOAD BUTTON (FLOATING) --- */
       #massUploadBtn {
         position: fixed; bottom: 80px; right: 20px;
-        background: #007bff; color: white; border: none;
-        border-radius: 50px; padding: 12px 20px; font-size: 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer;
-        z-index: 2000; display: flex; align-items: center; gap: 8px;
+        background: #28a745; color: white; border: none;
+        width: 50px; height: 50px; border-radius: 50%;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4); cursor: pointer;
+        z-index: 9998; display: flex; align-items: center; justify-content: center;
+        font-size: 24px;
       }
-      #massUploadBtn:hover { background: #0056b3; }
-
+      
       /* Modal Styles */
       #massUploadModal {
         display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;
+        background: rgba(0,0,0,0.6); z-index: 10000; align-items: flex-end; /* Bottom sheet style */
       }
       .modal-content {
-        background: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px;
-        text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        background: #fff; padding: 25px; border-radius: 20px 20px 0 0; width: 100%; 
+        box-sizing: border-box; animation: slideUp 0.3s ease-out;
       }
+      @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+      
       .modal-content select, .modal-content input {
-        width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px;
+        width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #eee; border-radius: 8px; background: #f9f9f9;
       }
-      .note { font-size: 0.85rem; color: #666; background: #f0f0f0; padding: 8px; border-radius: 4px; margin-bottom: 15px; text-align: left; }
     </style>
   </head>
 
@@ -58,42 +116,59 @@
       })();
     </script>
 
-    <div class="mobile-bottom-nav">
-      <button onclick="location.href='#/collections/products'">Products</button>
-      <button onclick="location.href='#/collections/services'">Services</button>
-      <button onclick="location.href='#/collections/works'">Works</button>
-      <button onclick="location.href='#/collections/designs'">Designs</button>
+    <div class="mobile-nav">
+      <div class="nav-item" onclick="navigateTo('products', this)">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h2v2H6zm4-4h6v2h-6zm0 4h6v2h-6z"/></svg>
+        Products
+      </div>
+      
+      <div class="nav-item" onclick="navigateTo('services', this)">
+        <svg viewBox="0 0 24 24"><path d="M20.41 4.94l-1.35-1.35c-.78-.78-2.05-.78-2.83 0L13.4 6.41 3 16.82V21h4.18l10.46-10.46 2.77-2.77c.79-.78.79-2.05 0-2.83zm-14 14.12L5 19v-1.36l9.82-9.82 1.41 1.41-9.82 9.83z"/></svg>
+        Services
+      </div>
+      
+      <div class="nav-item" onclick="navigateTo('designs', this)">
+         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.22-7.52-4.28z"/></svg>
+        Designs
+      </div>
+      
+      <div class="nav-item" onclick="navigateTo('works', this)">
+        <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM8 15c0-1.66 1.34-3 3-3 .35 0 .69.07 1 .18V6h5v2h-3v7.03c-.02 1.64-1.35 2.97-3 2.97-1.66 0-3-1.34-3-3z"/></svg>
+        Works
+      </div>
     </div>
 
-    <button id="massUploadBtn">📦 Mass Upload</button>
+    <button id="massUploadBtn">📂</button>
 
     <div id="massUploadModal">
       <div class="modal-content">
-        <h3>📦 Mass Upload</h3>
+        <h3 style="margin-top:0">Mass Upload</h3>
+        <p style="color:#666; font-size:14px;">Upload CSV to add items in bulk.</p>
         
-        <div class="note">
-          <strong>⚠️ Important:</strong>
-          <br>1. Upload a <b>CSV</b> file.
-          <br>2. Columns must match config (e.g., title, price, image).
-          <br>3. <b>Image</b> must be a path (e.g., /uploads/photo.jpg), not the file itself.
-        </div>
-
         <select id="massCollection">
           <option value="products">Products</option>
           <option value="services">Services</option>
-          <option value="works">Our Works</option>
           <option value="designs">Designs</option>
+          <option value="works">Works</option>
         </select>
 
         <input type="file" id="massFile" accept=".csv" />
         
-        <button id="massConfirm" style="width:100%; padding:12px; background:#28a745; color:#fff; border:none; border-radius:6px; cursor:pointer;">Start Upload</button>
-        <p id="massUploadStatus" style="margin-top:10px; font-weight:bold;"></p>
-        <button id="closeMassModal" style="margin-top:10px; background:transparent; color:#555; border:none; cursor:pointer;">Cancel</button>
+        <button id="massConfirm" style="width:100%; padding:15px; background:#007bff; color:#white; font-weight:bold; border:none; border-radius:8px; font-size:16px;">Start Upload</button>
+        <button id="closeMassModal" style="width:100%; padding:15px; background:transparent; color:#888; border:none; margin-top:5px;">Cancel</button>
+        <p id="massUploadStatus" style="margin-top:10px; font-size:14px; font-weight:bold;"></p>
       </div>
     </div>
 
     <script>
+      // Navigation Logic
+      function navigateTo(collection, el) {
+        window.location.hash = `#/collections/${collection}`;
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+      }
+
+      // Mass Upload Logic
       document.addEventListener("DOMContentLoaded", function () {
         const btn = document.getElementById("massUploadBtn");
         const modal = document.getElementById("massUploadModal");
@@ -119,50 +194,39 @@
             
             if (rows.length < 2) return alert("CSV file is empty or invalid.");
 
-            // Extract headers (keys)
             const headers = rows[0].split(",").map(h => h.trim());
             const totalItems = rows.length - 1;
-            
             status.textContent = `🚀 Uploading ${totalItems} items...`;
 
             const backend = window.CMS.getBackend();
-
             let successCount = 0;
 
             for (let i = 1; i < rows.length; i++) {
               const values = rows[i].split(",");
-              
-              // Create dynamic object from CSV columns
               let entryObj = {};
               headers.forEach((header, index) => {
-                // Handle commas inside quotes if necessary (basic split used here)
                 entryObj[header] = values[index] ? values[index].trim() : "";
               });
 
-              // Generate slug from title, or random ID
               const title = entryObj.title || "Untitled " + Date.now();
               const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
-              // Build YAML Frontmatter dynamically
+              // Dynamic YAML Builder
               let fileContent = "---\n";
               for (const key in entryObj) {
-                if (key !== 'description' && key !== 'body') {
-                   // Detect numbers
+                if (key !== 'description') {
                    const val = entryObj[key];
-                   if (!isNaN(val) && val !== "") {
+                   // Check if it looks like a number, save as number
+                   if (!isNaN(val) && val !== "" && key !== 'title' && key !== 'category') {
                       fileContent += `${key}: ${val}\n`;
                    } else {
                       fileContent += `${key}: "${val}"\n`;
                    }
                 }
               }
-              // Add date automatically
               fileContent += `date: "${new Date().toISOString()}"\n`;
               fileContent += "---\n";
-              
-              // Add description/body
               if (entryObj.description) fileContent += entryObj.description;
-              if (entryObj.body) fileContent += entryObj.body;
 
               try {
                 await backend.persistEntry({
@@ -171,17 +235,15 @@
                   entry: { path: `${collection}/${slug}.md`, raw: fileContent }
                 });
                 successCount++;
-                status.textContent = `✅ Uploaded ${successCount} of ${totalItems}`;
+                status.textContent = `✅ Uploaded ${successCount} / ${totalItems}`;
               } catch (err) {
                 console.error(err);
-                status.textContent = `❌ Error on item ${i}`;
               }
             }
             
-            status.textContent = "🎉 All Done! Refreshing...";
-            setTimeout(() => location.reload(), 2000);
+            status.textContent = "🎉 Done! Reloading...";
+            setTimeout(() => location.reload(), 1500);
           };
-          
           reader.readAsText(file);
         });
       });
