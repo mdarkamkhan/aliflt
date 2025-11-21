@@ -65,26 +65,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ================================
-         3. NAVIGATION MENU
+         3. NAVIGATION MENU (FIXED FOR YOUR CSS)
     ================================ */
     const navToggle = document.getElementById("navToggleBtn");
     const sidebar = document.getElementById("sidebarMenu");
     const overlay = document.getElementById("sidebarOverlay");
     const closeBtn = document.getElementById("sidebarCloseBtn");
+    const body = document.body; // CSS me body.sidebar-open use hua hai
 
     if (navToggle && sidebar && overlay) {
-        navToggle.addEventListener("click", () => {
-            sidebar.classList.add("open");
-            overlay.classList.add("active");
-        });
-
-        const closeAll = () => {
-            sidebar.classList.remove("open");
-            overlay.classList.remove("active");
+        
+        // Menu Kholne ka Function
+        const openMenu = () => {
+            sidebar.classList.add("is-open");   // CSS line 508 se match kiya
+            overlay.classList.add("is-open");   // CSS line 491 se match kiya
+            body.classList.add("sidebar-open"); // CSS line 28 & 481 (Hamburger animation ke liye)
         };
 
-        if (closeBtn) closeBtn.addEventListener("click", closeAll);
-        overlay.addEventListener("click", closeAll);
+        // Menu Band Karne ka Function
+        const closeMenu = () => {
+            sidebar.classList.remove("is-open");
+            overlay.classList.remove("is-open");
+            body.classList.remove("sidebar-open");
+        };
+
+        // Event Listeners
+        navToggle.addEventListener("click", openMenu);
+        if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+        overlay.addEventListener("click", closeMenu);
+        
     } else {
         console.warn("⚠️ Navigation Elements not found (Check IDs)");
     }
