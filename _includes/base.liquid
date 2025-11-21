@@ -13,7 +13,6 @@
     <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/favicon.png">
 
-    <!-- SEO Schema -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -30,15 +29,12 @@
     }
     </script>
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Cormorant+Garamond:wght@400;500&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
 
-    <!-- CSS -->
     <link rel="stylesheet" href="/css/style.css">
 
-    <!-- Admin invite redirect -->
     <script>
       if (location.hash.includes("invite_token") || location.hash.includes("recovery_token")) {
         location.href = "/admin/" + location.hash;
@@ -47,7 +43,6 @@
 </head>
 
 <body>
-    <!-- NAV -->
     <nav class="fixed-top-nav">
         <a href="/" class="nav-logo">ALiF</a>
 
@@ -63,10 +58,8 @@
         </div>
     </nav>
 
-    <!-- PAGE CONTENT -->
     <main>{{ content }}</main>
 
-    <!-- SIDEBAR -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="sidebar-header">
@@ -93,38 +86,68 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="fade-in-section">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Contact</h3>
-                    <p>Sahibganj, Jharkhand, India</p>
-                    <p><a href="/contact-us/">Contact Us</a></p>
+    <footer class="prada-footer">
+        <div class="footer-container">
+            
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <h2 class="footer-logo">ALiF</h2>
+                    <p class="footer-tagline">Luxury Tailoring & Design</p>
+                </div>
+                
+                <div class="footer-newsletter">
+                    <p>SUBSCRIBE TO OUR NEWSLETTER</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="E-MAIL ADDRESS" required>
+                        <button type="submit">→</button>
+                    </form>
+                </div>
+            </div>
+
+            <hr class="footer-divider">
+
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Client Services</h4>
+                    <ul>
+                        <li><a href="/contact-us/">Contact Us</a></li>
+                        <li><a href="/#reviews">Client Reviews</a></li>
+                        <li><a href="https://wa.me/7250470009">WhatsApp Support</a></li>
+                        <li><p class="footer-address">Dal Kuan, College Road,<br>Sahibganj, Jharkhand</p></li>
+                    </ul>
                 </div>
 
-                <div class="footer-column">
-                    <h3>Follow Us</h3>
-                    <ul class="footer-socials">
-                        <li><a href="https://www.instagram.com/alif_lstr" target="_blank">Instagram</a></li>
-                        <li><a href="https://wa.me/7250470009" target="_blank">WhatsApp</a></li>
+                <div class="footer-col">
+                    <h4>Collection</h4>
+                    <ul>
+                        <li><a href="/products/">All Products</a></li>
+                        <li><a href="/designs/">Exclusive Designs</a></li>
+                        <li><a href="/services-work/">Our Services</a></li>
+                        <li><a href="/cart/">Shopping Bag</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Follow Us</h4>
+                    <ul class="social-links-list">
+                        <li><a href="https://www.instagram.com/alif_lstr" target="_blank">Instagram ↗</a></li>
+                        <li><a href="https://wa.me/7250470009" target="_blank">WhatsApp ↗</a></li>
+                        <li><a href="#">Facebook ↗</a></li>
                     </ul>
                 </div>
             </div>
 
-            <div class="footer-copyright">
-                <p>© 2025 ALiF Ladies Tailor. All Rights Reserved.</p>
+            <div class="footer-bottom">
+                <p>© 2025 ALiF LADIES TAILOR. ALL RIGHTS RESERVED.</p>
+                <p class="developer-credit">DESIGNED WITH STYLE</p>
             </div>
         </div>
     </footer>
 
-    <!-- Chat Widget -->
     <div id="chat-widget"></div>
 
-    <!-- JS (IMPORTANT FIXED VERSION) -->
     <script src="/js/main.js?v=3" defer></script>
 
-    <!-- REMOVE MODAL BELOW ONLY IF YOU DON'T USE IT -->
     <div id="confirm-modal" class="modal-overlay">
         <div class="modal-content">
             <p id="modal-message">Do you want to remove this product?</p>
@@ -135,59 +158,11 @@
         </div>
     </div>
 
-    <!-- SERVICE WORKER -->
     <script>
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("/sw.js");
         }
     </script>
-
-<!-- 🐞 DEBUGGER (Visible only when ?debug=1 in URL) -->
-<div id="debug-btn" style="
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background:#ff4b4b;
-    color:#fff;
-    font-size:26px;
-    display:none;
-    justify-content:center;
-    align-items:center;
-    cursor:pointer;
-    z-index:999999;
-">🐞</div>
-
-<div id="debug-panel" style="
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    width: 90%;
-    max-width: 380px;
-    height: 60vh;
-    background: #111;
-    color:#0f0;
-    font-family: monospace;
-    padding: 10px;
-    border-radius: 10px;
-    display:none;
-    z-index:999999;
-    overflow-y:auto;
-    box-shadow:0 0 20px rgba(0,0,0,0.4);
-">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-        <strong style="color:#0f0;">🐞 Debug Console</strong>
-        <button id="close-debug" style="color:#fff;background:none;border:none;font-size:20px;cursor:pointer;">×</button>
-    </div>
-    <pre id="debug-log" style="white-space:pre-wrap;"></pre>
-
-    <div style="margin-top:10px;">
-        <input id="debug-input" type="text" placeholder="Ask AI Debugger…" style="width:100%;padding:8px;border-radius:5px;border:none;">
-        <button id="debug-send" style="width:100%;margin-top:5px;padding:8px;background:#0f0;color:#000;font-weight:bold;border:none;border-radius:5px;cursor:pointer;">Send</button>
-    </div>
-</div>
 
 </body>
 </html>
