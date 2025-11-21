@@ -141,14 +141,30 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", (e) => {
         const target = e.target;
 
-        // Add To Cart
+        // Add To Cart Logic (UPDATED)
         if (target.id === "addToCartBtn") {
+            
+            // Check 1: Agar button pehle se "GO TO CART" ban chuka hai
+            if (target.textContent === "GO TO CART") {
+                window.location.href = "/cart/";
+                return;
+            }
+
+            // Check 2: Normal Add to Cart process
             cart.add(
                 target.dataset.productId,
                 target.dataset.title,
                 target.dataset.price,
                 target.dataset.image
             );
+
+            // Change Button Text & Style
+            target.textContent = "GO TO CART";
+            target.style.backgroundColor = "#000"; // Black
+            target.style.color = "#fff"; // White Text
+            
+            // Show Toast with Product Name
+            showToast(`${target.dataset.title} added to cart`);
         }
 
         // Buy Now (WhatsApp)
@@ -157,15 +173,13 @@ document.addEventListener("DOMContentLoaded", () => {
             window.open(`https://wa.me/7250470009?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Cart Logic: Increment
+        // Cart Page Logic (Same as before)
         if (target.classList.contains("qty-btn") && target.dataset.action === "inc") {
             cart.items[target.dataset.id].qty++;
             cart.save();
             renderCartPage();
             cart.updateIcon();
         }
-
-        // Cart Logic: Decrement
         if (target.classList.contains("qty-btn") && target.dataset.action === "dec") {
             const id = target.dataset.id;
             if (cart.items[id].qty > 1) cart.items[id].qty--;
@@ -173,8 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
             renderCartPage();
             cart.updateIcon();
         }
-
-        // Cart Logic: Remove
         if (target.classList.contains("remove-btn")) {
             cart.remove(target.dataset.id);
             renderCartPage();
