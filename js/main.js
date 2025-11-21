@@ -1,3 +1,5 @@
+alert("JS Connected Successfully!");
+console.log("Main.js is loaded");
 /* ================================
       GLOBAL VARIABLES & CART
 ================================ */
