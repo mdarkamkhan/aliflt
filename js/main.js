@@ -302,5 +302,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initSwapper(".services-panel-gallery");
     initSwapper(".works-panel-gallery");
     initSwapper(".designs-panel-gallery");
-
+    
+});
                           
