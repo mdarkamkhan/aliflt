@@ -1084,3 +1084,165 @@ details[open] > .accordion-content {
 .filter-btn.active .filter-name {
     font-weight: 600; /* Make active text slightly bolder */
 }
+/* =========================================
+   PRADA STYLE FOOTER STYLES
+========================================= */
+.prada-footer {
+    background-color: #000000; /* Jet Black Background */
+    color: #ffffff;
+    padding: 60px 20px 30px 20px;
+    font-family: var(--font-body);
+    margin-top: 50px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- Top Section: Logo & Newsletter --- */
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.footer-logo {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    margin: 0;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.footer-tagline {
+    font-family: var(--font-accent);
+    font-style: italic;
+    color: #aaa;
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+.footer-newsletter p {
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    color: #ccc;
+}
+
+.newsletter-form {
+    display: flex;
+    border-bottom: 1px solid #555;
+    width: 300px;
+}
+
+.newsletter-form input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 10px 0;
+    width: 100%;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+}
+.newsletter-form input::placeholder { color: #666; }
+
+.newsletter-form button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* --- Divider Line --- */
+.footer-divider {
+    border: none;
+    border-top: 1px solid #333;
+    margin-bottom: 40px;
+}
+
+/* --- Grid Section --- */
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 Equal Columns */
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.footer-col h4 {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    color: #888; /* Muted heading color */
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-col li {
+    margin-bottom: 12px;
+}
+
+.footer-col a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    transition: opacity 0.3s ease;
+}
+
+.footer-col a:hover {
+    opacity: 0.6; /* Subtle hover effect */
+    text-decoration: none;
+}
+
+.footer-address {
+    color: #aaa;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-style: normal;
+}
+
+/* --- Bottom Section --- */
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #333;
+    padding-top: 30px;
+    font-size: 0.75rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .footer-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .newsletter-form { width: 100%; }
+    
+    .footer-grid {
+        grid-template-columns: 1fr; /* Stack columns on mobile */
+        gap: 40px;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    }
