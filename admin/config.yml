@@ -19,34 +19,25 @@ collections:
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
 
-- name: "products"
+  - name: "products"
     label: "Products"
     folder: "products"
     format: "frontmatter"
     create: true
     slug: "{{slug}}"
     fields:
-      - { name: "permalink", label: "Permalink", widget: "hidden", default: false }
-      - { name: "tags", label: "Tag", widget: "hidden", default: "product" }
+      - { name: "permalink", widget: "hidden", default: false }
+      - { name: "tags", widget: "hidden", default: "product" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
-      - { name: "image", label: "Main Image", widget: "image", required: true }
+      - { name: "image", label: "Main Image", widget: "image" }
 
-      # ⭐ FIXED GALLERY FIELD – SAFE MODE
       - name: "gallery"
         label: "More Photos (Gallery)"
         widget: "list"
-        collapsed: true
         required: false
-        allow_add: true
-        min: 0
-        max: 10
-        summary: "Image: {{fields.image}}"
-        field:
-          name: "image"
-          label: "Additional Image"
-          widget: "image"
-          required: true
+        fields:
+          - { name: "image", label: "Additional Image", widget: "image" }
 
       - name: "category"
         label: "Category"
@@ -73,16 +64,16 @@ collections:
       - { name: "description", label: "Description", widget: "text" }
       - { name: "size", label: "Size (Optional)", widget: "string", required: false }
       - { name: "colour", label: "Colour (Optional)", widget: "string", required: false }
-      - { name: "number_of_pieces", label: "Number of Pieces/meter (Optional)", widget: "string", required: false }
-      - { name: "fabric", label: "Fabric (Optional)", widget: "string", required: false }
-      - { name: "work", label: "Work (Optional)", widget: "string", required: false }
-      - { name: "pattern", label: "Pattern (Optional)", widget: "string", required: false }
-      - { name: "ideal_for", label: "Ideal For (Optional)", widget: "string", required: false }
-      - { name: "delivery_charges", label: "Delivery Charges (Optional)", widget: "string", required: false }
-      - { name: "delivery_within", label: "Delivery within (Optional)", widget: "string", required: false }
-      - { name: "payment_type", label: "Payment Type (Optional)", widget: "string", required: false }
-      - { name: "return_policy", label: "Return Policy (Optional)", widget: "string", required: false }
-      
+      - { name: "number_of_pieces", label: "Number of Pieces/meter", widget: "string", required: false }
+      - { name: "fabric", label: "Fabric", widget: "string", required: false }
+      - { name: "work", label: "Work", widget: "string", required: false }
+      - { name: "pattern", label: "Pattern", widget: "string", required: false }
+      - { name: "ideal_for", label: "Ideal For", widget: "string", required: false }
+      - { name: "delivery_charges", label: "Delivery Charges", widget: "string", required: false }
+      - { name: "delivery_within", label: "Delivery within", widget: "string", required: false }
+      - { name: "payment_type", label: "Payment Type", widget: "string", required: false }
+      - { name: "return_policy", label: "Return Policy", widget: "string", required: false }
+
   - name: "services"
     label: "Services"
     folder: "services"
@@ -90,11 +81,12 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - { name: "permalink", label: "Permalink", widget: "hidden", default: false }
-      - { name: "tags", label: "Tag", widget: "hidden", default: "service" }
+      - { name: "permalink", widget: "hidden", default: false }
+      - { name: "tags", widget: "hidden", default: "service" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
+
       - name: "category"
         label: "Category"
         widget: "select"
@@ -113,23 +105,24 @@ collections:
           - lehanga
           - trendy lehanga
           - saree fall & pico
+
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
       - { name: "service_information", label: "Service Information", widget: "text", required: false }
 
-
   - name: "works"
     label: "Our Works"
     folder: "works"
-    format: "frontmatter"
     create: true
     slug: "{{slug}}"
+    format: "frontmatter"
     fields:
-      - { name: "permalink", label: "Permalink", widget: "hidden", default: false }
-      - { name: "tags", label: "Tag", widget: "hidden", default: "work" }
+      - { name: "permalink", widget: "hidden", default: false }
+      - { name: "tags", widget: "hidden", default: "work" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
+
       - name: "category"
         label: "Category"
         widget: "select"
@@ -148,21 +141,21 @@ collections:
           - lehanga
           - trendy lehanga
           - saree fall & pico
+
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
 
   - name: "designs"
     label: "Designs"
     folder: "designs"
-    format: "frontmatter"
     create: true
     slug: "{{slug}}"
+    format: "frontmatter"
     fields:
-      - { name: "permalink", label: "Permalink", widget: "hidden", default: false }
-      - { name: "tags", label: "Tag", widget: "hidden", default: "design" }
+      - { name: "permalink", widget: "hidden", default: false }
+      - { name: "tags", widget: "hidden", default: "design" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
       - { name: "price", label: "Charges", widget: "number" }
       - { name: "category", label: "Widely Use For", widget: "string" }
-
