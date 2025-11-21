@@ -2,114 +2,107 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>ALiF Admin App</title>
+    <title>ALiF Smart Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
     <style>
       /* --- 1. RESET & BASE --- */
       body { margin: 0; background: #eff3f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
       
-      /* --- 2. 🔴 NUCLEAR OPTION: HIDE THAT SIDEBAR --- */
+      /* --- 2. HIDE DEFAULT CMS SIDEBAR --- */
       @media (max-width: 768px) {
-        
-        /* This selects ANY element that looks like a sidebar or collection menu */
-        .nc-app-sidebar, 
-        .nc-sidebar, 
-        aside, 
-        div[class*="Sidebar"], 
-        div[class*="CollectionPage-sidebar"],
-        nav[aria-label="Collections"] {
-            display: none !important; 
-            visibility: hidden !important;
-            width: 0 !important;
-            height: 0 !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-            position: absolute !important;
-            top: -9999px !important;
-        }
-        
-        /* Expand the main content to fill the empty space */
-        .nc-app-main { 
-            width: 100% !important; 
-            margin-left: 0 !important; 
-            padding-bottom: 80px !important; /* Space for bottom nav */
-        }
-        
-        /* Fix the header */
+        .nc-app-sidebar, nav[aria-label="Collections"], aside { display: none !important; }
+        .nc-app-main { width: 100% !important; margin-left: 0 !important; padding-bottom: 80px !important; }
         .nc-app-header { position: sticky !important; top: 0; z-index: 500; }
         
-        /* --- CARD STYLE LIST (Makes items look like Apps) --- */
+        /* CARD LIST STYLE */
         .nc-collectionPage-list {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important; 
-            gap: 10px !important;
-            padding: 10px !important;
+            display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; padding: 10px !important;
         }
-        
         a.nc-collectionPage-entry {
-            background: white !important;
-            border-radius: 12px !important;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
-            border: none !important;
-            display: flex !important;
-            flex-direction: column !important;
-            overflow: hidden !important;
-            height: auto !important;
-            min-height: 150px !important;
+            background: white !important; border-radius: 12px !important; box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
+            height: auto !important; min-height: 150px !important;
         }
-
-        /* Clean up the text inside cards */
         .nc-collectionPage-entry-detail { display: none !important; }
-        .nc-collectionPage-entry-title { font-size: 13px !important; font-weight: 600 !important; padding: 10px !important; }
       }
 
-      /* --- 3. BOTTOM NAVIGATION BAR (APP STYLE) --- */
+      /* --- 3. MOBILE BOTTOM NAV --- */
       .mobile-nav {
-        display: none; /* Hidden on Desktop */
-        position: fixed; bottom: 0; left: 0; width: 100%;
-        background: white; border-top: 1px solid #eee;
-        height: 65px; justify-content: space-around; align-items: center;
-        z-index: 9999; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        display: none; position: fixed; bottom: 0; left: 0; width: 100%;
+        background: white; border-top: 1px solid #eee; height: 65px;
+        justify-content: space-around; align-items: center; z-index: 9999;
         padding-bottom: env(safe-area-inset-bottom);
       }
-      
       @media (max-width: 768px) { .mobile-nav { display: flex; } }
 
       .nav-item {
         display: flex; flex-direction: column; align-items: center;
-        text-decoration: none; color: #888; font-size: 11px; flex: 1;
-        padding: 8px 0; cursor: pointer; -webkit-tap-highlight-color: transparent;
+        color: #888; font-size: 11px; flex: 1; padding: 8px 0; cursor: pointer;
       }
-      
       .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; fill: currentColor; }
       .nav-item.active { color: #0f62fe; font-weight: 700; }
 
-      /* --- 4. FLOATING ACTION BUTTON (MASS UPLOAD) --- */
-      #massUploadBtn {
+      /* --- 4. FLOATING ADD BUTTON --- */
+      #batchBtn {
         position: fixed; bottom: 85px; right: 20px;
         background: #0f62fe; color: white; border: none;
         width: 56px; height: 56px; border-radius: 50%;
         box-shadow: 0 4px 15px rgba(15, 98, 254, 0.4); cursor: pointer;
         z-index: 9998; display: flex; align-items: center; justify-content: center;
-        font-size: 24px; transition: transform 0.2s;
+        font-size: 28px; transition: transform 0.2s;
       }
-      #massUploadBtn:active { transform: scale(0.9); }
-      
-      /* --- 5. MODAL STYLES --- */
-      #massUploadModal {
+      #batchBtn:active { transform: scale(0.9); }
+
+      /* --- 5. BATCH EDITOR MODAL --- */
+      #batchModal {
         display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6); z-index: 10000; align-items: flex-end;
+        background: #f4f6f8; z-index: 10000; overflow-y: auto;
       }
-      .modal-content {
-        background: #fff; padding: 24px; border-radius: 20px 20px 0 0; width: 100%; 
-        box-sizing: border-box; animation: slideUp 0.3s ease-out;
-        padding-bottom: calc(24px + env(safe-area-inset-bottom));
+      .batch-header {
+        position: sticky; top: 0; background: white; padding: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 100;
+        display: flex; justify-content: space-between; align-items: center;
       }
-      @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+      .batch-container { padding: 15px; padding-bottom: 100px; }
       
-      .modal-content select, .modal-content input {
-        width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #eee; border-radius: 10px; background: #f9f9f9; font-size: 16px;
+      /* PRODUCT CARD STYLE IN BATCH EDITOR */
+      .batch-card {
+        background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative;
+      }
+      .batch-card h4 { margin: 0 0 10px 0; color: #0f62fe; font-size: 14px; }
+      
+      .form-group { margin-bottom: 10px; }
+      .form-group label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; font-weight: 600; }
+      .form-group input, .form-group select {
+        width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;
+        font-size: 16px; background: #fff; box-sizing: border-box;
+      }
+      
+      /* THE "COPY TO ALL" BUTTON */
+      .copy-btn {
+        background: #e5f0ff; color: #0f62fe; border: none;
+        padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer;
+        float: right; font-weight: bold;
+      }
+      .copy-btn:active { background: #cfe4ff; }
+
+      /* DELETE BUTTON */
+      .delete-row {
+        position: absolute; top: 10px; right: 10px; color: red;
+        background: none; border: none; font-size: 18px; cursor: pointer;
+      }
+
+      /* ACTION BUTTONS */
+      .fab-add-row {
+        position: fixed; bottom: 20px; right: 20px;
+        background: #28a745; color: white; padding: 12px 20px;
+        border-radius: 30px; border: none; font-weight: bold;
+        box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3); font-size: 16px; z-index: 101;
+      }
+      .btn-save-all {
+        background: #0f62fe; color: white; border: none; padding: 8px 20px;
+        border-radius: 8px; font-weight: bold; font-size: 14px;
       }
     </style>
   </head>
@@ -120,48 +113,42 @@
 
     <div class="mobile-nav">
       <div class="nav-item active" onclick="navigateTo('products', this)">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h2v2H6zm4-4h6v2h-6zm0 4h6v2h-6z"/></svg>
-        Products
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h2v2H6zm4-4h6v2h-6zm0 4h6v2h-6z"/></svg> Products
       </div>
-      
       <div class="nav-item" onclick="navigateTo('services', this)">
-        <svg viewBox="0 0 24 24"><path d="M20.41 4.94l-1.35-1.35c-.78-.78-2.05-.78-2.83 0L13.4 6.41 3 16.82V21h4.18l10.46-10.46 2.77-2.77c.79-.78.79-2.05 0-2.83zm-14 14.12L5 19v-1.36l9.82-9.82 1.41 1.41-9.82 9.83z"/></svg>
-        Services
+        <svg viewBox="0 0 24 24"><path d="M20.41 4.94l-1.35-1.35c-.78-.78-2.05-.78-2.83 0L13.4 6.41 3 16.82V21h4.18l10.46-10.46 2.77-2.77c.79-.78.79-2.05 0-2.83zm-14 14.12L5 19v-1.36l9.82-9.82 1.41 1.41-9.82 9.83z"/></svg> Services
       </div>
-      
       <div class="nav-item" onclick="navigateTo('designs', this)">
-         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.22-7.52-4.28z"/></svg>
-        Designs
+         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.22-7.52-4.28z"/></svg> Designs
       </div>
-      
       <div class="nav-item" onclick="navigateTo('works', this)">
-        <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM8 15c0-1.66 1.34-3 3-3 .35 0 .69.07 1 .18V6h5v2h-3v7.03c-.02 1.64-1.35 2.97-3 2.97-1.66 0-3-1.34-3-3z"/></svg>
-        Works
+        <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM8 15c0-1.66 1.34-3 3-3 .35 0 .69.07 1 .18V6h5v2h-3v7.03c-.02 1.64-1.35 2.97-3 2.97-1.66 0-3-1.34-3-3z"/></svg> Works
       </div>
     </div>
 
-    <button id="massUploadBtn">📂</button>
+    <button id="batchBtn" title="Batch Upload">+</button>
 
-    <div id="massUploadModal">
-      <div class="modal-content">
-        <h3 style="margin-top:0; font-size: 20px;">Mass Upload</h3>
-        <p style="color:#666; font-size:14px; margin-bottom: 20px;">Upload CSV to add items.</p>
-        
-        <label style="font-size:12px; font-weight:bold; color:#555;">Collection:</label>
-        <select id="massCollection">
+    <div id="batchModal">
+      <div class="batch-header">
+        <button onclick="document.getElementById('batchModal').style.display='none'" style="background:none; border:none; font-size:24px;">&times;</button>
+        <h3 style="margin:0; font-size:18px;">Batch Upload</h3>
+        <button class="btn-save-all" id="saveAllBtn">Save All</button>
+      </div>
+      
+      <div style="padding: 15px; background: #fff; border-bottom: 1px solid #eee;">
+        <label style="font-weight:bold; font-size:12px;">Collection:</label>
+        <select id="targetCollection" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; margin-top:5px;">
           <option value="products">Products</option>
           <option value="services">Services</option>
           <option value="designs">Designs</option>
           <option value="works">Works</option>
         </select>
-
-        <label style="font-size:12px; font-weight:bold; color:#555;">CSV File:</label>
-        <input type="file" id="massFile" accept=".csv" />
-        
-        <button id="massConfirm" style="width:100%; padding:15px; background:#0f62fe; color:white; font-weight:bold; border:none; border-radius:12px; font-size:16px; margin-top: 10px;">Start Upload</button>
-        <button id="closeMassModal" style="width:100%; padding:15px; background:transparent; color:#888; border:none; margin-top:5px;">Cancel</button>
-        <p id="massUploadStatus" style="margin-top:10px; font-size:14px; font-weight:bold; text-align:center;"></p>
       </div>
+
+      <div class="batch-container" id="batchList">
+        </div>
+
+      <button class="fab-add-row" id="addRowBtn">+ Add Row</button>
     </div>
 
     <script>
@@ -172,80 +159,127 @@
       }
 
       document.addEventListener("DOMContentLoaded", function () {
-        const btn = document.getElementById("massUploadBtn");
-        const modal = document.getElementById("massUploadModal");
-        const closeBtn = document.getElementById("closeMassModal");
-        const confirmBtn = document.getElementById("massConfirm");
-        const status = document.getElementById("massUploadStatus");
+        const batchBtn = document.getElementById("batchBtn");
+        const modal = document.getElementById("batchModal");
+        const list = document.getElementById("batchList");
+        const addRowBtn = document.getElementById("addRowBtn");
+        const saveAllBtn = document.getElementById("saveAllBtn");
+        let rowCount = 0;
 
-        btn.addEventListener("click", () => modal.style.display = "flex");
-        closeBtn.addEventListener("click", () => modal.style.display = "none");
+        // Open Modal
+        batchBtn.addEventListener("click", () => {
+          modal.style.display = "block";
+          if(rowCount === 0) addNewRow(); // Add first row automatically
+        });
 
-        confirmBtn.addEventListener("click", () => {
-          const collection = document.getElementById("massCollection").value;
-          const file = document.getElementById("massFile").files[0];
+        // ADD NEW ROW FUNCTION
+        function addNewRow() {
+          rowCount++;
+          const div = document.createElement("div");
+          div.className = "batch-card";
+          div.id = `row-${rowCount}`;
+          
+          // Only show "Copy ⬇️" buttons on the FIRST row
+          const showCopy = rowCount === 1;
 
-          if (!file) return alert("Please select a CSV file!");
-          status.textContent = "⏳ Reading file...";
-          status.style.color = "#007bff";
-
-          const reader = new FileReader();
-          reader.onload = async (e) => {
-            const text = e.target.result;
-            const rows = text.split("\n").map(row => row.trim()).filter(row => row.length > 0);
+          div.innerHTML = `
+            <h4>Item #${rowCount}</h4>
+            <button class="delete-row" onclick="this.parentElement.remove()">🗑️</button>
             
-            if (rows.length < 2) return alert("CSV file is empty or invalid.");
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" class="input-title" placeholder="e.g. Red Blouse">
+            </div>
 
-            const headers = rows[0].split(",").map(h => h.trim());
-            const totalItems = rows.length - 1;
-            status.textContent = `🚀 Uploading ${totalItems} items...`;
+            <div class="form-group">
+              <label>
+                Price 
+                ${showCopy ? '<button class="copy-btn" onclick="copyToAll(\'input-price\')">⬇️ Copy to All</button>' : ''}
+              </label>
+              <input type="number" class="input-price" placeholder="e.g. 500">
+            </div>
 
-            const backend = window.CMS.getBackend();
-            let successCount = 0;
+            <div class="form-group">
+              <label>
+                Category
+                ${showCopy ? '<button class="copy-btn" onclick="copyToAll(\'input-category\')">⬇️ Copy to All</button>' : ''}
+              </label>
+              <input type="text" class="input-category" placeholder="e.g. lace">
+            </div>
 
-            for (let i = 1; i < rows.length; i++) {
-              const values = rows[i].split(",");
-              let entryObj = {};
-              headers.forEach((header, index) => {
-                entryObj[header] = values[index] ? values[index].trim() : "";
-              });
+            <div class="form-group">
+              <label>Image Name (must be in Media Library)</label>
+              <input type="text" class="input-image" placeholder="e.g. photo1.jpg">
+            </div>
+          `;
+          list.appendChild(div);
+          // Scroll to bottom
+          window.scrollTo(0, document.body.scrollHeight);
+        }
 
-              const title = entryObj.title || "Untitled " + Date.now();
-              const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        addRowBtn.addEventListener("click", addNewRow);
 
-              let fileContent = "---\n";
-              for (const key in entryObj) {
-                if (key !== 'description' && key !== 'body') {
-                   const val = entryObj[key];
-                   if (!isNaN(val) && val !== "" && key !== 'title') {
-                      fileContent += `${key}: ${val}\n`;
-                   } else {
-                      fileContent += `${key}: "${val}"\n`;
-                   }
-                }
-              }
-              fileContent += `date: "${new Date().toISOString()}"\n`;
-              fileContent += "---\n";
-              if (entryObj.description) fileContent += entryObj.description;
+        // COPY TO ALL FUNCTION (Global)
+        window.copyToAll = function(className) {
+          const firstVal = document.querySelector(`.${className}`).value;
+          const allInputs = document.querySelectorAll(`.${className}`);
+          allInputs.forEach(input => {
+            input.value = firstVal;
+          });
+          alert(`Copied "${firstVal}" to ${allInputs.length} items!`);
+        };
 
-              try {
-                await backend.persistEntry({
-                  collection: collection,
-                  slug: slug,
-                  entry: { path: `${collection}/${slug}.md`, raw: fileContent }
-                });
-                successCount++;
-                status.textContent = `✅ Uploaded ${successCount} / ${totalItems}`;
-              } catch (err) {
-                console.error(err);
-                status.textContent = `❌ Error on item ${i}`;
-              }
+        // SAVE ALL FUNCTION
+        saveAllBtn.addEventListener("click", async () => {
+          const collection = document.getElementById("targetCollection").value;
+          const cards = document.querySelectorAll(".batch-card");
+          
+          if(cards.length === 0) return;
+
+          saveAllBtn.textContent = "Saving...";
+          const backend = window.CMS.getBackend();
+          let success = 0;
+
+          for (const card of cards) {
+            const title = card.querySelector(".input-title").value;
+            const price = card.querySelector(".input-price").value;
+            const category = card.querySelector(".input-category").value;
+            let image = card.querySelector(".input-image").value;
+
+            if (!title) continue; // Skip empty titles
+
+            // Auto-fix image path
+            if (image && !image.startsWith("/uploads/")) {
+              image = "/uploads/" + image;
             }
-            status.textContent = "🎉 Done! Refreshing...";
-            status.style.color = "green";
-            setTimeout(() => location.reload(), 1500);
-          };
-          reader.readAsText(file);
+
+            const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+            const date = new Date().toISOString();
+
+            const fileContent = `---
+title: "${title}"
+date: "${date}"
+price: ${price || 0}
+category: "${category}"
+image: "${image}"
+---`;
+
+            try {
+              await backend.persistEntry({
+                collection: collection,
+                slug: slug,
+                entry: { path: `${collection}/${slug}.md`, raw: fileContent }
+              });
+              success++;
+              card.style.border = "2px solid green"; // Visual feedback
+            } catch (err) {
+              console.error(err);
+              card.style.border = "2px solid red";
+            }
+          }
+
+          alert(`Saved ${success} items! Refreshing...`);
+          location.reload();
         });
       });
     </script>
