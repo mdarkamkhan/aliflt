@@ -142,5 +142,52 @@
         }
     </script>
 
+<!-- 🐞 DEBUGGER (Visible only when ?debug=1 in URL) -->
+<div id="debug-btn" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background:#ff4b4b;
+    color:#fff;
+    font-size:26px;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    z-index:999999;
+">🐞</div>
+
+<div id="debug-panel" style="
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 90%;
+    max-width: 380px;
+    height: 60vh;
+    background: #111;
+    color:#0f0;
+    font-family: monospace;
+    padding: 10px;
+    border-radius: 10px;
+    display:none;
+    z-index:999999;
+    overflow-y:auto;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong style="color:#0f0;">🐞 Debug Console</strong>
+        <button id="close-debug" style="color:#fff;background:none;border:none;font-size:20px;cursor:pointer;">×</button>
+    </div>
+    <pre id="debug-log" style="white-space:pre-wrap;"></pre>
+
+    <div style="margin-top:10px;">
+        <input id="debug-input" type="text" placeholder="Ask AI Debugger…" style="width:100%;padding:8px;border-radius:5px;border:none;">
+        <button id="debug-send" style="width:100%;margin-top:5px;padding:8px;background:#0f0;color:#000;font-weight:bold;border:none;border-radius:5px;cursor:pointer;">Send</button>
+    </div>
+</div>
+
 </body>
 </html>
