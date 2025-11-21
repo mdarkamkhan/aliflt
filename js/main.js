@@ -304,4 +304,38 @@ document.addEventListener("DOMContentLoaded", () => {
     initSwapper(".designs-panel-gallery");
     
 });
-                          
+    /* ================================
+         10. PWA INSTALL LOGIC (NEW)
+    ================================ */
+    let deferredPrompt;
+    const installBtn = document.getElementById('install-pwa-btn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // 1. Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // 2. Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // 3. Button ko Visible karo (CSS display: flex dekar)
+        if(installBtn) installBtn.style.display = 'flex';
+        console.log("📲 App is installable! Button shown.");
+    });
+
+    if(installBtn) {
+        installBtn.addEventListener('click', () => {
+            // Hide the app provided install promotion
+            installBtn.style.display = 'none';
+            // Show the install prompt
+            if(deferredPrompt) {
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    } else {
+                        console.log('User dismissed the install prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        });
+    }
