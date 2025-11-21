@@ -65,41 +65,78 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ================================
-         3. NAVIGATION MENU (FIXED FOR YOUR CSS)
+         3. NAVIGATION MENU (Fixed)
     ================================ */
     const navToggle = document.getElementById("navToggleBtn");
     const sidebar = document.getElementById("sidebarMenu");
     const overlay = document.getElementById("sidebarOverlay");
     const closeBtn = document.getElementById("sidebarCloseBtn");
-    const body = document.body; // CSS me body.sidebar-open use hua hai
+    const body = document.body; 
 
     if (navToggle && sidebar && overlay) {
-        
-        // Menu Kholne ka Function
         const openMenu = () => {
-            sidebar.classList.add("is-open");   // CSS line 508 se match kiya
-            overlay.classList.add("is-open");   // CSS line 491 se match kiya
-            body.classList.add("sidebar-open"); // CSS line 28 & 481 (Hamburger animation ke liye)
+            sidebar.classList.add("is-open");
+            overlay.classList.add("is-open");
+            body.classList.add("sidebar-open");
         };
-
-        // Menu Band Karne ka Function
         const closeMenu = () => {
             sidebar.classList.remove("is-open");
             overlay.classList.remove("is-open");
             body.classList.remove("sidebar-open");
         };
 
-        // Event Listeners
         navToggle.addEventListener("click", openMenu);
         if (closeBtn) closeBtn.addEventListener("click", closeMenu);
         overlay.addEventListener("click", closeMenu);
-        
-    } else {
-        console.warn("⚠️ Navigation Elements not found (Check IDs)");
     }
 
     /* ================================
-         4. CLICK HANDLING (Add to Cart / Buy)
+         4. FILTER BUTTONS (NEW FIXED LOGIC) 🛠️
+    ================================ */
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const productCards = document.querySelectorAll(".product-card");
+
+    if (filterButtons.length > 0) {
+        filterButtons.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault(); // Click jump rokne ke liye
+
+                // 1. Remove Active from all
+                filterButtons.forEach(b => b.classList.remove("active"));
+                
+                // 2. Add Active to clicked button (Use currentTarget to handle icon clicks)
+                const clickedBtn = e.currentTarget;
+                clickedBtn.classList.add("active");
+
+                // 3. Get Filter Value
+                // Check for both attribute styles just in case
+                const rawValues = clickedBtn.dataset.filterValues || clickedBtn.dataset.filter || "all";
+                const filterValues = rawValues.split(",").map(s => s.trim().toLowerCase());
+
+                // 4. Show/Hide Products
+                productCards.forEach(card => {
+                    const cardCategory = (card.dataset.category || "").toLowerCase();
+                    
+                    if (filterValues.includes("all") || filterValues.includes(cardCategory)) {
+                        // Show
+                        card.classList.remove("hidden");
+                        card.style.display = "block"; 
+                        setTimeout(() => card.classList.add("is-visible"), 10);
+                    } else {
+                        // Hide
+                        card.classList.remove("is-visible");
+                        card.classList.add("hidden");
+                        setTimeout(() => {
+                             if(card.classList.contains("hidden")) card.style.display = "none"; 
+                        }, 300); // Wait for animation
+                    }
+                });
+            });
+        });
+    }
+
+    /* ================================
+         5. CLICK HANDLING (Add to Cart / Buy)
     ================================ */
     document.addEventListener("click", (e) => {
         const target = e.target;
@@ -145,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* ================================
-         5. RENDER CART PAGE
+         6. RENDER CART PAGE
     ================================ */
     function renderCartPage() {
         const container = document.getElementById("cart-items-container");
@@ -192,12 +229,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (totalDisplay) totalDisplay.textContent = "Total: ₹" + cart.getTotalPrice();
     }
-
-    // Initial Render
     renderCartPage();
     
     /* ================================
-         6. WHATSAPP ORDER BUTTON
+         7. WHATSAPP ORDER BUTTON
     ================================ */
     const orderBtn = document.getElementById("proceedToOrderBtn");
     if (orderBtn) {
@@ -213,4 +248,71 @@ document.addEventListener("DOMContentLoaded", () => {
             window.open(`https://wa.me/7250470009?text=${encodeURIComponent(text)}`, '_blank');
         };
     }
+
+    /* ================================
+         8. SWAPPER / GALLERY LOGIC (Restored)
+    ================================ */
+    function initSwapper(selector) {
+        const wrap = document.querySelector(selector);
+        if (!wrap) return;
+
+        const items = wrap.querySelectorAll(".swapper-item");
+        const prevBtn = wrap.querySelector(".prev-btn");
+        const nextBtn = wrap.querySelector(".next-btn");
+        
+        if(items.length === 0) return;
+
+        let current = 0;
+        function show(i) {
+            items.forEach(x => x.classList.remove("active"));
+            items[i].classList.add("active");
+            current = i;
+        }
+        show(0);
+
+        if (prevBtn) prevBtn.onclick = (e) => {
+            e.preventDefault();
+            show((current - 1 + items.length) % items.length);
+        };
+        if (nextBtn) nextBtn.onclick = (e) => {
+            e.preventDefault();
+            show((current + 1) % items.length);
+        };
+
+        // Swipe Support
+        let startX = 0;
+        wrap.addEventListener("touchstart", e => (startX = e.touches[0].clientX), {passive: true});
+        wrap.addEventListener("touchend", e => {
+            let endX = e.changedTouches[0].clientX;
+            if (endX < startX - 50) { // Swipe Left -> Next
+                if(nextBtn) nextBtn.click();
+                else show((current + 1) % items.length);
+            }
+            if (endX > startX + 50) { // Swipe Right -> Prev
+                if(prevBtn) prevBtn.click();
+                else show((current - 1 + items.length) % items.length);
+            }
+        }, {passive: true});
+    }
+
+    // Initialize all galleries
+    initSwapper(".product-swapper");
+    initSwapper(".banner-swapper");
+    initSwapper(".products-panel-gallery");
+    initSwapper(".services-panel-gallery");
+    initSwapper(".works-panel-gallery");
+    initSwapper(".designs-panel-gallery");
+    
+    /* ================================
+         9. CHATBOT LOADER
+    ================================ */
+    const chatWidget = document.getElementById("chat-widget");
+    if (chatWidget) {
+        // Delay load slightly to not block main content
+        setTimeout(() => {
+             chatWidget.innerHTML = `<iframe src="/alifqr/index.html" class="chat-iframe" title="Chatbot" style="border:none; width:100%; height:100%;"></iframe>`;
+        }, 1000);
+    }
+
 });
+            
