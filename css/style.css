@@ -1337,3 +1337,65 @@ details[open] .pm-icon-minus { display: block; }
 #addToCartBtn {
     transition: all 0.3s ease;
 }
+/* =========================================
+   CART PAGE IMAGE FIX (FIXED SIZE)
+========================================= */
+
+/* 1. Row Layout - Image | Info | Cross */
+.cart-item { 
+    display: flex; 
+    align-items: flex-start; /* Top align looks better */
+    gap: 20px; 
+    padding: 20px 0; 
+    border-bottom: 1px solid #e0e0e0; 
+}
+
+/* 2. Image Container (Fixed Size) */
+.cart-img-box {
+    width: 90px;  /* Fixed Width */
+    height: 120px; /* Fixed Height (Portrait) */
+    flex-shrink: 0; /* Image dabegi nahi */
+    background-color: #f4f4f4;
+    overflow: hidden;
+}
+
+/* 3. Image Object Fit (Crop neatly) */
+.cart-img-box img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* Extra hissa cut jayega, stretch nahi hoga */
+    display: block;
+}
+
+/* 4. Product Info (Beech wala hissa) */
+.cart-info {
+    flex-grow: 1;
+}
+
+.cart-info h4 {
+    font-size: 1rem;
+    margin: 0 0 5px 0;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cart-info .price {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* 5. Cross Button (Right Side) */
+.remove-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+    padding: 0 10px;
+    line-height: 1;
+}
+.remove-btn:hover {
+    color: #000;
+}
