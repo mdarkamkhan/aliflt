@@ -1,458 +1,290 @@
-/* js/main.js */
-/* This file handles all client-side interactivity */
+/* ================================
+      GLOBAL VARIABLES
+================================ */
+const body = document.body;
 
-/* ==================================================
-===== 💡 E-COMMERCE CART LOGIC ===================
-================================================== 
-*/
+/* ================================
+      CART LOGIC
+================================ */
 const cart = {
-    items: {}, 
-    
+    items: {},
+
     load() {
-        const storedCart = localStorage.getItem('alifCart');
-        if (storedCart) {
-            this.items = JSON.parse(storedCart);
-        }
+        const stored = localStorage.getItem("alifCart");
+        if (stored) this.items = JSON.parse(stored);
         this.updateIcon();
     },
-    
+
     save() {
-        localStorage.setItem('alifCart', JSON.stringify(this.items));
-        this.updateIcon();
+        localStorage.setItem("alifCart", JSON.stringify(this.items));
     },
-    
+
     add(id, title, price, image) {
         if (!this.items[id]) {
-            this.items[id] = { title, price, image, qty: 1 };
-        }
-        this.save();
-    },
-    
-    remove(id) {
-        if (this.items[id]) {
-            delete this.items[id];
-        }
-        this.save();
-    },
-
-    increaseQuantity(id) {
-        if (this.items[id]) {
+            this.items[id] = { title, price: Number(price), image, qty: 1 };
+        } else {
             this.items[id].qty++;
         }
         this.save();
+        this.updateIcon();
+        showToast("Added to cart");
     },
 
-    decreaseQuantity(id) {
-        if (this.items[id] && this.items[id].qty > 1) {
-            this.items[id].qty--;
-        }
+    remove(id) {
+        delete this.items[id];
         this.save();
+        this.updateIcon();
     },
-    
-    getTotalCount() {
-        let count = 0;
-        for (const id in this.items) {
-            count += this.items[id].qty;
-        }
-        return count;
+
+    updateIcon() {
+        const cartCount = document.getElementById("cartCount");
+        if (!cartCount) return;
+
+        let total = 0;
+        for (const id in this.items) total += this.items[id].qty;
+
+        cartCount.textContent = total;
     },
-    
+
     getTotalPrice() {
         let total = 0;
         for (const id in this.items) {
-            total += this.items[id].price * this.items[id].qty;
+            const it = this.items[id];
+            total += it.price * it.qty;
         }
-        return total.toFixed(2);
+        return total;
     },
-    
-    updateIcon() {
-        const cartCount = document.getElementById('cartCount');
-        if (cartCount) {
-            cartCount.textContent = this.getTotalCount();
-        }
-    },
-    
-    generateWhatsAppMessage() {
-        let message = "Hi, I want to order these products:\n\n";
-        let total = 0;
 
-        for (const id in this.items) {
-            const item = this.items[id];
-            message += `*${item.title}*\n`;
-            message += `Qty: ${item.qty}\n`;
-            message += `Price: ₹${item.price} (each)\n`;
-            message += `Image: ${window.location.origin}${item.image}\n\n`;
-            total += item.price * item.qty;
-        }
-        
-        message += `*Total Price: ₹${total.toFixed(2)}*`;
-        return encodeURIComponent(message);
-    },
-    
     clear() {
         this.items = {};
         this.save();
+        this.updateIcon();
     }
 };
 
 cart.load();
 
-
-/* ==================================================
-===== 🖼️ SWAPPER LOGIC (NOW WITH TOUCH!) =========
-================================================== 
-*/
-function initializeSwapper(swapperSelector, options = {}) {
-    const swapper = document.querySelector(swapperSelector);
-    if (!swapper) return;
-    
-    const items = swapper.querySelectorAll('.swapper-item');
-    const prevBtn = swapper.querySelector('.prev-btn');
-    const nextBtn = swapper.querySelector('.next-btn');
-    let currentIndex = 0;
-    let autoplayInterval = null;
-    
-    // Variables to track touch position
-    let touchStartX = 0;
-    let touchEndX = 0;
-    
-    if (items.length <= 1) {
-        if (prevBtn) prevBtn.style.display = 'none';
-        if (nextBtn) nextBtn.style.display = 'none';
-        if (options.isBanner) {
-            if (items.length === 1) { showItem(0); }
-            return;
-        }
-    }
-    
-    function showItem(index) { 
-        items.forEach((item, i) => { item.classList.toggle('active', i === index); }); 
-    }
-    
-    function next() { 
-        currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0; 
-        showItem(currentIndex); 
-    }
-    
-    function prev() { 
-        currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1; 
-        showItem(currentIndex); 
-    }
-    
-    // --- Button Listeners ---
-    if (prevBtn) { 
-        let newPrev = prevBtn.cloneNode(true);
-        prevBtn.parentNode.replaceChild(newPrev, prevBtn);
-        newPrev.addEventListener('click', () => { prev(); if(autoplayInterval) resetAutoplay(); });
-    }
-
-    if (nextBtn) { 
-        let newNext = nextBtn.cloneNode(true);
-        nextBtn.parentNode.replaceChild(newNext, nextBtn);
-        newNext.addEventListener('click', () => { next(); if (autoplayInterval) resetAutoplay(); }); 
-    }
-    
-    // --- 💡 NEW: TOUCH SWIPE LOGIC ---
-    swapper.addEventListener('touchstart', e => {
-        touchStartX = e.changedTouches[0].screenX;
-    }, {passive: true});
-
-    swapper.addEventListener('touchend', e => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    }, {passive: true});
-
-    function handleSwipe() {
-        // Calculate difference
-        const diff = touchStartX - touchEndX;
-        const threshold = 50; // Minimum distance to count as swipe
-
-        if (diff > threshold) {
-            // Swiped LEFT -> Next Image
-            next();
-            if (autoplayInterval) resetAutoplay();
-        } 
-        
-        if (diff < -threshold) {
-            // Swiped RIGHT -> Previous Image
-            prev();
-            if (autoplayInterval) resetAutoplay();
-        }
-    }
-    
-    // --- Autoplay Logic ---
-    function startAutoplay() { 
-        if (options.autoplay && items.length > 1) { 
-            autoplayInterval = setInterval(next, options.autoplay); 
-        } 
-    }
-    
-    function resetAutoplay() { 
-        clearInterval(autoplayInterval); 
-        startAutoplay(); 
-    }
-    
-    showItem(currentIndex);
-    startAutoplay();
+/* ================================
+     TOAST NOTIFICATION
+================================ */
+function showToast(msg) {
+    let t = document.createElement("div");
+    t.className = "toast";
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.classList.add("show"), 50);
+    setTimeout(() => t.remove(), 2500);
 }
 
+/* ================================
+      SWAPPER (WITH TOUCH)
+================================ */
+function initSwapper(selector) {
+    const wrap = document.querySelector(selector);
+    if (!wrap) return;
 
-/* ==================================================
-===== Main Execution (On Page Load) ==============
-================================================== 
-*/
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // Galleries with Autoplay
-    initializeSwapper('.banner-swapper', { isBanner: true, autoplay: 5000 }); 
-    initializeSwapper('.products-panel-gallery', { autoplay: 4000 });
-    initializeSwapper('.works-panel-gallery', { autoplay: 3000 });
-    initializeSwapper('.services-panel-gallery', { autoplay: 3500 });
-    initializeSwapper('.designs-panel-gallery', { autoplay: 3500 }); 
+    const items = wrap.querySelectorAll(".swapper-item");
+    const prevBtn = wrap.querySelector(".prev-btn");
+    const nextBtn = wrap.querySelector(".next-btn");
+    let current = 0;
 
-    // 💡 Product Gallery (Manual Swipe Only - No Autoplay)
-    initializeSwapper('.product-swapper'); 
+    function show(i) {
+        items.forEach(x => x.classList.remove("active"));
+        items[i].classList.add("active");
+        current = i;
+    }
 
-    initializeSwapper('.services-swapper', { autoplay: 4000 });
-    initializeSwapper('.works-swapper', { autoplay: 3000 });
+    show(0);
 
-    // --- SIDEBAR MENU LOGIC ---
-    const navToggleBtn = document.getElementById('navToggleBtn');
-    const sidebarMenu = document.getElementById('sidebarMenu');
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
-    const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
-    const sidebarLinks = document.querySelectorAll('.sidebar-links a');
-    
-    const openSidebar = () => {
-        sidebarMenu.classList.add('is-open');
-        sidebarOverlay.classList.add('is-open');
-        document.body.classList.add('sidebar-open');
+    if (prevBtn) prevBtn.onclick = () => {
+        show((current - 1 + items.length) % items.length);
     };
-    const closeSidebar = () => {
-        sidebarMenu.classList.remove('is-open');
-        sidebarOverlay.classList.remove('is-open');
-        document.body.classList.remove('sidebar-open');
+    if (nextBtn) nextBtn.onclick = () => {
+        show((current + 1) % items.length);
     };
-    
-    if (navToggleBtn && sidebarMenu && sidebarOverlay && sidebarCloseBtn) {
-        navToggleBtn.addEventListener('click', () => {
-            if (sidebarMenu.classList.contains('is-open')) {
-                closeSidebar();
+
+    // Touch Swipe
+    let startX = 0;
+    wrap.addEventListener("touchstart", e => (startX = e.touches[0].clientX));
+    wrap.addEventListener("touchend", e => {
+        let endX = e.changedTouches[0].clientX;
+        if (endX < startX - 40) nextBtn?.click();
+        if (endX > startX + 40) prevBtn?.click();
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    initSwapper(".product-swapper");
+    initSwapper(".banner-swapper");
+    initSwapper(".products-panel-gallery");
+    initSwapper(".services-panel-gallery");
+    initSwapper(".works-panel-gallery");
+    initSwapper(".designs-panel-gallery");
+});
+
+/* ================================
+       NAVIGATION MENU
+================================ */
+const navToggle = document.getElementById("navToggleBtn");
+const sidebar = document.getElementById("sidebarMenu");
+const overlay = document.getElementById("sidebarOverlay");
+const closeBtn = document.getElementById("sidebarCloseBtn");
+
+function openMenu() {
+    sidebar.classList.add("open");
+    overlay.classList.add("active");
+}
+function closeMenu() {
+    sidebar.classList.remove("open");
+    overlay.classList.remove("active");
+}
+
+navToggle?.addEventListener("click", openMenu);
+closeBtn?.addEventListener("click", closeMenu);
+overlay?.addEventListener("click", closeMenu);
+
+/* ================================
+       FILTER BUTTONS
+================================ */
+const filterButtons = document.querySelectorAll(".filter-btn");
+const productCards = document.querySelectorAll(".product-card");
+
+filterButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        filterButtons.forEach(x => x.classList.remove("active"));
+        btn.classList.add("active");
+
+        const values = btn.dataset.filterValues.split(",");
+
+        productCards.forEach(card => {
+            const cat = card.dataset.category;
+            if (values.includes("all") || values.includes(cat)) {
+                card.style.display = "block";
             } else {
-                openSidebar();
+                card.style.display = "none";
             }
         });
-        sidebarCloseBtn.addEventListener('click', closeSidebar);
-        sidebarOverlay.addEventListener('click', closeSidebar);
-        sidebarLinks.forEach(link => {
-            link.addEventListener('click', closeSidebar);
-        });
-    }
-    
-    // --- PRODUCT LOGIC ---
-    const addToCartBtn = document.getElementById('addToCartBtn');
-    const buyNowBtn = document.getElementById('buyNowBtn');
-    const whatsappNumber = '7250470009'; 
-    const whatsappBaseUrl = `https://wa.me/${whatsappNumber}?text=`;
+    });
+});
 
-    if (addToCartBtn) {
-        const productId = addToCartBtn.dataset.productId;
-        if (cart.items[productId]) {
-            addToCartBtn.textContent = 'Go to Cart';
-            addToCartBtn.classList.add('btn-buy'); 
-            addToCartBtn.classList.remove('btn-cart');
-        }
-        addToCartBtn.addEventListener('click', () => {
-            if (addToCartBtn.textContent === 'Go to Cart') {
-                window.location.href = '/cart/';
-                return;
-            }
-            const { title, price, image } = addToCartBtn.dataset;
-            cart.add(productId, title, parseFloat(price), image);
-            addToCartBtn.textContent = 'Go to Cart';
-            addToCartBtn.classList.add('btn-buy');
-            addToCartBtn.classList.remove('btn-cart');
-            showToast(`${title} added to cart!`);
-        });
-    }
-    
-    if (buyNowBtn) {
-        buyNowBtn.addEventListener('click', () => {
-            const { title, price, image } = buyNowBtn.dataset;
-            const message = `Hi, I want to buy this product:\n\n*${title}*\nPrice: ₹${price}\nImage: ${window.location.origin}${image}`;
-            window.open(whatsappBaseUrl + encodeURIComponent(message), '_blank');
-        });
-    }
-    
-    // --- CONFIRMATION MODAL ---
-    const modal = document.getElementById('confirm-modal');
-    const modalMessage = document.getElementById('modal-message');
-    let modalCancel = document.getElementById('modal-cancel');
-    let modalConfirm = document.getElementById('modal-confirm');
-
-    function showConfirmationModal(message, onConfirm) {
-        if (!modal || !modalMessage) return;
-        modalMessage.textContent = message;
-        modal.style.display = 'flex';
-        
-        let newCancel = modalCancel.cloneNode(true);
-        modalCancel.parentNode.replaceChild(newCancel, modalCancel);
-        modalCancel = newCancel;
-        let newConfirm = modalConfirm.cloneNode(true);
-        modalConfirm.parentNode.replaceChild(newConfirm, modalConfirm);
-        modalConfirm = newConfirm;
-
-        modalCancel.addEventListener('click', () => modal.style.display = 'none');
-        modalConfirm.addEventListener('click', () => { onConfirm(); modal.style.display = 'none'; });
+/* ================================
+    PRODUCT PAGE BUTTONS
+================================ */
+document.addEventListener("click", e => {
+    if (e.target.id === "addToCartBtn") {
+        let btn = e.target;
+        cart.add(
+            btn.dataset.productId,
+            btn.dataset.title,
+            btn.dataset.price,
+            btn.dataset.image
+        );
     }
 
-    // --- CART PAGE LOGIC ---
-    const cartContainer = document.getElementById('cart-items-container');
-    if (cartContainer) {
+    if (e.target.id === "buyNowBtn") {
+        let btn = e.target;
+        let msg = `Hello, I want to buy:\n${btn.dataset.title}\nPrice: ₹${btn.dataset.price}`;
+        window.open(`https://wa.me/7250470009?text=${encodeURIComponent(msg)}`);
+    }
+});
+
+/* ================================
+        CART PAGE RENDER
+================================ */
+function renderCartPage() {
+    const container = document.getElementById("cart-items-container");
+    if (!container) return;
+
+    const empty = document.getElementById("cart-empty-message");
+    const actions = document.getElementById("cart-actions");
+    const summary = document.getElementById("cart-summary");
+
+    container.innerHTML = "";
+
+    const itemIds = Object.keys(cart.items);
+
+    if (itemIds.length === 0) {
+        empty.style.display = "block";
+        summary.style.display = "none";
+        actions.style.display = "none";
+        return;
+    }
+
+    empty.style.display = "none";
+    actions.style.display = "block";
+    summary.style.display = "block";
+
+    itemIds.forEach(id => {
+        const item = cart.items[id];
+
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+            <img src="${item.image}" class="cart-item-img">
+            <div class="cart-info">
+                <h3>${item.title}</h3>
+                <p>₹${item.price}</p>
+                <div class="cart-qty">
+                    <button class="qty-btn" data-id="${id}" data-action="dec">-</button>
+                    <span>${item.qty}</span>
+                    <button class="qty-btn" data-id="${id}" data-action="inc">+</button>
+                </div>
+                <button class="remove-btn" data-id="${id}">Remove</button>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+
+    document.getElementById("cart-total").textContent =
+        "Total: ₹" + cart.getTotalPrice();
+}
+
+renderCartPage();
+
+document.addEventListener("click", e => {
+    // Qty buttons
+    if (e.target.classList.contains("qty-btn")) {
+        const id = e.target.dataset.id;
+        const action = e.target.dataset.action;
+        if (action === "inc") cart.items[id].qty++;
+        if (action === "dec" && cart.items[id].qty > 1) cart.items[id].qty--;
+        cart.save();
+        renderCartPage();
+        cart.updateIcon();
+    }
+
+    // Remove
+    if (e.target.classList.contains("remove-btn")) {
+        cart.remove(e.target.dataset.id);
         renderCartPage();
     }
-    
-    function renderCartPage() {
-        const cartItems = cart.items;
-        const emptyMsg = document.getElementById('cart-empty-message');
-        const cartSummary = document.getElementById('cart-summary');
-        const cartActions = document.getElementById('cart-actions');
-        const deliveryContainer = document.getElementById('delivery-progress-container');
-        const deliveryText = document.getElementById('delivery-progress-text');
-        const deliveryBarInner = document.getElementById('delivery-progress-bar-inner');
+});
 
-        cartContainer.innerHTML = ''; 
-        
-        if (Object.keys(cartItems).length === 0) {
-            emptyMsg.style.display = 'block';
-            if (cartSummary) cartSummary.style.display = 'none';
-            if (cartActions) cartActions.style.display = 'none';
-            if (deliveryContainer) deliveryContainer.style.display = 'none';
-        } else {
-            emptyMsg.style.display = 'none';
-            if (cartSummary) cartSummary.style.display = 'block';
-            if (cartActions) cartActions.style.display = 'block';
-            
-            for (const id in cartItems) {
-                const item = cartItems[id];
-                const itemEl = document.createElement('div');
-                itemEl.className = 'cart-item';
-                itemEl.innerHTML = `
-                    <div class="cart-item-image"><img src="${item.image}" alt="${item.title}"></div>
-                    <div class="cart-item-info"><h4>${item.title}</h4><p>₹${item.price}</p></div>
-                    <div class="cart-item-controls">
-                        <div class="cart-item-quantity">
-                            <button class="cart-item-qty-btn" data-id="${id}" data-action="decrease">[-]</button>
-                            <span class="cart-item-qty-text">Qty: ${item.qty}</span>
-                            <button class="cart-item-qty-btn" data-id="${id}" data-action="increase">[+]</button>
-                        </div>
-                    </div>
-                `;
-                cartContainer.appendChild(itemEl);
-            }
-            
-            const currentTotal = parseFloat(cart.getTotalPrice());
-            const totalEl = document.getElementById('cart-total');
-            if(totalEl) totalEl.textContent = `Total: ₹${currentTotal.toFixed(2)}`;
-            
-            const freeDeliveryThreshold = 199;
-            if (deliveryContainer && deliveryText && deliveryBarInner) {
-                deliveryContainer.style.display = 'block';
-                if (currentTotal >= freeDeliveryThreshold) {
-                    deliveryContainer.classList.add('is-unlocked');
-                    deliveryText.textContent = "You’ve unlocked FREE delivery!";
-                    deliveryBarInner.style.width = '100%';
-                } else {
-                    deliveryContainer.classList.remove('is-unlocked');
-                    const remaining = freeDeliveryThreshold - currentTotal;
-                    deliveryText.textContent = `Add ₹${remaining.toFixed(2)} more for FREE delivery!`;
-                    const progressPercent = (currentTotal / freeDeliveryThreshold) * 100;
-                    deliveryBarInner.style.width = `${progressPercent}%`;
-                }
-            }
+/* ================================
+     WHATSAPP ORDER BUTTON
+================================ */
+const orderBtn = document.getElementById("proceedToOrderBtn");
+if (orderBtn) {
+    orderBtn.onclick = () => {
+        let text = "Hello, I want to order:\n\n";
 
-            document.querySelectorAll('.cart-item-qty-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const id = btn.dataset.id;
-                    const action = btn.dataset.action;
-                    if (action === 'increase') {
-                        cart.increaseQuantity(id);
-                        renderCartPage();
-                    } else if (action === 'decrease') {
-                        const item = cart.items[id];
-                        if (item.qty > 1) {
-                            cart.decreaseQuantity(id);
-                            renderCartPage();
-                        } else {
-                            showConfirmationModal(`Remove "${item.title}"?`, () => {
-                                cart.remove(id);
-                                renderCartPage();
-                            });
-                        }
-                    }
-                });
-            });
-            
-            const proceedBtn = document.getElementById('proceedToOrderBtn');
-            if(proceedBtn) {
-                proceedBtn.addEventListener('click', () => {
-                    const message = cart.generateWhatsAppMessage();
-                    window.open(whatsappBaseUrl + message, '_blank');
-                });
-            }
+        for (let id in cart.items) {
+            let it = cart.items[id];
+            text += `${it.title}\nQty: ${it.qty}\nPrice: ₹${it.price}\n\n`;
         }
-    }
-    
-    // Helper Toast
-    function showToast(message) {
-        let toast = document.createElement('div');
-        toast.className = 'toast-message';
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 10);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => { if (document.body.contains(toast)) document.body.removeChild(toast); }, 500);
-        }, 3000);
-    }
-    
-    // Chatbot
-    const chatButton = document.getElementById('chat-button');
-    const chatWindow = document.getElementById('chat-window');
-    const closeChat = document.getElementById('close-chat');
-    const sendButton = document.getElementById('send-button');
-    const chatInput = document.getElementById('chat-input');
-    const chatMessages = document.getElementById('chat-messages');
+        text += `Total: ₹${cart.getTotalPrice()}`;
 
-    if (chatButton && chatWindow) {
-        chatButton.addEventListener('click', () => {
-            chatWindow.classList.toggle('hidden');
-            chatWindow.classList.toggle('visible');
-            if (chatWindow.classList.contains('visible')) chatInput.focus();
-        });
-        closeChat.addEventListener('click', () => {
-            chatWindow.classList.add('hidden');
-            chatWindow.classList.remove('visible');
-        });
-        const sendMessage = () => {
-            const message = chatInput.value.trim();
-            if (!message) return;
-            appendMessage(message, 'user-message');
-            chatInput.value = '';
-            appendMessage('...', 'ai-message thinking-message');
-            scrollToBottom();
-            fetch('/.netlify/functions/ask-ai', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: message })
-            })
-            .then(res => res.json())
-            .then(data => {
-                removeThinking();
-                appendMessage(data.reply || 'Sorry, error occurred.', 'ai-message');
-                scrollToBottom();
-            })
-            .catch(error => {
-                removeThinking();
-                appendMessage('Network error.', 'ai-message');
-                                                 
+        window.open(`https://wa.me/7250470009?text=${encodeURIComponent(text)}`);
+    };
+}
+
+/* ================================
+     CHATBOT
+================================ */
+(function () {
+    const chatWidget = document.getElementById("chat-widget");
+    if (!chatWidget) return;
+
+    chatWidget.innerHTML = `
+        <iframe src="/alifqr/index.html" class="chat-iframe"></iframe>
+    `;
