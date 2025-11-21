@@ -1085,164 +1085,131 @@ details[open] > .accordion-content {
     font-weight: 600; /* Make active text slightly bolder */
 }
 /* =========================================
-   PRADA STYLE FOOTER STYLES
+   PRADA MOBILE FOOTER STYLES
 ========================================= */
-.prada-footer {
-    background-color: #000000; /* Jet Black Background */
-    color: #ffffff;
-    padding: 60px 20px 30px 20px;
-    font-family: var(--font-body);
-    margin-top: 50px;
+.prada-mobile-footer {
+    background-color: #ffffff;
+    color: #000000;
+    padding-top: 40px;
+    font-family: var(--font-body); /* Use your Poppins font */
 }
 
-.footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* --- Top Section: Logo & Newsletter --- */
-.footer-top {
+/* 1. Social Icons */
+.pm-social-row {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding-bottom: 40px;
-    flex-wrap: wrap;
-    gap: 30px;
+    gap: 25px; /* Prada has wide spacing */
+    padding: 0 20px 40px 20px; /* Bottom padding important */
 }
 
-.footer-logo {
-    font-family: var(--font-heading);
-    font-size: 3rem;
-    margin: 0;
-    letter-spacing: 2px;
-    color: #fff;
+.pm-social-row a {
+    color: #000;
+    transition: opacity 0.3s;
+}
+.pm-social-row a:hover { opacity: 0.6; }
+
+/* 2. Accordion Styles (Collapsible) */
+.pm-accordion-wrapper {
+    border-top: 1px solid #e5e5e5; /* Thin grey line top */
 }
 
-.footer-tagline {
-    font-family: var(--font-accent);
-    font-style: italic;
-    color: #aaa;
-    margin-top: 5px;
-    font-size: 1rem;
+.pm-accordion {
+    border-bottom: 1px solid #e5e5e5; /* Thin grey line bottom */
 }
 
-.footer-newsletter p {
-    font-size: 0.8rem;
-    letter-spacing: 1.5px;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    color: #ccc;
-}
-
-.newsletter-form {
-    display: flex;
-    border-bottom: 1px solid #555;
-    width: 300px;
-}
-
-.newsletter-form input {
-    background: transparent;
-    border: none;
-    color: #fff;
-    padding: 10px 0;
-    width: 100%;
-    outline: none;
-    font-family: var(--font-body);
+.pm-accordion-header {
+    list-style: none; /* Hide default arrow */
+    padding: 20px;
+    font-family: var(--font-heading); /* Use Playfair or Heading font */
+    font-weight: 600;
     font-size: 0.9rem;
-}
-.newsletter-form input::placeholder { color: #666; }
-
-.newsletter-form button {
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 1.2rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     cursor: pointer;
-}
-
-/* --- Divider Line --- */
-.footer-divider {
-    border: none;
-    border-top: 1px solid #333;
-    margin-bottom: 40px;
-}
-
-/* --- Grid Section --- */
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 Equal Columns */
-    gap: 40px;
-    margin-bottom: 60px;
-}
-
-.footer-col h4 {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 25px;
-    color: #888; /* Muted heading color */
-}
-
-.footer-col ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-col li {
-    margin-bottom: 12px;
-}
-
-.footer-col a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-    transition: opacity 0.3s ease;
-}
-
-.footer-col a:hover {
-    opacity: 0.6; /* Subtle hover effect */
-    text-decoration: none;
-}
-
-.footer-address {
-    color: #aaa;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    font-style: normal;
-}
-
-/* --- Bottom Section --- */
-.footer-bottom {
     display: flex;
     justify-content: space-between;
-    border-top: 1px solid #333;
-    padding-top: 30px;
-    font-size: 0.75rem;
-    color: #666;
+    align-items: center;
+}
+
+/* Chrome/Safari marker hide */
+.pm-accordion-header::-webkit-details-marker { display: none; }
+
+/* Icons Logic */
+.pm-icon-plus, .pm-icon-minus { font-size: 1.2rem; font-weight: 300; }
+.pm-icon-minus { display: none; }
+
+/* Switch icons when open */
+details[open] .pm-icon-plus { display: none; }
+details[open] .pm-icon-minus { display: block; }
+
+.pm-accordion-content {
+    padding: 0 20px 25px 20px;
+    background: #fff;
+}
+
+/* Review Styling */
+.pm-review-item {
+    margin-bottom: 15px;
+    border-left: 2px solid #000;
+    padding-left: 15px;
+}
+.pm-review-text {
+    font-size: 0.9rem;
+    font-style: italic;
+    margin: 0 0 5px 0;
+    color: #333;
+}
+.pm-review-author {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+}
+.pm-view-all {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    text-decoration: underline;
+    color: #000;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-/* --- Mobile Responsiveness --- */
-@media (max-width: 768px) {
-    .footer-top {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .newsletter-form { width: 100%; }
-    
-    .footer-grid {
-        grid-template-columns: 1fr; /* Stack columns on mobile */
-        gap: 40px;
-    }
-    
-    .footer-bottom {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-    }
-    }
+/* Links Styling inside accordion */
+.pm-links-list { list-style: none; padding: 0; margin: 0; }
+.pm-links-list li { margin-bottom: 10px; }
+.pm-links-list a { text-decoration: none; color: #333; font-size: 0.9rem; }
+
+
+/* 3. Contact Button (Like Store Locator) */
+.pm-contact-wrapper {
+    padding: 40px 0;
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5; /* Line below button */
+}
+
+.pm-contact-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #000;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 4. Bottom Bar */
+.pm-bottom-bar {
+    padding: 25px 20px;
+    text-align: center;
+}
+.pm-bottom-bar p {
+    font-size: 0.7rem;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
