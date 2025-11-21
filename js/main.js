@@ -6,9 +6,8 @@
 ================================================== 
 */
 const cart = {
-    items: {}, // e.g., { 'product-slug': { title: '...', price: 100, image: '...', qty: 1 } }
+    items: {}, 
     
-    // Load cart from localStorage
     load() {
         const storedCart = localStorage.getItem('alifCart');
         if (storedCart) {
@@ -17,23 +16,20 @@ const cart = {
         this.updateIcon();
     },
     
-    // Save cart to localStorage
     save() {
         localStorage.setItem('alifCart', JSON.stringify(this.items));
         this.updateIcon();
     },
     
-    // Add an item
     add(id, title, price, image) {
         if (this.items[id]) {
-            // Already in cart, do nothing (product page logic handles this)
+            // Already in cart
         } else {
             this.items[id] = { title, price, image, qty: 1 };
         }
         this.save();
     },
     
-    // Remove an item
     remove(id) {
         if (this.items[id]) {
             delete this.items[id];
@@ -41,7 +37,6 @@ const cart = {
         this.save();
     },
 
-    // Increase quantity
     increaseQuantity(id) {
         if (this.items[id]) {
             this.items[id].qty++;
@@ -49,7 +44,6 @@ const cart = {
         this.save();
     },
 
-    // Decrease quantity
     decreaseQuantity(id) {
         if (this.items[id] && this.items[id].qty > 1) {
             this.items[id].qty--;
@@ -57,7 +51,6 @@ const cart = {
         this.save();
     },
     
-    // Get total items
     getTotalCount() {
         let count = 0;
         for (const id in this.items) {
@@ -66,7 +59,6 @@ const cart = {
         return count;
     },
     
-    // Get total price
     getTotalPrice() {
         let total = 0;
         for (const id in this.items) {
@@ -75,7 +67,6 @@ const cart = {
         return total.toFixed(2);
     },
     
-    // Update the cart icon in the nav
     updateIcon() {
         const cartCount = document.getElementById('cartCount');
         if (cartCount) {
@@ -83,7 +74,6 @@ const cart = {
         }
     },
     
-    // Generate the WhatsApp message
     generateWhatsAppMessage() {
         let message = "Hi, I want to order these products:\n\n";
         let total = 0;
@@ -101,14 +91,12 @@ const cart = {
         return encodeURIComponent(message);
     },
     
-    // Clear the cart
     clear() {
         this.items = {};
         this.save();
     }
 };
 
-// Initialize the cart on every page load
 cart.load();
 
 
@@ -117,7 +105,6 @@ cart.load();
 ================================================== 
 */
 function initializeSwapper(swapperSelector, options = {}) {
-    // ... (This function is unchanged)
     const swapper = document.querySelector(swapperSelector);
     if (!swapper) return;
     const items = swapper.querySelectorAll('.swapper-item');
@@ -125,6 +112,7 @@ function initializeSwapper(swapperSelector, options = {}) {
     const nextBtn = swapper.querySelector('.next-btn');
     let currentIndex = 0;
     let autoplayInterval = null;
+    
     if (items.length <= 1) {
         if (prevBtn) prevBtn.style.display = 'none';
         if (nextBtn) nextBtn.style.display = 'none';
@@ -133,13 +121,45 @@ function initializeSwapper(swapperSelector, options = {}) {
             return;
         }
     }
-    function showItem(index) { items.forEach((item, i) => { item.classList.toggle('active', i === index); }); }
-    function next() { currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0; showItem(currentIndex); }
-    function prev() { currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1; showItem(currentIndex); }
-    if (prevBtn) { prevBtn.addEventListener('click', () => { prev(); if (autoplayInterval) resetAutoplay(); }); }
-    if (nextBtn) { nextBtn.addEventListener('click', () => { next(); if (autoplayInterval) resetAutoplay(); }); }
-    function startAutoplay() { if (options.autoplay && items.length > 1) { autoplayInterval = setInterval(next, options.autoplay); } }
-    function resetAutoplay() { clearInterval(autoplayInterval); startAutoplay(); }
+    
+    function showItem(index) { 
+        items.forEach((item, i) => { item.classList.toggle('active', i === index); }); 
+    }
+    
+    function next() { 
+        currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0; 
+        showItem(currentIndex); 
+    }
+    
+    function prev() { 
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1; 
+        showItem(currentIndex); 
+    }
+    
+    if (prevBtn) { 
+        // Use cloneNode to prevent duplicate listeners
+        let newPrev = prevBtn.cloneNode(true);
+        prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+        newPrev.addEventListener('click', () => { prev(); if(autoplayInterval) resetAutoplay(); });
+    }
+
+    if (nextBtn) { 
+        let newNext = nextBtn.cloneNode(true);
+        nextBtn.parentNode.replaceChild(newNext, nextBtn);
+        newNext.addEventListener('click', () => { next(); if (autoplayInterval) resetAutoplay(); }); 
+    }
+    
+    function startAutoplay() { 
+        if (options.autoplay && items.length > 1) { 
+            autoplayInterval = setInterval(next, options.autoplay); 
+        } 
+    }
+    
+    function resetAutoplay() { 
+        clearInterval(autoplayInterval); 
+        startAutoplay(); 
+    }
+    
     showItem(currentIndex);
     startAutoplay();
 }
@@ -156,7 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSwapper('.products-panel-gallery', { autoplay: 4000 });
     initializeSwapper('.works-panel-gallery', { autoplay: 3000 });
     initializeSwapper('.services-panel-gallery', { autoplay: 3500 });
-    initializeSwapper('.product-swapper', { autoplay: 4000 });
+    initializeSwapper('.designs-panel-gallery', { autoplay: 3500 }); 
+
+    // 💡 Product Gallery (No Autoplay)
+    initializeSwapper('.product-swapper'); 
+
     initializeSwapper('.services-swapper', { autoplay: 4000 });
     initializeSwapper('.works-swapper', { autoplay: 3000 });
 
@@ -166,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
     const sidebarLinks = document.querySelectorAll('.sidebar-links a');
+    
     const openSidebar = () => {
         sidebarMenu.classList.add('is-open');
         sidebarOverlay.classList.add('is-open');
@@ -176,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebarOverlay.classList.remove('is-open');
         document.body.classList.remove('sidebar-open');
     };
+    
     if (navToggleBtn && sidebarMenu && sidebarOverlay && sidebarCloseBtn) {
         navToggleBtn.addEventListener('click', () => {
             if (sidebarMenu.classList.contains('is-open')) {
@@ -194,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- PRODUCT DETAIL PAGE LOGIC ---
     const addToCartBtn = document.getElementById('addToCartBtn');
     const buyNowBtn = document.getElementById('buyNowBtn');
-    const whatsappNumber = '7488611845'; // Your WhatsApp number
+    const whatsappNumber = '7250470009'; 
     const whatsappBaseUrl = `https://wa.me/${whatsappNumber}?text=`;
 
     if (addToCartBtn) {
@@ -211,14 +237,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = '/cart/';
                 return;
             }
-            
             const { title, price, image } = addToCartBtn.dataset;
             cart.add(productId, title, parseFloat(price), image);
             
             addToCartBtn.textContent = 'Go to Cart';
             addToCartBtn.classList.add('btn-buy');
             addToCartBtn.classList.remove('btn-cart');
-            
             showToast(`${title} added to cart!`);
         });
     }
@@ -226,14 +250,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (buyNowBtn) {
         buyNowBtn.addEventListener('click', () => {
             const { title, price, image } = buyNowBtn.dataset;
-            const tempCart = {
-                items: {
-                    'temp': { title, price: parseFloat(price), image, qty: 1 }
-                },
-                generateWhatsAppMessage: cart.generateWhatsAppMessage
-            };
-            const message = tempCart.generateWhatsAppMessage();
-            window.open(whatsappBaseUrl + message, '_blank');
+            const message = `Hi, I want to buy this product:\n\n*${title}*\nPrice: ₹${price}\nImage: ${window.location.origin}${image}`;
+            window.open(whatsappBaseUrl + encodeURIComponent(message), '_blank');
         });
     }
     
@@ -245,11 +263,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showConfirmationModal(message, onConfirm) {
         if (!modal || !modalMessage) return;
-
         modalMessage.textContent = message;
         modal.style.display = 'flex';
         
-        // --- This is crucial to prevent multiple listeners ---
         let newCancel = modalCancel.cloneNode(true);
         modalCancel.parentNode.replaceChild(newCancel, modalCancel);
         modalCancel = newCancel;
@@ -257,18 +273,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let newConfirm = modalConfirm.cloneNode(true);
         modalConfirm.parentNode.replaceChild(newConfirm, modalConfirm);
         modalConfirm = newConfirm;
-        // --- End of listener cleanup ---
 
-        modalCancel.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
-
-        modalConfirm.addEventListener('click', () => {
-            onConfirm(); // Run the remove action
-            modal.style.display = 'none';
-        });
+        modalCancel.addEventListener('click', () => modal.style.display = 'none');
+        modalConfirm.addEventListener('click', () => { onConfirm(); modal.style.display = 'none'; });
     }
-
 
     // --- CART PAGE LOGIC ---
     const cartContainer = document.getElementById('cart-items-container');
@@ -281,56 +289,47 @@ document.addEventListener('DOMContentLoaded', () => {
         const emptyMsg = document.getElementById('cart-empty-message');
         const cartSummary = document.getElementById('cart-summary');
         const cartActions = document.getElementById('cart-actions');
-        
         const deliveryContainer = document.getElementById('delivery-progress-container');
         const deliveryText = document.getElementById('delivery-progress-text');
         const deliveryBarInner = document.getElementById('delivery-progress-bar-inner');
 
-        cartContainer.innerHTML = ''; // Clear the cart display
+        cartContainer.innerHTML = ''; 
         
         if (Object.keys(cartItems).length === 0) {
-            emptyMsg.style.display = 'block'; // 💡 This un-hides the "Continue Shopping" button
-            cartSummary.style.display = 'none';
-            cartActions.style.display = 'none';
+            emptyMsg.style.display = 'block';
+            if (cartSummary) cartSummary.style.display = 'none';
+            if (cartActions) cartActions.style.display = 'none';
             if (deliveryContainer) deliveryContainer.style.display = 'none';
         } else {
             emptyMsg.style.display = 'none';
-            cartSummary.style.display = 'block';
-            cartActions.style.display = 'block';
+            if (cartSummary) cartSummary.style.display = 'block';
+            if (cartActions) cartActions.style.display = 'block';
             
             for (const id in cartItems) {
                 const item = cartItems[id];
                 const itemEl = document.createElement('div');
                 itemEl.className = 'cart-item';
-                
                 itemEl.innerHTML = `
-                    <div class="cart-item-image">
-                        <img src="${item.image}" alt="${item.title}">
-                    </div>
-                    <div class="cart-item-info">
-                        <h4>${item.title}</h4>
-                        <p>₹${item.price}</p>
-                    </div>
+                    <div class="cart-item-image"><img src="${item.image}" alt="${item.title}"></div>
+                    <div class="cart-item-info"><h4>${item.title}</h4><p>₹${item.price}</p></div>
                     <div class="cart-item-controls">
                         <div class="cart-item-quantity">
-                            <button class="cart-item-qty-btn" data-id="${id}" data-action="decrease" aria-label="Decrease quantity">[-]</button>
+                            <button class="cart-item-qty-btn" data-id="${id}" data-action="decrease">[-]</button>
                             <span class="cart-item-qty-text">Qty: ${item.qty}</span>
-                            <button class="cart-item-qty-btn" data-id="${id}" data-action="increase" aria-label="Increase quantity">[+]</button>
+                            <button class="cart-item-qty-btn" data-id="${id}" data-action="increase">[+]</button>
                         </div>
                     </div>
                 `;
                 cartContainer.appendChild(itemEl);
             }
             
-            // Update total price
             const currentTotal = parseFloat(cart.getTotalPrice());
-            document.getElementById('cart-total').textContent = `Total: ₹${currentTotal.toFixed(2)}`;
+            const totalEl = document.getElementById('cart-total');
+            if(totalEl) totalEl.textContent = `Total: ₹${currentTotal.toFixed(2)}`;
             
-            // Update Delivery Progress Logic
             const freeDeliveryThreshold = 199;
             if (deliveryContainer && deliveryText && deliveryBarInner) {
                 deliveryContainer.style.display = 'block';
-                
                 if (currentTotal >= freeDeliveryThreshold) {
                     deliveryContainer.classList.add('is-unlocked');
                     deliveryText.textContent = "You’ve unlocked FREE delivery!";
@@ -344,64 +343,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Add listeners for INCREASE/DECREASE buttons
             document.querySelectorAll('.cart-item-qty-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = btn.dataset.id;
                     const action = btn.dataset.action;
-
                     if (action === 'increase') {
                         cart.increaseQuantity(id);
-                        renderCartPage(); // Re-render
+                        renderCartPage();
                     } else if (action === 'decrease') {
                         const item = cart.items[id];
                         if (item.qty > 1) {
                             cart.decreaseQuantity(id);
-                            renderCartPage(); // Re-render
+                            renderCartPage();
                         } else {
-                            // If quantity is 1, show confirmation
-                            showConfirmationModal(`Do you want to remove "${item.title}" from the cart?`, () => {
+                            showConfirmationModal(`Remove "${item.title}"?`, () => {
                                 cart.remove(id);
-                                renderCartPage(); // Re-render after removal
+                                renderCartPage();
                             });
                         }
                     }
                 });
             });
             
-            // Add listener for Proceed to Order button
-            document.getElementById('proceedToOrderBtn').addEventListener('click', () => {
-                const message = cart.generateWhatsAppMessage();
-                window.open(whatsappBaseUrl + message, '_blank');
-            });
+            const proceedBtn = document.getElementById('proceedToOrderBtn');
+            if(proceedBtn) {
+                proceedBtn.addEventListener('click', () => {
+                    const message = cart.generateWhatsAppMessage();
+                    window.open(whatsappBaseUrl + message, '_blank');
+                });
+            }
         }
     }
     
-    // Helper function to show a toast message
     function showToast(message) {
-        // ... (This function is unchanged)
         let toast = document.createElement('div');
         toast.className = 'toast-message';
         toast.textContent = message;
         document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.classList.add('show');
-        }, 10);
-        
+        setTimeout(() => toast.classList.add('show'), 10);
         setTimeout(() => {
             toast.classList.remove('show');
-            setTimeout(() => {
-                if (document.body.contains(toast)) {
-                    document.body.removeChild(toast);
-                }
-            }, 500);
+            setTimeout(() => { if (document.body.contains(toast)) document.body.removeChild(toast); }, 500);
         }, 3000);
     }
     
     // --- CHATBOT LOGIC ---
     const chatButton = document.getElementById('chat-button');
-    // ... (This whole chat logic section is unchanged)
     const chatWindow = document.getElementById('chat-window');
     const closeChat = document.getElementById('close-chat');
     const sendButton = document.getElementById('send-button');
@@ -409,20 +396,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatMessages = document.getElementById('chat-messages');
 
     if (chatButton && chatWindow && closeChat && sendButton && chatInput && chatMessages) {
-        
         chatButton.addEventListener('click', () => {
             chatWindow.classList.toggle('hidden');
             chatWindow.classList.toggle('visible');
-            if (chatWindow.classList.contains('visible')) {
-                chatInput.focus();
-            }
+            if (chatWindow.classList.contains('visible')) chatInput.focus();
         });
-
         closeChat.addEventListener('click', () => {
             chatWindow.classList.add('hidden');
             chatWindow.classList.remove('visible');
         });
-
         const sendMessage = () => {
             const message = chatInput.value.trim();
             if (!message) return;
@@ -438,138 +420,69 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => res.json())
             .then(data => {
                 removeThinking();
-                if (data.reply) {
-                    appendMessage(data.reply, 'ai-message');
-                } else {
-                    appendMessage('Sorry, I had a problem. Please try again.', 'ai-message');
-                }
+                appendMessage(data.reply || 'Sorry, I had a problem.', 'ai-message');
                 scrollToBottom();
             })
             .catch(error => {
                 removeThinking();
-                console.error('Chatbot error:', error);
-                appendMessage('Sorry, I couldn\'t connect. Please check your internet.', 'ai-message');
+                appendMessage('Sorry, I couldn\'t connect.', 'ai-message');
                 scrollToBottom();
             });
         }
-        
         sendButton.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
+        chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
         function appendMessage(text, className) {
-            const div = document.createElement('div');
-            div.className = `message ${className}`;
-            div.textContent = text;
-            chatMessages.appendChild(div);
-            scrollToBottom();
+            const div = document.createElement('div'); div.className = `message ${className}`; div.textContent = text; chatMessages.appendChild(div); scrollToBottom();
         }
-        function removeThinking() {
-            const thinking = chatMessages.querySelector('.thinking-message');
-            if (thinking) {
-                thinking.remove();
-            }
-        }
-        function scrollToBottom() {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
+        function removeThinking() { const t = chatMessages.querySelector('.thinking-message'); if(t) t.remove(); }
+        function scrollToBottom() { chatMessages.scrollTop = chatMessages.scrollHeight; }
     }
     
-    // Add CSS for the toast
-    const toastStyle = document.createElement('style');
-    toastStyle.textContent = `
-        .toast-message {
-            position: fixed;
-            bottom: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: white;
-            padding: 16px;
-            border-radius: 8px;
-            z-index: 10001;
-            font-size: 1rem;
-            transition: bottom 0.5s ease;
-        }
-        .toast-message.show {
-            bottom: 30px;
-        }
-    `;
-    document.head.appendChild(toastStyle);
-    
-
-    // --- PWA Install Prompt Logic ---
-    let deferredPrompt;
-    const installButton = document.getElementById('install-pwa-btn');
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent the browser's default mini-infobar
-        e.preventDefault();
-        // Stash the event so it can be triggered later.
-        deferredPrompt = e;
-        // Show our custom install button
-        if (installButton) {
-            installButton.style.display = 'block';
-        }
-    });
-
-    if (installButton) {
-        installButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            // Hide our button
-            installButton.style.display = 'none';
-            // Show the browser's install prompt
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the PWA install');
-                    } else {
-                        console.log('User dismissed the PWA install');
-                    }
-                    deferredPrompt = null;
-                });
-            }
-        });
+    if (!document.getElementById('toast-style')) {
+        const toastStyle = document.createElement('style');
+        toastStyle.id = 'toast-style';
+        toastStyle.textContent = `
+            .toast-message { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background-color: #333; color: white; padding: 16px; border-radius: 8px; z-index: 10001; font-size: 1rem; transition: bottom 0.5s ease; }
+            .toast-message.show { bottom: 30px; }
+        `;
+        document.head.appendChild(toastStyle);
     }
 
-    
     // --- PRODUCT FILTER LOGIC ---
     const filterButtons = document.querySelectorAll('.filter-btn');
     const productCards = document.querySelectorAll('.product-grid .product-card');
-
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Get the values to filter by (e.g., "cotton,blouse piece,net")
             const filterValues = button.dataset.filterValues;
-            
-            // Update active button state
             filterButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-
             if (filterValues === 'all') {
-                // Show all products
                 productCards.forEach(card => card.classList.remove('hidden'));
             } else {
-                // Show only filtered products
-                const filterArray = filterValues.split(','); // Create an array of categories
-                
+                const filterArray = filterValues.split(',');
                 productCards.forEach(card => {
                     const cardCategory = card.dataset.category;
-                    
-                    if (filterArray.includes(cardCategory)) {
-                        card.classList.remove('hidden'); // Show this card
-                    } else {
-                        card.classList.add('hidden'); // Hide this card
-                    }
+                    if (filterArray.includes(cardCategory)) card.classList.remove('hidden');
+                    else card.classList.add('hidden');
                 });
             }
         });
     });
-    
-}); // 💡 MOVED ALL SCRIPT TO INSIDE THIS LISTENER
+
+    // --- PWA Install Logic ---
+    let deferredPrompt;
+    const installButton = document.getElementById('install-pwa-btn');
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (installButton) installButton.style.display = 'block';
+    });
+    if (installButton) {
+        installButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            installButton.style.display = 'none';
+            if (deferredPrompt) deferredPrompt.prompt();
+        });
+    }
+});
+        
