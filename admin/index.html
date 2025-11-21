@@ -11,18 +11,11 @@
       
       /* --- 2. HIDE DEFAULT CMS SIDEBAR --- */
       @media (max-width: 768px) {
-        .nc-app-sidebar, nav[aria-label="Collections"], aside { display: none !important; }
+        .nc-app-sidebar, .nc-sidebar, aside, div[class*="Sidebar"], nav[aria-label="Collections"] { display: none !important; }
         .nc-app-main { width: 100% !important; margin-left: 0 !important; padding-bottom: 80px !important; }
         .nc-app-header { position: sticky !important; top: 0; z-index: 500; }
-        
-        /* CARD LIST STYLE */
-        .nc-collectionPage-list {
-            display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; padding: 10px !important;
-        }
-        a.nc-collectionPage-entry {
-            background: white !important; border-radius: 12px !important; box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
-            height: auto !important; min-height: 150px !important;
-        }
+        .nc-collectionPage-list { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; padding: 10px !important; }
+        a.nc-collectionPage-entry { background: white !important; border-radius: 12px !important; box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important; height: auto !important; min-height: 150px !important; }
         .nc-collectionPage-entry-detail { display: none !important; }
       }
 
@@ -35,10 +28,7 @@
       }
       @media (max-width: 768px) { .mobile-nav { display: flex; } }
 
-      .nav-item {
-        display: flex; flex-direction: column; align-items: center;
-        color: #888; font-size: 11px; flex: 1; padding: 8px 0; cursor: pointer;
-      }
+      .nav-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 11px; flex: 1; padding: 8px 0; cursor: pointer; }
       .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; fill: currentColor; }
       .nav-item.active { color: #0f62fe; font-weight: 700; }
 
@@ -54,49 +44,46 @@
       #batchBtn:active { transform: scale(0.9); }
 
       /* --- 5. BATCH EDITOR MODAL --- */
-      #batchModal {
-        display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: #f4f6f8; z-index: 10000; overflow-y: auto;
-      }
+      #batchModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f6f8; z-index: 10000; overflow-y: auto; }
       .batch-header {
         position: sticky; top: 0; background: white; padding: 15px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 100;
         display: flex; justify-content: space-between; align-items: center;
       }
-      .batch-container { padding: 15px; padding-bottom: 100px; }
+      .batch-container { padding: 15px; padding-bottom: 120px; }
       
-      /* PRODUCT CARD STYLE IN BATCH EDITOR */
+      /* PRODUCT CARD STYLE */
       .batch-card {
         background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative;
       }
-      .batch-card h4 { margin: 0 0 10px 0; color: #0f62fe; font-size: 14px; }
+      .batch-card h4 { margin: 0 0 15px 0; color: #0f62fe; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
       
-      .form-group { margin-bottom: 10px; }
-      .form-group label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; font-weight: 600; }
-      .form-group input, .form-group select {
-        width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;
+      .form-group { margin-bottom: 12px; }
+      .form-group label { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #444; margin-bottom: 5px; font-weight: 600; }
+      .form-group input, .form-group textarea, .form-group select {
+        width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px;
         font-size: 16px; background: #fff; box-sizing: border-box;
       }
       
-      /* THE "COPY TO ALL" BUTTON */
+      /* COPY BUTTON */
       .copy-btn {
         background: #e5f0ff; color: #0f62fe; border: none;
-        padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer;
-        float: right; font-weight: bold;
+        padding: 4px 10px; border-radius: 20px; font-size: 11px; cursor: pointer; font-weight: bold;
       }
       .copy-btn:active { background: #cfe4ff; }
 
       /* DELETE BUTTON */
       .delete-row {
-        position: absolute; top: 10px; right: 10px; color: red;
-        background: none; border: none; font-size: 18px; cursor: pointer;
+        position: absolute; top: 10px; right: 10px; color: white; background: #ff4d4d;
+        border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 14px; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
       }
 
       /* ACTION BUTTONS */
       .fab-add-row {
         position: fixed; bottom: 20px; right: 20px;
-        background: #28a745; color: white; padding: 12px 20px;
+        background: #28a745; color: white; padding: 12px 24px;
         border-radius: 30px; border: none; font-weight: bold;
         box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3); font-size: 16px; z-index: 101;
       }
@@ -104,6 +91,9 @@
         background: #0f62fe; color: white; border: none; padding: 8px 20px;
         border-radius: 8px; font-weight: bold; font-size: 14px;
       }
+      
+      /* Helper text */
+      .helper { font-size: 11px; color: #888; margin-top: 4px; display: block; }
     </style>
   </head>
 
@@ -126,29 +116,19 @@
       </div>
     </div>
 
-    <button id="batchBtn" title="Batch Upload">+</button>
+    <button id="batchBtn" title="Multi Upload">+</button>
 
     <div id="batchModal">
       <div class="batch-header">
         <button onclick="document.getElementById('batchModal').style.display='none'" style="background:none; border:none; font-size:24px;">&times;</button>
-        <h3 style="margin:0; font-size:18px;">Batch Upload</h3>
+        <h3 style="margin:0; font-size:18px;">Multi Product Upload</h3>
         <button class="btn-save-all" id="saveAllBtn">Save All</button>
       </div>
       
-      <div style="padding: 15px; background: #fff; border-bottom: 1px solid #eee;">
-        <label style="font-weight:bold; font-size:12px;">Collection:</label>
-        <select id="targetCollection" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; margin-top:5px;">
-          <option value="products">Products</option>
-          <option value="services">Services</option>
-          <option value="designs">Designs</option>
-          <option value="works">Works</option>
-        </select>
-      </div>
-
       <div class="batch-container" id="batchList">
         </div>
 
-      <button class="fab-add-row" id="addRowBtn">+ Add Row</button>
+      <button class="fab-add-row" id="addRowBtn">+ Add Product</button>
     </div>
 
     <script>
@@ -166,119 +146,170 @@
         const saveAllBtn = document.getElementById("saveAllBtn");
         let rowCount = 0;
 
-        // Open Modal
         batchBtn.addEventListener("click", () => {
           modal.style.display = "block";
-          if(rowCount === 0) addNewRow(); // Add first row automatically
+          if(rowCount === 0) addNewRow(); 
         });
 
-        // ADD NEW ROW FUNCTION
+        // --- HELPER: Create Input Field Logic ---
+        function createField(label, className, type = "text", placeholder = "", canCopy = false) {
+          return `
+            <div class="form-group">
+              <label>
+                ${label}
+                ${canCopy ? `<button class="copy-btn" onclick="copyToAll('${className}')">⬇️ Copy to All</button>` : ''}
+              </label>
+              ${type === 'textarea' 
+                ? `<textarea class="${className}" placeholder="${placeholder}" rows="2"></textarea>` 
+                : `<input type="${type}" class="${className}" placeholder="${placeholder}">`
+              }
+            </div>
+          `;
+        }
+
+        // --- ADD NEW ROW FUNCTION ---
         function addNewRow() {
           rowCount++;
           const div = document.createElement("div");
           div.className = "batch-card";
           div.id = `row-${rowCount}`;
           
-          // Only show "Copy ⬇️" buttons on the FIRST row
-          const showCopy = rowCount === 1;
+          // Show Copy buttons ONLY on the first card
+          const sc = rowCount === 1; 
 
           div.innerHTML = `
-            <h4>Item #${rowCount}</h4>
-            <button class="delete-row" onclick="this.parentElement.remove()">🗑️</button>
+            <h4>Product #${rowCount}</h4>
+            <button class="delete-row" onclick="this.parentElement.remove()">✕</button>
+            
+            ${createField("Title (Unique)", "input-title", "text", "e.g. Red Velvet Lace")}
             
             <div class="form-group">
-              <label>Title</label>
-              <input type="text" class="input-title" placeholder="e.g. Red Blouse">
+                <label>Image (Select from Device)</label>
+                <input type="file" accept="image/*" onchange="handleFileSelect(this)">
+                <input type="text" class="input-image" placeholder="/uploads/filename.jpg" readonly style="background:#eee; margin-top:5px;">
+                <span class="helper">Note: Make sure to upload photos to Media Library first!</span>
             </div>
 
-            <div class="form-group">
-              <label>
-                Price 
-                ${showCopy ? '<button class="copy-btn" onclick="copyToAll(\'input-price\')">⬇️ Copy to All</button>' : ''}
-              </label>
-              <input type="number" class="input-price" placeholder="e.g. 500">
-            </div>
-
-            <div class="form-group">
-              <label>
-                Category
-                ${showCopy ? '<button class="copy-btn" onclick="copyToAll(\'input-category\')">⬇️ Copy to All</button>' : ''}
-              </label>
-              <input type="text" class="input-category" placeholder="e.g. lace">
-            </div>
-
-            <div class="form-group">
-              <label>Image Name (must be in Media Library)</label>
-              <input type="text" class="input-image" placeholder="e.g. photo1.jpg">
-            </div>
+            ${createField("Category", "input-category", "text", "e.g. Lace", sc)}
+            ${createField("Price (₹)", "input-price", "number", "e.g. 500", sc)}
+            ${createField("Description", "input-desc", "textarea", "Product details...", sc)}
+            
+            ${createField("Size", "input-size", "text", "e.g. 9 meter", sc)}
+            ${createField("Colour", "input-color", "text", "e.g. Red", sc)}
+            ${createField("Pieces/Meters", "input-pieces", "text", "e.g. 1 Bundle", sc)}
+            ${createField("Fabric", "input-fabric", "text", "e.g. Velvet", sc)}
+            ${createField("Pattern", "input-pattern", "text", "e.g. Embroidered", sc)}
+            ${createField("Ideal For", "input-ideal", "text", "e.g. Saree Border", sc)}
+            
+            ${createField("Delivery Charges", "input-del-charge", "text", "e.g. Free or ₹50", sc)}
+            ${createField("Delivery Within", "input-del-time", "text", "e.g. 5-7 Days", sc)}
+            ${createField("Payment Type", "input-payment", "text", "e.g. Prepaid/COD", sc)}
+            ${createField("Return Policy", "input-return", "text", "e.g. No Returns", sc)}
           `;
           list.appendChild(div);
-          // Scroll to bottom
-          window.scrollTo(0, document.body.scrollHeight);
+          
+          // Scroll only if it's not the first one
+          if(rowCount > 1) div.scrollIntoView({behavior: "smooth"});
         }
 
         addRowBtn.addEventListener("click", addNewRow);
 
-        // COPY TO ALL FUNCTION (Global)
+        // --- FILE HANDLER (Auto-fills the text input) ---
+        window.handleFileSelect = function(input) {
+            if (input.files && input.files[0]) {
+                const filename = input.files[0].name;
+                // Find the text input right below this file input
+                const textInput = input.nextElementSibling;
+                textInput.value = "/uploads/" + filename;
+            }
+        }
+
+        // --- COPY TO ALL FUNCTION ---
         window.copyToAll = function(className) {
           const firstVal = document.querySelector(`.${className}`).value;
           const allInputs = document.querySelectorAll(`.${className}`);
-          allInputs.forEach(input => {
-            input.value = firstVal;
-          });
-          alert(`Copied "${firstVal}" to ${allInputs.length} items!`);
+          allInputs.forEach(input => input.value = firstVal);
+          alert(`Copied to ${allInputs.length} items!`);
         };
 
-        // SAVE ALL FUNCTION
+        // --- SAVE FUNCTION ---
         saveAllBtn.addEventListener("click", async () => {
-          const collection = document.getElementById("targetCollection").value;
           const cards = document.querySelectorAll(".batch-card");
-          
           if(cards.length === 0) return;
 
           saveAllBtn.textContent = "Saving...";
+          saveAllBtn.disabled = true;
+          
           const backend = window.CMS.getBackend();
           let success = 0;
 
           for (const card of cards) {
+            // Collect Data
             const title = card.querySelector(".input-title").value;
-            const price = card.querySelector(".input-price").value;
-            const category = card.querySelector(".input-category").value;
-            let image = card.querySelector(".input-image").value;
+            if (!title) continue; // Skip if no title
 
-            if (!title) continue; // Skip empty titles
-
-            // Auto-fix image path
-            if (image && !image.startsWith("/uploads/")) {
-              image = "/uploads/" + image;
-            }
+            const data = {
+                price: card.querySelector(".input-price").value,
+                category: card.querySelector(".input-category").value,
+                image: card.querySelector(".input-image").value,
+                description: card.querySelector(".input-desc").value,
+                size: card.querySelector(".input-size").value,
+                colour: card.querySelector(".input-color").value,
+                number_of_pieces: card.querySelector(".input-pieces").value,
+                fabric: card.querySelector(".input-fabric").value,
+                work: "", // Optional
+                pattern: card.querySelector(".input-pattern").value,
+                ideal_for: card.querySelector(".input-ideal").value,
+                delivery_charges: card.querySelector(".input-del-charge").value,
+                delivery_within: card.querySelector(".input-del-time").value,
+                payment_type: card.querySelector(".input-payment").value,
+                return_policy: card.querySelector(".input-return").value,
+            };
 
             const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
             const date = new Date().toISOString();
 
-            const fileContent = `---
+            // Build YAML
+            let fileContent = `---
 title: "${title}"
 date: "${date}"
-price: ${price || 0}
-category: "${category}"
-image: "${image}"
----`;
+layout: "product.liquid"
+tags: "product"
+permalink: false
+`;
+            // Loop through data object
+            for (const key in data) {
+                const val = data[key];
+                if(val) {
+                    // Check if number
+                    if(!isNaN(val) && val.trim() !== "") {
+                        fileContent += `${key}: ${val}\n`;
+                    } else {
+                        fileContent += `${key}: "${val}"\n`;
+                    }
+                }
+            }
+            fileContent += `---`;
 
             try {
               await backend.persistEntry({
-                collection: collection,
+                collection: "products", // Hardcoded for Products Batch
                 slug: slug,
-                entry: { path: `${collection}/${slug}.md`, raw: fileContent }
+                entry: { path: `products/${slug}.md`, raw: fileContent }
               });
               success++;
-              card.style.border = "2px solid green"; // Visual feedback
+              card.style.border = "2px solid green";
+              card.style.opacity = "0.5";
             } catch (err) {
               console.error(err);
               card.style.border = "2px solid red";
+              alert(`Error saving ${title}: ${err.message}`);
             }
           }
 
-          alert(`Saved ${success} items! Refreshing...`);
+          saveAllBtn.textContent = "Done!";
+          saveAllBtn.disabled = false;
+          alert(`Successfully saved ${success} products!`);
           location.reload();
         });
       });
