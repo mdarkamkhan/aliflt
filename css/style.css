@@ -1302,3 +1302,38 @@ details[open] .pm-icon-minus { display: block; }
     color: #000;
     border: 1px solid #000;
 }
+/* =========================================
+   PRODUCT DESCRIPTION FIXES
+========================================= */
+
+/* 1. Fix Overflow (Frame se bahar jana band) */
+.product-detail-info, 
+.product-description, 
+.accordion-content {
+    max-width: 100%;
+    word-wrap: break-word;      /* Lambe words ko todega */
+    overflow-wrap: break-word;  /* Frame ke andar rakhega */
+    white-space: normal;        /* Text ko wrap karega */
+}
+
+/* 2. Professional Typography for Description */
+.product-description p, 
+.accordion-description-text {
+    font-family: var(--font-body); /* Clean Poppins font */
+    font-size: 0.95rem;
+    line-height: 1.8; /* Lines ke beech space */
+    color: #444; /* Soft Black */
+    font-weight: 300;
+    margin-bottom: 15px;
+    text-align: left; /* Align Left looks better for reading */
+}
+
+/* 3. Add Spacing inside Accordion */
+.accordion-content {
+    padding: 15px 5px; /* Thoda breathing room */
+}
+
+/* 4. Button State Change (Added via JS) */
+#addToCartBtn {
+    transition: all 0.3s ease;
+}
