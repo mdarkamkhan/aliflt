@@ -13,17 +13,29 @@ eleventyComputed:
   title: "{{ item.data.title }}" 
 ---
 
-<!-- 💡 Main product grid is now inside a .container.section -->
 <div class="container section">
     
     <div class="product-detail-grid">
         
-        <!-- Column 1: Image -->
         <div class="product-detail-image">
-            <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+            <div class="swapper-container product-swapper">
+                
+                <div class="swapper-item active">
+                    <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+                </div>
+
+                {% if item.data.gallery %}
+                    {% for galleryItem in item.data.gallery %}
+                        <div class="swapper-item">
+                            <img src="{{ galleryItem.image | url }}" alt="{{ item.data.title }} view">
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <button class="prev-btn" aria-label="Previous image">&#10094;</button>
+                <button class="next-btn" aria-label="Next image">&#10095;</button>
+            </div>
         </div>
-        
-        <!-- Column 2: Info -->
         <div class="product-detail-info">
             <h1 class="product-detail-title">{{ item.data.title }}</h1>
             
@@ -35,12 +47,10 @@ eleventyComputed:
                 <span class="product-detail-category">{{ item.data.category }}</span>
             {% endif %}
 
-            <!-- Static Delivery Promo Text -->
             <div class="product-delivery-promo">
                 Free delivery on orders above ₹199
             </div>
 
-            <!-- Add to Cart & Buy Now Buttons -->
             <div class="product-detail-actions">
                 <button class="btn-cart" id="addToCartBtn" 
                         data-product-id="{{ item.fileSlug }}" 
@@ -57,35 +67,24 @@ eleventyComputed:
                 </button>
             </div>
             
-            <!-- 💡 The old description and spec sections have been removed from here -->
-
         </div>
     </div>
 </div>
 
-<!-- 
-==================================================
-===== 💡 NEW FULL-WIDTH ACCORDION ================
-================================================== 
--->
 <div class="product-accordion-container">
 
-    <!-- 1. Description Accordion -->
     {% if item.data.description %}
-    <details class="accordion-item" open> <!-- Starts open -->
-        <summary class="accordion-summary">
+    <details class="accordion-item" open> <summary class="accordion-summary">
             <h3 class="accordion-heading">Description</h3>
             <span class="accordion-caret">^</span>
         </summary>
         <div class="accordion-content">
-            <div> <!-- This inner div is required for the animation -->
-                <p class="accordion-description-text">{{ item.data.description }}</p>
+            <div> <p class="accordion-description-text">{{ item.data.description }}</p>
             </div>
         </div>
     </details>
     {% endif %}
 
-    <!-- 2. Product Information Accordion -->
     <details class="accordion-item">
         <summary class="accordion-summary">
             <h3 class="accordion-heading">Product Information</h3>
@@ -147,7 +146,6 @@ eleventyComputed:
         </div>
     </details>
 
-    <!-- 3. Delivery Details Accordion -->
     <details class="accordion-item">
         <summary class="accordion-summary">
             <h3 class="accordion-heading">Delivery Details</h3>
