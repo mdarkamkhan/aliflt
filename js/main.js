@@ -22,9 +22,7 @@ const cart = {
     },
     
     add(id, title, price, image) {
-        if (this.items[id]) {
-            // Already in cart
-        } else {
+        if (!this.items[id]) {
             this.items[id] = { title, price, image, qty: 1 };
         }
         this.save();
@@ -101,17 +99,22 @@ cart.load();
 
 
 /* ==================================================
-===== Swapper and Gallery Logic ==================
+===== 🖼️ SWAPPER LOGIC (NOW WITH TOUCH!) =========
 ================================================== 
 */
 function initializeSwapper(swapperSelector, options = {}) {
     const swapper = document.querySelector(swapperSelector);
     if (!swapper) return;
+    
     const items = swapper.querySelectorAll('.swapper-item');
     const prevBtn = swapper.querySelector('.prev-btn');
     const nextBtn = swapper.querySelector('.next-btn');
     let currentIndex = 0;
     let autoplayInterval = null;
+    
+    // Variables to track touch position
+    let touchStartX = 0;
+    let touchEndX = 0;
     
     if (items.length <= 1) {
         if (prevBtn) prevBtn.style.display = 'none';
@@ -136,8 +139,8 @@ function initializeSwapper(swapperSelector, options = {}) {
         showItem(currentIndex); 
     }
     
+    // --- Button Listeners ---
     if (prevBtn) { 
-        // Use cloneNode to prevent duplicate listeners
         let newPrev = prevBtn.cloneNode(true);
         prevBtn.parentNode.replaceChild(newPrev, prevBtn);
         newPrev.addEventListener('click', () => { prev(); if(autoplayInterval) resetAutoplay(); });
@@ -149,6 +152,35 @@ function initializeSwapper(swapperSelector, options = {}) {
         newNext.addEventListener('click', () => { next(); if (autoplayInterval) resetAutoplay(); }); 
     }
     
+    // --- 💡 NEW: TOUCH SWIPE LOGIC ---
+    swapper.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, {passive: true});
+
+    swapper.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, {passive: true});
+
+    function handleSwipe() {
+        // Calculate difference
+        const diff = touchStartX - touchEndX;
+        const threshold = 50; // Minimum distance to count as swipe
+
+        if (diff > threshold) {
+            // Swiped LEFT -> Next Image
+            next();
+            if (autoplayInterval) resetAutoplay();
+        } 
+        
+        if (diff < -threshold) {
+            // Swiped RIGHT -> Previous Image
+            prev();
+            if (autoplayInterval) resetAutoplay();
+        }
+    }
+    
+    // --- Autoplay Logic ---
     function startAutoplay() { 
         if (options.autoplay && items.length > 1) { 
             autoplayInterval = setInterval(next, options.autoplay); 
@@ -171,14 +203,14 @@ function initializeSwapper(swapperSelector, options = {}) {
 */
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- Initialize Galleries ---
+    // Galleries with Autoplay
     initializeSwapper('.banner-swapper', { isBanner: true, autoplay: 5000 }); 
     initializeSwapper('.products-panel-gallery', { autoplay: 4000 });
     initializeSwapper('.works-panel-gallery', { autoplay: 3000 });
     initializeSwapper('.services-panel-gallery', { autoplay: 3500 });
     initializeSwapper('.designs-panel-gallery', { autoplay: 3500 }); 
 
-    // 💡 Product Gallery (No Autoplay)
+    // 💡 Product Gallery (Manual Swipe Only - No Autoplay)
     initializeSwapper('.product-swapper'); 
 
     initializeSwapper('.services-swapper', { autoplay: 4000 });
@@ -217,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // --- PRODUCT DETAIL PAGE LOGIC ---
+    // --- PRODUCT LOGIC ---
     const addToCartBtn = document.getElementById('addToCartBtn');
     const buyNowBtn = document.getElementById('buyNowBtn');
     const whatsappNumber = '7250470009'; 
@@ -225,13 +257,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (addToCartBtn) {
         const productId = addToCartBtn.dataset.productId;
-        
         if (cart.items[productId]) {
             addToCartBtn.textContent = 'Go to Cart';
             addToCartBtn.classList.add('btn-buy'); 
             addToCartBtn.classList.remove('btn-cart');
         }
-        
         addToCartBtn.addEventListener('click', () => {
             if (addToCartBtn.textContent === 'Go to Cart') {
                 window.location.href = '/cart/';
@@ -239,7 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const { title, price, image } = addToCartBtn.dataset;
             cart.add(productId, title, parseFloat(price), image);
-            
             addToCartBtn.textContent = 'Go to Cart';
             addToCartBtn.classList.add('btn-buy');
             addToCartBtn.classList.remove('btn-cart');
@@ -255,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // --- Confirmation Modal Logic ---
+    // --- CONFIRMATION MODAL ---
     const modal = document.getElementById('confirm-modal');
     const modalMessage = document.getElementById('modal-message');
     let modalCancel = document.getElementById('modal-cancel');
@@ -269,7 +298,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let newCancel = modalCancel.cloneNode(true);
         modalCancel.parentNode.replaceChild(newCancel, modalCancel);
         modalCancel = newCancel;
-        
         let newConfirm = modalConfirm.cloneNode(true);
         modalConfirm.parentNode.replaceChild(newConfirm, modalConfirm);
         modalConfirm = newConfirm;
@@ -375,6 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // Helper Toast
     function showToast(message) {
         let toast = document.createElement('div');
         toast.className = 'toast-message';
@@ -387,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
     
-    // --- CHATBOT LOGIC ---
+    // Chatbot
     const chatButton = document.getElementById('chat-button');
     const chatWindow = document.getElementById('chat-window');
     const closeChat = document.getElementById('close-chat');
@@ -395,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatInput = document.getElementById('chat-input');
     const chatMessages = document.getElementById('chat-messages');
 
-    if (chatButton && chatWindow && closeChat && sendButton && chatInput && chatMessages) {
+    if (chatButton && chatWindow) {
         chatButton.addEventListener('click', () => {
             chatWindow.classList.toggle('hidden');
             chatWindow.classList.toggle('visible');
@@ -420,69 +449,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => res.json())
             .then(data => {
                 removeThinking();
-                appendMessage(data.reply || 'Sorry, I had a problem.', 'ai-message');
+                appendMessage(data.reply || 'Sorry, error occurred.', 'ai-message');
                 scrollToBottom();
             })
             .catch(error => {
                 removeThinking();
-                appendMessage('Sorry, I couldn\'t connect.', 'ai-message');
-                scrollToBottom();
-            });
-        }
-        sendButton.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
-        function appendMessage(text, className) {
-            const div = document.createElement('div'); div.className = `message ${className}`; div.textContent = text; chatMessages.appendChild(div); scrollToBottom();
-        }
-        function removeThinking() { const t = chatMessages.querySelector('.thinking-message'); if(t) t.remove(); }
-        function scrollToBottom() { chatMessages.scrollTop = chatMessages.scrollHeight; }
-    }
-    
-    if (!document.getElementById('toast-style')) {
-        const toastStyle = document.createElement('style');
-        toastStyle.id = 'toast-style';
-        toastStyle.textContent = `
-            .toast-message { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background-color: #333; color: white; padding: 16px; border-radius: 8px; z-index: 10001; font-size: 1rem; transition: bottom 0.5s ease; }
-            .toast-message.show { bottom: 30px; }
-        `;
-        document.head.appendChild(toastStyle);
-    }
-
-    // --- PRODUCT FILTER LOGIC ---
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const productCards = document.querySelectorAll('.product-grid .product-card');
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const filterValues = button.dataset.filterValues;
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            if (filterValues === 'all') {
-                productCards.forEach(card => card.classList.remove('hidden'));
-            } else {
-                const filterArray = filterValues.split(',');
-                productCards.forEach(card => {
-                    const cardCategory = card.dataset.category;
-                    if (filterArray.includes(cardCategory)) card.classList.remove('hidden');
-                    else card.classList.add('hidden');
-                });
-            }
-        });
-    });
-
-    // --- PWA Install Logic ---
-    let deferredPrompt;
-    const installButton = document.getElementById('install-pwa-btn');
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        if (installButton) installButton.style.display = 'block';
-    });
-    if (installButton) {
-        installButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            installButton.style.display = 'none';
-            if (deferredPrompt) deferredPrompt.prompt();
-        });
-    }
-});
-        
+                appendMessage('Network error.', 'ai-message');
+                                                 
