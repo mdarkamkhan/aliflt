@@ -19,7 +19,7 @@ collections:
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
 
-  - name: "products"
+- name: "products"
     label: "Products"
     folder: "products"
     format: "frontmatter"
@@ -30,16 +30,23 @@ collections:
       - { name: "tags", label: "Tag", widget: "hidden", default: "product" }
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
-      - { name: "image", label: "Main Image", widget: "image" }
-      
-      # 💡 NEW: ADD MORE PHOTOS BUTTON (GALLERY)
+      - { name: "image", label: "Main Image", widget: "image", required: true }
+
+      # ⭐ FIXED GALLERY FIELD – SAFE MODE
       - name: "gallery"
         label: "More Photos (Gallery)"
         widget: "list"
+        collapsed: true
         required: false
-        summary: "{{fields.image}}"
-        fields:
-          - { name: "image", label: "Additional Image", widget: "image" }
+        allow_add: true
+        min: 0
+        max: 10
+        summary: "Image: {{fields.image}}"
+        field:
+          name: "image"
+          label: "Additional Image"
+          widget: "image"
+          required: true
 
       - name: "category"
         label: "Category"
@@ -61,6 +68,7 @@ collections:
           - banarasi
           - velvet
           - cotton
+
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
       - { name: "size", label: "Size (Optional)", widget: "string", required: false }
@@ -74,7 +82,7 @@ collections:
       - { name: "delivery_within", label: "Delivery within (Optional)", widget: "string", required: false }
       - { name: "payment_type", label: "Payment Type (Optional)", widget: "string", required: false }
       - { name: "return_policy", label: "Return Policy (Optional)", widget: "string", required: false }
-
+      
   - name: "services"
     label: "Services"
     folder: "services"
