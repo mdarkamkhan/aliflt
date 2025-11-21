@@ -302,17 +302,5 @@ document.addEventListener("DOMContentLoaded", () => {
     initSwapper(".services-panel-gallery");
     initSwapper(".works-panel-gallery");
     initSwapper(".designs-panel-gallery");
-    
-    /* ================================
-         9. CHATBOT LOADER
-    ================================ */
-    const chatWidget = document.getElementById("chat-widget");
-    if (chatWidget) {
-        // Delay load slightly to not block main content
-        setTimeout(() => {
-             chatWidget.innerHTML = `<iframe src="/alifqr/index.html" class="chat-iframe" title="Chatbot" style="border:none; width:100%; height:100%;"></iframe>`;
-        }, 1000);
-    }
 
-});
-            
+                          
