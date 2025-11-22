@@ -1,43 +1,31 @@
 ---
 layout: base.liquid
-
-pagination:
-  data: collections.services
-  size: 1
-  alias: item
-
-# ✅ Generate one page per service like /service/<fileSlug>/
-permalink: "service/{{ item.fileSlug }}/"
-
-eleventyComputed:
-  title: "{{ item.data.title | default: 'Service' }}"
 ---
 
 <div class="container section">
   <div class="product-detail-grid">
 
     <div class="product-detail-image">
-      {% if item.data.image %}
-        <img src="{{ item.data.image | url }}" alt="{{ item.data.title | escape }}">
+      {% if image %}
+        <img src="{{ image }}" alt="{{ title | escape }}">
       {% else %}
         <img src="/icons/icon-512x512.png" alt="Service image">
       {% endif %}
     </div>
 
     <div class="product-detail-info">
-      <h1 class="product-detail-title">{{ item.data.title }}</h1>
+      <h1 class="product-detail-title">{{ title }}</h1>
 
-      {% if item.data.price %}
-        <span class="product-detail-price">₹{{ item.data.price }}</span>
+      {% if price %}
+        <span class="product-detail-price">Starting from ₹{{ price }}</span>
       {% endif %}
 
-      {% if item.data.category %}
-        <span class="product-detail-category">{{ item.data.category }}</span>
+      {% if category %}
+        <span class="product-detail-category">{{ category }}</span>
       {% endif %}
 
       <div class="product-detail-actions" style="grid-template-columns: 1fr;">
-        {% assign safe_title = item.data.title | replace: "'", "" %}
-        {% assign wapp_text = "Hello, I would like to book the '" | append: safe_title | append: "' service." %}
+        {% assign wapp_text = "Hello, I would like to book the '" | append: title | append: "' service." %}
         <a href="https://wa.me/7250470009?text={{ wapp_text | url_encode }}" 
            class="btn-buy" 
            target="_blank">
@@ -51,89 +39,40 @@ eleventyComputed:
 
 <div class="product-accordion-container">
 
-  {% if item.data.service_information %}
+  {% if description or service_information %}
   <details class="accordion-item" open>
     <summary class="accordion-summary">
       <h3 class="accordion-heading">Service Information</h3>
       <span class="accordion-caret">^</span>
     </summary>
     <div class="accordion-content">
-      <div class="container">
-        <p class="accordion-description-text">{{ item.data.service_information }}</p>
-      </div>
+      <p class="accordion-description-text">
+        {{ description }} <br> {{ service_information }}
+      </p>
     </div>
   </details>
   {% endif %}
 
-  {% assign current_category = item.data.category %}
-  {% if current_category %}
-    {% comment %} This now checks if 'work.data.category' exists before comparing {% endcomment %}
-    {% assign related_works = collections.works | where_exp: "work", "work.data.category and work.data.category == current_category" %}
-  {% endif %}
+  {% assign current_cat = category %}
+  {% assign related_works = collections.works | where_exp: "work", "work.data.category == current_cat" %}
 
-  {% if related_works and related_works.size > 0 %}
-  <details class="accordion-item" open>
+  {% if related_works.size > 0 %}
+  <details class="accordion-item">
     <summary class="accordion-summary">
       <h3 class="accordion-heading">Our Works</h3>
       <span class="accordion-caret">^</span>
     </summary>
-    
-    <div class="accordion-content" style="padding-top: 15px; padding-bottom: 15px;">
-      <div class="horizontal-scroll-wrapper" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-        <div class="works-gallery-container" style="display: flex; flex-wrap: nowrap; gap: 15px; padding-left: 1.5rem; padding-right: 1.5rem;">
-          
+    <div class="accordion-content">
+        <div style="display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px;">
           {% for work in related_works %}
-          <div class="work-gallery-item" style="flex: 0 0 280px; width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-radius: 8px; overflow: hidden; background: #fff;">
-            <div class="product-card-image-wrapper" style="aspect-ratio: 1 / 1.1; background: #f4f4f4;">
-              {% if work.data.image %}
-                <img src="{{ work.data.image | url }}" alt="{{ work.data.title | escape }}" style="width: 100%; height: 100%; object-fit: cover;">
-              {% endif %}
-            </div>
-            <p class="work-gallery-title" style="padding: 12px 15px; text-align: center; font-size: 0.9rem; margin: 0; color: #333;">{{ work.data.title }}</p>
+          <div style="min-width: 150px; border: 1px solid #eee;">
+            <img src="{{ work.data.image }}" style="width:100%; height:150px; object-fit:cover;">
+            <p style="font-size:0.8rem; text-align:center; padding:5px;">{{ work.data.title }}</p>
           </div>
           {% endfor %}
-
         </div>
-      </div>
     </div>
   </details>
   {% endif %}
-  {% assign current_service_url = item.url %}
-  {% assign related_services = collections.services | where_exp: "service", "service.url != current_service_url" %}
 
-  {% if related_services and related_services.size > 0 %}
-  <details class="accordion-item" open>
-    <summary class="accordion-summary">
-      <h3 class="accordion-heading">Other Services</h3>
-      <span class="accordion-caret">^</span>
-    </summary>
-    
-    <div class="accordion-content" style="padding-top: 15px; padding-bottom: 15px;">
-      <div class="horizontal-scroll-wrapper" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-        <div class="related-services-container" style="display: flex; flex-wrap: nowrap; gap: 15px; padding-left: 1.5rem; padding-right: 1.5rem;">
-          
-          {% for service in related_services %}
-          <a href="{{ service.url | url }}" class="related-service-card" style="flex: 0 0 280px; width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-radius: 8px; overflow: hidden; background: #fff; text-decoration: none;">
-            
-            <div class="product-card-image-wrapper" style="aspect-ratio: 1 / 1.1; background: #f4f4f4;">
-              {% if service.data.image %}
-                <img src="{{ service.data.image | url }}" alt="{{ service.data.title | escape }}" style="width: 100%; height: 100%; object-fit: cover;">
-              {% endif %}
-            </div>
-            
-            <div class="related-service-info" style="padding: 12px 15px; text-align: center;">
-              <p class="related-service-title" style="font-size: 0.9rem; margin: 0; color: #333; font-weight: 500;">{{ service.data.title }}</p>
-              {% if service.data.price %}
-              <span class="related-service-price" style="display: block; font-weight: bold; color: #000; margin-top: 4px; font-size: 1rem;">₹{{ service.data.price }}</span>
-              {% endif %}
-            </div>
-          
-          </a>
-          {% endfor %}
-
-        </div>
-      </div>
-    </div>
-  </details>
-  {% endif %}
-  </div>
+</div>
