@@ -30,45 +30,51 @@ eleventyComputed:
             {% if galleryItem.image %}
               <div class="swapper-item">
                 <img src="{{ galleryItem.image | url }}" alt="{{ item.data.title | escape }} view {{ forloop.index }}">
-              </div>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
+---
+layout: base.liquid
+---
 
-        <!-- Prev / Next controls (JS expects .prev-btn / .next-btn) -->
-        <button class="prev-btn" aria-label="Previous image" type="button">&#10094;</button>
-        <button class="next-btn" aria-label="Next image" type="button">&#10095;</button>
-      </div>
+<div class="container section">
+  <div class="product-detail-grid">
+
+    <div class="product-detail-image">
+      <div class="swapper-container product-swapper">
+        <div class="swapper-item active">
+          {% if image %}
+            <img src="{{ image }}" alt="{{ title | escape }}">
+          {% else %}
+            <img src="/icons/icon-512x512.png" alt="Product">
+          {% endif %}
+        </div>
+        </div>
     </div>
 
-    <!-- PRODUCT INFO -->
     <div class="product-detail-info">
-      <h1 class="product-detail-title">{{ item.data.title }}</h1>
+      <h1 class="product-detail-title">{{ title }}</h1>
 
-      {% if item.data.price %}
-        <span class="product-detail-price">₹{{ item.data.price }}</span>
+      {% if price %}
+        <span class="product-detail-price">₹{{ price }}</span>
       {% endif %}
 
-      {% if item.data.category %}
-        <span class="product-detail-category">{{ item.data.category }}</span>
+      {% if category %}
+        <span class="product-detail-category">{{ category }}</span>
       {% endif %}
 
       <div class="product-delivery-promo">Free delivery on orders above ₹199</div>
 
-      <!-- ACTIONS: Add to Cart / Buy Now -->
       <div class="product-detail-actions">
         <button class="btn-cart" id="addToCartBtn"
-                data-product-id="{{ item.fileSlug }}"
-                data-title="{{ item.data.title | escape }}"
-                data-price="{{ item.data.price }}"
-                data-image="{{ item.data.image | url }}">
+                data-product-id="{{ page.fileSlug }}"
+                data-title="{{ title | escape }}"
+                data-price="{{ price }}"
+                data-image="{{ image }}">
           Add to Cart
         </button>
 
         <button class="btn-buy" id="buyNowBtn"
-                data-title="{{ item.data.title | escape }}"
-                data-price="{{ item.data.price }}"
-                data-image="{{ item.data.image | url }}">
+                data-title="{{ title | escape }}"
+                data-price="{{ price }}"
+                data-image="{{ image }}">
           Buy Now
         </button>
       </div>
@@ -76,17 +82,16 @@ eleventyComputed:
   </div>
 </div>
 
-<!-- ACCORDIONS -->
 <div class="product-accordion-container">
 
-  {% if item.data.description %}
+  {% if description %}
   <details class="accordion-item" open>
     <summary class="accordion-summary">
       <h3 class="accordion-heading">Description</h3>
       <span class="accordion-caret">^</span>
     </summary>
     <div class="accordion-content">
-      <p class="accordion-description-text">{{ item.data.description }}</p>
+      <p class="accordion-description-text">{{ description }}</p>
     </div>
   </details>
   {% endif %}
@@ -98,27 +103,11 @@ eleventyComputed:
     </summary>
     <div class="accordion-content">
       <div class="spec-row-wrapper">
-        {% if item.data.size %}
-        <div class="spec-row"><span class="spec-label">Size</span><span class="spec-value">{{ item.data.size }}</span></div>
-        {% endif %}
-        {% if item.data.colour %}
-        <div class="spec-row"><span class="spec-label">Colour</span><span class="spec-value">{{ item.data.colour }}</span></div>
-        {% endif %}
-        {% if item.data.number_of_pieces %}
-        <div class="spec-row"><span class="spec-label">Number of Pieces/meter</span><span class="spec-value">{{ item.data.number_of_pieces }}</span></div>
-        {% endif %}
-        {% if item.data.fabric %}
-        <div class="spec-row"><span class="spec-label">Fabric</span><span class="spec-value">{{ item.data.fabric }}</span></div>
-        {% endif %}
-        {% if item.data.work %}
-        <div class="spec-row"><span class="spec-label">Work</span><span class="spec-value">{{ item.data.work }}</span></div>
-        {% endif %}
-        {% if item.data.pattern %}
-        <div class="spec-row"><span class="spec-label">Pattern</span><span class="spec-value">{{ item.data.pattern }}</span></div>
-        {% endif %}
-        {% if item.data.ideal_for %}
-        <div class="spec-row"><span class="spec-label">Ideal For</span><span class="spec-value">{{ item.data.ideal_for }}</span></div>
-        {% endif %}
+        {% if size %}<div class="spec-row"><span class="spec-label">Size</span><span class="spec-value">{{ size }}</span></div>{% endif %}
+        {% if colour %}<div class="spec-row"><span class="spec-label">Colour</span><span class="spec-value">{{ colour }}</span></div>{% endif %}
+        {% if fabric %}<div class="spec-row"><span class="spec-label">Fabric</span><span class="spec-value">{{ fabric }}</span></div>{% endif %}
+        {% if pattern %}<div class="spec-row"><span class="spec-label">Pattern</span><span class="spec-value">{{ pattern }}</span></div>{% endif %}
+        {% if ideal_for %}<div class="spec-row"><span class="spec-label">Ideal For</span><span class="spec-value">{{ ideal_for }}</span></div>{% endif %}
       </div>
     </div>
   </details>
@@ -130,18 +119,9 @@ eleventyComputed:
     </summary>
     <div class="accordion-content">
       <div class="spec-row-wrapper">
-        {% if item.data.delivery_charges %}
-        <div class="spec-row"><span class="spec-label">Delivery Charges</span><span class="spec-value">{{ item.data.delivery_charges }}</span></div>
-        {% endif %}
-        {% if item.data.delivery_within %}
-        <div class="spec-row"><span class="spec-label">Delivery within</span><span class="spec-value">{{ item.data.delivery_within }}</span></div>
-        {% endif %}
-        {% if item.data.payment_type %}
-        <div class="spec-row"><span class="spec-label">Payment Type</span><span class="spec-value">{{ item.data.payment_type }}</span></div>
-        {% endif %}
-        {% if item.data.return_policy %}
-        <div class="spec-row"><span class="spec-label">Return Policy</span><span class="spec-value">{{ item.data.return_policy }}</span></div>
-        {% endif %}
+        {% if delivery_charges %}<div class="spec-row"><span class="spec-label">Del. Charges</span><span class="spec-value">{{ delivery_charges }}</span></div>{% endif %}
+        {% if delivery_within %}<div class="spec-row"><span class="spec-label">Del. Within</span><span class="spec-value">{{ delivery_within }}</span></div>{% endif %}
+        {% if return_policy %}<div class="spec-row"><span class="spec-label">Return Policy</span><span class="spec-value">{{ return_policy }}</span></div>{% endif %}
       </div>
     </div>
   </details>
