@@ -13,7 +13,6 @@ permalink: /products/
             <img src="/icons/all-categories.png" alt="All Categories" class="filter-icon">
             <span class="filter-name">All</span>
         </button>
-
         {% for category in categoryFilters.categories %}
         <button class="filter-btn" data-filter-values="{{ category.values | join: ',' | downcase }}">
             <img src="/icons/{{ category.icon }}" alt="{{ category.name }}" class="filter-icon">
@@ -21,13 +20,19 @@ permalink: /products/
         </button>
         {% endfor %}
     </div>
+
     <div class="product-grid">
         
-        {% for item in collections.products %}
-        <a href="/products/{{ item.fileSlug }}/" class="product-card" data-category="{{ item.data.category | downcase }}">
+        {% for item in collections.products reversed %}
+        
+        <a href="{{ item.url }}" class="product-card" data-category="{{ item.data.category | downcase }}">
             
             <div class="product-card-image-wrapper">
-                <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+                {% if item.data.image %}
+                  <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+                {% else %}
+                  <img src="/icons/icon-512x512.png" alt="Product">
+                {% endif %}
             </div>
             
             <div class="product-card-name">
@@ -35,19 +40,14 @@ permalink: /products/
             </div>
             
             <div style="text-align: center; padding: 0 10px 20px; font-family: var(--font-body); font-weight: 300; font-size: 0.95rem;">
-                
                 {% if item.data.category %}
                 <span class="product-card-category" style="color: #777; text-transform: capitalize;">
                     {{ item.data.category }}
                 </span>
                 {% endif %}
                 
-                {% if item.data.price and item.data.category %}
-                    <span style="color: #aaa; margin: 0 6px;">&bull;</span>
-                {% endif %}
-
                 {% if item.data.price %}
-                <span class="product-card-price" style="font-weight: 400; color: #000;">
+                <span class="product-card-price" style="font-weight: 400; color: #000; margin-left:5px;">
                     ₹{{ item.data.price }}
                 </span>
                 {% endif %}
@@ -57,7 +57,7 @@ permalink: /products/
         {% endfor %}
 
         {% if collections.products.size == 0 %}
-            <p class='empty-gallery-message' style="position: static; transform: none; color: #333;">
+            <p class='empty-gallery-message' style="position: static; transform: none; color: #333; width:100%; text-align:center;">
                 No products found. Please check back soon.
             </p>
         {% endif %}
