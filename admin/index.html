@@ -200,7 +200,7 @@
         document.querySelectorAll(`.${cls}`).forEach(el => el.value = val);
     }
 
-    // --- 4. SAVE LOGIC (WITH UNIQUE SLUG FIX) ---
+    // --- 4. SAVE LOGIC (WITH UNIQUE SLUG) ---
     document.getElementById('saveAllBtn').addEventListener('click', async () => {
         const btn = document.getElementById('saveAllBtn');
         const type = selector.value;
@@ -215,9 +215,9 @@
             const title = getVal('inp-title');
             if(!title) continue;
 
-            // 🔥 UNIQUE SLUG FIX: Append Timestamp
+            // 🔥 UNIQUE SLUG FIX: Append Timestamp to prevent duplicates
             const cleanTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-            const uniqueId = Date.now().toString().slice(-4);
+            const uniqueId = Date.now().toString().slice(-4); // Last 4 digits of time
             const slug = `${cleanTitle}-${uniqueId}`;
             const date = new Date().toISOString();
             
