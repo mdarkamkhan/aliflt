@@ -3,10 +3,248 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ALiF Content Manager</title>
+  <title>ALiF Admin Panel</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  
+  <style>
+    /* --- 1. CSS FOR MASS UPLOAD UI (Hidden by default) --- */
+    #mass-upload-ui {
+      display: none; /* Hidden initially */
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #f4f6f8; z-index: 10000; overflow-y: auto;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Header */
+    .mu-header {
+      background: #fff; padding: 15px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    
+    /* Selector */
+    #collectionSelector {
+        padding: 10px; border: 2px solid #0f62fe; border-radius: 6px;
+        font-size: 14px; font-weight: bold; color: #0f62fe; background: #fff;
+    }
+
+    /* Card Style */
+    .mu-container { padding: 15px; padding-bottom: 100px; max-width: 800px; margin: 0 auto; }
+    .mu-card {
+        background: #fff; padding: 20px; border-radius: 12px; margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: relative; border: 1px solid #eee;
+    }
+    .mu-card h4 { margin: 0 0 15px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between; }
+    
+    /* Inputs */
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: #555; margin-bottom: 5px; }
+    .form-group input, .form-group textarea {
+        width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;
+        font-size: 14px; box-sizing: border-box;
+    }
+    
+    /* Buttons */
+    .btn-copy { background: #eef; color: #0f62fe; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; float: right; }
+    .btn-delete { color: red; background: none; border: none; cursor: pointer; font-size: 16px; }
+    
+    /* Floating Actions */
+    .fab-container {
+        position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 101;
+    }
+    .btn-fab {
+        background: #000; color: #fff; border: none; padding: 12px 20px; border-radius: 50px;
+        font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .btn-save { background: #0f62fe; }
+
+    /* --- 2. TOGGLE SWITCH BUTTON (Visible on Standard CMS) --- */
+    #modeSwitchBtn {
+        position: fixed; bottom: 20px; left: 20px; z-index: 9999;
+        background: #28a745; color: white; padding: 10px 20px; border-radius: 50px;
+        border: 2px solid white; font-weight: bold; cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+  </style>
 </head>
 <body>
+
   <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+
+  <button id="modeSwitchBtn" onclick="toggleMassMode()">🚀 Switch to Mass Upload</button>
+
+  <div id="mass-upload-ui">
+      <div class="mu-header">
+          <button onclick="toggleMassMode()" style="background:none; border:none; font-size:20px;">🔙 Back</button>
+          <select id="collectionSelector">
+              <option value="products">🛍️ Products</option>
+              <option value="services">✂️ Services</option>
+              <option value="works">👗 Works</option>
+              <option value="designs">🎨 Designs</option>
+              <option value="offers">📢 Banners</option>
+          </select>
+      </div>
+
+      <div class="mu-container" id="formList"></div>
+
+      <div class="fab-container">
+          <button class="btn-fab" onclick="addNewRow()">+ Add Item</button>
+          <button class="btn-fab btn-save" id="saveAllBtn">Save All</button>
+      </div>
+  </div>
+
+  <script>
+    // --- TOGGLE MODES ---
+    function toggleMassMode() {
+        const ui = document.getElementById('mass-upload-ui');
+        const btn = document.getElementById('modeSwitchBtn');
+        const cmsRoot = document.getElementById('nc-root'); // Netlify's main div
+
+        if (ui.style.display === 'none' || ui.style.display === '') {
+            // Show Mass Upload
+            ui.style.display = 'block';
+            btn.style.display = 'none';
+            if(cmsRoot) cmsRoot.style.display = 'none'; // Hide standard CMS
+            
+            // Initialize first row if empty
+            if(document.querySelectorAll('.mu-card').length === 0) addNewRow();
+        } else {
+            // Show Standard CMS
+            ui.style.display = 'none';
+            btn.style.display = 'block';
+            if(cmsRoot) cmsRoot.style.display = 'block';
+        }
+    }
+
+    // --- MASS UPLOAD LOGIC ---
+    const list = document.getElementById('formList');
+    const selector = document.getElementById('collectionSelector');
+    let rowCount = 0;
+
+    // Config Maps
+    const configs = {
+        products: { layout: 'product.liquid', tag: 'product' },
+        services: { layout: 'service.liquid', tag: 'service' },
+        works:    { layout: 'service.liquid', tag: 'work' },
+        designs:  { layout: 'design.liquid',  tag: 'design' },
+        offers:   { layout: 'product.liquid', tag: 'offer' }
+    };
+
+    // Reset on change
+    selector.addEventListener('change', () => {
+        if(confirm("Clear current forms?")) {
+            list.innerHTML = ""; rowCount = 0; addNewRow();
+        }
+    });
+
+    // Helper: Create Input
+    function createInp(label, cls, ph, type="text", showCopy=false) {
+        return `
+        <div class="form-group">
+            <label>${label} ${showCopy ? `<button class="btn-copy" onclick="copyToAll('${cls}')">⬇ Apply to All</button>` : ''}</label>
+            ${type === 'textarea' 
+                ? `<textarea class="${cls}" placeholder="${ph}" rows="2"></textarea>` 
+                : `<input type="${type}" class="${cls}" placeholder="${ph}">` }
+        </div>`;
+    }
+
+    // Add Row
+    function addNewRow() {
+        rowCount++;
+        const div = document.createElement('div');
+        div.className = 'mu-card';
+        div.innerHTML = `
+            <h4>Item #${rowCount} <button class="btn-delete" onclick="this.parentElement.parentElement.remove()">✕</button></h4>
+            ${createInp("Title *", "inp-title", "Name")}
+            <div class="form-group">
+                <label>Image (Select File) *</label>
+                <input type="file" accept="image/*" onchange="this.nextElementSibling.value = '/uploads/' + this.files[0].name">
+                <input type="text" class="inp-image" readonly style="background:#eee; margin-top:5px;" placeholder="/uploads/...">
+            </div>
+            ${ selector.value !== 'offers' ? 
+                createInp("Category", "inp-cat", "e.g. Lace", "text", rowCount===1) +
+                createInp("Price", "inp-price", "0", "number", rowCount===1) +
+                createInp("Description", "inp-desc", "Details...", "textarea", rowCount===1)
+            : ''}
+            ${ selector.value === 'products' ? 
+                `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">${createInp("Size", "inp-size", "", "text", rowCount===1)}${createInp("Color", "inp-color", "", "text", rowCount===1)}</div>` +
+                createInp("Fabric", "inp-fab", "", "text", rowCount===1)
+            : ''}
+        `;
+        list.appendChild(div);
+        div.scrollIntoView({behavior:'smooth'});
+    }
+
+    // Copy Function
+    window.copyToAll = function(cls) {
+        const val = document.querySelector(`.${cls}`).value;
+        document.querySelectorAll(`.${cls}`).forEach(el => el.value = val);
+    }
+
+    // --- SAVE LOGIC (The Magic Part) ---
+    document.getElementById('saveAllBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('saveAllBtn');
+        const type = selector.value;
+        
+        // Get Backend from the ALREADY LOADED CMS
+        const backend = window.CMS.getBackend();
+        
+        if(!backend) {
+            alert("Error: CMS not fully loaded. Please wait a few seconds or refresh.");
+            return;
+        }
+
+        btn.textContent = "Uploading...";
+        btn.disabled = true;
+        let success = 0;
+
+        const cards = document.querySelectorAll('.mu-card');
+        for (const card of cards) {
+            const getVal = (c) => card.querySelector(`.${c}`)?.value || "";
+            const title = getVal('inp-title');
+            if(!title) continue;
+
+            const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+            const date = new Date().toISOString();
+            
+            // Construct YAML
+            let content = `---
+title: "${title}"
+date: "${date}"
+layout: "${configs[type].layout}"
+tags: "${configs[type].tag}"
+permalink: false
+`;
+            const fields = {
+                image: getVal('inp-image'), price: getVal('inp-price'),
+                category: getVal('inp-cat'), description: getVal('inp-desc'),
+                size: getVal('inp-size'), colour: getVal('inp-color'), fabric: getVal('inp-fab')
+            };
+
+            for(let k in fields) {
+                if(fields[k]) content += `${k}: "${fields[k]}"\n`;
+            }
+            content += `---`;
+
+            try {
+                await backend.persistEntry({
+                    collection: type,
+                    slug: slug,
+                    entry: { path: `${type}/${slug}.md`, raw: content }
+                });
+                success++;
+                card.style.border = "2px solid green";
+            } catch(e) {
+                console.error(e);
+                card.style.border = "2px solid red";
+            }
+        }
+
+        btn.textContent = "Save All";
+        btn.disabled = false;
+        alert(`Done! Uploaded ${success} items.`);
+        location.reload(); // Refresh to show new items in list
+    });
+  </script>
 </body>
 </html>
