@@ -1423,3 +1423,32 @@ details[open] .pm-icon-minus { display: block; }
 .spec-row {
     padding: 10px 0; /* List items ke beech space */
 }
+/* =========================================
+   TOAST NOTIFICATION (POPUP)
+========================================= */
+.toast {
+    visibility: hidden; /* Default chupa hua */
+    min-width: 250px;
+    background-color: #000; /* Black Background */
+    color: #fff;            /* White Text */
+    text-align: center;
+    border-radius: 0;       /* Sharp edges (Premium Look) */
+    padding: 15px;
+    position: fixed;
+    z-index: 10005;         /* Sabse upar */
+    left: 50%;
+    bottom: 30px;           /* Screen ke neeche */
+    transform: translateX(-50%); /* Center alignment */
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    opacity: 0;
+    transition: opacity 0.3s, bottom 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Jab JS 'show' class add karega tab dikhega */
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 50px; /* Thoda upar uthega animation ke sath */
+}
