@@ -9,15 +9,14 @@
       /* --- 1. RESET & BASE --- */
       body { margin: 0; background: #eff3f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
       
-      /* --- 2. HIDE DEFAULT SIDEBAR ON MOBILE --- */
+      /* --- 2. HIDE DEFAULT SIDEBAR --- */
       @media (max-width: 768px) {
         .nc-app-sidebar, .nc-sidebar, aside { display: none !important; }
         .nc-app-main { width: 100% !important; margin-left: 0 !important; padding-bottom: 80px !important; }
-        /* Fix header sticking */
         .nc-app-header { position: sticky !important; top: 0; z-index: 500; }
       }
 
-      /* --- 3. MOBILE BOTTOM NAV --- */
+      /* --- 3. MOBILE NAV --- */
       .mobile-nav {
         display: none; position: fixed; bottom: 0; left: 0; width: 100%;
         background: white; border-top: 1px solid #eee; height: 65px;
@@ -30,38 +29,26 @@
       .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; fill: currentColor; }
       .nav-item.active { color: #0f62fe; font-weight: 700; }
 
-      /* --- 4. FLOATING MULTI-UPLOAD BUTTON --- */
+      /* --- 4. FLOATING BUTTON --- */
       #batchBtn {
         position: fixed; bottom: 85px; right: 20px;
         background: #0f62fe; color: white; border: none;
         width: 60px; height: 60px; border-radius: 50%;
         box-shadow: 0 4px 20px rgba(15, 98, 254, 0.5); cursor: pointer;
-        z-index: 100000; /* Always on top */
-        display: flex; align-items: center; justify-content: center;
+        z-index: 100000; display: flex; align-items: center; justify-content: center;
         font-size: 32px; transition: transform 0.2s;
       }
       #batchBtn:active { transform: scale(0.9); }
-      
-      /* Tooltip for button */
-      #batchBtn::after {
-        content: "Bulk Upload";
-        position: absolute; right: 70px; background: #333; color: #fff;
-        font-size: 12px; padding: 4px 8px; border-radius: 4px;
-        opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap;
-      }
-      #batchBtn:hover::after { opacity: 1; }
 
-      /* --- 5. BATCH EDITOR MODAL --- */
+      /* --- 5. MODAL --- */
       #batchModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f6f8; z-index: 100001; overflow-y: auto; }
       
       .batch-header {
         position: sticky; top: 0; background: white; padding: 15px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 100;
-        display: flex; justify-content: space-between; align-items: center; gap: 10px;
-        flex-wrap: wrap;
+        display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
       }
 
-      /* TYPE SELECTOR DROPDOWN */
       #collectionSelector {
         padding: 10px; border: 2px solid #0f62fe; border-radius: 6px;
         font-size: 14px; font-weight: bold; color: #0f62fe; background: #fff;
@@ -75,25 +62,20 @@
         box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative;
         transition: all 0.3s ease;
       }
-      .batch-card:hover { border-color: #0f62fe; }
-      
       .batch-card h4 { margin: 0 0 15px 0; color: #0f62fe; font-size: 18px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; display:flex; justify-content:space-between; }
-
+      
       .form-group { margin-bottom: 15px; }
       .form-group label { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #555; margin-bottom: 6px; font-weight: 600; }
-      
       .form-group input, .form-group textarea, .form-group select {
         width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
         font-size: 15px; background: #fff; box-sizing: border-box;
       }
       .form-group input:focus { border-color: #0f62fe; outline: none; }
       
-      /* COPY BUTTON STYLE */
       .copy-btn {
         background: #e5f0ff; color: #0f62fe; border: none;
         padding: 4px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; font-weight: bold;
       }
-      .copy-btn:hover { background: #cfe4ff; }
 
       .delete-row {
         color: #ff4d4d; background: none; border: none; cursor: pointer; font-size: 18px; font-weight:bold;
@@ -144,12 +126,10 @@
       </div>
       
       <div class="batch-container" id="batchList"></div>
-
       <button class="fab-add-row" id="addRowBtn">+ Add More</button>
     </div>
 
     <script>
-      // Helper to navigate normal CMS
       function navigateTo(collection, el) {
         window.location.hash = `#/collections/${collection}`;
       }
@@ -163,13 +143,11 @@
         const collectionSelector = document.getElementById("collectionSelector");
         let rowCount = 0;
 
-        // Open Modal
         batchBtn.addEventListener("click", () => {
           modal.style.display = "block";
           if(rowCount === 0) addNewRow(); 
         });
 
-        // Configuration for each type
         const collectionConfig = {
             products: { tag: 'product', layout: 'product.liquid' },
             services: { tag: 'service', layout: 'service.liquid' },
@@ -178,7 +156,6 @@
             offers:   { tag: 'offer',   layout: 'product.liquid' }
         };
 
-        // Create Input Fields
         function createField(label, className, type = "text", placeholder = "", canCopy = false) {
           return `
             <div class="form-group">
@@ -194,19 +171,15 @@
           `;
         }
 
-        // Add New Row Logic
         function addNewRow() {
           rowCount++;
           const div = document.createElement("div");
           div.className = "batch-card";
           div.id = `row-${rowCount}`;
-          const sc = (rowCount === 1); // Show Copy button only on first row
-          
-          // Determine what fields to show based on selection
+          const sc = (rowCount === 1); 
           const type = collectionSelector.value;
           let fieldsHTML = "";
 
-          // COMMON FIELDS
           fieldsHTML += `<h4>#${rowCount} <button class="delete-row" onclick="removeRow(this)">✕</button></h4>`;
           fieldsHTML += createField("Title (Required)", "input-title", "text", "Item Name");
           
@@ -217,11 +190,10 @@
                 <input type="text" class="input-image" placeholder="/uploads/..." readonly style="background:#f9f9f9; margin-top:5px; color:#666;">
             </div>`;
 
-          // SPECIFIC FIELDS
           if(type !== 'offers') {
-              fieldsHTML += createField("Category", "input-category", "text", "Category Name", sc);
+              fieldsHTML += createField("Category", "input-category", "text", "", sc);
               fieldsHTML += createField("Price (₹)", "input-price", "number", "0", sc);
-              fieldsHTML += createField("Description", "input-desc", "textarea", "Details...", sc);
+              fieldsHTML += createField("Description", "input-desc", "textarea", "", sc);
           }
 
           if(type === 'products') {
@@ -235,30 +207,19 @@
 
           div.innerHTML = fieldsHTML;
           list.appendChild(div);
-          
           if(rowCount > 1) setTimeout(() => div.scrollIntoView({behavior: "smooth", block: "center"}), 100);
         }
 
-        // Listen for Add Button
         addRowBtn.addEventListener("click", addNewRow);
 
-        // Reset rows when changing collection type
         collectionSelector.addEventListener("change", () => {
-            if(rowCount > 0 && !confirm("Switching type will clear current form. Continue?")) {
-                // Reset selector back if cancelled (complex logic omitted for simplicity)
-                return;
-            }
-            list.innerHTML = "";
-            rowCount = 0;
-            addNewRow();
+            list.innerHTML = ""; rowCount = 0; addNewRow();
         });
 
-        // Remove Row
         window.removeRow = function(btn) {
             if(confirm("Delete this row?")) btn.parentElement.parentElement.remove();
         }
 
-        // File Select
         window.handleFileSelect = function(input) {
             if (input.files && input.files[0]) {
                 const filename = input.files[0].name;
@@ -266,27 +227,41 @@
             }
         }
 
-        // Copy To All Logic
         window.copyToAll = function(className) {
           const firstVal = document.querySelector(`.${className}`).value;
           if(!firstVal) { alert("First field is empty!"); return; }
           document.querySelectorAll(`.${className}`).forEach(input => {
               input.value = firstVal;
-              input.style.backgroundColor = "#e6fffa";
-              setTimeout(() => input.style.backgroundColor = "#fff", 500);
           });
         };
 
-        // SAVE ALL Logic
+        // --- FIXED SAVE LOGIC ---
         saveAllBtn.addEventListener("click", async () => {
           const cards = document.querySelectorAll(".batch-card");
           if(cards.length === 0) return;
 
+          // 1. CHECK BACKEND WITH RETRY
+          let backend = null;
+          try {
+              backend = window.CMS.getBackend();
+          } catch(e) { console.log("Backend check 1 failed"); }
+
+          if(!backend) {
+              // Try authentication check
+              if(window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
+                  // Refresh page if auth exists but CMS isn't ready
+                  alert("CMS connection refreshing... Try Save again in 5 seconds.");
+                  window.netlifyIdentity.refresh().then(() => location.reload());
+                  return;
+              } else {
+                  alert("CMS not ready! Please login via Netlify Identity.");
+                  window.netlifyIdentity.open();
+                  return;
+              }
+          }
+
           const selectedType = collectionSelector.value;
           const config = collectionConfig[selectedType];
-          const backend = window.CMS.getBackend();
-          
-          if(!backend) { alert("CMS not ready! Please login."); return; }
 
           saveAllBtn.textContent = "Saving...";
           saveAllBtn.disabled = true;
@@ -298,7 +273,6 @@
             const title = card.querySelector(".input-title").value;
             if (!title) { card.style.border = "2px solid orange"; continue; }
 
-            // Safe get value helper
             const getVal = (cls) => {
                 const el = card.querySelector(`.${cls}`);
                 return el ? el.value : "";
@@ -358,10 +332,10 @@ permalink: false
           saveAllBtn.disabled = false;
 
           if(errors === 0) {
-            alert(`✅ Saved ${success} items!`);
+            alert(`✅ Saved ${success} items successfully!`);
             setTimeout(() => location.reload(), 500);
           } else {
-            alert(`${success} Saved, ${errors} Failed.`);
+            alert(`${success} Saved, ${errors} Failed. Check connection.`);
           }
         });
       });
