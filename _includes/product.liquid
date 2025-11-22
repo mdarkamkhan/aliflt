@@ -1,0 +1,114 @@
+---
+layout: base.liquid
+---
+
+<div class="container section">
+  <div class="product-detail-grid">
+
+    <div class="product-detail-image">
+      <div class="swapper-container product-swapper">
+        
+        <div class="swapper-item active">
+          {% if image %}
+            <img src="{{ image }}" alt="{{ title | escape }}">
+          {% else %}
+            <img src="/icons/icon-512x512.png" alt="Product">
+          {% endif %}
+        </div>
+
+        {% if gallery %}
+          {% for galleryItem in gallery %}
+            {% if galleryItem.image %}
+              <div class="swapper-item">
+                <img src="{{ galleryItem.image }}" alt="{{ title | escape }}">
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% if gallery %}
+        <button class="prev-btn" aria-label="Previous">&#10094;</button>
+        <button class="next-btn" aria-label="Next">&#10095;</button>
+        {% endif %}
+
+      </div>
+    </div>
+
+    <div class="product-detail-info">
+      <h1 class="product-detail-title">{{ title }}</h1>
+
+      {% if price %}
+        <span class="product-detail-price">₹{{ price }}</span>
+      {% endif %}
+
+      {% if category %}
+        <span class="product-detail-category">{{ category }}</span>
+      {% endif %}
+
+      <div class="product-delivery-promo">Free delivery on orders above ₹199</div>
+
+      <div class="product-detail-actions">
+        <button class="btn-cart" id="addToCartBtn"
+                data-product-id="{{ page.fileSlug }}"
+                data-title="{{ title | escape }}"
+                data-price="{{ price }}"
+                data-image="{{ image }}">
+          Add to Cart
+        </button>
+
+        <button class="btn-buy" id="buyNowBtn"
+                data-title="{{ title | escape }}"
+                data-price="{{ price }}"
+                data-image="{{ image }}">
+          Buy Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="product-accordion-container">
+
+  {% if description %}
+  <details class="accordion-item" open>
+    <summary class="accordion-summary">
+      <h3 class="accordion-heading">Description</h3>
+      <span class="accordion-caret">^</span>
+    </summary>
+    <div class="accordion-content">
+      <p class="accordion-description-text">{{ description }}</p>
+    </div>
+  </details>
+  {% endif %}
+
+  <details class="accordion-item">
+    <summary class="accordion-summary">
+      <h3 class="accordion-heading">Product Information</h3>
+      <span class="accordion-caret">^</span>
+    </summary>
+    <div class="accordion-content">
+      <div class="spec-row-wrapper">
+        {% if size %}<div class="spec-row"><span class="spec-label">Size</span><span class="spec-value">{{ size }}</span></div>{% endif %}
+        {% if colour %}<div class="spec-row"><span class="spec-label">Colour</span><span class="spec-value">{{ colour }}</span></div>{% endif %}
+        {% if fabric %}<div class="spec-row"><span class="spec-label">Fabric</span><span class="spec-value">{{ fabric }}</span></div>{% endif %}
+        {% if pattern %}<div class="spec-row"><span class="spec-label">Pattern</span><span class="spec-value">{{ pattern }}</span></div>{% endif %}
+        {% if ideal_for %}<div class="spec-row"><span class="spec-label">Ideal For</span><span class="spec-value">{{ ideal_for }}</span></div>{% endif %}
+        {% if work %}<div class="spec-row"><span class="spec-label">Work</span><span class="spec-value">{{ work }}</span></div>{% endif %}
+      </div>
+    </div>
+  </details>
+
+  <details class="accordion-item">
+    <summary class="accordion-summary">
+      <h3 class="accordion-heading">Delivery Details</h3>
+      <span class="accordion-caret">^</span>
+    </summary>
+    <div class="accordion-content">
+      <div class="spec-row-wrapper">
+        {% if delivery_charges %}<div class="spec-row"><span class="spec-label">Del. Charges</span><span class="spec-value">{{ delivery_charges }}</span></div>{% endif %}
+        {% if delivery_within %}<div class="spec-row"><span class="spec-label">Del. Within</span><span class="spec-value">{{ delivery_within }}</span></div>{% endif %}
+        {% if return_policy %}<div class="spec-row"><span class="spec-label">Return Policy</span><span class="spec-value">{{ return_policy }}</span></div>{% endif %}
+      </div>
+    </div>
+  </details>
+</div>
