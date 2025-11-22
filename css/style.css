@@ -1399,3 +1399,27 @@ details[open] .pm-icon-minus { display: block; }
 .remove-btn:hover {
     color: #000;
 }
+/* =========================================
+   FIX ACCORDION TEXT PADDING
+========================================= */
+
+/* Container ke andar space (Padding) badha di */
+.accordion-content {
+    padding: 15px 25px !important; /* Left-Right 25px space */
+    background-color: #fff;
+}
+
+/* Text ko thoda saaf aur readable banaya */
+.accordion-content p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.8; /* Lines ke beech space */
+    font-family: var(--font-body);
+    text-align: left;
+}
+
+/* Agar Product Details list hai toh uski spacing maintain rahe */
+.spec-row {
+    padding: 10px 0; /* List items ke beech space */
+}
