@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALiF Mass Uploader</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js"></script>
+
+    <style>
+        :root { --primary: #000; --bg: #f4f4f4; --white: #fff; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg); padding-bottom: 80px; }
+        
+        /* HEADER */
+        .header {
+            background: var(--white); padding: 15px; position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand { font-weight: bold; font-size: 1.2rem; }
+        
+        /* COLLECTION SELECTOR */
+        .selector {
+            padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; width: 140px;
+        }
+
+        /* CONTAINER */
+        .container { padding: 15px; max-width: 600px; margin: auto; }
+
+        /* CARD STYLE */
+        .card {
+            background: var(--white); padding: 20px; border-radius: 10px; margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative; border: 1px solid #eee;
+        }
+        .card-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .row-num { font-weight: bold; color: #555; }
+        .btn-delete { color: red; border: none; background: none; font-size: 1.2rem; cursor: pointer; }
+
+        /* FORM INPUTS */
+        .form-group { margin-bottom: 15px; }
+        .label-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem; color: #666; font-weight: 600; }
+        
+        input, textarea, select {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;
+            font-size: 1rem; box-sizing: border-box; font-family: inherit;
+        }
+        input:focus, textarea:focus { border-color: var(--primary); outline: none; }
+
+        /* COPY BUTTON */
+        .btn-copy {
+            background: #e0e0e0; border: none; padding: 2px 8px; border-radius: 4px;
+            font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; gap: 3px;
+        }
+        .btn-copy:active { background: #ccc; }
+
+        /* FLOATING ACTION BUTTONS */
+        .fab-container {
+            position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 100;
+        }
+        .btn-fab {
+            background: var(--primary); color: var(--white); border: none;
+            padding: 15px 25px; border-radius: 50px; font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); cursor: pointer; display: flex; align-items: center; gap: 5px;
+        }
+        .btn-add { background: #333; }
+        .btn-save { background: #007bff; }
+
+        /* HIDDEN CMS CONTAINER (To keep CMS logic running but invisible) */
+        #nc-root { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="brand">Mass Upload</div>
+        <select class="selector" id="collectionType">
+            <option value="products">Products</option>
+            <option value="services">Services</option>
+            <option value="works">Works</option>
+            <option value="designs">Designs</option>
+            <option value="offers">Banners</option>
+        </select>
+    </div>
+
+    <div class="container" id="formList">
+        </div>
+
+    <div class="fab-container">
+        <button class="btn-fab btn-add" onclick="addNewRow()">+ Add</button>
+        <button class="btn-fab btn-save" onclick="saveAll()">Save All</button>
+    </div>
+
+    <script>
+        const list = document.getElementById('formList');
+        const typeSelector = document.getElementById('collectionType');
+        let rowCount = 0;
+
+        // --- 1. INITIALIZE ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check Login
+            if (!netlifyIdentity.currentUser()) {
+                alert("Please login first!");
+                netlifyIdentity.open();
+                netlifyIdentity.on('login', () => location.reload());
+            } else {
+                addNewRow(); // Add first empty row
+            }
+        });
+
+        // --- 2. RESET ON CHANGE ---
+        typeSelector.addEventListener('change', () => {
+            if(confirm("Change Category? Current forms will be cleared.")) {
+                list.innerHTML = "";
+                rowCount = 0;
+                addNewRow();
+            }
+        });
+
+        // --- 3. HELPER: CREATE INPUT ---
+        function createInput(label, cls, placeholder, type="text", showCopy=false) {
+            return `
+            <div class="form-group">
+                <div class="label-row">
+                    <span>${label}</span>
+                    ${showCopy ? `<button class="btn-copy" onclick="copyToAll('${cls}')">⬇ Apply to All</button>` : ''}
+                </div>
+                ${type === 'textarea' 
+                    ? `<textarea class="${cls}" placeholder="${placeholder}" rows="2"></textarea>`
+                    : `<input type="${type}" class="${cls}" placeholder="${placeholder}">`
+                }
+            </div>`;
+        }
+
+        // --- 4. ADD NEW ROW LOGIC ---
+        function addNewRow() {
+            rowCount++;
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.id = `row-${rowCount}`;
+            const isFirst = rowCount === 1; // Only show copy buttons on first card
+            const type = typeSelector.value;
+
+            let html = `
+                <div class="card-header">
+                    <span class="row-num">Item #${rowCount}</span>
+                    <button class="btn-delete" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+                
+                ${createInput("Title *", "inp-title", "Item Name")}
+                
+                <div class="form-group">
+                    <div class="label-row"><span>Image *</span></div>
+                    <input type="file" accept="image/*" onchange="handleFile(this)">
+                    <input type="text" class="inp-image" readonly style="background:#eee; margin-top:5px;" placeholder="/uploads/...">
+                </div>
+            `;
+
+            // DYNAMIC FIELDS BASED ON TYPE
+            if (type !== 'offers') {
+                html += createInput("Category", "inp-cat", "e.g. Lace", "text", isFirst);
+                html += createInput("Price (₹)", "inp-price", "0", "number", isFirst);
+                html += createInput("Description", "inp-desc", "Details...", "textarea", isFirst);
+            }
+
+            if (type === 'products') {
+                html += `<div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    ${createInput("Size", "inp-size", "e.g. 9m", "text", isFirst)}
+                    ${createInput("Colour", "inp-color", "Red", "text", isFirst)}
+                </div>`;
+                html += createInput("Fabric", "inp-fabric", "Velvet", "text", isFirst);
+                html += createInput("Ideal For", "inp-ideal", "Saree", "text", isFirst);
+            }
+
+            div.innerHTML = html;
+            list.appendChild(div);
+            
+            if(!isFirst) div.scrollIntoView({behavior:"smooth", block:"center"});
+        }
+
+        // --- 5. UTILITIES ---
+        function handleFile(input) {
+            if(input.files[0]) {
+                input.nextElementSibling.value = "/uploads/" + input.files[0].name;
+            }
+        }
+
+        function copyToAll(cls) {
+            const val = document.querySelector(`.${cls}`).value;
+            if(!val) return alert("Empty field!");
+            document.querySelectorAll(`.${cls}`).forEach(el => {
+                el.value = val;
+                el.style.background = "#e8f0fe";
+                setTimeout(()=>el.style.background="#fff", 500);
+            });
+        }
+
+        // --- 6. SAVE LOGIC (Using CMS Backend) ---
+        async function saveAll() {
+            const cards = document.querySelectorAll('.card');
+            if(cards.length === 0) return;
+
+            // Try to get Backend
+            let backend;
+            try { backend = window.CMS.getBackend(); } catch(e){}
+            
+            if(!backend) {
+                alert("System Initializing... Please wait 5 seconds and click Save again.");
+                return;
+            }
+
+            const saveBtn = document.querySelector('.btn-save');
+            saveBtn.textContent = "Uploading...";
+            saveBtn.disabled = true;
+
+            let success = 0;
+            const collection = typeSelector.value;
+            
+            // CONFIGS
+            const layoutMap = {
+                products: 'product.liquid', services: 'service.liquid',
+                works: 'service.liquid', designs: 'design.liquid', offers: 'product.liquid'
+            };
+            const tagMap = {
+                products: 'product', services: 'service', works: 'work',
+                designs: 'design', offers: 'offer'
+            };
+
+            for (const card of cards) {
+                const getVal = (c) => card.querySelector(`.${c}`)?.value || "";
+                const title = getVal('inp-title');
+                
+                if(!title) continue;
+
+                // Data Object
+                const data = {
+                    title: title,
+                    image: getVal('inp-image'),
+                    price: getVal('inp-price'),
+                    category: getVal('inp-cat'),
+                    description: getVal('inp-desc'),
+                    size: getVal('inp-size'),
+                    colour: getVal('inp-color'),
+                    fabric: getVal('inp-fabric'),
+                    ideal_for: getVal('inp-ideal')
+                };
+
+                // Slug & Date
+                const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+                const date = new Date().toISOString();
+
+                // YAML Build
+                let content = `---
+title: "${title}"
+date: "${date}"
+layout: "${layoutMap[collection]}"
+tags: "${tagMap[collection]}"
+permalink: false
+`;
+                for(let k in data) {
+                    if(data[k]) {
+                        const val = data[k];
+                        // Check if number
+                        content += (!isNaN(val) && val.trim() !== "") ? `${k}: ${val}\n` : `${k}: "${val.replace(/"/g, '\\"')}"\n`;
+                    }
+                }
+                content += `---`;
+
+                try {
+                    await backend.persistEntry({
+                        collection: collection,
+                        slug: slug,
+                        entry: { path: `${collection}/${slug}.md`, raw: content }
+                    });
+                    success++;
+                    card.style.border = "2px solid green";
+                    card.querySelector('.btn-delete').remove();
+                } catch(e) {
+                    console.error(e);
+                    card.style.border = "2px solid red";
+                }
+            }
+
+            saveBtn.textContent = "Save All";
+            saveBtn.disabled = false;
+            alert(`✅ Uploaded ${success} items!`);
+        }
+    </script>
+</body>
+</html>
