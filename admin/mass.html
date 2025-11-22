@@ -7,7 +7,7 @@
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   
   <style>
-    /* --- CSS FOR MASS UPLOAD UI --- */
+    /* --- STYLE FOR MASS UPLOAD UI (Hidden by default) --- */
     #mass-upload-ui {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: #f0f2f5; z-index: 10000; overflow-y: auto;
@@ -16,7 +16,7 @@
 
     .mu-header {
       background: #fff; padding: 15px; position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       display: flex; justify-content: space-between; align-items: center;
     }
     
@@ -57,6 +57,7 @@
     .btn-save { background: #006400; }
     .btn-save:disabled { background: #999; cursor: not-allowed; }
 
+    /* 2. TOGGLE BUTTON STYLE (Visible on Standard CMS) */
     #modeSwitchBtn {
         position: fixed; bottom: 20px; left: 20px; z-index: 9999;
         background: #007bff; color: white; padding: 12px 24px; border-radius: 50px;
@@ -95,7 +96,7 @@
   </div>
 
   <script>
-    // --- 1. CONNECTION CHECKER ---
+    // --- Connection Logic ---
     let cmsBackend = null;
     
     function checkConnection() {
@@ -103,6 +104,7 @@
         const saveBtn = document.getElementById('saveAllBtn');
         
         try {
+            // Yeh line check karti hai ki normal CMS connect hua ya nahi
             cmsBackend = window.CMS.getBackend();
             if(cmsBackend) {
                 statusEl.textContent = "🟢 Connected";
@@ -117,27 +119,30 @@
             console.log("Waiting for CMS...");
         }
     }
+    // Har 1 second mein check karo
     setInterval(checkConnection, 1000);
 
-    // --- 2. TOGGLE MODES ---
+    // --- Toggle Logic ---
     function toggleMassMode() {
         const ui = document.getElementById('mass-upload-ui');
         const btn = document.getElementById('modeSwitchBtn');
-        const cmsRoot = document.getElementById('nc-root');
+        const cmsRoot = document.getElementById('nc-root'); // Standard CMS div
 
         if (ui.style.display === 'none' || ui.style.display === '') {
+            // Mass Mode ON
             ui.style.display = 'block';
             btn.style.display = 'none';
             if(cmsRoot) cmsRoot.style.display = 'none';
             if(document.querySelectorAll('.mu-card').length === 0) addNewRow();
         } else {
+            // Normal Mode ON
             ui.style.display = 'none';
             btn.style.display = 'block';
             if(cmsRoot) cmsRoot.style.display = 'block';
         }
     }
 
-    // --- 3. FORM GENERATOR ---
+    // --- Form Logic ---
     const list = document.getElementById('formList');
     const selector = document.getElementById('collectionSelector');
     let rowCount = 0;
@@ -200,7 +205,7 @@
         document.querySelectorAll(`.${cls}`).forEach(el => el.value = val);
     }
 
-    // --- 4. SAVE LOGIC (WITH UNIQUE SLUG) ---
+    // --- Save Logic ---
     document.getElementById('saveAllBtn').addEventListener('click', async () => {
         const btn = document.getElementById('saveAllBtn');
         const type = selector.value;
@@ -215,9 +220,9 @@
             const title = getVal('inp-title');
             if(!title) continue;
 
-            // 🔥 UNIQUE SLUG FIX: Append Timestamp to prevent duplicates
+            // Unique Slug Logic
             const cleanTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-            const uniqueId = Date.now().toString().slice(-4); // Last 4 digits of time
+            const uniqueId = Date.now().toString().slice(-4);
             const slug = `${cleanTitle}-${uniqueId}`;
             const date = new Date().toISOString();
             
@@ -252,7 +257,6 @@ permalink: false
             } catch(e) {
                 console.error(e);
                 card.style.border = "2px solid red";
-                alert("Failed: " + title);
             }
         }
 
