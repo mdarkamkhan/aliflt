@@ -10,14 +10,18 @@ permalink: /designs/
 
   <div class="product-grid">
 
-    {%- comment -%} Loop through all items in the 'designs' collection {%- endcomment -%}
-    {% for item in collections.designs %}
+    {%- comment -%} 
+      NOTE: Changed 'collections.designs' to 'collections.design' 
+      because Mass Uploader uses the singular tag "design".
+    {%- endcomment -%}
+    
+    {% for item in collections.design reversed %}
       
-      <a href="/design/{{ item.fileSlug }}/" class="product-card">
+      <a href="{{ item.url }}" class="product-card">
         
         <div class="product-card-image-wrapper">
           {% if item.data.image %}
-            <img src="{{ item.data.image | url }}" alt="{{ item.data.title | escape }}">
+            <img src="{{ item.data.image }}" alt="{{ item.data.title | escape }}">
           {% else %}
             <img src="/icons/icon-512x512.png" alt="ALiF Design">
           {% endif %}
@@ -44,11 +48,10 @@ permalink: /designs/
     {% endfor %}
 
     {%- comment -%} Empty state {%- endcomment -%}
-    {% if collections.designs.size == 0 %}
-      <p class="empty-gallery-message" style="position:static; transform:none; color:#333;">
+    {% if collections.design.size == 0 %}
+      <p class="empty-gallery-message" style="position:static; transform:none; color:#333; text-align:center; width:100%;">
         No designs found. Please check back soon.
       </p>
     {% endif %}
   </div>
 </div>
-
