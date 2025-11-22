@@ -98,7 +98,7 @@
   </head>
 
   <body>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script src="https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js"></script>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
     <div class="mobile-nav">
@@ -235,29 +235,16 @@
           });
         };
 
-        // --- FIXED SAVE LOGIC ---
+        // --- FIXED SAVE LOGIC (DIRECT ACCESS) ---
         saveAllBtn.addEventListener("click", async () => {
           const cards = document.querySelectorAll(".batch-card");
           if(cards.length === 0) return;
 
-          // 1. CHECK BACKEND WITH RETRY
-          let backend = null;
-          try {
-              backend = window.CMS.getBackend();
-          } catch(e) { console.log("Backend check 1 failed"); }
-
+          // DIRECT BACKEND ACCESS (STABLE)
+          const backend = window.CMS.getBackend();
           if(!backend) {
-              // Try authentication check
-              if(window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
-                  // Refresh page if auth exists but CMS isn't ready
-                  alert("CMS connection refreshing... Try Save again in 5 seconds.");
-                  window.netlifyIdentity.refresh().then(() => location.reload());
-                  return;
-              } else {
-                  alert("CMS not ready! Please login via Netlify Identity.");
-                  window.netlifyIdentity.open();
-                  return;
-              }
+              alert("⚠️ Authentication Error: Please refresh the page and login again.");
+              return;
           }
 
           const selectedType = collectionSelector.value;
@@ -313,6 +300,7 @@ permalink: false
             fileContent += `---`;
 
             try {
+              // DIRECT API CALL TO CMS
               await backend.persistEntry({
                 collection: selectedType, 
                 slug: slug,
