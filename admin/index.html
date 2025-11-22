@@ -3,87 +3,73 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ALiF Admin Panel</title>
+  <title>ALiF Admin & Mass Upload</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   
   <style>
-    /* --- CSS FOR MASS UPLOAD UI --- */
+    /* --- STYLES FOR MASS UPLOAD UI --- */
     #mass-upload-ui {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: #f0f2f5; z-index: 10000; overflow-y: auto;
-      font-family: sans-serif;
+      background: #f4f6f8; z-index: 99999; overflow-y: auto; font-family: sans-serif;
     }
 
-    /* Header */
     .mu-header {
       background: #fff; padding: 15px; position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center;
     }
-    
-    /* Status Indicator */
-    #connectionStatus {
-        font-size: 12px; font-weight: bold; padding: 5px 10px; border-radius: 4px;
-        background: #ffcccc; color: #cc0000; margin-right: 10px; display: inline-block;
-    }
-    #connectionStatus.ready { background: #ccffcc; color: #006600; }
 
-    /* Selector */
     #collectionSelector {
-        padding: 10px; border: 2px solid #333; border-radius: 6px; font-weight: bold;
+        padding: 8px; border: 2px solid #000; border-radius: 5px; font-weight: bold; font-size: 14px;
     }
 
-    .mu-container { padding: 20px; max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
+    .mu-container { padding: 15px; padding-bottom: 120px; max-width: 600px; margin: 0 auto; }
     
     .mu-card {
-        background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative;
+        background: #fff; padding: 15px; border-radius: 10px; margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative;
     }
-    
-    /* Inputs */
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; color: #555; }
-    .form-group input, .form-group textarea {
-        width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px;
-        font-size: 14px; box-sizing: border-box;
-    }
-    
-    /* Buttons */
-    .btn-copy { float: right; background: #e6f7ff; color: #0050b3; border: none; padding: 4px 8px; cursor: pointer; font-size: 10px; border-radius: 4px; }
-    .btn-delete { position: absolute; top: 15px; right: 15px; background: none; border: none; color: red; font-size: 20px; cursor: pointer; }
-    
-    /* Floating Actions */
-    .fab-container {
-        position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 101;
-    }
-    .btn-fab {
-        background: #000; color: #fff; border: none; padding: 15px 25px; border-radius: 50px;
-        font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-    .btn-save { background: #006400; } /* Green for save */
-    .btn-save:disabled { background: #999; cursor: not-allowed; }
+    .mu-card h4 { margin: 0 0 10px 0; border-bottom: 1px solid #eee; padding-bottom: 5px; display: flex; justify-content: space-between; }
 
-    /* Switch Button */
-    #modeSwitchBtn {
-        position: fixed; bottom: 20px; left: 20px; z-index: 9999;
-        background: #007bff; color: white; padding: 12px 24px; border-radius: 50px;
-        border: 2px solid white; font-weight: bold; cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    .form-group { margin-bottom: 10px; }
+    .form-group label { display: block; font-size: 12px; font-weight: bold; color: #555; margin-bottom: 4px; }
+    .form-group input, .form-group textarea {
+        width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; box-sizing: border-box;
+    }
+    
+    .btn-copy { float: right; background: #e6f7ff; color: #0050b3; border: none; padding: 3px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; }
+    .btn-delete { color: red; background: none; border: none; font-size: 18px; font-weight: bold; }
+
+    /* Floating Bottom Bar */
+    .fab-bar {
+        position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 15px;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-around; z-index: 101;
+    }
+    .btn-action {
+        padding: 12px 25px; border-radius: 30px; border: none; font-weight: bold; font-size: 14px; flex-grow: 1; margin: 0 5px; cursor: pointer;
+    }
+    .btn-add { background: #333; color: white; }
+    .btn-save { background: #006400; color: white; }
+    .btn-save:disabled { background: #ccc; }
+
+    /* Floating Toggle Button on Main Screen */
+    #toggleBtn {
+        position: fixed; bottom: 20px; left: 20px; z-index: 500;
+        background: #007bff; color: white; padding: 12px 20px; border-radius: 50px;
+        border: 2px solid white; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
   </style>
 </head>
 <body>
 
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script src="https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js"></script>
 
-  <button id="modeSwitchBtn" onclick="toggleMassMode()">🚀 Mass Upload</button>
+  <div id="nc-root"></div>
+
+  <button id="toggleBtn" onclick="showMassUpload()">🚀 Multi Upload</button>
 
   <div id="mass-upload-ui">
       <div class="mu-header">
-          <div>
-              <button onclick="toggleMassMode()" style="background:none; border:none; font-size:24px; cursor:pointer;">&larr;</button>
-              <span id="connectionStatus">🔴 Disconnected</span>
-          </div>
+          <button onclick="hideMassUpload()" style="font-size:20px; border:none; background:none;">❌ Close</button>
           <select id="collectionSelector">
               <option value="products">Products</option>
               <option value="services">Services</option>
@@ -95,66 +81,29 @@
 
       <div class="mu-container" id="formList"></div>
 
-      <div class="fab-container">
-          <button class="btn-fab" onclick="addNewRow()">+ Add</button>
-          <button class="btn-fab btn-save" id="saveAllBtn" disabled>Save All</button>
+      <div class="fab-bar">
+          <button class="btn-action btn-add" onclick="addNewRow()">+ Add More</button>
+          <button class="btn-action btn-save" id="saveAllBtn">Save All</button>
       </div>
   </div>
 
   <script>
-    // --- 1. CONNECTION CHECKER ---
-    // CMS load hone ka wait karega
-    let cmsBackend = null;
-    
-    function checkConnection() {
-        const statusEl = document.getElementById('connectionStatus');
-        const saveBtn = document.getElementById('saveAllBtn');
-        
-        try {
-            // Try to get the backend
-            cmsBackend = window.CMS.getBackend();
-            if(cmsBackend) {
-                statusEl.textContent = "🟢 Connected";
-                statusEl.className = "ready";
-                saveBtn.disabled = false;
-            } else {
-                statusEl.textContent = "🔴 Connecting...";
-                statusEl.className = "";
-                saveBtn.disabled = true;
-            }
-        } catch(e) {
-            console.log("Waiting for CMS...");
-        }
+    // --- 1. UI TOGGLE LOGIC ---
+    function showMassUpload() {
+        document.getElementById('mass-upload-ui').style.display = 'block';
+        document.getElementById('toggleBtn').style.display = 'none';
+        if(rowCount === 0) addNewRow();
+    }
+    function hideMassUpload() {
+        document.getElementById('mass-upload-ui').style.display = 'none';
+        document.getElementById('toggleBtn').style.display = 'block';
     }
 
-    // Har 1 second mein check karega jab tak connect na ho jaye
-    setInterval(checkConnection, 1000);
-
-
-    // --- 2. TOGGLE MODES ---
-    function toggleMassMode() {
-        const ui = document.getElementById('mass-upload-ui');
-        const btn = document.getElementById('modeSwitchBtn');
-        const cmsRoot = document.getElementById('nc-root');
-
-        if (ui.style.display === 'none' || ui.style.display === '') {
-            ui.style.display = 'block';
-            btn.style.display = 'none';
-            if(cmsRoot) cmsRoot.style.display = 'none';
-            if(document.querySelectorAll('.mu-card').length === 0) addNewRow();
-        } else {
-            ui.style.display = 'none';
-            btn.style.display = 'block';
-            if(cmsRoot) cmsRoot.style.display = 'block';
-        }
-    }
-
-    // --- 3. FORM GENERATOR ---
+    // --- 2. FORM GENERATION LOGIC ---
     const list = document.getElementById('formList');
     const selector = document.getElementById('collectionSelector');
     let rowCount = 0;
 
-    // Configs for each type
     const configs = {
         products: { layout: 'product.liquid', tag: 'product' },
         services: { layout: 'service.liquid', tag: 'service' },
@@ -163,16 +112,15 @@
         offers:   { layout: 'product.liquid', tag: 'offer' }
     };
 
+    // Reset on change
     selector.addEventListener('change', () => {
-        if(confirm("Change Category? Current list will be cleared.")) {
-            list.innerHTML = ""; rowCount = 0; addNewRow();
-        }
+        list.innerHTML = ""; rowCount = 0; addNewRow();
     });
 
     function createInp(label, cls, ph, type="text", showCopy=false) {
         return `
         <div class="form-group">
-            <label>${label} ${showCopy ? `<button class="btn-copy" onclick="copyToAll('${cls}')">⬇ Copy to All</button>` : ''}</label>
+            <label>${label} ${showCopy ? `<button class="btn-copy" onclick="copyToAll('${cls}')">⬇ Copy All</button>` : ''}</label>
             ${type === 'textarea' 
                 ? `<textarea class="${cls}" placeholder="${ph}" rows="2"></textarea>` 
                 : `<input type="${type}" class="${cls}" placeholder="${ph}">` }
@@ -183,24 +131,29 @@
         rowCount++;
         const div = document.createElement('div');
         div.className = 'mu-card';
-        div.innerHTML = `
-            <h4>Item #${rowCount} <button class="btn-delete" onclick="this.parentElement.parentElement.remove()">×</button></h4>
-            ${createInp("Title *", "inp-title", "Name")}
-            <div class="form-group">
-                <label>Image (Select File) *</label>
-                <input type="file" accept="image/*" onchange="this.nextElementSibling.value = '/uploads/' + this.files[0].name">
-                <input type="text" class="inp-image" readonly style="background:#eee; margin-top:5px;" placeholder="/uploads/...">
-            </div>
-            ${ selector.value !== 'offers' ? 
-                createInp("Category", "inp-cat", "e.g. Lace", "text", rowCount===1) +
-                createInp("Price (Number)", "inp-price", "0", "number", rowCount===1) +
-                createInp("Description", "inp-desc", "Details...", "textarea", rowCount===1)
-            : ''}
-            ${ selector.value === 'products' ? 
-                `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">${createInp("Size", "inp-size", "9m", "text", rowCount===1)}${createInp("Color", "inp-color", "Red", "text", rowCount===1)}</div>` +
-                createInp("Fabric", "inp-fab", "Velvet", "text", rowCount===1)
-            : ''}
-        `;
+        const isFirst = rowCount === 1;
+        const type = selector.value;
+
+        let html = `<h4>Item #${rowCount} <button class="btn-delete" onclick="this.parentElement.parentElement.remove()">×</button></h4>
+        ${createInp("Title", "inp-title", "Name")}
+        
+        <div class="form-group">
+            <label>Image File Name</label>
+            <input type="text" class="inp-image" placeholder="e.g. photo1.jpg">
+            <small style="color:#666; font-size:10px;">Upload photo in Media Library first, then type name here.</small>
+        </div>`;
+
+        if (type !== 'offers') {
+            html += createInp("Category", "inp-cat", "Lace", "text", isFirst);
+            html += createInp("Price", "inp-price", "0", "number", isFirst);
+            html += createInp("Description", "inp-desc", "...", "textarea", isFirst);
+        }
+        if (type === 'products') {
+            html += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">${createInp("Size", "inp-size", "", "text", isFirst)}${createInp("Color", "inp-color", "", "text", isFirst)}</div>` +
+            createInp("Fabric", "inp-fab", "", "text", isFirst);
+        }
+
+        div.innerHTML = html;
         list.appendChild(div);
         div.scrollIntoView({behavior:'smooth'});
     }
@@ -210,26 +163,53 @@
         document.querySelectorAll(`.${cls}`).forEach(el => el.value = val);
     }
 
-    // --- 4. SAVE LOGIC ---
+    // --- 3. SMART SAVE LOGIC (AUTO-WAIT) ---
+    
+    // Helper: Wait for Backend
+    const waitForBackend = async () => {
+        let attempts = 0;
+        while (attempts < 20) { // Try for 10 seconds (20 * 500ms)
+            try {
+                if (window.CMS && window.CMS.getBackend()) {
+                    return window.CMS.getBackend();
+                }
+            } catch(e) {}
+            await new Promise(r => setTimeout(r, 500));
+            attempts++;
+        }
+        return null;
+    };
+
     document.getElementById('saveAllBtn').addEventListener('click', async () => {
         const btn = document.getElementById('saveAllBtn');
         const type = selector.value;
         
-        // DOUBLE CHECK CONNECTION
-        if(!cmsBackend) {
-            alert("System not connected. Please ensure you are logged in.");
+        btn.textContent = "Connecting...";
+        btn.disabled = true;
+
+        // 1. WAIT FOR CONNECTION
+        const backend = await waitForBackend();
+
+        if(!backend) {
+            alert("🔴 Error: You are not logged in properly. Please reload the page and login to the standard CMS first.");
+            btn.textContent = "Save All";
+            btn.disabled = false;
             return;
         }
 
         btn.textContent = "Uploading...";
-        btn.disabled = true;
         let success = 0;
-
         const cards = document.querySelectorAll('.mu-card');
+
         for (const card of cards) {
             const getVal = (c) => card.querySelector(`.${c}`)?.value || "";
             const title = getVal('inp-title');
+            
             if(!title) continue;
+
+            // Image Path Fix
+            let imgRaw = getVal('inp-image');
+            if(imgRaw && !imgRaw.startsWith('/uploads/')) imgRaw = '/uploads/' + imgRaw;
 
             const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
             const date = new Date().toISOString();
@@ -241,22 +221,19 @@ layout: "${configs[type].layout}"
 tags: "${configs[type].tag}"
 permalink: false
 `;
-            // Dynamic Fields
             const fields = {
-                image: getVal('inp-image'), price: getVal('inp-price'),
+                image: imgRaw, price: getVal('inp-price'),
                 category: getVal('inp-cat'), description: getVal('inp-desc'),
                 size: getVal('inp-size'), colour: getVal('inp-color'), fabric: getVal('inp-fab')
             };
 
             for(let k in fields) {
-                if(fields[k]) {
-                    content += `${k}: ${isNaN(fields[k]) ? `"${fields[k]}"` : fields[k]}\n`;
-                }
+                if(fields[k]) content += `${k}: "${fields[k]}"\n`;
             }
             content += `---`;
 
             try {
-                await cmsBackend.persistEntry({
+                await backend.persistEntry({
                     collection: type,
                     slug: slug,
                     entry: { path: `${type}/${slug}.md`, raw: content }
@@ -266,14 +243,15 @@ permalink: false
             } catch(e) {
                 console.error(e);
                 card.style.border = "2px solid red";
-                alert("Error saving " + title);
+                alert("Failed: " + title);
             }
         }
 
         btn.textContent = "Save All";
         btn.disabled = false;
+        
         if(success > 0) {
-            alert(`✅ Uploaded ${success} items!`);
+            alert(`✅ Successfully uploaded ${success} items!`);
             location.reload();
         }
     });
