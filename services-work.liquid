@@ -9,11 +9,17 @@ permalink: /services-work/
 
   <div class="product-grid">
 
-    {%- comment -%} Services (clickable) {%- endcomment -%}
-    {% for item in collections.services %}
-      <a href="/service/{{ item.fileSlug }}/" class="product-card">
+    {%- comment -%} 1. SERVICES LOOP (Clickable) {%- endcomment -%}
+    {% for item in collections.service reversed %}
+      
+      <a href="{{ item.url }}" class="product-card">
+        
         <div class="product-card-image-wrapper">
-          <img src="{{ item.data.image | url }}" alt="{{ item.data.title | escape }}">
+          {% if item.data.image %}
+            <img src="{{ item.data.image }}" alt="{{ item.data.title | escape }}">
+          {% else %}
+            <img src="/icons/icon-512x512.png" alt="Service">
+          {% endif %}
         </div>
 
         <div class="product-card-name" style="text-align:left; padding:15px; font-weight:normal;">
@@ -23,7 +29,7 @@ permalink: /services-work/
 
           {% if item.data.price %}
           <div class="product-card-price" style="font-weight:bold; font-size:1.1rem; margin-top:8px; color:#000;">
-            ₹{{ item.data.price }}
+            Starting ₹{{ item.data.price }}
           </div>
           {% endif %}
 
@@ -36,11 +42,15 @@ permalink: /services-work/
       </a>
     {% endfor %}
 
-    {%- comment -%} Works (not clickable) {%- endcomment -%}
-    {% for item in collections.works %}
-      <div class="product-card" style="opacity:0.92; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+    {%- comment -%} 2. WORKS LOOP (Display Only) {%- endcomment -%}
+    {% for item in collections.work reversed %}
+      <div class="product-card" style="opacity:0.95; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
         <div class="product-card-image-wrapper">
-          <img src="{{ item.data.image | url }}" alt="{{ item.data.title | escape }}">
+          {% if item.data.image %}
+            <img src="{{ item.data.image }}" alt="{{ item.data.title | escape }}">
+          {% else %}
+            <img src="/icons/icon-512x512.png" alt="Our Work">
+          {% endif %}
         </div>
 
         <div class="product-card-name" style="text-align:left; padding:15px; font-weight:normal;">
@@ -48,22 +58,16 @@ permalink: /services-work/
             {{ item.data.title | default: 'Our Work' }}
           </div>
 
-          {% if item.data.category %}
           <div class="product-card-category" style="font-size:0.9rem; color:#777; margin-top:8px; text-transform:capitalize;">
             (Our Work) {{ item.data.category }}
           </div>
-          {% endif %}
         </div>
       </div>
     {% endfor %}
 
     {%- comment -%} Empty state {%- endcomment -%}
-    {% assign services_size = collections.services.size %}
-    {% assign works_size = collections.works.size %}
-    {% assign combined_size = services_size | plus: works_size %}
-
-    {% if combined_size == 0 %}
-      <p class="empty-gallery-message" style="position:static; transform:none; color:#333;">
+    {% if collections.service.size == 0 and collections.work.size == 0 %}
+      <p class="empty-gallery-message" style="position:static; transform:none; color:#333; width:100%; text-align:center;">
         No services or works found. Please check back soon.
       </p>
     {% endif %}
