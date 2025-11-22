@@ -13,29 +13,40 @@
         .config-box { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #007bff; }
         .config-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
         label { font-size: 12px; font-weight: bold; color: #555; text-transform: uppercase; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; box-sizing: border-box; background: #fff; }
+        
+        /* INPUTS */
+        input, select, textarea { 
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; box-sizing: border-box; background: #fff; 
+            transition: all 0.3s ease;
+        }
         input:focus, textarea:focus, select:focus { border-color: #007bff; outline: none; }
 
-        /* PRODUCT CARD */
-        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #000; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .card-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .row-num { font-weight: bold; font-size: 1.1em; }
-        .btn-del { color: red; font-weight: bold; background: none; border: none; font-size: 24px; padding: 0 10px; }
+        /* ✅ FILLED STATE (GREEN) */
+        .filled {
+            border: 2px solid #28a745 !important;
+            background-color: #e8f5e9 !important; /* Light Green */
+        }
 
-        /* FIELD GROUPS */
+        /* CARD STYLE */
+        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #333; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .card-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .row-num { font-weight: bold; font-size: 1.1em; color: #007bff; }
+        .btn-del { color: red; font-weight: bold; background: none; border: none; font-size: 24px; padding: 0 10px; cursor: pointer; }
+
+        /* LAYOUT HELPERS */
         .field-group { margin-bottom: 12px; }
         .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .section-title { font-size: 11px; font-weight: bold; color: #007bff; margin: 15px 0 5px 0; border-bottom: 1px dashed #ccc; padding-bottom: 2px; }
-
-        /* FILE INPUT */
-        .file-wrapper { background: #eef; padding: 10px; border-radius: 5px; border: 1px dashed #007bff; text-align: center; margin-top: 5px; }
         
-        /* FLOATING BUTTONS */
+        .file-wrapper { background: #eef; padding: 10px; border-radius: 5px; border: 1px dashed #007bff; text-align: center; margin-top: 5px; transition: all 0.3s ease; }
+        .file-wrapper.filled { border: 2px solid #28a745; background-color: #e8f5e9; }
+        
+        /* BUTTONS */
         .fab-container { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 100; }
         .btn { padding: 14px 24px; border: none; border-radius: 50px; font-weight: bold; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; font-size: 16px; }
         .btn-add { background: #333; }
         .btn-upload { background: #006400; }
-        .btn-refresh { background: #333; } /* New Style for Refresh */
+        .btn-refresh { background: #333; }
         
         .btn-copy { background: #e6f7ff; color: #0050b3; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; float: right; cursor: pointer; }
         .btn-copy:active { background: #cfe4ff; }
@@ -86,32 +97,72 @@
 
     <div id="logs"></div>
 
-    <script>
-        const productCats = [
-            "lace", "latkan", "thread", "aster", "fall", "blouse piece", 
-            "plain saten", "plain crape", "plain cotton", "plain reyon", 
-            "net", "organza", "jorget", "banarasi", "velvet", "cotton"
-        ];
-
-        const serviceCats = [
-            "blouse", "kurti pant", "kurti patyala", "kurti palazzo", "kurti", 
-            "garara", "sharara", "gown", "anarkali gown", "frock", 
-            "afgani kurti", "lehanga", "trendy lehanga", "saree fall & pico"
-        ];
-    </script>
+    <datalist id="cat-list">
+        <option value="lace"><option value="latkan"><option value="blouse piece"><option value="velvet"><option value="organza"><option value="cotton">
+    </datalist>
 
     <script>
         const container = document.getElementById('rows-container');
         const logBox = document.getElementById('logs');
         let rowCount = 0;
 
-        // Load saved data
+        // Category lists
+        const productCats = [
+            "lace", "latkan", "thread", "aster", "fall", "blouse piece", 
+            "plain saten", "plain crape", "plain cotton", "plain reyon", 
+            "net", "organza", "jorget", "banarasi", "velvet", "cotton"
+        ];
+        const serviceCats = [
+            "blouse", "kurti pant", "kurti patyala", "kurti palazzo", "kurti", 
+            "garara", "sharara", "gown", "anarkali gown", "frock", 
+            "afgani kurti", "lehanga", "trendy lehanga", "saree fall & pico"
+        ];
+
         window.onload = () => {
             document.getElementById('owner').value = localStorage.getItem('gh_owner') || '';
             document.getElementById('repo').value = localStorage.getItem('gh_repo') || '';
             document.getElementById('token').value = localStorage.getItem('gh_token') || '';
+            // Check initial config fields
+            checkConfigInputs();
             addRow();
         };
+
+        // --- 🟢 AUTO GREEN LOGIC ---
+        document.addEventListener('input', function(e) {
+            const el = e.target;
+            if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
+                validateInput(el);
+            }
+        });
+
+        document.addEventListener('change', function(e) {
+            const el = e.target;
+            // Handle File Input Wrapper
+            if(el.type === 'file') {
+                const wrapper = el.closest('.file-wrapper');
+                if(el.files.length > 0) wrapper.classList.add('filled');
+                else wrapper.classList.remove('filled');
+            }
+            // Handle Select Dropdowns
+            if(el.tagName === 'SELECT') {
+                validateInput(el);
+            }
+        });
+
+        function validateInput(el) {
+            if(el.value.trim() !== "") {
+                el.classList.add('filled');
+            } else {
+                el.classList.remove('filled');
+            }
+        }
+
+        function checkConfigInputs() {
+            ['owner', 'repo', 'token'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el && el.value) el.classList.add('filled');
+            });
+        }
 
         function resetRows() {
             if(rowCount > 0 && !confirm("Change Category? Current rows will be cleared.")) return;
@@ -125,13 +176,13 @@
             logBox.innerHTML += `<div>> ${msg}</div>`;
         }
 
-        // --- HELPER FUNCTIONS ---
+        // --- HELPERS ---
         const mkInp = (label, cls, ph, type="text") => `
             <div class="field-group">
                 <label>${label} ${rowCount===1 ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label>
                 ${type === 'textarea' 
                     ? `<textarea class="${cls}" rows="2" placeholder="${ph}"></textarea>`
-                    : `<input type="${type}" class="${cls}" placeholder="${ph}">`
+                    : `<input type="${type}" class="${cls}" placeholder="${ph}" ${label.includes('Category') ? 'list="cat-list"' : ''}>`
                 }
             </div>`;
 
@@ -140,7 +191,7 @@
             return `
             <div class="field-group">
                 <label>${label} ${rowCount===1 ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label>
-                <select class="${cls}">${opts}</select>
+                <select class="${cls}"><option value="">-- Select --</option>${opts}</select>
             </div>`;
         };
 
@@ -179,14 +230,16 @@
                 ${mkInp("Ideal For", "inp-ideal", "e.g. Saree Border")}
                 <div class="section-title">Policy</div>
                 <div class="two-col">${mkInp("Del. Charges", "inp-del-charge", "Free")}${mkInp("Return Policy", "inp-return", "No Returns")}</div>`;
-            } else if (type === 'services' || type === 'works') {
+            } 
+            else if (type === 'services' || type === 'works') {
                 html += `<div class="two-col">
                     ${mkInp("Price", "inp-price", "0", "number")}
                     ${mkSelect("Category", "inp-cat", serviceCats)}
                 </div>
                 ${mkInp("Description", "inp-desc", "Description...", "textarea")}
                 ${ type === 'services' ? mkInp("Service Info", "inp-serv-info", "Extra details...", "textarea") : '' }`;
-            } else if (type === 'designs') {
+            } 
+            else if (type === 'designs') {
                 html += `<div class="two-col">
                     ${mkInp("Charges (Price)", "inp-price", "0", "number")}
                     ${mkInp("Widely Use For", "inp-cat", "e.g. Blouse")} 
@@ -198,12 +251,17 @@
             setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
         }
 
+        // --- 🟢 AUTO GREEN ON COPY ---
         function copyAll(cls) {
             const val = document.querySelector(`.${cls}`).value;
+            if(!val) return alert("Fill this field first!");
+            
             document.querySelectorAll(`.${cls}`).forEach(el => {
                 el.value = val;
-                el.style.background = "#e6f7ff";
-                setTimeout(() => el.style.background = "white", 300);
+                el.classList.add('filled'); // Turn green immediately
+                el.style.transition = "0.3s";
+                el.style.transform = "scale(1.02)";
+                setTimeout(() => el.style.transform = "scale(1)", 200);
             });
         }
 
@@ -224,15 +282,10 @@
             const addBtn = document.getElementById('addBtn');
 
             if(!owner || !repo || !token) return alert("Fill GitHub Details first!");
-
-            localStorage.setItem('gh_owner', owner);
-            localStorage.setItem('gh_repo', repo);
-            localStorage.setItem('gh_token', token);
+            localStorage.setItem('gh_owner', owner); localStorage.setItem('gh_repo', repo); localStorage.setItem('gh_token', token);
 
             const rows = document.querySelectorAll('.card');
-            btn.innerText = "Uploading... (Do not close)";
-            btn.disabled = true;
-            addBtn.disabled = true;
+            btn.innerText = "Uploading..."; btn.disabled = true; addBtn.disabled = true;
             log("Starting upload process...");
 
             for (const row of rows) {
@@ -242,13 +295,12 @@
                 
                 if(!title) continue;
 
-                // Unique Slug
                 const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
                 const uniqueId = Date.now().toString().slice(-4);
                 const finalSlug = `${slug}-${uniqueId}`;
                 const date = new Date().toISOString();
                 
-                // 1. UPLOAD IMAGE
+                // 1. IMAGE
                 let imagePath = "";
                 if(fileInput.files.length > 0) {
                     const file = fileInput.files[0];
@@ -265,7 +317,7 @@
                     } catch(e) { log(`❌ Image Error`); }
                 }
 
-                // 2. UPLOAD DATA
+                // 2. DATA
                 let layout = "product.liquid";
                 if(folder === 'designs') layout = "design.liquid";
                 if(folder === 'services' || folder === 'works') layout = "service.liquid";
@@ -281,7 +333,6 @@ category: "${getVal('inp-cat')}"
 description: "${getVal('inp-desc').replace(/"/g, '\\"')}"
 permalink: false
 `;
-                // Add Extras based on folder type (Same logic as before)
                 if(folder === 'products') {
                     if(getVal('inp-size')) content += `size: "${getVal('inp-size')}"\n`;
                     if(getVal('inp-color')) content += `colour: "${getVal('inp-color')}"\n`;
@@ -312,24 +363,18 @@ permalink: false
                         row.style.borderLeft = "5px solid green";
                         row.style.opacity = "0.5";
                     } else {
-                        log(`❌ Data Error`);
+                        log(`❌ Error: Check Token`);
                         row.style.borderLeft = "5px solid red";
                     }
                 } catch(err) { log(`❌ Net Error`); }
             }
             
-            // --- BUTTON CHANGE LOGIC ---
+            // BUTTON CHANGE
             btn.innerText = "Done! Refresh 🔄";
             btn.style.backgroundColor = "#333";
-            btn.classList.add("btn-refresh");
+            btn.onclick = function() { location.reload(); };
             btn.disabled = false;
-            
-            // Change action to Reload
-            btn.onclick = function() {
-                location.reload();
-            };
-            
-            alert("Upload Complete! Click Refresh button to start new batch.");
+            alert("Upload Complete!");
         }
     </script>
 </body>
