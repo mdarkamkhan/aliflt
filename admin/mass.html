@@ -24,7 +24,7 @@
         /* ✅ FILLED STATE (GREEN) */
         .filled {
             border: 2px solid #28a745 !important;
-            background-color: #e8f5e9 !important; /* Light Green */
+            background-color: #e8f5e9 !important;
         }
 
         /* CARD STYLE */
@@ -38,9 +38,20 @@
         .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .section-title { font-size: 11px; font-weight: bold; color: #007bff; margin: 15px 0 5px 0; border-bottom: 1px dashed #ccc; padding-bottom: 2px; }
         
+        /* IMAGE PREVIEW BOX */
         .file-wrapper { background: #eef; padding: 10px; border-radius: 5px; border: 1px dashed #007bff; text-align: center; margin-top: 5px; transition: all 0.3s ease; }
         .file-wrapper.filled { border: 2px solid #28a745; background-color: #e8f5e9; }
         
+        .img-preview {
+            display: none; /* Hidden initially */
+            width: 100px; height: 100px; 
+            object-fit: cover; 
+            border-radius: 5px; 
+            margin: 10px auto 0 auto; 
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
         /* BUTTONS */
         .fab-container { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 100; }
         .btn { padding: 14px 24px; border: none; border-radius: 50px; font-weight: bold; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; font-size: 16px; }
@@ -106,7 +117,6 @@
         const logBox = document.getElementById('logs');
         let rowCount = 0;
 
-        // Category lists
         const productCats = [
             "lace", "latkan", "thread", "aster", "fall", "blouse piece", 
             "plain saten", "plain crape", "plain cotton", "plain reyon", 
@@ -122,12 +132,11 @@
             document.getElementById('owner').value = localStorage.getItem('gh_owner') || '';
             document.getElementById('repo').value = localStorage.getItem('gh_repo') || '';
             document.getElementById('token').value = localStorage.getItem('gh_token') || '';
-            // Check initial config fields
             checkConfigInputs();
             addRow();
         };
 
-        // --- 🟢 AUTO GREEN LOGIC ---
+        // --- 🟢 AUTO GREEN & PREVIEW LOGIC ---
         document.addEventListener('input', function(e) {
             const el = e.target;
             if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
@@ -135,25 +144,30 @@
             }
         });
 
-        document.addEventListener('change', function(e) {
-            const el = e.target;
-            // Handle File Input Wrapper
-            if(el.type === 'file') {
-                const wrapper = el.closest('.file-wrapper');
-                if(el.files.length > 0) wrapper.classList.add('filled');
-                else wrapper.classList.remove('filled');
-            }
-            // Handle Select Dropdowns
-            if(el.tagName === 'SELECT') {
-                validateInput(el);
-            }
-        });
-
         function validateInput(el) {
-            if(el.value.trim() !== "") {
-                el.classList.add('filled');
+            if(el.type !== 'file') {
+                if(el.value.trim() !== "") el.classList.add('filled');
+                else el.classList.remove('filled');
+            }
+        }
+
+        // --- IMAGE PREVIEW FUNCTION ---
+        window.previewImage = function(input) {
+            const file = input.files[0];
+            const wrapper = input.closest('.file-wrapper');
+            const img = wrapper.querySelector('.img-preview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                    img.style.display = 'block'; // Show Image
+                    wrapper.classList.add('filled'); // Turn Green
+                }
+                reader.readAsDataURL(file);
             } else {
-                el.classList.remove('filled');
+                img.style.display = 'none';
+                wrapper.classList.remove('filled');
             }
         }
 
@@ -191,7 +205,7 @@
             return `
             <div class="field-group">
                 <label>${label} ${rowCount===1 ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label>
-                <select class="${cls}"><option value="">-- Select --</option>${opts}</select>
+                <select class="${cls}" onchange="validateInput(this)"><option value="">-- Select --</option>${opts}</select>
             </div>`;
         };
 
@@ -213,7 +227,8 @@
                 <div class="field-group">
                     <label>Image *</label>
                     <div class="file-wrapper">
-                        <input type="file" class="inp-file" accept="image/*">
+                        <input type="file" class="inp-file" accept="image/*" onchange="previewImage(this)">
+                        <img class="img-preview">
                     </div>
                 </div>`;
 
@@ -251,14 +266,13 @@
             setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
         }
 
-        // --- 🟢 AUTO GREEN ON COPY ---
         function copyAll(cls) {
             const val = document.querySelector(`.${cls}`).value;
             if(!val) return alert("Fill this field first!");
             
             document.querySelectorAll(`.${cls}`).forEach(el => {
                 el.value = val;
-                el.classList.add('filled'); // Turn green immediately
+                el.classList.add('filled');
                 el.style.transition = "0.3s";
                 el.style.transform = "scale(1.02)";
                 setTimeout(() => el.style.transform = "scale(1)", 200);
@@ -372,6 +386,7 @@ permalink: false
             // BUTTON CHANGE
             btn.innerText = "Done! Refresh 🔄";
             btn.style.backgroundColor = "#333";
+            btn.classList.add("btn-refresh");
             btn.onclick = function() { location.reload(); };
             btn.disabled = false;
             alert("Upload Complete!");
