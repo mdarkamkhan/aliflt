@@ -9,44 +9,37 @@ layout: base.liquid
       {% if image %}
         <img src="{{ image }}" alt="{{ title | escape }}" style="width:100%; border:1px solid #eee;">
       {% else %}
-        <img src="/icons/icon-512x512.png" alt="Design image">
+        <img src="/icons/icon-512x512.png" alt="Design">
       {% endif %}
     </div>
 
     <div class="product-detail-info">
-      <h1 class="product-detail-title" style="font-size: 2rem; margin-bottom: 10px;">{{ title }}</h1>
+      <h1 class="product-detail-title">{{ title }}</h1>
 
-      {% if price and price > 0 %}
-        <p class="product-detail-price" style="font-size: 1.2rem; font-weight: bold; margin: 15px 0;">
+      {% if price %}
+        <p class="product-detail-price" style="font-size: 1.2rem; font-weight: bold;">
             Charges: ₹{{ price }}
-        </p>
-      {% else %}
-         <p class="product-detail-price" style="font-size: 1.2rem; color: #777; margin: 15px 0;">
-            Price on Request
         </p>
       {% endif %}
 
       {% if category %}
-        <p class="product-detail-category" style="color:#666; text-transform: uppercase; letter-spacing:1px;">
-            Use: {{ category }}
-        </p>
+        <p class="product-detail-category">Use: {{ category }}</p>
       {% endif %}
 
-      <div class="product-description" style="margin-top: 20px; margin-bottom: 30px; line-height: 1.6;">
+      <div class="product-description" style="margin: 20px 0;">
         {{ content }}
       </div>
 
       <div class="product-detail-actions">
         {%- capture wapp_message -%}
-        Hello,
-        I am interested in this design: {{ title }}
+        Hello, I am interested in this design: {{ title }}
         Link: https://aliflt.netlify.app{{ page.url }}
         {%- endcapture -%}
 
         <a href="https://wa.me/7250470009?text={{ wapp_message | strip | url_encode }}" 
            class="btn-buy" 
            target="_blank"
-           style="display:inline-block; width:100%; text-align:center;">
+           style="width:100%; text-align:center;">
           Request This Design
         </a>
       </div>
