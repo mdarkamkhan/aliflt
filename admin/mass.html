@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALiF Super Uploader</title>
+    <title>ALiF Ultimate Uploader</title>
     <style>
         /* --- STYLING --- */
         body { font-family: sans-serif; padding: 15px; background: #f0f2f5; padding-bottom: 120px; }
-        h2 { text-align: center; color: #333; margin-top: 0; margin-bottom: 20px; }
+        h2 { text-align: center; color: #333; margin-top: 0; }
         
         /* CONFIG BOX */
-        .config-box { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-top: 5px solid #007bff; }
+        .config-box { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #007bff; }
         .config-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
         label { font-size: 12px; font-weight: bold; color: #555; text-transform: uppercase; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; box-sizing: border-box; }
-        input:focus, textarea:focus { border-color: #007bff; outline: none; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; box-sizing: border-box; background: #fff; }
+        input:focus, textarea:focus, select:focus { border-color: #007bff; outline: none; }
 
         /* PRODUCT CARD */
-        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #333; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #000; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .card-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .row-num { font-weight: bold; font-size: 1.1em; color: #007bff; }
-        .btn-del { color: red; font-weight: bold; background: none; border: none; font-size: 24px; padding: 0 10px; cursor: pointer; }
+        .row-num { font-weight: bold; font-size: 1.1em; }
+        .btn-del { color: red; font-weight: bold; background: none; border: none; font-size: 24px; padding: 0 10px; }
 
         /* FIELD GROUPS */
         .field-group { margin-bottom: 12px; }
@@ -35,6 +35,7 @@
         .btn { padding: 14px 24px; border: none; border-radius: 50px; font-weight: bold; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; font-size: 16px; }
         .btn-add { background: #333; }
         .btn-upload { background: #006400; }
+        .btn-refresh { background: #333; } /* New Style for Refresh */
         
         .btn-copy { background: #e6f7ff; color: #0050b3; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; float: right; cursor: pointer; }
         .btn-copy:active { background: #cfe4ff; }
@@ -45,23 +46,23 @@
 </head>
 <body>
 
-    <h2>🚀 Super Uploader</h2>
+    <h2>🚀 Ultimate Uploader</h2>
     
     <div class="config-box">
         <div class="config-row">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                 <div>
                     <label>GitHub User</label>
-                    <input type="text" id="owner" placeholder="e.g. arkamkhan">
+                    <input type="text" id="owner">
                 </div>
                 <div>
                     <label>Repo Name</label>
-                    <input type="text" id="repo" placeholder="e.g. aliflt">
+                    <input type="text" id="repo">
                 </div>
             </div>
             <div>
                 <label>Token (Paste Once)</label>
-                <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxx">
+                <input type="password" id="token">
             </div>
             <div>
                 <label>Upload To:</label>
@@ -79,22 +80,32 @@
     <div id="rows-container"></div>
 
     <div class="fab-container">
-        <button class="btn btn-add" onclick="addRow()">+ Add</button>
-        <button class="btn btn-upload" id="uploadBtn" onclick="startUpload()">Upload All 🚀</button>
+        <button class="btn btn-add" id="addBtn" onclick="addRow()">+ Add</button>
+        <button class="btn btn-upload" id="uploadBtn" onclick="startUpload()">Upload 🚀</button>
     </div>
 
     <div id="logs"></div>
 
-    <datalist id="cat-list">
-        <option value="lace"><option value="latkan"><option value="blouse piece"><option value="velvet"><option value="organza"><option value="cotton">
-    </datalist>
+    <script>
+        const productCats = [
+            "lace", "latkan", "thread", "aster", "fall", "blouse piece", 
+            "plain saten", "plain crape", "plain cotton", "plain reyon", 
+            "net", "organza", "jorget", "banarasi", "velvet", "cotton"
+        ];
+
+        const serviceCats = [
+            "blouse", "kurti pant", "kurti patyala", "kurti palazzo", "kurti", 
+            "garara", "sharara", "gown", "anarkali gown", "frock", 
+            "afgani kurti", "lehanga", "trendy lehanga", "saree fall & pico"
+        ];
+    </script>
 
     <script>
         const container = document.getElementById('rows-container');
         const logBox = document.getElementById('logs');
         let rowCount = 0;
 
-        // Load saved GitHub details
+        // Load saved data
         window.onload = () => {
             document.getElementById('owner').value = localStorage.getItem('gh_owner') || '';
             document.getElementById('repo').value = localStorage.getItem('gh_repo') || '';
@@ -114,24 +125,32 @@
             logBox.innerHTML += `<div>> ${msg}</div>`;
         }
 
-        // --- DYNAMIC FORM BUILDER ---
+        // --- HELPER FUNCTIONS ---
+        const mkInp = (label, cls, ph, type="text") => `
+            <div class="field-group">
+                <label>${label} ${rowCount===1 ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label>
+                ${type === 'textarea' 
+                    ? `<textarea class="${cls}" rows="2" placeholder="${ph}"></textarea>`
+                    : `<input type="${type}" class="${cls}" placeholder="${ph}">`
+                }
+            </div>`;
+
+        const mkSelect = (label, cls, options) => {
+            let opts = options.map(o => `<option value="${o}">${o.toUpperCase()}</option>`).join('');
+            return `
+            <div class="field-group">
+                <label>${label} ${rowCount===1 ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label>
+                <select class="${cls}">${opts}</select>
+            </div>`;
+        };
+
+        // --- ADD ROW ---
         function addRow() {
             rowCount++;
             const div = document.createElement('div');
             div.className = 'card';
-            const isFirst = rowCount === 1;
             const type = document.getElementById('folder').value;
             
-            // Helper to create inputs
-            const mkInp = (label, cls, ph, type="text") => `
-                <div class="field-group">
-                    <label>${label} ${isFirst ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label>
-                    ${type === 'textarea' 
-                        ? `<textarea class="${cls}" rows="2" placeholder="${ph}"></textarea>`
-                        : `<input type="${type}" class="${cls}" placeholder="${ph}" ${label === 'Category' ? 'list="cat-list"' : ''}>`
-                    }
-                </div>`;
-
             let html = `
                 <div class="card-header">
                     <span class="row-num">#${rowCount}</span>
@@ -141,59 +160,41 @@
                 ${mkInp("Title *", "inp-title", "Item Name")}
                 
                 <div class="field-group">
-                    <label>Image (Select from Gallery) *</label>
+                    <label>Image *</label>
                     <div class="file-wrapper">
                         <input type="file" class="inp-file" accept="image/*">
                     </div>
                 </div>`;
 
-            // --- TYPE SPECIFIC FIELDS ---
-            
-            if (type !== 'offers') {
-                // Common for Products, Services, Works, Designs
+            if (type === 'products') {
                 html += `<div class="two-col">
                     ${mkInp("Price", "inp-price", "0", "number")}
-                    ${mkInp("Category", "inp-cat", "Select/Type")}
-                </div>`;
-                
-                if (type === 'designs') {
-                    // Designs use Price/Category but minimal description
-                } else {
-                    html += mkInp("Description", "inp-desc", "Details...", "textarea");
-                }
-            }
-
-            // --- PRODUCT SPECIFIC FIELDS ---
-            if (type === 'products') {
-                html += `<div class="section-title">Product Details</div>`;
+                    ${mkSelect("Category", "inp-cat", productCats)}
+                </div>
+                ${mkInp("Description", "inp-desc", "Details...", "textarea")}
+                <div class="section-title">Details</div>
+                <div class="two-col">${mkInp("Size", "inp-size", "e.g. 9m")}${mkInp("Color", "inp-color", "e.g. Red")}</div>
+                <div class="two-col">${mkInp("Pieces/Meter", "inp-pieces", "e.g. 1 Bundle")}${mkInp("Fabric", "inp-fabric", "e.g. Velvet")}</div>
+                <div class="two-col">${mkInp("Work", "inp-work", "e.g. Dhaga")}${mkInp("Pattern", "inp-pattern", "e.g. Floral")}</div>
+                ${mkInp("Ideal For", "inp-ideal", "e.g. Saree Border")}
+                <div class="section-title">Policy</div>
+                <div class="two-col">${mkInp("Del. Charges", "inp-del-charge", "Free")}${mkInp("Return Policy", "inp-return", "No Returns")}</div>`;
+            } else if (type === 'services' || type === 'works') {
                 html += `<div class="two-col">
-                    ${mkInp("Size", "inp-size", "e.g. 9m")}
-                    ${mkInp("Color", "inp-color", "e.g. Red")}
-                </div>`;
+                    ${mkInp("Price", "inp-price", "0", "number")}
+                    ${mkSelect("Category", "inp-cat", serviceCats)}
+                </div>
+                ${mkInp("Description", "inp-desc", "Description...", "textarea")}
+                ${ type === 'services' ? mkInp("Service Info", "inp-serv-info", "Extra details...", "textarea") : '' }`;
+            } else if (type === 'designs') {
                 html += `<div class="two-col">
-                    ${mkInp("Pieces/Meter", "inp-pieces", "e.g. 1 Bundle")}
-                    ${mkInp("Fabric", "inp-fabric", "e.g. Velvet")}
+                    ${mkInp("Charges (Price)", "inp-price", "0", "number")}
+                    ${mkInp("Widely Use For", "inp-cat", "e.g. Blouse")} 
                 </div>`;
-                html += `<div class="two-col">
-                    ${mkInp("Work", "inp-work", "e.g. Dhaga")}
-                    ${mkInp("Pattern", "inp-pattern", "e.g. Floral")}
-                </div>`;
-                html += mkInp("Ideal For", "inp-ideal", "e.g. Saree Border");
-
-                html += `<div class="section-title">Policy</div>`;
-                html += `<div class="two-col">
-                    ${mkInp("Del. Charges", "inp-del-charge", "Free")}
-                    ${mkInp("Return Policy", "inp-return", "No Returns")}
-                </div>`;
-            }
-
-            if (type === 'services') {
-                html += mkInp("Service Info", "inp-serv-info", "Extra details...", "textarea");
             }
 
             div.innerHTML = html;
             container.appendChild(div);
-            // Scroll to new row
             setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
         }
 
@@ -206,7 +207,7 @@
             });
         }
 
-        // --- UPLOAD LOGIC (Direct GitHub API) ---
+        // --- UPLOAD LOGIC ---
         const toBase64 = file => new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -220,17 +221,18 @@
             const token = document.getElementById('token').value.trim();
             const folder = document.getElementById('folder').value;
             const btn = document.getElementById('uploadBtn');
+            const addBtn = document.getElementById('addBtn');
 
             if(!owner || !repo || !token) return alert("Fill GitHub Details first!");
 
-            // Save Config locally for next time
             localStorage.setItem('gh_owner', owner);
             localStorage.setItem('gh_repo', repo);
             localStorage.setItem('gh_token', token);
 
             const rows = document.querySelectorAll('.card');
-            btn.innerText = "Uploading...";
+            btn.innerText = "Uploading... (Do not close)";
             btn.disabled = true;
+            addBtn.disabled = true;
             log("Starting upload process...");
 
             for (const row of rows) {
@@ -240,41 +242,30 @@
                 
                 if(!title) continue;
 
-                // Unique Slug logic to avoid conflicts
-                const cleanTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+                // Unique Slug
+                const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
                 const uniqueId = Date.now().toString().slice(-4);
-                const slug = `${cleanTitle}-${uniqueId}`;
+                const finalSlug = `${slug}-${uniqueId}`;
                 const date = new Date().toISOString();
                 
-                // 1. UPLOAD IMAGE FIRST (If selected)
+                // 1. UPLOAD IMAGE
                 let imagePath = "";
                 if(fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     log(`Uploading Image: ${file.name}...`);
-                    
-                    const cleanFileName = file.name.replace(/\s+/g, '-').toLowerCase();
-                    const uniqueFileName = `${Date.now()}-${cleanFileName}`;
-                    
+                    const uniqueFileName = `${Date.now()}-${file.name.replace(/\s+/g, '-').toLowerCase()}`;
                     try {
                         const base64Content = await toBase64(file);
-                        const imgUrl = `https://api.github.com/repos/${owner}/${repo}/contents/uploads/${uniqueFileName}`;
-                        
-                        const res = await fetch(imgUrl, {
+                        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/uploads/${uniqueFileName}`, {
                             method: 'PUT',
                             headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                             body: JSON.stringify({ message: `Img: ${title}`, content: base64Content })
                         });
-                        
-                        if(res.ok) {
-                            imagePath = `/uploads/${uniqueFileName}`;
-                        } else {
-                            const err = await res.json();
-                            log(`❌ Image Error: ${err.message}`);
-                        }
-                    } catch(e) { log(`❌ Image Net Error`); }
+                        if(res.ok) imagePath = `/uploads/${uniqueFileName}`;
+                    } catch(e) { log(`❌ Image Error`); }
                 }
 
-                // 2. PREPARE FRONTMATTER
+                // 2. UPLOAD DATA
                 let layout = "product.liquid";
                 if(folder === 'designs') layout = "design.liquid";
                 if(folder === 'services' || folder === 'works') layout = "service.liquid";
@@ -290,7 +281,7 @@ category: "${getVal('inp-cat')}"
 description: "${getVal('inp-desc').replace(/"/g, '\\"')}"
 permalink: false
 `;
-                // Add Product Extras
+                // Add Extras based on folder type (Same logic as before)
                 if(folder === 'products') {
                     if(getVal('inp-size')) content += `size: "${getVal('inp-size')}"\n`;
                     if(getVal('inp-color')) content += `colour: "${getVal('inp-color')}"\n`;
@@ -307,39 +298,38 @@ permalink: false
                 if(folder === 'services' && getVal('inp-serv-info')) {
                     content += `service_information: "${getVal('inp-serv-info').replace(/"/g, '\\"')}"\n`;
                 }
-
                 content += `---`;
 
-                // 3. UPLOAD MD FILE
                 const contentEncoded = btoa(unescape(encodeURIComponent(content)));
-                const url = `https://api.github.com/repos/${owner}/${repo}/contents/${folder}/${slug}.md`;
-
                 try {
-                    // PUT Request (Create File)
-                    const body = { message: `Add ${title}`, content: contentEncoded };
-                    const res = await fetch(url, {
+                    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}/${finalSlug}.md`, {
                         method: 'PUT',
                         headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify(body)
+                        body: JSON.stringify({ message: `Add ${title}`, content: contentEncoded })
                     });
-
                     if(res.ok) {
-                        log(`✅ Success: ${title}`);
+                        log(`✅ Uploaded: ${title}`);
                         row.style.borderLeft = "5px solid green";
                         row.style.opacity = "0.5";
                     } else {
-                        const err = await res.json();
-                        log(`❌ Data Error: ${err.message}`);
+                        log(`❌ Data Error`);
                         row.style.borderLeft = "5px solid red";
                     }
-                } catch(err) {
-                    log(`❌ Network Error`);
-                }
+                } catch(err) { log(`❌ Net Error`); }
             }
             
-            btn.innerText = "Done! Refresh Page";
+            // --- BUTTON CHANGE LOGIC ---
+            btn.innerText = "Done! Refresh 🔄";
+            btn.style.backgroundColor = "#333";
+            btn.classList.add("btn-refresh");
             btn.disabled = false;
-            alert("Upload Process Finished! Check Logs.");
+            
+            // Change action to Reload
+            btn.onclick = function() {
+                location.reload();
+            };
+            
+            alert("Upload Complete! Click Refresh button to start new batch.");
         }
     </script>
 </body>
