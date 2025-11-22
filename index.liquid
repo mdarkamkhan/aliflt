@@ -6,7 +6,9 @@ permalink: /
 
 <div id="top-banner">
     <div class="swapper-container banner-swapper">
-        {% for item in collections.offers %}
+        {% assign banners = collections.offer | reverse %}
+        
+        {% for item in banners %}
         <div class="swapper-item {% if forloop.first %}active{% endif %}">
             <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
             <div class="banner-content">
@@ -14,9 +16,13 @@ permalink: /
             </div>
         </div>
         {% endfor %}
-        {% if collections.offers.length == 0 %}
+        
+        {% if banners.size == 0 %}
             <p class='empty-gallery-message'>Loading offers...</p>
         {% endif %}
+        
+        <button class="prev-btn">&#10094;</button>
+        <button class="next-btn">&#10095;</button>
     </div>
 </div>
 
@@ -24,13 +30,13 @@ permalink: /
     <div class="prada-panel-label">ALiF Products</div>
     
     <div class="swapper-container products-panel-gallery">
-        {% for item in collections.products %}
+        {% for item in collections.product reversed limit:5 %}
         <div class="swapper-item {% if forloop.first %}active{% endif %}">
             <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
         </div>
         {% endfor %}
 
-        {% if collections.products.length == 0 %}
+        {% if collections.product.size == 0 %}
             <p class='empty-gallery-message'>Products coming soon.</p>
         {% endif %}
     </div>
@@ -40,13 +46,13 @@ permalink: /
     <div class="prada-panel-label">ALiF Services</div>
     
     <div class="swapper-container services-panel-gallery">
-        {% for item in collections.services %}
+        {% for item in collections.service reversed limit:5 %}
         <div class="swapper-item {% if forloop.first %}active{% endif %}">
             <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
         </div>
         {% endfor %}
 
-        {% if collections.services.length == 0 %}
+        {% if collections.service.size == 0 %}
             <p class='empty-gallery-message'>Services coming soon.</p>
         {% endif %}
     </div>
@@ -56,13 +62,13 @@ permalink: /
     <div class="prada-panel-label">ALiF Works</div>
     
     <div class="swapper-container works-panel-gallery">
-        {% for item in collections.works %}
+        {% for item in collections.work reversed limit:5 %}
         <div class="swapper-item {% if forloop.first %}active{% endif %}">
             <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
         </div>
         {% endfor %}
 
-        {% if collections.works.length == 0 %}
+        {% if collections.work.size == 0 %}
             <p class='empty-gallery-message'>Our work coming soon.</p>
         {% endif %}
     </div>
@@ -72,24 +78,14 @@ permalink: /
     <div class="prada-panel-label">ALiF Designs</div>
     
     <div class="swapper-container designs-panel-gallery">
-        {% for item in collections.designs %}
+        {% for item in collections.design reversed limit:5 %}
         <div class="swapper-item {% if forloop.first %}active{% endif %}">
             <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
         </div>
         {% endfor %}
 
-        {% if collections.designs.length == 0 %}
+        {% if collections.design.size == 0 %}
             <p class='empty-gallery-message'>Designs coming soon.</p>
         {% endif %}
     </div>
 </a>
-{% comment %}
-<div class="container section">
-    <h2>Our Services & Works</h2>
-    <div class="product-grid">
-    </div>
-</div>
-{% endcomment %}
-
-        </details>
-</div>
