@@ -7,43 +7,84 @@ layout: base.liquid
 
     <div class="product-detail-image">
       {% if image %}
-        <img src="{{ image }}" alt="{{ title | escape }}" style="width:100%; border:1px solid #eee;">
+        <img src="{{ image }}" alt="{{ title | escape }}" style="width:100%; border:1px solid #f0f0f0;">
       {% else %}
         <img src="/icons/icon-512x512.png" alt="Design">
       {% endif %}
     </div>
 
-    <div class="product-detail-info">
-      <h1 class="product-detail-title">{{ title }}</h1>
+    <div class="product-detail-info" style="display: flex; flex-direction: column; justify-content: center;">
+      
+      <h1 class="product-detail-title" style="font-size: 2.2rem; margin-bottom: 5px; letter-spacing: 1px;">{{ title }}</h1>
 
-      {% if price %}
-        <p class="product-detail-price" style="font-size: 1.2rem; font-weight: bold;">
+      {% if price and price > 0 %}
+        <p class="product-detail-price" style="font-size: 1.3rem; font-weight: 400; color: #333; margin-top: 10px;">
             Charges: ₹{{ price }}
+        </p>
+      {% else %}
+         <p class="product-detail-price" style="font-size: 1.2rem; color: #777; margin-top: 10px;">
+            Price on Request
         </p>
       {% endif %}
 
       {% if category %}
-        <p class="product-detail-category">Use: {{ category }}</p>
+        <p class="product-detail-category" style="color:#888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-top: 0;">
+            USE: {{ category }}
+        </p>
       {% endif %}
 
-      <div class="product-description" style="margin: 20px 0;">
-        {{ content }}
-      </div>
-
-      <div class="product-detail-actions">
+      <div class="product-detail-actions" style="margin-top: 30px;">
         {%- capture wapp_message -%}
-        Hello, I am interested in this design: {{ title }}
+        Hello ALiF,
+        I am interested in getting this design made: {{ title }}
         Link: https://aliflt.netlify.app{{ page.url }}
         {%- endcapture -%}
 
         <a href="https://wa.me/7250470009?text={{ wapp_message | strip | url_encode }}" 
-           class="btn-buy" 
            target="_blank"
-           style="width:100%; text-align:center;">
-          Request This Design
+           style="
+               display: block;
+               width: 100%;
+               background-color: #000;
+               color: #fff;
+               text-align: center;
+               padding: 18px 0;
+               text-decoration: none;
+               text-transform: uppercase;
+               letter-spacing: 2px;
+               font-size: 0.9rem;
+               font-weight: 500;
+               border: 1px solid #000;
+               transition: all 0.3s ease;
+               cursor: pointer;
+           "
+           onmouseover="this.style.backgroundColor='#fff'; this.style.color='#000';"
+           onmouseout="this.style.backgroundColor='#000'; this.style.color='#fff';">
+          REQUEST THIS DESIGN
         </a>
+        
+        <p style="text-align: center; font-size: 0.75rem; color: #777; margin-top: 10px; font-style: italic;">
+            * Customize color and fabric as per your need
+        </p>
       </div>
+
     </div>
 
   </div>
 </div>
+
+{% if content and content != "" %}
+<div class="product-accordion-container" style="margin-top: 40px;">
+  <details class="accordion-item" open>
+    <summary class="accordion-summary">
+      <h3 class="accordion-heading">Design Details</h3>
+      <span class="accordion-caret">^</span>
+    </summary>
+    <div class="accordion-content">
+      <div class="product-description" style="line-height: 1.8; color: #444;">
+        {{ content }}
+      </div>
+    </div>
+  </details>
+</div>
+{% endif %}
