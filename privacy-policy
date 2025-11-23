@@ -1,0 +1,38 @@
+---
+layout: base.liquid
+title: Privacy Policy
+permalink: /privacy-policy/
+---
+
+<div class="container section" style="max-width: 800px; margin: 0 auto; padding: 80px 20px;">
+    <h1 style="font-family: var(--font-heading); text-transform: uppercase; text-align: center; margin-bottom: 50px; letter-spacing: 2px;">Privacy Policy</h1>
+    
+    <div style="font-family: var(--font-body); line-height: 1.8; color: #444; font-size: 0.95rem;">
+        <p><strong>Last Updated:</strong> November 2025</p>
+        
+        <h3 style="margin-top: 30px; text-transform: uppercase; font-size: 1.1rem; color: #000;">1. Overview</h3>
+        <p>At ALiF Ladies Tailor, we value your privacy. This policy outlines how we handle your personal information when you visit our website or place an order.</p>
+
+        <h3 style="margin-top: 30px; text-transform: uppercase; font-size: 1.1rem; color: #000;">2. Information We Collect</h3>
+        <p>We collect minimal information necessary to process your orders and measurements:</p>
+        <ul>
+            <li>Name and Phone Number (for WhatsApp communication).</li>
+            <li>Measurement details for custom stitching.</li>
+            <li>Delivery address for shipping.</li>
+        </ul>
+
+        <h3 style="margin-top: 30px; text-transform: uppercase; font-size: 1.1rem; color: #000;">3. How We Use Your Info</h3>
+        <p>Your data is used solely for:</p>
+        <ul>
+            <li>Processing your stitching or product orders.</li>
+            <li>Contacting you regarding fittings or delivery updates.</li>
+            <li>Improving our catalogue and services.</li>
+        </ul>
+
+        <h3 style="margin-top: 30px; text-transform: uppercase; font-size: 1.1rem; color: #000;">4. Data Security</h3>
+        <p>We do not sell or share your personal data with third-party advertisers. Your measurement data is stored securely offline for future orders.</p>
+
+        <h3 style="margin-top: 30px; text-transform: uppercase; font-size: 1.1rem; color: #000;">5. Contact Us</h3>
+        <p>If you have questions about your data, please contact us at <strong>alifladiestailor@gmail.com</strong> or visit our store in Sahibganj.</p>
+    </div>
+</div>
