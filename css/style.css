@@ -1453,7 +1453,7 @@ details[open] .pm-icon-minus { display: block; }
     bottom: 50px; /* Thoda upar uthega animation ke sath */
 }
 /* =========================================
-   PREMIUM OPENING SPLASH SCREEN
+   PREMIUM ANIMATED SPLASH SCREEN
 ========================================= */
 #app-splash {
     position: fixed;
@@ -1461,53 +1461,73 @@ details[open] .pm-icon-minus { display: block; }
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #FBF9F6; /* Website ka Bg Color */
-    z-index: 99999; /* Sabse upar */
+    background-color: #ffffff; /* Pure White for clean look */
+    z-index: 99999;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     transition: opacity 0.8s ease-out, visibility 0.8s;
 }
 
-/* Hide Class (JS add karega) */
+/* Hiding Class */
 #app-splash.hidden {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
 
-.splash-content {
-    text-align: center;
-    animation: fadeInUp 1.2s ease-out forwards;
-}
-
+/* 1. LOGO ANIMATION (ALiF) */
 .splash-logo {
-    font-family: 'Playfair Display', serif; /* Luxury Font */
-    font-size: 3.5rem;
-    font-weight: 400;
-    letter-spacing: 3px;
+    font-family: 'Playfair Display', serif;
+    font-size: 4.5rem; /* Bada size */
+    font-weight: 500;
     color: #000;
     margin: 0;
+    opacity: 0; /* Pehle chupa rahega */
+    
+    /* Animation: Name | Duration | Timing | Fill Mode */
+    animation: luxuryReveal 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+/* 2. SUBTITLE ANIMATION (Ladies Tailor) */
 .splash-sub {
     font-family: 'Poppins', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 4px;
+    letter-spacing: 6px; /* Wide spacing looks rich */
     color: #666;
-    margin-top: 5px;
+    margin-top: 10px;
     opacity: 0;
-    animation: fadeIn 1s ease-out 0.5s forwards; /* Thoda late aayega */
+    
+    /* Thoda late aayega (0.5s delay) */
+    animation: fadeInUp 1s ease-out 0.6s forwards;
 }
 
-/* Animations */
+/* --- KEYFRAMES (Magic Happens Here) --- */
+
+/* Logo: Neeche se upar + Size normal + Failna */
+@keyframes luxuryReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(1.1); /* Thoda neeche aur bada */
+        letter-spacing: -2px; /* Chipka hua */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1); /* Normal position */
+        letter-spacing: 2px; /* Thoda khula hua */
+    }
+}
+
+/* Subtitle: Neeche se upar fade in */
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
