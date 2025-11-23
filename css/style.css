@@ -1467,7 +1467,7 @@ details[open] .pm-icon-minus { display: block; }
     }
 }
 
-/* S/* =========================================
+/* =========================================
    LOGO IMAGE ANIMATION
 ========================================= */
 
@@ -1497,16 +1497,5 @@ details[open] .pm-icon-minus { display: block; }
     100% {
         opacity: 1;
         transform: scale(1); /* Normal size */
-    }
-}
-ubtitle: Neeche se upar fade in */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
