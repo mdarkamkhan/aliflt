@@ -1,31 +1,40 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ JS Loaded & DOM Ready");
 
-        /* ================================
-         0. SPLASH SCREEN LOGIC (Updated for Image Logo)
+            /* ================================
+         0. SPLASH SCREEN LOGIC (SMART)
     ================================ */
     const splash = document.getElementById('app-splash');
     
     if (splash) {
-        const removeSplash = () => {
-            // Curtain Effect shuru karo
-            splash.classList.add('slide-out'); 
+        // 1. Check karein: Kya user ne animation pehle dekh liya hai?
+        if (sessionStorage.getItem("alifSplashSeen")) {
             
-            // 0.8s baad (jab curtain upar chala jaye) tab element remove karo
-            setTimeout(() => {
-                splash.style.display = 'none';
-            }, 800); 
-        };
+            // Agar HAAN: Toh Splash screen ko turant gayab kar do (No Animation)
+            splash.style.display = 'none';
+            
+        } else {
+            
+            // Agar NAHI: Toh Animation play karo
+            const removeSplash = () => {
+                splash.classList.add('slide-out'); // Curtain upar karo
+                
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    // ✅ Flag set karo: Ab browser yaad rakhega
+                    sessionStorage.setItem("alifSplashSeen", "true");
+                }, 800); 
+            };
 
-        window.addEventListener('load', () => {
-            // ✅ TIME INCREASED: 2800ms (2.8 Seconds)
-            // Logo animation (2.5s) ke khatam hone ka wait karega
-            setTimeout(removeSplash, 2800);
-        });
+            window.addEventListener('load', () => {
+                setTimeout(removeSplash, 2800); // 2.8s ka wait
+            });
 
-        // Safety Fallback (Agar internet slow ho)
-        setTimeout(removeSplash, 5000);
+            // Safety Fallback
+            setTimeout(removeSplash, 5000);
+        }
     }
+
     /* ================================
           1. CART LOGIC
     ================================ */
