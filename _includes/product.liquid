@@ -116,23 +116,71 @@ layout: base.liquid
 {% assign current_category = category %}
 {% assign similar_products = collections.product | where_exp: "item", "item.data.category == current_category and item.fileSlug != current_item_id" %}
 
-{% if similar_products.size > 0 %}
+{% assign current_item_url = page.url %}
+{% assign current_category = category %}
+
+{% assign similar_products = collections.product | where: "data.category", current_category | reverse %}
+
 <div class="section" style="padding: 30px 20px; background: #fcfcfc; border-top: 1px solid #eee;">
     <h3 style="font-family: var(--font-accent); text-align: center; margin-bottom: 20px; font-weight: 400;">SIMILAR ITEMS</h3>
     
     <div style="display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+        
+        {% assign count = 0 %}
         {% for item in similar_products %}
-        <a href="{{ item.url }}" style="text-decoration: none; color: #000; min-width: 160px;">
-            <div style="aspect-ratio: 1/1.2; overflow: hidden; margin-bottom: 10px;">
-                <img src="{{ item.data.image }}" alt="{{ item.data.title }}" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
-            <p style="margin: 0; font-size: 0.9rem; text-align: center;">{{ item.data.title }}</p>
-            <p style="margin: 0; font-size: 0.85rem; text-align: center; color: #666;">₹{{ item.data.price }}</p>
-        </a>
+            
+            {% if item.url != current_item_url %}
+                
+                <a href="{{ item.url }}" style="text-decoration: none; color: #000; min-width: 160px;">
+                    <div style="aspect-ratio: 1/1.2; overflow: hidden; margin-bottom: 10px;">
+                        <img src="{{ item.data.image }}" alt="{{ item.data.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="margin: 0; font-size: 0.9rem; text-align: center;">{{ item.data.title }}</p>
+                    <p style="margin: 0; font-size: 0.85rem; text-align: center; color: #666;">₹{{ item.data.price }}</p>
+                </a>
+
+                {% assign count = count | plus: 1 %}
+                {% if count == 12 %}{% break %}{% endif %}
+            
+            {% endif %}
+
+        {% endfor %}
+
+        {% if count == 0 %}
+            <p style="text-align:center; width:100%; color:#777; font-size:0.9rem;">No similar items found.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% assign ad_products = collections.product | where: "data.is_ad", true | reverse %}
+
+{% if ad_products.size > 0 %}
+<div class="section" style="padding: 30px 20px; background: #fff; border-top: 1px solid #eee;">
+    <h3 style="font-family: var(--font-accent); text-align: center; margin-bottom: 20px; font-weight: 400;">YOU MAY ALSO LIKE</h3>
+    
+    <div style="display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+        
+        {% assign ad_count = 0 %}
+        {% for item in ad_products %}
+            
+            {% if item.url != current_item_url %}
+                <a href="{{ item.url }}" style="text-decoration: none; color: #000; min-width: 160px;">
+                    <div style="aspect-ratio: 1/1.2; overflow: hidden; margin-bottom: 10px; border: 1px solid #f0f0f0;">
+                        <img src="{{ item.data.image }}" alt="{{ item.data.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="margin: 0; font-size: 0.9rem; text-align: center;">{{ item.data.title }}</p>
+                    <p style="margin: 0; font-size: 0.85rem; text-align: center; color: #666;">₹{{ item.data.price }}</p>
+                </a>
+                
+                {% assign ad_count = ad_count | plus: 1 %}
+                {% if ad_count == 12 %}{% break %}{% endif %}
+            {% endif %}
+
         {% endfor %}
     </div>
 </div>
 {% endif %}
+
 
 {% assign ad_products = collections.product | where: "data.is_ad", true | where_exp: "item", "item.fileSlug != current_item_id" %}
 
