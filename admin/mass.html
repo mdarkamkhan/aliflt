@@ -9,23 +9,14 @@
         body { font-family: sans-serif; padding: 15px; background: #f0f2f5; padding-bottom: 120px; }
         h2 { text-align: center; color: #333; margin-top: 0; }
         
-        /* CONFIG BOX */
         .config-box { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #007bff; }
         .config-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
         label { font-size: 12px; font-weight: bold; color: #555; text-transform: uppercase; }
-        
-        /* INPUTS */
-        input, select, textarea { 
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; box-sizing: border-box; background: #fff; 
-            transition: all 0.3s ease;
-        }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; box-sizing: border-box; background: #fff; }
         input:focus, textarea:focus, select:focus { border-color: #007bff; outline: none; }
 
-        /* ✅ FILLED STATE (GREEN) */
-        .filled {
-            border: 2px solid #28a745 !important;
-            background-color: #e8f5e9 !important;
-        }
+        /* FILLED STATE */
+        .filled { border: 2px solid #28a745 !important; background-color: #e8f5e9 !important; }
 
         /* CARD STYLE */
         .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #333; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
@@ -33,36 +24,27 @@
         .row-num { font-weight: bold; font-size: 1.1em; color: #007bff; }
         .btn-del { color: red; font-weight: bold; background: none; border: none; font-size: 24px; padding: 0 10px; cursor: pointer; }
 
-        /* LAYOUT HELPERS */
         .field-group { margin-bottom: 12px; }
         .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .section-title { font-size: 11px; font-weight: bold; color: #007bff; margin: 15px 0 5px 0; border-bottom: 1px dashed #ccc; padding-bottom: 2px; }
-        
-        /* IMAGE PREVIEW BOX */
         .file-wrapper { background: #eef; padding: 10px; border-radius: 5px; border: 1px dashed #007bff; text-align: center; margin-top: 5px; transition: all 0.3s ease; }
         .file-wrapper.filled { border: 2px solid #28a745; background-color: #e8f5e9; }
-        
-        .img-preview {
-            display: none; /* Hidden initially */
-            width: 100px; height: 100px; 
-            object-fit: cover; 
-            border-radius: 5px; 
-            margin: 10px auto 0 auto; 
-            border: 2px solid #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        .img-preview { display: none; width: 100px; height: 100px; object-fit: cover; border-radius: 5px; margin: 10px auto 0 auto; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        /* AD CHECKBOX STYLE */
+        .ad-wrapper {
+            display: flex; align-items: center; gap: 10px; background: #f9f9f9; padding: 10px; border-radius: 5px; border: 1px solid #ddd; cursor: pointer; margin-bottom: 15px;
         }
+        .ad-wrapper.active { background: #fff3cd; border-color: #ffc107; }
+        .ad-checkbox { width: 20px; height: 20px; margin: 0; cursor: pointer; }
+        .ad-label { margin: 0; cursor: pointer; color: #856404; font-size: 14px; }
 
         /* BUTTONS */
         .fab-container { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 100; }
         .btn { padding: 14px 24px; border: none; border-radius: 50px; font-weight: bold; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; font-size: 16px; }
         .btn-add { background: #333; }
         .btn-upload { background: #006400; }
-        .btn-refresh { background: #333; }
-        
         .btn-copy { background: #e6f7ff; color: #0050b3; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; float: right; cursor: pointer; }
-        .btn-copy:active { background: #cfe4ff; }
-
-        /* LOGS */
+        
         #logs { background: #000; color: #0f0; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 12px; margin-top: 20px; display: none; white-space: pre-wrap; }
     </style>
 </head>
@@ -73,19 +55,10 @@
     <div class="config-box">
         <div class="config-row">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <div>
-                    <label>GitHub User</label>
-                    <input type="text" id="owner">
-                </div>
-                <div>
-                    <label>Repo Name</label>
-                    <input type="text" id="repo">
-                </div>
+                <div><label>GitHub User</label><input type="text" id="owner"></div>
+                <div><label>Repo Name</label><input type="text" id="repo"></div>
             </div>
-            <div>
-                <label>Token (Paste Once)</label>
-                <input type="password" id="token">
-            </div>
+            <div><label>Token</label><input type="password" id="token"></div>
             <div>
                 <label>Upload To:</label>
                 <select id="folder" onchange="resetRows()">
@@ -102,7 +75,7 @@
     <div id="rows-container"></div>
 
     <div class="fab-container">
-        <button class="btn btn-add" id="addBtn" onclick="addRow()">+ Add</button>
+        <button class="btn btn-add" onclick="addRow()">+ Add</button>
         <button class="btn btn-upload" id="uploadBtn" onclick="startUpload()">Upload 🚀</button>
     </div>
 
@@ -117,16 +90,8 @@
         const logBox = document.getElementById('logs');
         let rowCount = 0;
 
-        const productCats = [
-            "lace", "latkan", "thread", "aster", "fall", "blouse piece", 
-            "plain saten", "plain crape", "plain cotton", "plain reyon", 
-            "net", "organza", "jorget", "banarasi", "velvet", "cotton"
-        ];
-        const serviceCats = [
-            "blouse", "kurti pant", "kurti patyala", "kurti palazzo", "kurti", 
-            "garara", "sharara", "gown", "anarkali gown", "frock", 
-            "afgani kurti", "lehanga", "trendy lehanga", "saree fall & pico"
-        ];
+        const productCats = ["lace", "latkan", "thread", "aster", "fall", "blouse piece", "plain saten", "plain crape", "plain cotton", "plain reyon", "net", "organza", "jorget", "banarasi", "velvet", "cotton"];
+        const serviceCats = ["blouse", "kurti pant", "kurti patyala", "kurti palazzo", "kurti", "garara", "sharara", "gown", "anarkali gown", "frock", "afgani kurti", "lehanga", "trendy lehanga", "saree fall & pico"];
 
         window.onload = () => {
             document.getElementById('owner').value = localStorage.getItem('gh_owner') || '';
@@ -136,33 +101,31 @@
             addRow();
         };
 
-        // --- 🟢 AUTO GREEN & PREVIEW LOGIC ---
+        function checkConfigInputs() {
+            ['owner', 'repo', 'token'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el && el.value) el.classList.add('filled');
+            });
+        }
+
         document.addEventListener('input', function(e) {
-            const el = e.target;
-            if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
-                validateInput(el);
+            if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                if(e.target.type !== 'file' && e.target.type !== 'checkbox') {
+                    e.target.value.trim() !== "" ? e.target.classList.add('filled') : e.target.classList.remove('filled');
+                }
             }
         });
 
-        function validateInput(el) {
-            if(el.type !== 'file') {
-                if(el.value.trim() !== "") el.classList.add('filled');
-                else el.classList.remove('filled');
-            }
-        }
-
-        // --- IMAGE PREVIEW FUNCTION ---
         window.previewImage = function(input) {
             const file = input.files[0];
             const wrapper = input.closest('.file-wrapper');
             const img = wrapper.querySelector('.img-preview');
-
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     img.src = e.target.result;
-                    img.style.display = 'block'; // Show Image
-                    wrapper.classList.add('filled'); // Turn Green
+                    img.style.display = 'block';
+                    wrapper.classList.add('filled');
                 }
                 reader.readAsDataURL(file);
             } else {
@@ -171,45 +134,34 @@
             }
         }
 
-        function checkConfigInputs() {
-            ['owner', 'repo', 'token'].forEach(id => {
-                const el = document.getElementById(id);
-                if(el && el.value) el.classList.add('filled');
-            });
+        // Toggle Ad Box Color
+        window.toggleAd = function(div) {
+            const checkbox = div.querySelector('input');
+            checkbox.checked = !checkbox.checked; // Toggle check
+            if(checkbox.checked) div.classList.add('active');
+            else div.classList.remove('active');
         }
 
         function resetRows() {
             if(rowCount > 0 && !confirm("Change Category? Current rows will be cleared.")) return;
-            container.innerHTML = "";
-            rowCount = 0;
-            addRow();
+            container.innerHTML = ""; rowCount = 0; addRow();
         }
 
         function log(msg) {
-            logBox.style.display = 'block';
-            logBox.innerHTML += `<div>> ${msg}</div>`;
+            logBox.style.display = 'block'; logBox.innerHTML += `<div>> ${msg}</div>`;
         }
 
-        // --- HELPERS ---
         const mkInp = (label, cls, ph, type="text") => `
             <div class="field-group">
                 <label>${label} ${rowCount===1 ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label>
-                ${type === 'textarea' 
-                    ? `<textarea class="${cls}" rows="2" placeholder="${ph}"></textarea>`
-                    : `<input type="${type}" class="${cls}" placeholder="${ph}" ${label.includes('Category') ? 'list="cat-list"' : ''}>`
-                }
+                ${type === 'textarea' ? `<textarea class="${cls}" rows="2" placeholder="${ph}"></textarea>` : `<input type="${type}" class="${cls}" placeholder="${ph}" ${label.includes('Category') ? 'list="cat-list"' : ''}>`}
             </div>`;
 
         const mkSelect = (label, cls, options) => {
             let opts = options.map(o => `<option value="${o}">${o.toUpperCase()}</option>`).join('');
-            return `
-            <div class="field-group">
-                <label>${label} ${rowCount===1 ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label>
-                <select class="${cls}" onchange="validateInput(this)"><option value="">-- Select --</option>${opts}</select>
-            </div>`;
+            return `<div class="field-group"><label>${label} ${rowCount===1 ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label><select class="${cls}"><option value="">-- Select --</option>${opts}</select></div>`;
         };
 
-        // --- ADD ROW ---
         function addRow() {
             rowCount++;
             const div = document.createElement('div');
@@ -217,10 +169,7 @@
             const type = document.getElementById('folder').value;
             
             let html = `
-                <div class="card-header">
-                    <span class="row-num">#${rowCount}</span>
-                    <button class="btn-del" onclick="this.parentElement.parentElement.remove()">×</button>
-                </div>
+                <div class="card-header"><span class="row-num">#${rowCount}</span><button class="btn-del" onclick="this.parentElement.parentElement.remove()">×</button></div>
                 
                 ${mkInp("Title *", "inp-title", "Item Name")}
                 
@@ -230,13 +179,16 @@
                         <input type="file" class="inp-file" accept="image/*" onchange="previewImage(this)">
                         <img class="img-preview">
                     </div>
-                </div>`;
+                </div>
+                
+                <div class="ad-wrapper" onclick="toggleAd(this)">
+                    <input type="checkbox" class="inp-ad" style="pointer-events:none;">
+                    <label class="ad-label">📢 Mark as Ad (Show in "You May Also Like")</label>
+                </div>
+                `;
 
             if (type === 'products') {
-                html += `<div class="two-col">
-                    ${mkInp("Price", "inp-price", "0", "number")}
-                    ${mkSelect("Category", "inp-cat", productCats)}
-                </div>
+                html += `<div class="two-col">${mkInp("Price", "inp-price", "0", "number")}${mkSelect("Category", "inp-cat", productCats)}</div>
                 ${mkInp("Description", "inp-desc", "Details...", "textarea")}
                 <div class="section-title">Details</div>
                 <div class="two-col">${mkInp("Size", "inp-size", "e.g. 9m")}${mkInp("Color", "inp-color", "e.g. Red")}</div>
@@ -247,18 +199,12 @@
                 <div class="two-col">${mkInp("Del. Charges", "inp-del-charge", "Free")}${mkInp("Return Policy", "inp-return", "No Returns")}</div>`;
             } 
             else if (type === 'services' || type === 'works') {
-                html += `<div class="two-col">
-                    ${mkInp("Price", "inp-price", "0", "number")}
-                    ${mkSelect("Category", "inp-cat", serviceCats)}
-                </div>
+                html += `<div class="two-col">${mkInp("Price", "inp-price", "0", "number")}${mkSelect("Category", "inp-cat", serviceCats)}</div>
                 ${mkInp("Description", "inp-desc", "Description...", "textarea")}
                 ${ type === 'services' ? mkInp("Service Info", "inp-serv-info", "Extra details...", "textarea") : '' }`;
             } 
             else if (type === 'designs') {
-                html += `<div class="two-col">
-                    ${mkInp("Charges (Price)", "inp-price", "0", "number")}
-                    ${mkInp("Widely Use For", "inp-cat", "e.g. Blouse")} 
-                </div>`;
+                html += `<div class="two-col">${mkInp("Charges (Price)", "inp-price", "0", "number")}${mkInp("Widely Use For", "inp-cat", "e.g. Blouse")}</div>`;
             }
 
             div.innerHTML = html;
@@ -269,17 +215,11 @@
         function copyAll(cls) {
             const val = document.querySelector(`.${cls}`).value;
             if(!val) return alert("Fill this field first!");
-            
             document.querySelectorAll(`.${cls}`).forEach(el => {
-                el.value = val;
-                el.classList.add('filled');
-                el.style.transition = "0.3s";
-                el.style.transform = "scale(1.02)";
-                setTimeout(() => el.style.transform = "scale(1)", 200);
+                el.value = val; el.classList.add('filled');
             });
         }
 
-        // --- UPLOAD LOGIC ---
         const toBase64 = file => new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -293,19 +233,19 @@
             const token = document.getElementById('token').value.trim();
             const folder = document.getElementById('folder').value;
             const btn = document.getElementById('uploadBtn');
-            const addBtn = document.getElementById('addBtn');
 
             if(!owner || !repo || !token) return alert("Fill GitHub Details first!");
             localStorage.setItem('gh_owner', owner); localStorage.setItem('gh_repo', repo); localStorage.setItem('gh_token', token);
 
             const rows = document.querySelectorAll('.card');
-            btn.innerText = "Uploading..."; btn.disabled = true; addBtn.disabled = true;
+            btn.innerText = "Uploading..."; btn.disabled = true;
             log("Starting upload process...");
 
             for (const row of rows) {
                 const getVal = (c) => row.querySelector(`.${c}`)?.value || "";
                 const title = getVal('inp-title');
                 const fileInput = row.querySelector('.inp-file');
+                const isAd = row.querySelector('.inp-ad').checked; // GET AD VALUE
                 
                 if(!title) continue;
 
@@ -314,7 +254,6 @@
                 const finalSlug = `${slug}-${uniqueId}`;
                 const date = new Date().toISOString();
                 
-                // 1. IMAGE
                 let imagePath = "";
                 if(fileInput.files.length > 0) {
                     const file = fileInput.files[0];
@@ -331,7 +270,6 @@
                     } catch(e) { log(`❌ Image Error`); }
                 }
 
-                // 2. DATA
                 let layout = "product.liquid";
                 if(folder === 'designs') layout = "design.liquid";
                 if(folder === 'services' || folder === 'works') layout = "service.liquid";
@@ -342,6 +280,7 @@ date: "${date}"
 layout: "${layout}"
 tags: "${folder === 'offers' ? 'offer' : folder.slice(0, -1)}"
 image: "${imagePath}"
+is_ad: ${isAd}
 price: ${getVal('inp-price') || 0}
 category: "${getVal('inp-cat')}"
 description: "${getVal('inp-desc').replace(/"/g, '\\"')}"
@@ -383,10 +322,8 @@ permalink: false
                 } catch(err) { log(`❌ Net Error`); }
             }
             
-            // BUTTON CHANGE
             btn.innerText = "Done! Refresh 🔄";
             btn.style.backgroundColor = "#333";
-            btn.classList.add("btn-refresh");
             btn.onclick = function() { location.reload(); };
             btn.disabled = false;
             alert("Upload Complete!");
