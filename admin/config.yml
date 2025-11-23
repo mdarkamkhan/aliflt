@@ -18,6 +18,9 @@ collections:
       - { name: "date", label: "Date", widget: "datetime" }
       - { name: "title", label: "Title", widget: "string" }
       - { name: "image", label: "Image", widget: "image" }
+      - { name: "return_policy", label: "Return Policy", widget: "string", required: false }
+      # 👇 YEH LINE ADD KARO SABME (Products, Services, Designs, Works me)
+      - { name: "is_ad", label: "Mark as Ad (You May Also Like)", widget: "boolean", default: false, required: false }
 
   - name: "products"
     label: "Products"
@@ -73,6 +76,9 @@ collections:
       - { name: "delivery_within", label: "Delivery within", widget: "string", required: false }
       - { name: "payment_type", label: "Payment Type", widget: "string", required: false }
       - { name: "return_policy", label: "Return Policy", widget: "string", required: false }
+      - { name: "return_policy", label: "Return Policy", widget: "string", required: false }
+      # 👇 YEH LINE ADD KARO SABME (Products, Services, Designs, Works me)
+      - { name: "is_ad", label: "Mark as Ad (You May Also Like)", widget: "boolean", default: false, required: false }
 
   - name: "services"
     label: "Services"
@@ -109,6 +115,9 @@ collections:
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
       - { name: "service_information", label: "Service Information", widget: "text", required: false }
+      - { name: "return_policy", label: "Return Policy", widget: "string", required: false }
+      # 👇 YEH LINE ADD KARO SABME (Products, Services, Designs, Works me)
+      - { name: "is_ad", label: "Mark as Ad (You May Also Like)", widget: "boolean", default: false, required: false }
 
   - name: "works"
     label: "Our Works"
@@ -144,6 +153,9 @@ collections:
 
       - { name: "price", label: "Price", widget: "number" }
       - { name: "description", label: "Description", widget: "text" }
+      - { name: "return_policy", label: "Return Policy", widget: "string", required: false }
+      # 👇 YEH LINE ADD KARO SABME (Products, Services, Designs, Works me)
+      - { name: "is_ad", label: "Mark as Ad (You May Also Like)", widget: "boolean", default: false, required: false }
 
   - name: "designs"
     label: "Designs"
@@ -159,3 +171,6 @@ collections:
       - { name: "image", label: "Image", widget: "image" }
       - { name: "price", label: "Charges", widget: "number" }
       - { name: "category", label: "Widely Use For", widget: "string" }
+      - { name: "return_policy", label: "Return Policy", widget: "string", required: false }
+      # 👇 YEH LINE ADD KARO SABME (Products, Services, Designs, Works me)
+      - { name: "is_ad", label: "Mark as Ad (You May Also Like)", widget: "boolean", default: false, required: false }
