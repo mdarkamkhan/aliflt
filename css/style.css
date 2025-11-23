@@ -1499,3 +1499,58 @@ details[open] .pm-icon-minus { display: block; }
         transform: scale(1); /* Normal size */
     }
 }
+/* =========================================
+   PREMIUM SPLASH SCREEN (FIXED LAYOUT)
+========================================= */
+
+/* 1. Main Container (Full Screen White Overlay) */
+#app-splash {
+    position: fixed;       /* Screen par chipka rahega */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff; /* Pure White Background */
+    z-index: 99999;        /* Sabse upar (Navbar se bhi upar) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Curtain Effect Settings */
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), border-radius 0.8s;
+    transform-origin: top;
+}
+
+/* 2. Exit Animation (Curtain Slide Up) */
+#app-splash.slide-out {
+    transform: translateY(-100%); /* Poora upar chala jayega */
+    border-radius: 0 0 50% 50%;   /* Neeche curve effect */
+}
+
+/* 3. Logo Image Styling */
+.splash-logo-img {
+    width: 180px;  /* Logo Size */
+    height: auto;
+    opacity: 0;    /* Start Hidden */
+    
+    /* Animation: Breathe + Reveal */
+    animation: logoReveal 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* 4. Keyframes (Logo Animation) */
+@keyframes logoReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px); /* Chhota + Neeche */
+        filter: blur(5px); /* Dhundhla */
+    }
+    40% {
+        opacity: 1;
+        transform: scale(1.1) translateY(0); /* Thoda Bada (Pop) */
+        filter: blur(0px); /* Saaf */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Normal Size */
+    }
+}
