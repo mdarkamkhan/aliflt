@@ -3,12 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALiF Ladies Tailor | {{ title }}</title>
+    
+    {% assign pageTitle = title | default: "ALiF Ladies Tailor" %}
+    {% assign pageDescription = description | default: "Custom bridal blouses, lehengas, gowns — premium ladies tailoring in Sahibganj, Jharkhand. Quality stitching for festive and daily wear." %}
+    {% assign pageImage = image | default: "/icons/icon-512x512.png" %}
+    {% assign siteUrl = "https://aliflt.netlify.app" %}
 
-    <meta name="description" content="Custom bridal blouses, lehengas, gowns — premium ladies tailoring in Sahibganj, Jharkhand. Quality stitching for festive and daily wear.">
-    <link rel="canonical" href="https://aliflt.netlify.app{{ page.url }}">
+    <title>{{ pageTitle }} | ALiF Ladies Tailor</title>
+    <meta name="description" content="{{ pageDescription }}">
+    <link rel="canonical" href="{{ siteUrl }}{{ page.url }}">
 
     <meta name="theme-color" content="#FBF9F6"/>
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ siteUrl }}{{ page.url }}">
+    <meta property="og:title" content="{{ pageTitle }}">
+    <meta property="og:description" content="{{ pageDescription }}">
+    <meta property="og:image" content="{{ siteUrl }}{{ pageImage }}">
+
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/favicon.png">
@@ -18,21 +30,23 @@
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "ALiF Ladies Tailor",
+      "image": "{{ siteUrl }}/icons/icon-512x512.png",
       "description": "Custom bridal blouses, lehengas, and gowns.",
       "address": {
         "@type": "PostalAddress",
+        "streetAddress": "Daal Kuan, College Road",
         "addressLocality": "Sahibganj",
         "addressRegion": "Jharkhand",
+        "postalCode": "816109",
         "addressCountry": "IN"
       },
-      "url": "https://aliflt.netlify.app/"
+      "url": "{{ siteUrl }}"
     }
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Cormorant+Garamond:wght@400;500&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="/css/style.css">
 
     <script>
@@ -67,7 +81,6 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <div class="sidebar-menu" id="sidebarMenu">
-        
         <div class="sidebar-header">
             <button class="sidebar-close-btn" id="sidebarCloseBtn">&times;</button>
         </div>
@@ -82,7 +95,6 @@
         </ul>
 
         <div class="sidebar-footer-area">
-            
             <h3 class="sidebar-heading">FOLLOW US</h3>
             
             <div class="sidebar-icons-row">
@@ -100,12 +112,10 @@
             <button id="install-pwa-btn" class="sidebar-install-btn" style="display:none;">
                 INSTALL APP
             </button>
-
         </div>
     </div>
 
     <footer class="prada-mobile-footer">
-        
         <div class="pm-social-row">
             <a href="https://facebook.com" target="_blank" aria-label="Facebook">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
@@ -137,7 +147,6 @@
                             WRITE A REVIEW ON GOOGLE
                         </a>
                         <h4 style="font-family: var(--font-accent); font-size: 1.5rem; margin-bottom: 15px; font-weight:400; color:#333;">What Our Clients Say</h4>
-                        
                         <script src="https://elfsightcdn.com/platform.js" async></script>
                         <div class="elfsight-app-2c83f037-ee5d-4d90-913e-2a5f353d7add" data-elfsight-app-lazy></div>
                     </div>
