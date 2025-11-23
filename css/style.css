@@ -1452,59 +1452,6 @@ details[open] .pm-icon-minus { display: block; }
     opacity: 1;
     bottom: 50px; /* Thoda upar uthega animation ke sath */
 }
-/* =========================================
-   PREMIUM ANIMATED SPLASH SCREEN
-========================================= */
-#app-splash {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff; /* Pure White for clean look */
-    z-index: 99999;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.8s ease-out, visibility 0.8s;
-}
-
-/* Hiding Class */
-#app-splash.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-/* 1. LOGO ANIMATION (ALiF) */
-.splash-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 4.5rem; /* Bada size */
-    font-weight: 500;
-    color: #000;
-    margin: 0;
-    opacity: 0; /* Pehle chupa rahega */
-    
-    /* Animation: Name | Duration | Timing | Fill Mode */
-    animation: luxuryReveal 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-/* 2. SUBTITLE ANIMATION (Ladies Tailor) */
-.splash-sub {
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 6px; /* Wide spacing looks rich */
-    color: #666;
-    margin-top: 10px;
-    opacity: 0;
-    
-    /* Thoda late aayega (0.5s delay) */
-    animation: fadeInUp 1s ease-out 0.6s forwards;
-}
-
-/* --- KEYFRAMES (Magic Happens Here) --- */
 
 /* Logo: Neeche se upar + Size normal + Failna */
 @keyframes luxuryReveal {
@@ -1520,7 +1467,39 @@ details[open] .pm-icon-minus { display: block; }
     }
 }
 
-/* Subtitle: Neeche se upar fade in */
+/* S/* =========================================
+   LOGO IMAGE ANIMATION
+========================================= */
+
+/* Logo Image Styling */
+.splash-logo-img {
+    width: 180px; /* Logo ka size set karein */
+    height: auto;
+    opacity: 0; /* Pehle gayab rahega */
+    
+    /* Animation: Breathe + Reveal */
+    animation: logoReveal 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* --- KEYFRAMES --- */
+
+@keyframes logoReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px); /* Chhota aur neeche */
+        filter: blur(5px); /* Dhundhla */
+    }
+    40% {
+        opacity: 1;
+        transform: scale(1.1) translateY(0); /* Thoda bada (Pop effect) */
+        filter: blur(0px); /* Saaf */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Normal size */
+    }
+}
+ubtitle: Neeche se upar fade in */
 @keyframes fadeInUp {
     from {
         opacity: 0;
