@@ -1,23 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ JS Loaded & DOM Ready");
 
-    /* ================================
-         0. SPLASH SCREEN LOGIC
+        /* ================================
+         0. SPLASH SCREEN LOGIC (Updated for Image Logo)
     ================================ */
     const splash = document.getElementById('app-splash');
+    
     if (splash) {
-        // Window load hone ke baad
-        window.addEventListener('load', () => {
-            // 2200ms (2.2 sec) ka wait taaki animation poora dikhe
+        const removeSplash = () => {
+            // Curtain Effect shuru karo
+            splash.classList.add('slide-out'); 
+            
+            // 0.8s baad (jab curtain upar chala jaye) tab element remove karo
             setTimeout(() => {
-                splash.classList.add('hidden');
-            }, 2200); 
+                splash.style.display = 'none';
+            }, 800); 
+        };
+
+        window.addEventListener('load', () => {
+            // ✅ TIME INCREASED: 2800ms (2.8 Seconds)
+            // Logo animation (2.5s) ke khatam hone ka wait karega
+            setTimeout(removeSplash, 2800);
         });
-        
-        // Safety Fallback (Agar load atak jaye)
-        setTimeout(() => {
-            splash.classList.add('hidden');
-        }, 4000);
+
+        // Safety Fallback (Agar internet slow ho)
+        setTimeout(removeSplash, 5000);
     }
     /* ================================
           1. CART LOGIC
