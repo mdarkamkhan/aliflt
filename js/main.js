@@ -6,17 +6,18 @@ document.addEventListener("DOMContentLoaded", () => {
     ================================ */
     const splash = document.getElementById('app-splash');
     if (splash) {
-        // Wait for window load (images etc) or minimal timeout
+        // Window load hone ke baad
         window.addEventListener('load', () => {
+            // 2200ms (2.2 sec) ka wait taaki animation poora dikhe
             setTimeout(() => {
                 splash.classList.add('hidden');
-            }, 1500); // 1.5 Second ka premium delay
+            }, 2200); 
         });
-    
-        // Fallback: Agar load event miss ho jaye (safety)
+        
+        // Safety Fallback (Agar load atak jaye)
         setTimeout(() => {
             splash.classList.add('hidden');
-        }, 3000);
+        }, 4000);
     }
     /* ================================
           1. CART LOGIC
