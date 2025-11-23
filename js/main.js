@@ -2,6 +2,23 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ JS Loaded & DOM Ready");
 
     /* ================================
+         0. SPLASH SCREEN LOGIC
+    ================================ */
+    const splash = document.getElementById('app-splash');
+    if (splash) {
+        // Wait for window load (images etc) or minimal timeout
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                splash.classList.add('hidden');
+            }, 1500); // 1.5 Second ka premium delay
+        });
+    
+        // Fallback: Agar load event miss ho jaye (safety)
+        setTimeout(() => {
+            splash.classList.add('hidden');
+        }, 3000);
+    }
+    /* ================================
           1. CART LOGIC
     ================================ */
     const cart = {
