@@ -1857,3 +1857,23 @@ details[open] .pm-icon-minus { display: block; }
     /* Footer margin fix */
     .prada-mobile-footer { padding-bottom: 90px; }
 }
+/* =========================================
+   SIDEBAR FIX FOR BOTTOM NAV
+========================================= */
+
+/* Mobile par Sidebar ka footer upar uthao */
+@media (max-width: 768px) {
+    .sidebar-footer-area {
+        padding-bottom: 100px !important; /* Bottom Nav se door rahega */
+    }
+    
+    /* Install button ko thoda aur prominent banao */
+    .sidebar-install-btn {
+        margin-bottom: 20px;
+    }
+    
+    /* Sidebar ka scroll sahi karo */
+    .sidebar-menu {
+        padding-bottom: 80px; 
+    }
+}
