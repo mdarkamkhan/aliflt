@@ -58,82 +58,15 @@
 </head>
 
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
-    
-    <script>
-        let searchIndex = [];
-        const overlay = document.getElementById('search-overlay');
-        const input = document.getElementById('search-input');
-        const resultsContainer = document.getElementById('search-results');
 
-        // Fetch Data
-        fetch('/search.json').then(res => res.json()).then(data => {
-            searchIndex = data;
-        });
-
-        // Open Search
-        document.getElementById('open-search').addEventListener('click', () => {
-            overlay.classList.add('active');
-            setTimeout(() => input.focus(), 100);
-        });
-
-        // Close Search
-        document.getElementById('close-search').addEventListener('click', () => {
-            overlay.classList.remove('active');
-            input.value = '';
-            resultsContainer.innerHTML = '';
-        });
-
-        // SMART SEARCH LOGIC (Full Power)
-        input.addEventListener('input', (e) => {
-            const query = e.target.value;
-            
-            if(query.length < 2) {
-                resultsContainer.innerHTML = '';
-                return;
-            }
-
-            // Fuse.js Configuration (Yahan humne sab kuch jod diya)
-            const fuse = new Fuse(searchIndex, {
-                keys: [
-                    { name: 'title', weight: 0.4 },       // Title sabse important
-                    { name: 'category', weight: 0.2 },    // Category (Lace/Blouse)
-                    { name: 'colour', weight: 0.2 },      // Colour (Red/Gold) - AB YE SEARCH HOGA
-                    { name: 'fabric', weight: 0.1 },      // Fabric (Velvet/Cotton)
-                    { name: 'ideal_for', weight: 0.05 },  // Usage (Saree/Suit)
-                    { name: 'work', weight: 0.05 },       // Work (Dhaga/Zari)
-                    { name: 'description', weight: 0.05 } // Extra details
-                ],
-                threshold: 0.4,     // Spelling mistake (Red vs Rad) chalega
-                ignoreLocation: true,
-                minMatchCharLength: 2
-            });
-
-            const results = fuse.search(query);
-            
-            // Render Results
-            if(results.length > 0) {
-                resultsContainer.innerHTML = results.map(res => `
-                    <a href="${res.item.url}" class="search-item">
-                        <img src="${res.item.image}" alt="${res.item.title}">
-                        <div>
-                            <h4>${res.item.title}</h4>
-                            <span>
-                                ${res.item.category} 
-                                ${res.item.colour ? '• ' + res.item.colour : ''} 
-                                ${res.item.price ? '• ₹' + res.item.price : ''}
-                            </span>
-                        </div>
-                        <span class="s-arrow">→</span>
-                    </a>
-                `).join('');
-            } else {
-                resultsContainer.innerHTML = `<p style="text-align:center; color:#999; margin-top:20px;">No results for "${query}"</p>`;
-            }
-        });
-    </script>
-
-    
+    <div id="search-overlay">
+        <div class="search-header">
+            <input type="text" id="search-input" placeholder="Search for Lace, Blouse, Velvet..." autofocus>
+            <button id="close-search">&times;</button>
+        </div>
+        <div id="search-results"></div>
+        <p class="search-hint">Try typing "Red", "Velvet" or "Blouse"</p>
+    </div>
     <div id="app-splash">
         <img src="/icons/icon-512x512.png" alt="ALiF Logo" class="splash-logo-img">
     </div>
@@ -142,6 +75,14 @@
         <a href="/" class="nav-logo">ALiF</a>
 
         <div class="nav-actions">
+            
+            <button class="nav-search-btn" id="open-search" aria-label="Open Search" style="background:none; border:none; cursor:pointer; margin-right: 15px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+
             <a href="/cart/" class="nav-cart-btn" id="cartIcon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -284,6 +225,81 @@
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("/sw.js");
         }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    <script>
+        let searchIndex = [];
+        const overlay = document.getElementById('search-overlay');
+        const input = document.getElementById('search-input');
+        const resultsContainer = document.getElementById('search-results');
+
+        // Fetch Data
+        fetch('/search.json').then(res => res.json()).then(data => {
+            searchIndex = data;
+        });
+
+        // Open Search
+        const openBtn = document.getElementById('open-search');
+        if(openBtn) {
+            openBtn.addEventListener('click', () => {
+                overlay.classList.add('active');
+                setTimeout(() => input.focus(), 100);
+            });
+        }
+
+        // Close Search
+        document.getElementById('close-search').addEventListener('click', () => {
+            overlay.classList.remove('active');
+            input.value = '';
+            resultsContainer.innerHTML = '';
+        });
+
+        // SEARCH LOGIC
+        input.addEventListener('input', (e) => {
+            const query = e.target.value;
+            
+            if(query.length < 2) {
+                resultsContainer.innerHTML = '';
+                return;
+            }
+
+            const fuse = new Fuse(searchIndex, {
+                // ✅ IMPORTANT: Ye fields search honge
+                keys: [
+                    { name: 'title', weight: 0.4 },
+                    { name: 'category', weight: 0.2 },
+                    { name: 'colour', weight: 0.2 },  // <-- Colour (Red)
+                    { name: 'fabric', weight: 0.1 },  // <-- Fabric (Velvet)
+                    { name: 'ideal_for', weight: 0.05 },
+                    { name: 'work', weight: 0.05 },
+                    { name: 'description', weight: 0.05 }
+                ],
+                threshold: 0.4,
+                ignoreLocation: true,
+                minMatchCharLength: 2
+            });
+
+            const results = fuse.search(query);
+            
+            if(results.length > 0) {
+                resultsContainer.innerHTML = results.map(res => `
+                    <a href="${res.item.url}" class="search-item">
+                        <img src="${res.item.image}" alt="${res.item.title}">
+                        <div class="s-info">
+                            <h4>${res.item.title}</h4>
+                            <span>
+                                ${res.item.category} 
+                                ${res.item.colour ? '• ' + res.item.colour : ''} 
+                            </span>
+                        </div>
+                        <span class="s-arrow">→</span>
+                    </a>
+                `).join('');
+            } else {
+                resultsContainer.innerHTML = `<p style="text-align:center; color:#999; margin-top:20px;">No results for "${query}"</p>`;
+            }
+        });
     </script>
 
 </body>
