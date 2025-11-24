@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     {% assign pageTitle = title | default: "ALiF Ladies Tailor" %}
-    {% assign pageDescription = description | default: "Custom bridal blouses, lehengas, gowns — premium ladies tailoring in Sahibganj, Jharkhand. Quality stitching for festive and daily wear." %}
+    {% assign pageDescription = description | default: "Custom bridal blouses, lehengas, gowns — premium ladies tailoring in Sahibganj." %}
     {% assign pageImage = image | default: "/icons/icon-512x512.png" %}
     {% assign siteUrl = "https://aliflt.netlify.app" %}
 
-    <title>{{ pageTitle }} | ALiF Ladies Tailor</title>
+    <title>{{ pageTitle }} | ALiF</title>
     <meta name="description" content="{{ pageDescription }}">
     <link rel="canonical" href="{{ siteUrl }}{{ page.url }}">
-
     <meta name="theme-color" content="#FBF9F6"/>
 
     <meta property="og:type" content="website">
@@ -25,69 +24,43 @@
     <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/favicon.png">
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "ALiF Ladies Tailor",
-      "image": "{{ siteUrl }}/icons/icon-512x512.png",
-      "description": "Custom bridal blouses, lehengas, and gowns.",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Daal Kuan, College Road",
-        "addressLocality": "Sahibganj",
-        "addressRegion": "Jharkhand",
-        "postalCode": "816109",
-        "addressCountry": "IN"
-      },
-      "url": "{{ siteUrl }}"
-    }
-    </script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Cormorant+Garamond:wght@400;500&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css?v=luxury2025">
 
     <script>
-      if (location.hash.includes("invite_token") || location.hash.includes("recovery_token")) {
-        location.href = "/admin/" + location.hash;
-      }
+        if (sessionStorage.getItem("alifSplashSeen")) {
+            document.write('<style>#app-splash { display: none !important; }</style>');
+        }
+        if (location.hash.includes("invite_token")) location.href = "/admin/" + location.hash;
     </script>
 </head>
 
 <body>
+    
+    <div id="app-splash">
+        <img src="/icons/icon-512x512.png" alt="ALiF Logo" class="splash-logo-img">
+    </div>
 
     <div id="search-overlay">
         <div class="search-header">
-            <input type="text" id="search-input" placeholder="Search for Lace, Blouse, Velvet..." autofocus>
+            <input type="text" id="search-input" placeholder="Search..." autocomplete="off">
             <button id="close-search">&times;</button>
         </div>
         <div id="search-results"></div>
-    </div>
-    <div id="app-splash">
-        <img src="/icons/icon-512x512.png" alt="ALiF Logo" class="splash-logo-img">
     </div>
 
     <nav class="fixed-top-nav">
         <a href="/" class="nav-logo">ALiF</a>
 
         <div class="nav-actions">
-            
-            <button class="nav-search-btn" id="open-search" aria-label="Open Search" style="background:none; border:none; cursor:pointer; margin-right: 15px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
+            <button class="nav-search-btn" id="open-search">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </button>
 
             <a href="/cart/" class="nav-cart-btn" id="cartIcon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 <span class="cart-count" id="cartCount">0</span>
             </a>
 
@@ -105,13 +78,64 @@
 
     <main>{{ content }}</main>
 
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <nav class="bottom-nav">
+        <a href="/" class="b-nav-item {% if page.url == '/' %}active{% endif %}">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Home
+        </a>
+        <a href="/products/" class="b-nav-item {% if page.url contains '/products/' %}active{% endif %}">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Products
+        </a>
+        <a href="/designs/" class="b-nav-item {% if page.url contains '/designs/' %}active{% endif %}">
+            <svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
+            Designs
+        </a>
+        <a href="/cart/" class="b-nav-item {% if page.url contains '/cart/' %}active{% endif %}">
+            <div style="position: relative;">
+                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <span class="mobile-badge" id="cartCountMobile">0</span>
+            </div>
+            Cart
+        </a>
+        <a href="/contact-us/" class="b-nav-item {% if page.url contains '/contact-us/' %}active{% endif %}">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            Contact
+        </a>
+    </nav>
 
+
+    <nav class="bottom-nav">
+        <a href="/" class="b-nav-item {% if page.url == '/' %}active{% endif %}">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Home
+        </a>
+        <a href="/products/" class="b-nav-item {% if page.url contains '/products/' %}active{% endif %}">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Products
+        </a>
+        <a href="/designs/" class="b-nav-item {% if page.url contains '/designs/' %}active{% endif %}">
+            <svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
+            Designs
+        </a>
+        <a href="/cart/" class="b-nav-item {% if page.url contains '/cart/' %}active{% endif %}">
+            <div style="position: relative;">
+                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <span class="mobile-badge" id="cartCountMobile">0</span>
+            </div>
+            Cart
+        </a>
+        <a href="/contact-us/" class="b-nav-item {% if page.url contains '/contact-us/' %}active{% endif %}">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            Contact
+        </a>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="sidebar-header">
             <button class="sidebar-close-btn" id="sidebarCloseBtn">&times;</button>
         </div>
-
         <ul class="sidebar-links">
             <li><a href="/">Home</a></li>
             <li><a href="/products/">Products</a></li>
@@ -120,70 +144,38 @@
             <li><a href="/contact-us/">Contact</a></li>
             <li><a href="/#reviews">Reviews</a></li>
         </ul>
-
         <div class="sidebar-footer-area">
             <h3 class="sidebar-heading">FOLLOW US</h3>
             <div class="sidebar-icons-row">
-                <a href="https://instagram.com/alif_lstr" target="_blank" aria-label="Instagram">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                </a>
-                <a href="https://wa.me/7250470009" target="_blank" aria-label="WhatsApp">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                </a>
-                <a href="https://facebook.com" target="_blank" aria-label="Facebook">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-                </a>
+                <a href="https://instagram.com/alif_lstr" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://wa.me/7250470009" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="https://facebook.com" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
             </div>
-            <button id="install-pwa-btn" class="sidebar-install-btn" style="display:none;">
-                INSTALL APP
-            </button>
+            <button id="install-pwa-btn" class="sidebar-install-btn" style="display:none;">INSTALL APP</button>
         </div>
     </div>
 
     <footer class="prada-mobile-footer">
         <div class="pm-social-row">
-            <a href="https://facebook.com" target="_blank" aria-label="Facebook">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-            </a>
-            <a href="https://instagram.com/alif_lstr" target="_blank" aria-label="Instagram">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-            </a>
-            <a href="https://wa.me/7250470009" target="_blank" aria-label="WhatsApp">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-            </a>
-            <a href="mailto:alifladiestailor@gmail.com" aria-label="Email">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-            </a>
+            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+            <a href="https://instagram.com/alif_lstr" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+            <a href="https://wa.me/7250470009"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+            <a href="mailto:alifladiestailor@gmail.com"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
         </div>
-
         <div class="pm-accordion-wrapper">
             <details class="pm-accordion">
-                <summary class="pm-accordion-header">
-                    CLIENT REVIEWS
-                    <span class="pm-icon-plus">+</span>
-                    <span class="pm-icon-minus">-</span>
-                </summary>
+                <summary class="pm-accordion-header">CLIENT REVIEWS <span class="pm-icon-plus">+</span><span class="pm-icon-minus">-</span></summary>
                 <div class="pm-accordion-content">
-                    <div style="text-align: center; padding: 10px 0 20px 0;">
-                        <p style="font-family: var(--font-body); font-size: 1rem; color: #333; margin-bottom: 15px;">
-                            Did you love our service? Help others find us!
-                        </p>
-                        <a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" style="display: block; width: 100%; background-color: #000; color: #fff; text-align: center; padding: 15px 0; text-decoration: none; font-family: var(--font-body); letter-spacing: 1.5px; font-size: 0.9rem; margin-bottom: 25px;">
-                            WRITE A REVIEW ON GOOGLE
-                        </a>
-                        <h4 style="font-family: var(--font-accent); font-size: 1.5rem; margin-bottom: 15px; font-weight:400; color:#333;">What Our Clients Say</h4>
+                    <div style="text-align:center; padding:20px 0;">
+                        <p style="font-size:0.9rem; margin-bottom:15px;">Loved our service? Leave a review!</p>
+                        <a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" style="display:block; width:100%; background:#000; color:#fff; padding:15px; font-size:0.9rem;">WRITE A REVIEW</a>
                         <script src="https://elfsightcdn.com/platform.js" async></script>
                         <div class="elfsight-app-2c83f037-ee5d-4d90-913e-2a5f353d7add" data-elfsight-app-lazy></div>
                     </div>
                 </div>
             </details>
-            
             <details class="pm-accordion">
-                <summary class="pm-accordion-header">
-                    LEGAL TERMS AND CONDITIONS
-                    <span class="pm-icon-plus">+</span>
-                    <span class="pm-icon-minus">-</span>
-                </summary>
+                <summary class="pm-accordion-header">LEGAL TERMS <span class="pm-icon-plus">+</span><span class="pm-icon-minus">-</span></summary>
                 <div class="pm-accordion-content">
                     <ul class="pm-links-list">
                         <li><a href="/privacy-policy/">Privacy Policy</a></li>
@@ -193,150 +185,83 @@
                 </div>
             </details>
         </div>
-
         <div class="pm-contact-wrapper">
-            <a href="/contact-us/" class="pm-contact-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                <span>CONTACT US</span>
-            </a>
+            <a href="/contact-us/" class="pm-contact-btn">CONTACT US</a>
         </div>
-        
-        <div class="pm-bottom-bar">
-            <p>© 2025 ALiF LADIES TAILOR | DESIGNED WITH STYLE</p>
-        </div>
+        <div class="pm-bottom-bar"><p>© 2025 ALiF LADIES TAILOR</p></div>
     </footer>
 
     <div id="chat-widget"></div>
 
-    <script src="/js/main.js?v=3" defer></script>
-
-    <div id="confirm-modal" class="modal-overlay">
-        <div class="modal-content">
-            <p id="modal-message">Do you want to remove this product?</p>
-            <div class="modal-actions">
-                <button id="modal-cancel" class="btn-cart">Cancel</button>
-                <button id="modal-confirm" class="btn-buy">Remove</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/sw.js");
-        }
-    </script>
-
-        <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    <script src="/js/main.js?v=4" defer></script>
     
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
     <script>
-        // ... (Upar wala purana Search Logic waisa hi rahega) ...
+        document.addEventListener("DOMContentLoaded", () => {
+            let searchIndex = [];
+            const overlay = document.getElementById('search-overlay');
+            const input = document.getElementById('search-input');
+            const resultsContainer = document.getElementById('search-results');
+            const openBtn = document.getElementById('open-search');
+            const closeBtn = document.getElementById('close-search');
 
-          // ==========================================
-        // 🤖 FUTURISTIC TYPEWRITER EFFECT (Updated)
-        // ==========================================
-        const target = document.getElementById('search-input');
-        
-        // Sirf Keywords (Bina "Search for" ke)
-        const words = [
-            "Lace...", 
-            "Latkan...", 
-            "Velvet...", 
-            "Blouse Designs...", 
-            "Net Fabric...", 
-            "Diamond lace...", 
-            "Georgette...", 
-            "Banarasi...", 
-            "Cotton...",
-            "Astar & Fall..."
-        ];
+            fetch('/search.json').then(res => res.json()).then(data => { searchIndex = data; });
 
-        let i = 0;
-        let j = 0;
-        let currentWord = "";
-        let isDeleting = false;
-        let isEnd = false;
+            if(openBtn) openBtn.onclick = () => { overlay.classList.add('active'); setTimeout(() => input.focus(), 100); };
+            if(closeBtn) closeBtn.onclick = () => { overlay.classList.remove('active'); input.value = ''; resultsContainer.innerHTML = ''; };
 
-        function typeEffect() {
-            isEnd = false;
-            currentWord = words[i];
+            // Typewriter
+            const words = ["Lace...", "Latkan...", "Velvet...", "Blouse...", "Net...", "Diamond Work..."];
+            let i = 0, j = 0, currentWord = "", isDeleting = false, isEnd = false;
 
-            if (isDeleting) {
-                target.placeholder = currentWord.substring(0, j--);
-                if (j < 0) {
-                    isDeleting = false;
-                    i++;
-                    if (i == words.length) i = 0;
+            function typeEffect() {
+                isEnd = false; currentWord = words[i];
+                if (isDeleting) {
+                    input.placeholder = currentWord.substring(0, j--);
+                    if (j < 0) { isDeleting = false; i++; if (i == words.length) i = 0; }
+                } else {
+                    input.placeholder = currentWord.substring(0, j++);
+                    if (j == currentWord.length + 1) { isEnd = true; isDeleting = true; }
                 }
-            } else {
-                target.placeholder = currentWord.substring(0, j++);
-                if (j == currentWord.length + 1) {
-                    isEnd = true;
-                    isDeleting = true;
-                }
+                const speed = isEnd ? 2000 : isDeleting ? 50 : 100;
+                setTimeout(typeEffect, speed);
             }
+            typeEffect();
 
-            const speed = isEnd ? 2000 : isDeleting ? 50 : 100; 
-            setTimeout(typeEffect, speed);
-        }
+            input.addEventListener('input', (e) => {
+                const query = e.target.value;
+                if(query.length < 2) { resultsContainer.innerHTML = ''; return; }
 
-        typeEffect();
+                const fuse = new Fuse(searchIndex, {
+                    keys: [
+                        { name: 'title', weight: 0.4 },
+                        { name: 'category', weight: 0.2 },
+                        { name: 'colour', weight: 0.2 }, // Color Search
+                        { name: 'fabric', weight: 0.1 }, // Fabric Search
+                        { name: 'ideal_for', weight: 0.05 },
+                        { name: 'work', weight: 0.05 }
+                    ],
+                    threshold: 0.4,
+                    ignoreLocation: true
+                });
 
-
-        // ... (Baaki purana code: fetch data, open search, etc.) ...
-        
-        let searchIndex = [];
-        const overlay = document.getElementById('search-overlay');
-        const input = document.getElementById('search-input');
-        const resultsContainer = document.getElementById('search-results');
-
-        fetch('/search.json').then(res => res.json()).then(data => { searchIndex = data; });
-
-        document.getElementById('open-search').addEventListener('click', () => {
-            overlay.classList.add('active');
-            setTimeout(() => input.focus(), 100);
-        });
-
-        document.getElementById('close-search').addEventListener('click', () => {
-            overlay.classList.remove('active');
-            input.value = '';
-            resultsContainer.innerHTML = '';
-        });
-
-        input.addEventListener('input', (e) => {
-            const query = e.target.value;
-            if(query.length < 2) { resultsContainer.innerHTML = ''; return; }
-
-            const fuse = new Fuse(searchIndex, {
-                keys: [
-                    { name: 'title', weight: 0.4 },
-                    { name: 'category', weight: 0.2 },
-                    { name: 'colour', weight: 0.2 },
-                    { name: 'fabric', weight: 0.1 },
-                    { name: 'ideal_for', weight: 0.05 },
-                    { name: 'work', weight: 0.05 }
-                ],
-                threshold: 0.4,
-                ignoreLocation: true
+                const results = fuse.search(query);
+                if(results.length > 0) {
+                    resultsContainer.innerHTML = results.map(res => `
+                        <a href="${res.item.url}" class="search-item">
+                            <img src="${res.item.image}" alt="${res.item.title}">
+                            <div><h4>${res.item.title}</h4><span>${res.item.category}</span></div>
+                            <span class="s-arrow">→</span>
+                        </a>`).join('');
+                } else {
+                    resultsContainer.innerHTML = `<p style="text-align:center; color:#999; margin-top:20px;">No results.</p>`;
+                }
             });
-
-            const results = fuse.search(query);
-            
-            if(results.length > 0) {
-                resultsContainer.innerHTML = results.map(res => `
-                    <a href="${res.item.url}" class="search-item">
-                        <img src="${res.item.image}" alt="${res.item.title}">
-                        <div>
-                            <h4>${res.item.title}</h4>
-                            <span>${res.item.category} ${res.item.colour ? '• ' + res.item.colour : ''}</span>
-                        </div>
-                        <span class="s-arrow">→</span>
-                    </a>
-                `).join('');
-            } else {
-                resultsContainer.innerHTML = `<p style="text-align:center; color:#999; margin-top:20px;">No results for "${query}"</p>`;
-            }
         });
     </script>
 
+    <script>
+        if ("serviceWorker" in navigator) { navigator.serviceWorker.register("/sw.js"); }
+    </script>
 </body>
 </html>
