@@ -1895,3 +1895,23 @@ ubic-bezier(0.22, 1, 0.36, 1) forwards;
   0%   { transform: translateX(0); }
   100% { transform: translateX(-100%); }
 }
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-accent);
+  font-size: 0.95rem;
+  letter-spacing: 1.5px;
+  padding: 10px 0;
+  position: relative;
+}
+.marquee-content {
+  display: inline-block;
+  animation: marquee 18s linear infinite;
+  padding-left: 100%;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
