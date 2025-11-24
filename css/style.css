@@ -1857,7 +1857,7 @@ ubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 #app-splash.zoom-out-effect {
-  opacity: 0;
+  opacity: 1;
   transform: scale(1.2);
 }
 .splash-logo-img {
