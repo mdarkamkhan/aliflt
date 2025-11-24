@@ -58,6 +58,81 @@
 </head>
 
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    
+    <script>
+        let searchIndex = [];
+        const overlay = document.getElementById('search-overlay');
+        const input = document.getElementById('search-input');
+        const resultsContainer = document.getElementById('search-results');
+
+        // Fetch Data
+        fetch('/search.json').then(res => res.json()).then(data => {
+            searchIndex = data;
+        });
+
+        // Open Search
+        document.getElementById('open-search').addEventListener('click', () => {
+            overlay.classList.add('active');
+            setTimeout(() => input.focus(), 100);
+        });
+
+        // Close Search
+        document.getElementById('close-search').addEventListener('click', () => {
+            overlay.classList.remove('active');
+            input.value = '';
+            resultsContainer.innerHTML = '';
+        });
+
+        // SMART SEARCH LOGIC (Full Power)
+        input.addEventListener('input', (e) => {
+            const query = e.target.value;
+            
+            if(query.length < 2) {
+                resultsContainer.innerHTML = '';
+                return;
+            }
+
+            // Fuse.js Configuration (Yahan humne sab kuch jod diya)
+            const fuse = new Fuse(searchIndex, {
+                keys: [
+                    { name: 'title', weight: 0.4 },       // Title sabse important
+                    { name: 'category', weight: 0.2 },    // Category (Lace/Blouse)
+                    { name: 'colour', weight: 0.2 },      // Colour (Red/Gold) - AB YE SEARCH HOGA
+                    { name: 'fabric', weight: 0.1 },      // Fabric (Velvet/Cotton)
+                    { name: 'ideal_for', weight: 0.05 },  // Usage (Saree/Suit)
+                    { name: 'work', weight: 0.05 },       // Work (Dhaga/Zari)
+                    { name: 'description', weight: 0.05 } // Extra details
+                ],
+                threshold: 0.4,     // Spelling mistake (Red vs Rad) chalega
+                ignoreLocation: true,
+                minMatchCharLength: 2
+            });
+
+            const results = fuse.search(query);
+            
+            // Render Results
+            if(results.length > 0) {
+                resultsContainer.innerHTML = results.map(res => `
+                    <a href="${res.item.url}" class="search-item">
+                        <img src="${res.item.image}" alt="${res.item.title}">
+                        <div>
+                            <h4>${res.item.title}</h4>
+                            <span>
+                                ${res.item.category} 
+                                ${res.item.colour ? '• ' + res.item.colour : ''} 
+                                ${res.item.price ? '• ₹' + res.item.price : ''}
+                            </span>
+                        </div>
+                        <span class="s-arrow">→</span>
+                    </a>
+                `).join('');
+            } else {
+                resultsContainer.innerHTML = `<p style="text-align:center; color:#999; margin-top:20px;">No results for "${query}"</p>`;
+            }
+        });
+    </script>
+
     
     <div id="app-splash">
         <img src="/icons/icon-512x512.png" alt="ALiF Logo" class="splash-logo-img">
