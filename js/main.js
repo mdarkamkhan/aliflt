@@ -63,15 +63,25 @@ document.addEventListener("DOMContentLoaded", () => {
             this.save();
             this.updateIcon();
         },
-        updateIcon() {
-            const cartCount = document.getElementById("cartCount");
-            if (cartCount) {
-                let total = 0;
-                for (const id in this.items) total += this.items[id].qty;
-                cartCount.textContent = total;
-                cartCount.style.display = total > 0 ? "flex" : "none";
-            }
-        },
+            updateIcon() {
+        let total = 0;
+        for (const id in this.items) total += this.items[id].qty;
+
+        // 1. Desktop Icon Update
+        const desktopCount = document.getElementById("cartCount");
+        if (desktopCount) {
+            desktopCount.textContent = total;
+            // Optional: Hide if 0
+            desktopCount.style.display = total > 0 ? 'flex' : 'none';
+        }
+
+        // 2. Mobile Bottom Icon Update
+        const mobileCount = document.getElementById("cartCountMobile");
+        if (mobileCount) {
+            mobileCount.textContent = total;
+            mobileCount.style.display = total > 0 ? 'inline-block' : 'none';
+        }
+    },
         getTotalPrice() {
             let total = 0;
             for (const id in this.items) {
