@@ -4,32 +4,51 @@ document.addEventListener("DOMContentLoaded", () => {
                 /* ================================
          0. SPLASH SCREEN LOGIC (ZOOM EFFECT)
     ================================ */
-    const splash = document.getElementById('app-splash');
-    
-    // Sirf tab chalega jab splash screen visible ho (First Time)
-    if (splash && getComputedStyle(splash).display !== 'none') {
-        
-        const triggerZoomExit = () => {
-            // 1. Nayi Class add karo jo Zoom animation shuru karegi
-            splash.classList.add('zoom-out-effect'); 
-            
-            // 2. Animation khatam hone ka wait (0.9s buffer)
-            setTimeout(() => {
-                splash.style.display = 'none';
-                // Flag set karo taaki dubara na dikhe
-                sessionStorage.setItem("alifSplashSeen", "true");
-            }, 900); 
-        };
+    #app-splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #FBF9F6; /* theme color */
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 
-        window.addEventListener('load', () => {
-            // 2 second logo dikhao, phir Zoom karke gayab ho jao
-            setTimeout(triggerZoomExit, 2000);
-        });
-        
-        // Safety Fallback (Agar load atak jaye)
-        setTimeout(triggerZoomExit, 4500);
-    }
+.splash-logo-img {
+  width: 140px;
+  height: auto;
+  opacity: 0;
+  transform: scale(0.9);
+  animation: logoEnter 1.4s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
+}
 
+#app-splash.zoom-out-effect {
+  animation: bgFadeOut 0.8s ease forwards 0.5s;
+}
+
+#app-splash.zoom-out-effect .splash-logo-img {
+  animation: logoZoomThrough 1s cubic-bezier(0.6, 0, 0.05, 1) forwards;
+}
+
+@keyframes logoEnter {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes logoZoomThrough {
+  0% { transform: scale(1); opacity: 1; }
+  30% { transform: scale(0.7); opacity: 1; }
+  100% { transform: scale(40); opacity: 0; }
+}
+
+@keyframes bgFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
 
     /* ================================
           1. CART LOGIC
