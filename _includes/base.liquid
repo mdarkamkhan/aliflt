@@ -226,57 +226,97 @@
         }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    
     <script>
+        // ... (Upar wala purana Search Logic waisa hi rahega) ...
+
+          // ==========================================
+        // 🤖 FUTURISTIC TYPEWRITER EFFECT (Updated)
+        // ==========================================
+        const target = document.getElementById('search-input');
+        
+        // Sirf Keywords (Bina "Search for" ke)
+        const words = [
+            "Lace...", 
+            "Latkan...", 
+            "Velvet...", 
+            "Blouse Designs...", 
+            "Net Fabric...", 
+            "Diamond Work...", 
+            "Georgette...", 
+            "Banarasi...", 
+            "Cotton...",
+            "Astar & Fall..."
+        ];
+
+        let i = 0;
+        let j = 0;
+        let currentWord = "";
+        let isDeleting = false;
+        let isEnd = false;
+
+        function typeEffect() {
+            isEnd = false;
+            currentWord = words[i];
+
+            if (isDeleting) {
+                target.placeholder = currentWord.substring(0, j--);
+                if (j < 0) {
+                    isDeleting = false;
+                    i++;
+                    if (i == words.length) i = 0;
+                }
+            } else {
+                target.placeholder = currentWord.substring(0, j++);
+                if (j == currentWord.length + 1) {
+                    isEnd = true;
+                    isDeleting = true;
+                }
+            }
+
+            const speed = isEnd ? 2000 : isDeleting ? 50 : 100; 
+            setTimeout(typeEffect, speed);
+        }
+
+        typeEffect();
+
+
+        // ... (Baaki purana code: fetch data, open search, etc.) ...
+        
         let searchIndex = [];
         const overlay = document.getElementById('search-overlay');
         const input = document.getElementById('search-input');
         const resultsContainer = document.getElementById('search-results');
 
-        // Fetch Data
-        fetch('/search.json').then(res => res.json()).then(data => {
-            searchIndex = data;
+        fetch('/search.json').then(res => res.json()).then(data => { searchIndex = data; });
+
+        document.getElementById('open-search').addEventListener('click', () => {
+            overlay.classList.add('active');
+            setTimeout(() => input.focus(), 100);
         });
 
-        // Open Search
-        const openBtn = document.getElementById('open-search');
-        if(openBtn) {
-            openBtn.addEventListener('click', () => {
-                overlay.classList.add('active');
-                setTimeout(() => input.focus(), 100);
-            });
-        }
-
-        // Close Search
         document.getElementById('close-search').addEventListener('click', () => {
             overlay.classList.remove('active');
             input.value = '';
             resultsContainer.innerHTML = '';
         });
 
-        // SEARCH LOGIC
         input.addEventListener('input', (e) => {
             const query = e.target.value;
-            
-            if(query.length < 2) {
-                resultsContainer.innerHTML = '';
-                return;
-            }
+            if(query.length < 2) { resultsContainer.innerHTML = ''; return; }
 
             const fuse = new Fuse(searchIndex, {
-                // ✅ IMPORTANT: Ye fields search honge
                 keys: [
                     { name: 'title', weight: 0.4 },
                     { name: 'category', weight: 0.2 },
-                    { name: 'colour', weight: 0.2 },  // <-- Colour (Red)
-                    { name: 'fabric', weight: 0.1 },  // <-- Fabric (Velvet)
+                    { name: 'colour', weight: 0.2 },
+                    { name: 'fabric', weight: 0.1 },
                     { name: 'ideal_for', weight: 0.05 },
-                    { name: 'work', weight: 0.05 },
-                    { name: 'description', weight: 0.05 }
+                    { name: 'work', weight: 0.05 }
                 ],
                 threshold: 0.4,
-                ignoreLocation: true,
-                minMatchCharLength: 2
+                ignoreLocation: true
             });
 
             const results = fuse.search(query);
@@ -285,12 +325,9 @@
                 resultsContainer.innerHTML = results.map(res => `
                     <a href="${res.item.url}" class="search-item">
                         <img src="${res.item.image}" alt="${res.item.title}">
-                        <div class="s-info">
+                        <div>
                             <h4>${res.item.title}</h4>
-                            <span>
-                                ${res.item.category} 
-                                ${res.item.colour ? '• ' + res.item.colour : ''} 
-                            </span>
+                            <span>${res.item.category} ${res.item.colour ? '• ' + res.item.colour : ''}</span>
                         </div>
                         <span class="s-arrow">→</span>
                     </a>
