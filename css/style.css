@@ -1,59 +1,40 @@
-/* ALiF Ladies Tailor - Modern Trendy Theme */
+/* css/style.css */
+/* ALiF Ladies Tailor - Luxury Fashion Theme */
 
 :root {
-    /* --- COLORS --- */
     --accent-color: #000000;
     --accent-color-dark: #333333;
-    --bg-color: #FBF9F6; /* Soft beige */
-    --white: #ffffff;
+    --bg-color: #FBF9F6; /* Soft beige/cream */
     --text-color: #111111;
     --border-color: #e0e0e0;
-
-    /* --- FONTS (Clean & Modern) --- */
-    /* Ab Headings bhi Poppins hongi (Trendy Look) */
-    --font-heading: 'Poppins', sans-serif; 
+    --font-heading: 'Playfair Display', serif;
     --font-body: 'Poppins', sans-serif;
-    --font-accent: 'Poppins', sans-serif;
-
-    /* --- SHAPES (The New Trendy Look) --- */
-    --radius-card: 16px;      /* Product Cards ke liye */
-    --radius-btn: 50px;       /* Buttons (Pill shape) */
-    --radius-input: 12px;     /* Search/Form inputs */
-    
-    /* --- SHADOWS --- */
-    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.06);
-    --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.12);
-}
-
-/* --- GLOBAL RESETS --- */
-html {
-    scroll-behavior: smooth; /* Smooth Scrolling */
+    --font-accent: 'Cormorant Garamond', serif;
 }
 
 body {
     font-family: var(--font-body);
-    font-weight: 400;
+    font-weight: 300; /* Poppins Light */
     line-height: 1.7;
     margin: 0;
     padding: 0;
     color: var(--text-color);
     background-color: var(--bg-color);
+    padding-bottom: 0px;
     padding-top: 70px; 
-    padding-bottom: 0;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-body.sidebar-open { overflow: hidden; }
+body.sidebar-open {
+    overflow: hidden;
+}
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    font-weight: 600; /* Thoda Bold */
+    font-weight: 400;
     color: var(--text-color);
-    letter-spacing: -0.5px; /* Modern tight spacing */
 }
-
-a { text-decoration: none; color: inherit; transition: 0.3s; }
-ul { list-style: none; padding: 0; margin: 0; }
 
 .container {
     max-width: 960px;
@@ -62,261 +43,1599 @@ ul { list-style: none; padding: 0; margin: 0; }
     padding: 0 20px;
 }
 
+/* Set .section margin to 0 so panels are the only thing with margin */
 .section {
-    margin: 40px 0;
-    padding: 20px 0;
+    background: transparent;
+    margin: 0;
+    padding: 40px;
+    border-radius: 0;
+    box-shadow: none;
+}
+/* We add margin back to sections that are *inside* a container */
+.container .section {
+    margin: 20px 0;
 }
 
 .section h2 {
     text-align: center;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 15px;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
     margin-bottom: 30px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
     font-size: 1.8rem;
+}
+.contact-form label { 
+    display: block; 
+    margin-bottom: 8px; 
+    font-weight: 400; 
+    font-family: var(--font-accent);
+    font-size: 1.2rem;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-
-/* --- BUTTONS (Trendy Pill Shape) --- */
-.btn-cart, .btn-buy, .btn-submit, .sidebar-install-btn, .cta-buttons a {
-    display: inline-block;
+.contact-form input, .contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 25px;
+    border: 1px solid #000;
+    border-radius: 0;
+    box-sizing: border-box;
     font-family: var(--font-body);
-    font-weight: 600;
+    font-weight: 300;
+    font-size: 1rem;
+    background: #fff;
+}
+.contact-form button {
+    background: var(--accent-color);
+    color: #fff;
+    padding: 12px 25px;
+    border: 1px solid var(--accent-color);
+    border-radius: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+.contact-form button:hover { 
+    background: #fff; 
+    color: var(--accent-color); 
+}
+.cta-buttons { text-align: center; margin-top: 20px; }
+.cta-buttons a {
+    display: inline-block;
+    background: #000;
+    color: #fff;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 0;
+    font-weight: 300;
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 5px 10px;
+    border: 1px solid #000;
+    transition: all 0.3s ease;
+}
+.cta-buttons a:hover {
+    background: #fff;
+    color: #000;
+}
+/* Special button styles removed for a uniform look */
+.cta-buttons a.review-btn {
+    margin: 20px auto 0 auto;
+    padding: 12px 30px;
+    font-size: 1.1em;
+    display: block;
+    max-width: 300px;
+}
+.cta-buttons a.instagram-btn {
+    background: #000; /* Remove gradient */
+}
+.social-links { text-align: center; margin-top: 20px; }
+.social-links a {
+    display: inline-block;
+    margin: 0 15px;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    font-weight: 300;
+    text-decoration: none;
+    color: var(--text-color);
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 14px 30px;
-    border-radius: var(--radius-btn) !important; /* Gol Button */
-    border: none;
-    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+.social-links a:hover {
+    opacity: 0.7;
+}
+
+/* This footer style is now overridden by the inline <style> in base.liquid */
+footer {
     text-align: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 20px 0;
+    color: #777;
 }
-
-/* Black Solid Button */
-.btn-buy, .btn-submit, .sidebar-install-btn, .cta-buttons a {
-    background-color: var(--accent-color);
-    color: #fff;
+.swapper-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    min-height: 500px; 
+    overflow: hidden;
 }
-.btn-buy:hover, .btn-submit:hover, .sidebar-install-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+.swapper-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    box-shadow: none;
+    display: none;
 }
-
-/* Outline Button */
-.btn-cart {
-    background-color: transparent;
-    color: var(--accent-color);
-    border: 2px solid #eee;
+.swapper-item.active {
+    opacity: 1;
+    display: block;
 }
-.btn-cart:hover {
-    border-color: #000;
+.swapper-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 0;
+    min-height: 450px; 
+    object-fit: cover;
+}
+.swapper-item .product-label, .swapper-item .service-details, .swapper-item .work-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 15px;
+    font-size: 1rem;
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-sizing: border-box;
+    text-align: center;
+}
+.swapper-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    z-index: 20;
+    pointer-events: none;
+}
+.swapper-nav-btn {
+    background: rgba(255,255,255,0.7);
+    color: #000;
+    border: none;
+    font-size: 1.5rem;
+    padding: 10px;
+    cursor: pointer;
+    pointer-events: all;
+    border-radius: 0;
+    transition: background 0.3s ease;
+}
+.swapper-nav-btn:hover {
     background: #fff;
 }
 
-/* --- PRODUCT CARDS (Shadow + Rounded) --- */
+.empty-gallery-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    text-align: center;
+    font-family: var(--font-accent);
+    color: #777;
+    font-size: 1.2rem;
+}
+
+/* ==================================================
+===== 💡 BANNER STYLES (AUTO-FRAME FIX) ========
+================================================== */
+#top-banner {
+    position: relative;
+    width: 100%;
+    /* 💡 REMOVED height: 100vh; */
+    overflow: hidden;
+}
+#top-banner .swapper-container {
+    width: 100%;
+    /* 💡 REMOVED height: 100%; */
+    max-width: none;
+    /* 💡 REMOVED min-height: auto; */
+}
+#top-banner .swapper-item img {
+    width: 100%;
+    height: auto; /* 💡 CHANGED to 'auto' */
+    object-fit: fill; /* 💡 CHANGED to 'fill' */
+    display: block; /* 💡 ADDED this */
+    min-height: 0; 
+}
+/* ==================================================
+===== 💡 END BANNER STYLES FIX ==================
+================================================== */
+
+.banner-content {
+    position: absolute;
+    bottom: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    width: 80%;
+}
+.banner-content h2 {
+    display: none; /* 💡 Hides the redundant title */
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+@media (max-width: 900px) {
+    #top-banner {
+        /* No 100vh height needed */
+    }
+    .banner-content {
+         bottom: 15vh;
+    }
+    .banner-content h2 {
+        font-size: 2rem;
+    }
+}
+/* 💡 MOBILE TYPOGRAPHY (Magazine Cover Style) */
+@media (max-width: 600px) {
+    .banner-content h2 {
+        display: block !important; /* Ensure visibility */
+        font-size: 2.8rem; /* Bada Impactful Size */
+        line-height: 1.1;
+        letter-spacing: -1px; /* Tight spacing trendy hai */
+        text-shadow: none; /* Clean look */
+        color: #fff;
+    }
+    
+    /* Optional: Body text ko bhi adjust karein */
+    body {
+        font-size: 15px; /* Thoda readable size */
+    }
+}
+
+/* VISIBILITY FIX (Original rules kept) */
+.fade-in-section {
+    opacity: 1; 
+    transform: translateY(0);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.fade-in-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Chat Styles */
+#chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
+#chat-button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+ #chat-window {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border-radius: 0;
+    border: 1px solid #000;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+ }
+ #chat-header {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 10px;
+    font-weight: 400;
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }
+  #close-chat { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+ .message { margin-bottom: 10px; padding: 8px 12px; border-radius: 8px; max-width: 80%; font-family: var(--font-body); font-weight: 300;}
+ .user-message { background-color: #eee; align-self: flex-end; margin-left: auto; }
+ .ai-message { background-color: var(--accent-color); color: white; align-self: flex-start; margin-right: auto; }
+  .thinking-message { font-style: italic; color: #888; align-self: flex-start; }
+ #chat-input-area { display: flex; padding: 10px; border-top: 1px solid #eee; }
+ #chat-input { flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 0; margin-right: 5px; font-family: var(--font-body); }
+ #send-button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 0;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+ }
+ #send-button:hover { background-color: var(--accent-color-dark); }
+ #chat-window.hidden { display: none; }
+ #chat-window.visible { display: flex; }
+
+
+/* PRADA-STYLE HOMEPAGE PANELS (CARD-STYLE) */
+.prada-panel {
+    position: relative;
+    width: calc(100% - 40px);
+    max-width: 1600px;
+    margin: 20px auto;
+    height: 85vh; 
+    overflow: hidden;
+    display: block;
+    text-decoration: none;
+    color: white;
+    background: #eee;
+    border-radius: 0;
+    box-shadow: none;
+}
+.prada-panel-label {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    z-index: 10;
+    font-size: 1.2rem;
+    font-weight: 400;
+    font-family: var(--font-accent);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.prada-panel .swapper-container { max-width: none; width: 100%; height: 100%; min-height: 0; }
+.prada-panel .swapper-item { height: 100%; }
+.prada-panel .swapper-item img { height: 100%; min-height: 0; object-fit: cover; border-radius: 0; }
+.prada-panel .swapper-nav,
+.prada-panel .product-label,
+.prada-panel .service-details,
+.prada-panel .work-caption {
+    display: none;
+}
+@media (max-width: 600px) {
+    .prada-panel { width: calc(100% - 20px); margin: 10px auto; height: 70vh; }
+    .prada-panel-label { font-size: 1.1rem; top: 20px; left: 20px; }
+}
+
+
+/* ==================================================
+===== 💡 PRODUCT PAGE GRID LAYOUT (UPDATED) ========
+================================================== 
+*/
+
 .product-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
 }
-@media (min-width: 768px) { .product-grid { grid-template-columns: repeat(3, 1fr); gap: 25px; } }
-@media (min-width: 1024px) { .product-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+}
+@media (min-width: 1024px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+@media (min-width: 1400px) {
+    .product-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
 
+/* VISIBILITY FIX (Original rules kept) */
 .product-card {
-    background: var(--white);
-    border-radius: var(--radius-card);
-    box-shadow: var(--shadow-soft);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid transparent;
+    text-decoration: none;
+    color: var(--text-color);
+    display: block;
+    border-radius: 0;
+    opacity: 1; 
+    transform: translateY(0);
+    /* 💡 ADDED transition for display */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, display 0.3s ease;
+}
+.product-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* 💡 NEW: Class for hiding filtered products */
+.product-card.hidden {
+    opacity: 0;
+    transform: translateY(10px);
+    display: none;
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
-}
-
+/* ✅ ISE PASTE KARO */
+/* 💡 LUXURY SLOW ZOOM EFFECT */
 .product-card-image-wrapper {
-    aspect-ratio: 1 / 1.2;
-    background: #f4f4f4;
     overflow: hidden;
+    border-radius: 0;
+    position: relative;
+    /* Masking fix for safari if needed */
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
 .product-card img {
     width: 100%;
-    height: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1 / 1.25;
     object-fit: cover;
-    transition: transform 0.5s ease;
-}
-.product-card:hover img { transform: scale(1.05); }
 
+    /* Smooth Transition */
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+}
+
+.product-card:hover img { 
+    transform: scale(1.08); /* Slow, subtle zoom luxury feel deta hai */
+}
 .product-card-name {
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 12px 10px 5px 10px;
     text-align: center;
+    font-weight: 400; /* Use heading font */
+    font-family: var(--font-heading);
+    padding: 15px 10px;
+    font-size: 1.2rem;
+    text-transform: capitalize; /* Kept from original */
+}
+@media (max-width: 600px) {
+    .section { padding: 20px; }
+    .container .section { margin: 10px 0; }
+    .product-card-name { font-size: 1.1rem; padding: 10px; }
 }
 
-.product-card-price {
-    font-weight: 700;
-    color: #000;
-}
 
-/* --- FORMS & INPUTS (Soft Look) --- */
-input, textarea, select, .minimal-input {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid #eee;
-    border-radius: var(--radius-input) !important;
-    background: #fff;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    box-sizing: border-box;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-    transition: all 0.3s;
-    margin-bottom: 15px;
+/* COLLAPSIBLE REVIEWS SECTION */
+.collapsible-section { 
+    padding: 0; 
+    border: 1px solid var(--border-color); 
+    background: #fff; /* Give it a white bg to stand out slightly */
+    position: relative; /* Helps ensure it stacks correctly */
+    z-index: 10;
 }
-input:focus, textarea:focus {
-    border-color: #000;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+.collapsible-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    cursor: pointer;
+    list-style: none;
 }
+.collapsible-summary::-webkit-details-marker { display: none; }
+.collapsible-summary h2 { 
+    margin: 0; 
+    border-bottom: none; /* Override section h2 */
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+.icon-plus-minus { position: relative; width: 18px; height: 18px; }
+.icon-plus-minus::before,
+.icon-plus-minus::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: #333;
+    transition: transform 0.3s ease-out;
+}
+.icon-plus-minus::before { height: 1px; width: 100%; transform: translate(-50%, -50%); }
+.icon-plus-minus::after { height: 100%; width: 1px; transform: translate(-50%, -50%); }
+details[open] .icon-plus-minus::after { transform: translate(-50%, -50%) rotate(90deg); }
+.collapsible-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease-in-out;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+details[open] .collapsible-content {
+    grid-template-rows: 1fr;
+    padding-bottom: 25px;
+}
+.collapsible-content > div { overflow: hidden; }
 
-/* --- NAVBAR --- */
+
+/* FIXED NAV & SIDEBAR STYLES - UPDATED WITH GLASSMORPHISM */
 .fixed-top-nav {
-    position: fixed; top: 0; left: 0; width: 100%; height: 70px;
-    background: rgba(255, 255, 255, 0.95); /* Slight glass effect */
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; z-index: 1001; box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    
+    /* 💡 TRENDY CHANGE: Glassmorphism Effect */
+    background: rgba(251, 249, 246, 0.85); /* Transparent Beige */
+    backdrop-filter: blur(12px); /* Blur Effect */
+    -webkit-backdrop-filter: blur(12px); /* Safari Fix */
+    
+    border-bottom: 1px solid rgba(0,0,0,0.05); /* Subtle Border */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1001;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    box-shadow: none;
 }
-.nav-logo {
-    font-size: 1.8rem; font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase; font-family: var(--font-heading);
-}
-.nav-actions { display: flex; gap: 15px; align-items: center; }
-.nav-toggle-btn { background: none; border: none; width: 30px; cursor: pointer; }
-.nav-toggle-btn span { display: block; width: 100%; height: 2px; background: #000; margin: 6px 0; transition: 0.3s; }
 
-/* --- SIDEBAR MENU --- */
+@media (max-width: 600px) {
+    .fixed-top-nav { height: 60px; padding: 0 15px; }
+    body { padding-top: 60px; } /* Ye line zaroori hai content ko adjust karne ke liye */
+}
+
+/* ⚠️ ISKO DELETE MAT KARNA (Ye same rahega) */
+.nav-logo {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--text-color);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+}
+
+/* 💡 USER REQUESTED CHANGES APPLIED HERE 💡 */
+.nav-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 36px; /* 💡 CHANGED */
+    height: 32px; /* 💡 CHANGED */
+    z-index: 1004;
+}
+.nav-toggle-btn span {
+    width: 100%;
+    height: 2px; /* 💡 CHANGED */
+    background: #000;
+    border-radius: 0;
+    transition: all 0.3s ease;
+}
+/* 💡 Adjusted transform to match new dimensions */
+.sidebar-open .nav-toggle-btn span:nth-child(1) { transform: translateY(14px) rotate(45deg); } 
+.sidebar-open .nav-toggle-btn span:nth-child(2) { opacity: 0; }
+.sidebar-open .nav-toggle-btn span:nth-child(3) { transform: translateY(-14px) rotate(-45deg); } 
+/* 💡 END OF USER CHANGES 💡 */
+
 .sidebar-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5); z-index: 1002; opacity: 0; visibility: hidden; transition: 0.3s;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1002;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
 }
 .sidebar-overlay.is-open { opacity: 1; visibility: visible; }
-
 .sidebar-menu {
-    position: fixed; top: 0; right: 0; width: 300px; height: 100%;
-    background: #fff; z-index: 1003;
-    transform: translateX(100%); transition: transform 0.3s ease-in-out;
-    display: flex; flex-direction: column; padding-bottom: 30px;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height: 100%;
+    background: var(--bg-color);
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+    transform: translateX(100%);
+    transition: transform 0.4s ease-in-out;
+    z-index: 1003;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 .sidebar-menu.is-open { transform: translateX(0); }
-
-.sidebar-header { padding: 20px; text-align: right; }
-.sidebar-close-btn { background: none; border: none; font-size: 2rem; cursor: pointer; }
-
-.sidebar-links { padding: 0 30px; flex-grow: 1; }
-.sidebar-links li { margin-bottom: 15px; }
-.sidebar-links a { font-size: 1.1rem; font-weight: 500; text-transform: uppercase; }
-
-.sidebar-footer-area { padding: 20px 30px; }
-.sidebar-heading { font-size: 0.8rem; color: #888; letter-spacing: 1px; margin-bottom: 15px; }
-.sidebar-icons-row { display: flex; gap: 20px; margin-bottom: 20px; }
-
-/* --- SWAPPER / SLIDER (Rounded) --- */
-.swapper-container { position: relative; width: 100%; overflow: hidden; border-radius: var(--radius-card); }
-.swapper-item { display: none; width: 100%; transition: opacity 0.5s; }
-.swapper-item.active { display: block; }
-.swapper-item img { width: 100%; border-radius: var(--radius-card); display: block; }
-
-/* --- PRADA PANEL (Home Categories) --- */
-.prada-panel {
-    display: block; position: relative; margin: 20px auto; width: calc(100% - 40px); max-width: 1200px;
-    border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-soft);
+@media (max-width: 600px) { .sidebar-menu { width: 90%; } }
+.sidebar-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px 15px;
+    height: 70px;
+    align-items: center;
+    box-sizing: border-box;
 }
-.prada-panel-label {
-    position: absolute; top: 20px; left: 20px; z-index: 10;
-    font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-    background: rgba(255,255,255,0.8); padding: 5px 15px; border-radius: 30px;
-    backdrop-filter: blur(5px);
+@media (max-width: 600px) { .sidebar-header { height: 60px; } }
+.sidebar-close-btn { background: none; border: none; font-size: 2.5rem; color: #555; cursor: pointer; line-height: 1; }
+.sidebar-links { list-style: none; padding: 0 25px; margin: 0; flex-grow: 1; }
+.sidebar-links li { margin-bottom: 5px; }
+.sidebar-links a {
+    display: block;
+    padding: 15px 0;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 1.3rem;
+    font-weight: 300; 
+    font-family: var(--font-body); 
+    text-transform: uppercase; 
+    letter-spacing: 1.5px;   
+    transition: opacity 0.3s ease;
+}
+.sidebar-links a:hover { color: #000; opacity: 0.7; }
+.sidebar-socials { padding: 25px; border-top: 1px solid var(--border-color); }
+.sidebar-socials h3 {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #000;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: var(--font-accent);
+}
+.sidebar-socials .footer-socials { gap: 20px; }
+
+
+/* E-COMMERCE STYLES */
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+.nav-cart-btn { position: relative; color: #333; padding: 5px; }
+.nav-cart-btn svg { width: 24px; height: 24px; stroke: #000; }
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 11px;
+    font-weight: 400;
+    font-family: var(--font-body);
+    line-height: 1;
+    border-radius: 50%;
+    padding: 4px 6px;
+    min-width: 10px;
+    text-align: center;
+}
+.btn-cart, .btn-buy {
+    font-family: var(--font-body);
+    padding: 14px 20px;
+    border: 1px solid #000;
+    border-radius: 0;
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+/* Ghost button */
+.btn-cart { 
+    background-color: transparent; 
+    color: #000; 
+    border: 1px solid #000; 
+}
+.btn-cart:hover { 
+    background-color: #000; 
+    color: #fff; 
+}
+/* Solid button */
+.btn-buy { 
+    background-color: var(--accent-color); 
+    color: white; 
+    border: 1px solid var(--accent-color); 
+}
+/* ... Purana code upar ... */
+
+.btn-buy:hover { 
+    background-color: #fff; 
+    color: var(--accent-color);
 }
 
-/* --- ACCORDIONS --- */
-.product-accordion-container { border-top: 1px solid #eee; margin-top: 30px; }
-.accordion-item { border-bottom: 1px solid #eee; }
-.accordion-summary { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; font-weight: 600; }
-.accordion-content { padding: 0 20px 20px; display: none; } /* JS handles open state mostly */
-details[open] .accordion-content { display: block; }
+/* 💡 TRENDY SWIPE BUTTON STYLES */
+.btn-buy, .cta-buttons a {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    background: transparent !important;
+    color: #000 !important;
+    border: 1px solid #000;
+   transition: color 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
 
-/* --- FILTER BAR (Scrollable) --- */
+.btn-buy::before, .cta-buttons a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.btn-buy:hover::before, .cta-buttons a:hover::before {
+    transform: scaleX(1);
+}
+
+.btn-buy:hover, .cta-buttons a:hover {
+    color: #fff !important;
+    border-color: #000;
+}
+/* 👆 Code khatam 👆 */
+
+
+.product-detail-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+@media (min-width: 768px) { .product-detail-grid { grid-template-columns: 1fr 1fr; } }
+.product-detail-image img { 
+    width: 100%; 
+    height: auto; 
+    border-radius: 0; 
+    box-shadow: none; 
+    border: 1px solid var(--border-color);
+}
+.product-detail-title { 
+    font-size: 2.8rem; 
+    margin-top: 0; 
+    margin-bottom: 10px; 
+    font-weight: 400; 
+    line-height: 1.2;
+}
+.product-detail-price { 
+    font-size: 1.8rem; 
+    font-weight: 300; 
+    color: #000; 
+    display: block; 
+    margin-bottom: 15px; 
+    font-family: var(--font-body);
+}
+.product-detail-category { 
+    font-size: 1.1rem; 
+    color: #555; 
+    text-transform: uppercase; 
+    display: block; 
+    margin-bottom: 5px; 
+    font-family: var(--font-accent);
+    letter-spacing: 1.5px;
+}
+.product-detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+
+/* 💡 UPDATED CART ITEM STYLES */
+.cart-item { 
+    display: grid; 
+    grid-template-columns: 80px 1fr auto; 
+    gap: 15px; 
+    align-items: center; 
+    padding: 15px 0; 
+    border-bottom: 1px solid var(--border-color); 
+}
+.cart-item-image img { width: 80px; height: 80px; object-fit: cover; border-radius: 0; }
+.cart-item-info h4 { 
+    margin: 0 0 5px 0; 
+    font-size: 1.3rem; 
+    font-family: var(--font-heading);
+    font-weight: 400;
+}
+.cart-item-info p { margin: 0; color: #000; font-family: var(--font-body); font-weight: 400; }
+.cart-item-controls {
+    text-align: right;
+}
+
+#cart-summary { 
+    margin-top: 30px; 
+    border-top: 1px solid #000; 
+    padding-top: 20px; 
+    text-align: right; 
+}
+#cart-total { 
+    font-size: 1.5rem; 
+    margin-bottom: 20px; 
+    font-family: var(--font-heading);
+    font-weight: 400;
+}
+#cart-summary .btn-buy { width: 100%; }
+@media (min-width: 768px) { #cart-summary .btn-buy { width: auto; min-width: 300px; } }
+
+/* 💡 CART QUANTITY CONTROLS */
+.cart-item-quantity {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 300;
+    color: #333;
+    margin-top: 8px; 
+    display: flex; 
+    align-items: center; 
+}
+.cart-item-qty-text {
+    margin: 0 10px;
+    font-weight: 400; 
+    min-width: 50px; 
+    text-align: center;
+}
+.cart-item-qty-btn { 
+    background: none;
+    border: 1px solid #000;
+    color: #000;
+    font-family: var(--font-body);
+    font-weight: 400;
+    cursor: pointer;
+    padding: 2px 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border-radius: 0; 
+}
+.cart-item-qty-btn:hover {
+    background: #000;
+    color: #fff;
+}
+
+/* 💡 DELIVERY PROMO STYLES */
+.product-delivery-promo {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 300;
+    margin-bottom: 25px; /* Space before buttons */
+}
+#delivery-progress-container {
+    margin-top: 20px; 
+    margin-bottom: 25px; 
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    text-align: center;
+}
+#delivery-progress-text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 300;
+    margin: 0 0 10px 0;
+    transition: color 0.4s ease;
+}
+.delivery-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #eee;
+    overflow: hidden;
+}
+#delivery-progress-bar-inner {
+    height: 100%;
+    width: 0; /* JS will set this */
+    background: var(--accent-color);
+    transition: width 0.4s ease, background-color 0.4s ease;
+}
+#delivery-progress-container.is-unlocked #delivery-progress-text {
+    color: #006400; /* Dark, elegant green */
+    font-weight: 400;
+}
+#delivery-progress-container.is-unlocked #delivery-progress-bar-inner {
+    background: #006400; /* Dark, elegant green */
+}
+
+/* 💡 CONFIRMATION MODAL STYLES */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10002;
+    padding: 20px;
+    box-sizing: border-box;
+    display: none; /* JS will control this */
+}
+.modal-content {
+    background: var(--bg-color);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+.modal-content p {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    line-height: 1.4;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+.modal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+/* Modal buttons use the existing .btn-cart and .btn-buy styles */
+
+
+/* ==================================================
+===== 💡 PRADA-STYLE ACCORDION ===========
+================================================== */
+.product-accordion-container {
+    width: 100%;
+    background: var(--bg-color);
+    margin-top: 20px; /* Space from the grid above */
+}
+
+.accordion-item {
+    border-top: 1px solid var(--border-color);
+}
+.accordion-item:last-child {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.accordion-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px; /* Same padding as review section */
+    cursor: pointer;
+    list-style: none; /* Remove default marker */
+}
+.accordion-summary::-webkit-details-marker { 
+    display: none; 
+}
+
+.accordion-heading {
+    margin: 0;
+    font-family: var(--font-accent); /* Cormorant Garamond */
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 1.2rem;
+}
+
+.accordion-caret {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    line-height: 1;
+    transform: rotate(0deg); /* Start pointing up */
+    transition: transform 0.4s ease;
+}
+
+/* 💡 This rotates the caret when the accordion is open */
+details[open] > .accordion-summary .accordion-caret {
+    transform: rotate(180deg);
+}
+
+/* 💡 This is the smooth-slide animation */
+.accordion-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease-in-out;
+}
+details[open] > .accordion-content {
+    grid-template-rows: 1fr;
+}
+.accordion-content > div {
+    overflow: hidden;
+    padding: 0 25px 30px 25px; /* Padding for the content */
+}
+
+/* 💡 Styles for the content *inside* the accordion */
+.accordion-description-text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #555;
+    font-weight: 300;
+    margin: 0;
+}
+
+.spec-row-wrapper {
+    max-width: 960px; /* Optional: constrain width */
+}
+
+/* 💡 Re-adding spec-row styles for inside the accordion */
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-family: var(--font-body); /* Poppins */
+    font-size: 1rem;
+}
+.spec-row:first-child {
+    padding-top: 0;
+}
+.spec-row:last-child {
+    border-bottom: none;
+}
+.spec-label {
+    font-weight: 400; /* Poppins Regular */
+    color: #333;
+    padding-right: 15px;
+}
+.spec-value {
+    font-weight: 300; /* Poppins Light */
+    color: #000;
+    text-align: right;
+    text-transform: capitalize;
+}
+
+/* ==================================================
+===== 💡 FILTER BAR STYLES (72px ICON FIX) =============
+================================================== */
 .filter-bar-scroll-container {
-    display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px;
-    scrollbar-width: none;
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+    padding: 10px 0 20px 0; /* Space above/below the bar */
+    margin-bottom: 20px; /* Space between bar and grid */
 }
+
+/* Hide scrollbar for a cleaner look */
+.filter-bar-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+.filter-bar-scroll-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
 .filter-btn {
-    flex: 0 0 auto; display: flex; flex-direction: column; align-items: center;
-    background: none; border: none; padding: 5px; width: 80px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px 5px; /* Reduced side padding */
+    margin-right: 10px;
+    border-radius: 0;
+    width: 90px; /* 💡 Set a fixed width */
+    flex-shrink: 0; /* 💡 Prevent button from shrinking */
+    border-bottom: 2px solid transparent; /* Placeholder for active state */
+    transition: border-color 0.3s ease;
 }
+
 .filter-icon {
-    width: 60px; height: 60px; border-radius: 50%; object-fit: cover;
-    border: 2px solid #eee; padding: 2px; transition: 0.3s;
+    width: 72px;  /* 💡 CHANGED to 72px */
+    height: 72px; /* 💡 CHANGED to 72px */
+    object-fit: contain;
+    margin-bottom: 0; 
+    border-radius: 50%; /* Makes the icons circular */
+    border: 1px solid var(--border-color); /* Subtle border */
+    padding: 2px;
 }
-.filter-btn.active .filter-icon { border-color: #000; }
-.filter-name { font-size: 0.8rem; margin-top: 5px; font-weight: 500; }
 
-/* --- TOAST NOTIFICATION --- */
-.toast {
-    visibility: hidden; min-width: 250px;
-    background-color: #000; color: #fff; text-align: center;
-    border-radius: 50px; padding: 15px 25px;
-    position: fixed; z-index: 10005; left: 50%; bottom: 30px;
-    transform: translateX(-50%); font-size: 0.9rem;
-    opacity: 0; transition: all 0.3s;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+.filter-name {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    text-transform: capitalize;
+    white-space: normal; /* 💡 Allow text to wrap */
+    text-align: center; /* 💡 Center the wrapped text */
+    line-height: 1.2; /* 💡 Added for better wrapped text spacing */
+    margin-top: 4px; /* 💡 Space from icon */
 }
-.toast.show { visibility: visible; opacity: 1; bottom: 50px; }
 
-/* --- CART PAGE FIX --- */
-.cart-item { display: flex; gap: 15px; padding: 20px 0; border-bottom: 1px solid #eee; }
-.cart-img-box { width: 80px; height: 100px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
-.cart-img-box img { width: 100%; height: 100%; object-fit: cover; }
-.cart-info h4 { font-size: 1rem; margin: 0 0 5px; }
-.remove-btn { background: none; border: none; color: #999; font-size: 1.5rem; }
-
-/* --- FOOTER (Prada Mobile Style) --- */
+/* Active state for the button */
+.filter-btn.active {
+    border-bottom: 2px solid var(--accent-color);
+}
+.filter-btn.active .filter-name {
+    font-weight: 600; /* Make active text slightly bolder */
+    }
+/* =========================================
+   PRADA MOBILE FOOTER STYLES
+========================================= */
 .prada-mobile-footer {
-    background: #fff; padding: 40px 0 20px; margin-top: 40px;
-    border-radius: 20px 20px 0 0; /* Top Rounded */
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.03);
+    background-color: #ffffff;
+    color: #000000;
+    padding-top: 40px;
+    font-family: var(--font-body); /* Use your Poppins font */
 }
-.pm-social-row { display: flex; justify-content: center; gap: 30px; margin-bottom: 30px; }
-.pm-contact-wrapper { text-align: center; padding: 30px 0; border-top: 1px solid #f0f0f0; }
-.pm-contact-btn { font-weight: 700; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; }
-.pm-bottom-bar { text-align: center; font-size: 0.7rem; color: #999; margin-top: 20px; }
+
+/* 1. Social Icons */
+.pm-social-row {
+    display: flex;
+    gap: 25px; /* Prada has wide spacing */
+    padding: 0 20px 40px 20px; /* Bottom padding important */
+}
+
+.pm-social-row a {
+    color: #000;
+    transition: opacity 0.3s;
+}
+.pm-social-row a:hover { opacity: 0.6; }
+
+/* 2. Accordion Styles (Collapsible) */
+.pm-accordion-wrapper {
+    border-top: 1px solid #e5e5e5; /* Thin grey line top */
+}
+
+.pm-accordion {
+    border-bottom: 1px solid #e5e5e5; /* Thin grey line bottom */
+}
+
+.pm-accordion-header {
+    list-style: none; /* Hide default arrow */
+    padding: 20px;
+    font-family: var(--font-heading); /* Use Playfair or Heading font */
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Chrome/Safari marker hide */
+.pm-accordion-header::-webkit-details-marker { display: none; }
+
+/* Icons Logic */
+.pm-icon-plus, .pm-icon-minus { font-size: 1.2rem; font-weight: 300; }
+.pm-icon-minus { display: none; }
+
+/* Switch icons when open */
+details[open] .pm-icon-plus { display: none; }
+details[open] .pm-icon-minus { display: block; }
+
+.pm-accordion-content {
+    padding: 0 20px 25px 20px;
+    background: #fff;
+}
+
+/* Review Styling */
+.pm-review-item {
+    margin-bottom: 15px;
+    border-left: 2px solid #000;
+    padding-left: 15px;
+}
+.pm-review-text {
+    font-size: 0.9rem;
+    font-style: italic;
+    margin: 0 0 5px 0;
+    color: #333;
+}
+.pm-review-author {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+}
+.pm-view-all {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    text-decoration: underline;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Links Styling inside accordion */
+.pm-links-list { list-style: none; padding: 0; margin: 0; }
+.pm-links-list li { margin-bottom: 10px; }
+.pm-links-list a { text-decoration: none; color: #333; font-size: 0.9rem; }
+
+
+/* 3. Contact Button (Like Store Locator) */
+.pm-contact-wrapper {
+    padding: 40px 0;
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5; /* Line below button */
+}
+
+.pm-contact-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #000;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 4. Bottom Bar */
+.pm-bottom-bar {
+    padding: 25px 20px;
+    text-align: center;
+}
+.pm-bottom-bar p {
+    font-size: 0.7rem;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+/* =========================================
+   PREMIUM SIDEBAR STYLES (UPDATED)
+========================================= */
+
+/* Sidebar Layout */
+.sidebar-menu {
+    /* Existing styles ke saath yeh add karo taaki footer niche rahe */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    padding-bottom: 40px; /* Bottom space */
+}
+
+.sidebar-header {
+    margin-bottom: 20px;
+}
+
+/* Links Styling (Clean) */
+.sidebar-links {
+    flex-grow: 1; /* Links beech ka space le lenge */
+    padding: 0 30px;
+}
+.sidebar-links li {
+    margin-bottom: 15px;
+}
+.sidebar-links a {
+    font-size: 1.1rem; /* Thoda chhota aur classy */
+    letter-spacing: 2px;
+    font-weight: 400;
+}
+
+/* Bottom Area (Socials + Button) */
+.sidebar-footer-area {
+    padding: 0 30px;
+    margin-top: auto; /* Force to bottom */
+}
+
+.sidebar-heading {
+    font-family: var(--font-accent); /* Cormorant/Fancy Font */
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 400;
+}
+
+/* Icons Row */
+.sidebar-icons-row {
+    display: flex;
+    gap: 30px; /* Khula khula space */
+    margin-bottom: 30px;
+}
+.sidebar-icons-row a {
+    color: #000;
+    transition: transform 0.3s ease;
+}
+.sidebar-icons-row a:hover {
+    transform: scale(1.1);
+}
+
+/* FULL WIDTH INSTALL BUTTON (Premium Look) */
+.sidebar-install-btn {
+    width: 100%; /* Full Width */
+    background-color: #000000; /* Jet Black */
+    color: #ffffff; /* White Text */
+    border: 1px solid #ffffff; /* White Border as requested */
+    outline: 1px solid #000000; /* Double border effect for contrast */
+    padding: 18px 0;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 3px; /* Wide spacing for luxury feel */
+    cursor: pointer;
+    border-radius: 0; /* Sharp edges */
+    transition: all 0.3s ease;
+    
+    /* Flex logic to center text */
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-install-btn:hover {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+}
+/* =========================================
+   PRODUCT DESCRIPTION FIXES
+========================================= */
+
+/* 1. Fix Overflow (Frame se bahar jana band) */
+.product-detail-info, 
+.product-description, 
+.accordion-content {
+    max-width: 100%;
+    word-wrap: break-word;      /* Lambe words ko todega */
+    overflow-wrap: break-word;  /* Frame ke andar rakhega */
+    white-space: normal;        /* Text ko wrap karega */
+}
+
+/* 2. Professional Typography for Description */
+.product-description p, 
+.accordion-description-text {
+    font-family: var(--font-body); /* Clean Poppins font */
+    font-size: 0.95rem;
+    line-height: 1.8; /* Lines ke beech space */
+    color: #444; /* Soft Black */
+    font-weight: 300;
+    margin-bottom: 15px;
+    text-align: left; /* Align Left looks better for reading */
+}
+
+/* 3. Add Spacing inside Accordion */
+.accordion-content {
+    padding: 15px 5px; /* Thoda breathing room */
+}
+
+/* 4. Button State Change (Added via JS) */
+#addToCartBtn {
+    transition: all 0.3s ease;
+}
+/* =========================================
+   CART PAGE IMAGE FIX (FIXED SIZE)
+========================================= */
+
+/* 1. Row Layout - Image | Info | Cross */
+.cart-item { 
+    display: flex; 
+    align-items: flex-start; /* Top align looks better */
+    gap: 20px; 
+    padding: 20px 0; 
+    border-bottom: 1px solid #e0e0e0; 
+}
+
+/* 2. Image Container (Fixed Size) */
+.cart-img-box {
+    width: 90px;  /* Fixed Width */
+    height: 120px; /* Fixed Height (Portrait) */
+    flex-shrink: 0; /* Image dabegi nahi */
+    background-color: #f4f4f4;
+    overflow: hidden;
+}
+
+/* 3. Image Object Fit (Crop neatly) */
+.cart-img-box img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* Extra hissa cut jayega, stretch nahi hoga */
+    display: block;
+}
+
+/* 4. Product Info (Beech wala hissa) */
+.cart-info {
+    flex-grow: 1;
+}
+
+.cart-info h4 {
+    font-size: 1rem;
+    margin: 0 0 5px 0;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cart-info .price {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* 5. Cross Button (Right Side) */
+.remove-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+    padding: 0 10px;
+    line-height: 1;
+}
+.remove-btn:hover {
+    color: #000;
+}
+/* =========================================
+   FIX ACCORDION TEXT PADDING
+========================================= */
+
+/* Container ke andar space (Padding) badha di */
+.accordion-content {
+    padding: 15px 25px !important; /* Left-Right 25px space */
+    background-color: #fff;
+}
+
+/* Text ko thoda saaf aur readable banaya */
+.accordion-content p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.8; /* Lines ke beech space */
+    font-family: var(--font-body);
+    text-align: left;
+}
+
+/* Agar Product Details list hai toh uski spacing maintain rahe */
+.spec-row {
+    padding: 10px 0; /* List items ke beech space */
+}
+/* =========================================
+   TOAST NOTIFICATION (POPUP)
+========================================= */
+.toast {
+    visibility: hidden; /* Default chupa hua */
+    min-width: 250px;
+    background-color: #000; /* Black Background */
+    color: #fff;            /* White Text */
+    text-align: center;
+    border-radius: 0;       /* Sharp edges (Premium Look) */
+    padding: 15px;
+    position: fixed;
+    z-index: 10005;         /* Sabse upar */
+    left: 50%;
+    bottom: 30px;           /* Screen ke neeche */
+    transform: translateX(-50%); /* Center alignment */
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    opacity: 0;
+    transition: opacity 0.3s, bottom 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Jab JS 'show' class add karega tab dikhega */
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 50px; /* Thoda upar uthega animation ke sath */
+}
+
+/* Logo: Neeche se upar + Size normal + Failna */
+@keyframes luxuryReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(1.1); /* Thoda neeche aur bada */
+        letter-spacing: -2px; /* Chipka hua */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1); /* Normal position */
+        letter-spacing: 2px; /* Thoda khula hua */
+    }
+}
 
 /* =========================================
-   PREMIUM SPLASH SCREEN (FIXED & CLEAN)
+   LOGO IMAGE ANIMATION
 ========================================= */
+
+/* Logo Image Styling */
+.splash-logo-img {
+    width: 180px; /* Logo ka size set karein */
+    height: auto;
+    opacity: 0; /* Pehle gayab rahega */
+    
+    /* Animation: Breathe + Reveal */
+    animation: logoReveal 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* --- KEYFRAMES --- */
+
+@keyframes logoReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px); /* Chhota aur neeche */
+        filter: blur(5px); /* Dhundhla */
+    }
+    40% {
+        opacity: 1;
+        transform: scale(1.1) translateY(0); /* Thoda bada (Pop effect) */
+        filter: blur(0px); /* Saaf */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Normal size */
+    }
+}
+/* =========================================
+   PREMIUM SPLASH SCREEN (FIXED LAYOUT)
+========================================= */
+
+/* 1. Main Container (Full Screen White Overlay) */
 #app-splash {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: #ffffff; z-index: 99999;
-    display: flex; justify-content: center; align-items: center;
+    position: fixed;       /* Screen par chipka rahega */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff; /* Pure White Background */
+    z-index: 99999;        /* Sabse upar (Navbar se bhi upar) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Curtain Effect Settings */
     transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), border-radius 0.8s;
     transform-origin: top;
 }
+
+/* 2. Exit Animation (Curtain Slide Up) */
 #app-splash.slide-out {
-    transform: translateY(-100%); border-radius: 0 0 50% 50%;
+    transform: translateY(-100%); /* Poora upar chala jayega */
+    border-radius: 0 0 50% 50%;   /* Neeche curve effect */
 }
+
+/* 3. Logo Image Styling */
 .splash-logo-img {
-    width: 180px; height: auto; opacity: 0;
+    width: 180px;  /* Logo Size */
+    height: auto;
+    opacity: 0;    /* Start Hidden */
+    
+    /* Animation: Breathe + Reveal */
     animation: logoReveal 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
+/* 4. Keyframes (Logo Animation) */
 @keyframes logoReveal {
-    0% { opacity: 0; transform: scale(0.8) translateY(20px); filter: blur(5px); }
-    40% { opacity: 1; transform: scale(1.1) translateY(0); filter: blur(0px); }
-    100% { opacity: 1; transform: scale(1); }
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px); /* Chhota + Neeche */
+        filter: blur(5px); /* Dhundhla */
+    }
+    40% {
+        opacity: 1;
+        transform: scale(1.1) translateY(0); /* Thoda Bada (Pop) */
+        filter: blur(0px); /* Saaf */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Normal Size */
+    }
 }
+/* 💡 CUSTOM SELECTION COLOR (Gold/Black Theme) */
+::selection {
+    background: #000; /* Background Black */
+    color: #fff;      /* Text White */
+}
+::-moz-selection {
+    background: #000;
+    color: #fff;
+        }
