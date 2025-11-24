@@ -1842,3 +1842,53 @@ ubic-bezier(0.22, 1, 0.36, 1) forwards;
         padding-bottom: 80px; 
     }
 }
+#app-splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #FBF9F6; /* same as theme background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000; /* highest so it's above everything */
+  transition: opacity 0.5s ease;
+}
+
+#app-splash.zoom-out-effect {
+  opacity: 0;
+  transform: scale(1.2);
+}
+.splash-logo-img {
+  width: 120px;
+  height: 120px;
+  animation: splashZoom 2s ease-in-out infinite alternate;
+}
+@keyframes splashZoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  background: #000; /* Optional: black strip look */
+  color: #fff;
+  font-family: var(--font-accent);
+  font-size: 0.95rem;
+  letter-spacing: 1.5px;
+  padding: 10px 0;
+  position: relative;
+}
+
+.marquee-content {
+  display: inline-block;
+  animation: marquee 18s linear infinite;
+  padding-left: 100%; /* starting outside view */
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
