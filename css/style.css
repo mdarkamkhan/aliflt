@@ -1807,3 +1807,53 @@ details[open] .pm-icon-minus { display: block; }
     font-size: 0.85rem;
     margin-top: 10px;
 }
+/* =========================================
+   BOTTOM NAVIGATION BAR (APP STYLE)
+========================================= */
+.bottom-nav {
+    display: none; /* Desktop par gayab */
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: #ffffff; border-top: 1px solid #eee;
+    height: 65px; z-index: 9999;
+    justify-content: space-around; align-items: center;
+    padding-bottom: env(safe-area-inset-bottom); /* iPhone fix */
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+}
+
+.b-nav-item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-decoration: none; color: #999; font-size: 10px;
+    flex: 1; height: 100%; transition: 0.3s;
+    font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.5px;
+    position: relative;
+}
+
+.b-nav-item svg {
+    width: 22px; height: 22px; margin-bottom: 4px;
+    stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* Active State (Black) */
+.b-nav-item.active { color: #000; font-weight: 600; }
+
+/* Cart Badge in Bottom Nav */
+.mobile-badge {
+    position: absolute; top: 5px; right: 25%;
+    background: #000; color: #fff; font-size: 9px; font-weight: bold;
+    padding: 2px 5px; border-radius: 50%; min-width: 14px; text-align: center;
+    display: none; /* JS will show this */
+}
+
+/* --- MOBILE ADJUSTMENTS --- */
+@media (max-width: 768px) {
+    .bottom-nav { display: flex; }
+    
+    /* Hide Top Cart on Mobile */
+    .nav-actions #cartIcon { display: none !important; }
+    
+    /* Body padding taaki content chhipe nahi */
+    body { padding-bottom: 80px !important; }
+    
+    /* Footer margin fix */
+    .prada-mobile-footer { padding-bottom: 90px; }
+}
