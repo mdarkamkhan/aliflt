@@ -1554,7 +1554,63 @@ details[open] .pm-icon-minus { display: block; }
     opacity: 0; /* Pehle gayab rahega */
     
     /* Animation: Breathe + Reveal */
-    animation: logoReveal 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: logoReveal 2.5s c/* =========================================
+   🚀 NEXT-LEVEL SPLASH SCREEN (Zoom-Through)
+========================================= */
+
+#app-splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Zaroori hai taaki zoom hone par scroll na aaye */
+}
+
+/* Initial State: Logo Fades In */
+.splash-logo-img {
+    width: 120px; /* Logo size thoda chhota rakha hai taaki zoom impactful lage */
+    height: auto;
+    opacity: 0;
+    animation: initialFadeIn 1s ease-out forwards;
+}
+
+/* --- PHASE 2: THE ZOOM EXIT (Triggered by JS) --- */
+
+/* 1. Background Fade Out */
+#app-splash.zoom-out-effect {
+    animation: fadeOutBg 0.6s ease-out forwards 0.4s; /* Thoda delay taaki logo bada hone lage tab fade ho */
+    pointer-events: none; /* Click through ho jaye */
+}
+
+/* 2. Logo Zooms Into Screen */
+#app-splash.zoom-out-effect .splash-logo-img {
+    animation: zoomThroughLogo 0.8s cubic-bezier(0.6, 0, 0.05, 1) forwards;
+}
+
+/* --- KEYFRAMES --- */
+
+@keyframes initialFadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes zoomThroughLogo {
+    0% { transform: scale(1); opacity: 1; }
+    30% { transform: scale(0.7); opacity: 1; } /* Peeche khinchega (Anticipation) */
+    100% { transform: scale(50); opacity: 0; } /* Phir Rocket ki tarah screen faad ke niklega */
+}
+
+@keyframes fadeOutBg {
+    from { opacity: 1; }
+    to { opacity: 0; visibility: hidden; }
+}
+ubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* --- KEYFRAMES --- */
@@ -1575,98 +1631,7 @@ details[open] .pm-icon-minus { display: block; }
         transform: scale(1); /* Normal size */
     }
 }
-/* =========================================
-   PREMIUM SPLASH SCREEN (FIXED LAYOUT)
-========================================= */
 
-/* 1. Main Container (Full Screen White Overlay) */
-#app-splash {
-    position: fixed;       /* Screen par chipka rahega */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff; /* Pure White Background */
-    z-index: 99999;        /* Sabse upar (Navbar se bhi upar) */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    /* Curtain Effect Settings */
-    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), border-radius 0.8s;
-    transform-origin: top;
-}
-
-/* 2. Exit Animation (Curtain Slide Up) */
-#app-splash.slide-out {
-    transform: translateY(-100%); /* Poora upar chala jayega */
-    border-radius: 0 0 50% 50%;   /* Neeche curve effect */
-}
-
-/* 3. Logo Image Styling */
-.splash-logo-img {
-    width: 180px;  /* Logo Size */
-    height: auto;
-    opacity: 0;    /* Start Hidden */
-    
-    /* Animation: Breathe + Reveal */
-    animation: logoReveal 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-/* 4. Keyframes (Logo Animation) */
-@keyframes logoReveal {
-    0% {
-        opacity: 0;
-        transform: scale(0.8) translateY(20px); /* Chhota + Neeche */
-        filter: blur(5px); /* Dhundhla */
-    }
-    40% {
-        opacity: 1;
-        transform: scale(1.1) translateY(0); /* Thoda Bada (Pop) */
-        filter: blur(0px); /* Saaf */
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1); /* Normal Size */
-    }
-}
-/* 💡 CUSTOM SELECTION COLOR (Gold/Black Theme) */
-::selection {
-    background: #000; /* Background Black */
-    color: #fff;      /* Text White */
-}
-::-moz-selection {
-    background: #000;
-    color: #fff;
-        }
-/* 💡 FASHION TICKER (MARQUEE STRIP) */
-.marquee-container {
-    background: #000;  /* Black Background */
-    color: #fff;       /* White Text */
-    padding: 12px 0;   /* Thoda gap upar neeche */
-    overflow: hidden;  /* Jo text bahar jaye wo na dikhe */
-    white-space: nowrap; /* Text ko tootne nahi dega (Ek line mein rakhega) */
-    position: relative;
-    border-bottom: 1px solid #333;
-    width: 100%;
-}
-
-.marquee-content {
-    display: inline-block;
-    padding-left: 100%; /* Screen ke bahar se shuru hoga */
-    animation: scrollText 20s linear infinite; /* Chalne wala animation */
-    font-family: var(--font-heading);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-/* Ye Animation text ko chalayega */
-@keyframes scrollText {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}
 /* =========================================
    PREMIUM LUXURY SEARCH (FIXED)
 ========================================= */
