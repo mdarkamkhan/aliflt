@@ -1708,25 +1708,28 @@ details[open] .pm-icon-minus { display: block; }
     margin-bottom: 20px;
 }
 
-/* The Input Box */
+/* --- Search Input Box (Slim & Modern) --- */
 #search-input {
     width: 100%;
-    border: none !important; /* Border hatao */
+    border: none !important;
     background: transparent !important;
     outline: none !important;
     box-shadow: none !important;
     
-    /* Typography - Luxury Look */
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem; /* Bada Font */
-    font-weight: 400;
+    /* Updated Typography */
+    font-family: 'Poppins', sans-serif; /* Sidebar wala font */
+    font-size: 1.3rem;  /* Size chhota kiya (Pehle 1.8rem tha) */
+    font-weight: 300;   /* Bilkul Patla (Slim) text */
     color: #000;
     padding: 0;
+    letter-spacing: 0.5px; /* Thoda sa space taaki saaf dikhe */
 }
 
+/* Placeholder Style (Typewriter text) */
 #search-input::placeholder {
-    color: #ccc; /* Light Grey Placeholder */
+    color: #bbbbbb; /* Light Grey */
     font-weight: 300;
+    opacity: 1;
 }
 
 /* Close Button (X) */
