@@ -4,51 +4,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 /* ================================
          0. SPLASH SCREEN LOGIC (ZOOM EFFECT)
     ================================ */
-    #app-splash {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #FBF9F6; /* theme color */
-  z-index: 99999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const splash = document.getElementById('app-splash');
 
-.splash-logo-img {
-  width: 140px;
-  height: auto;
-  opacity: 0;
-  transform: scale(0.9);
-  animation: logoEnter 1.4s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
-}
+  if (splash && !sessionStorage.getItem("alifSplashSeen")) {
+    const triggerZoomExit = () => {
+      splash.classList.add('zoom-out-effect');
+      setTimeout(() => {
+        splash.style.display = 'none';
+        sessionStorage.setItem("alifSplashSeen", "true");
+      }, 1200);
+    };
 
-#app-splash.zoom-out-effect {
-  animation: bgFadeOut 0.8s ease forwards 0.5s;
-}
-
-#app-splash.zoom-out-effect .splash-logo-img {
-  animation: logoZoomThrough 1s cubic-bezier(0.6, 0, 0.05, 1) forwards;
-}
-
-@keyframes logoEnter {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes logoZoomThrough {
-  0% { transform: scale(1); opacity: 1; }
-  30% { transform: scale(0.7); opacity: 1; }
-  100% { transform: scale(40); opacity: 0; }
-}
-
-@keyframes bgFadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; visibility: hidden; }
-}
+    window.addEventListener('load', () => {
+      setTimeout(triggerZoomExit, 2000);
+    });
+  } else if (splash) {
+    splash.style.display = 'none';
+  }
+});
 
     /* ================================
           1. CART LOGIC
