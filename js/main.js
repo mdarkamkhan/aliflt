@@ -1,39 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ JS Loaded & DOM Ready");
 
-            /* ================================
-         0. SPLASH SCREEN LOGIC (SMART)
+                /* ================================
+         0. SPLASH SCREEN LOGIC (ZOOM EFFECT)
     ================================ */
     const splash = document.getElementById('app-splash');
     
-    if (splash) {
-        // 1. Check karein: Kya user ne animation pehle dekh liya hai?
-        if (sessionStorage.getItem("alifSplashSeen")) {
+    // Sirf tab chalega jab splash screen visible ho (First Time)
+    if (splash && getComputedStyle(splash).display !== 'none') {
+        
+        const triggerZoomExit = () => {
+            // 1. Nayi Class add karo jo Zoom animation shuru karegi
+            splash.classList.add('zoom-out-effect'); 
             
-            // Agar HAAN: Toh Splash screen ko turant gayab kar do (No Animation)
-            splash.style.display = 'none';
-            
-        } else {
-            
-            // Agar NAHI: Toh Animation play karo
-            const removeSplash = () => {
-                splash.classList.add('slide-out'); // Curtain upar karo
-                
-                setTimeout(() => {
-                    splash.style.display = 'none';
-                    // ✅ Flag set karo: Ab browser yaad rakhega
-                    sessionStorage.setItem("alifSplashSeen", "true");
-                }, 800); 
-            };
+            // 2. Animation khatam hone ka wait (0.9s buffer)
+            setTimeout(() => {
+                splash.style.display = 'none';
+                // Flag set karo taaki dubara na dikhe
+                sessionStorage.setItem("alifSplashSeen", "true");
+            }, 900); 
+        };
 
-            window.addEventListener('load', () => {
-                setTimeout(removeSplash, 2800); // 2.8s ka wait
-            });
-
-            // Safety Fallback
-            setTimeout(removeSplash, 5000);
-        }
+        window.addEventListener('load', () => {
+            // 2 second logo dikhao, phir Zoom karke gayab ho jao
+            setTimeout(triggerZoomExit, 2000);
+        });
+        
+        // Safety Fallback (Agar load atak jaye)
+        setTimeout(triggerZoomExit, 4500);
     }
+
 
     /* ================================
           1. CART LOGIC
