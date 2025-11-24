@@ -1,0 +1,23 @@
+---
+permalink: /search.json
+eleventyExcludeFromCollections: true
+---
+[
+  {% for item in collections.all %}
+    {% if item.url and item.data.title and item.url != "/admin/" and item.url != "/404.html" %}
+    {
+      "title": "{{ item.data.title | escape }}",
+      "category": "{{ item.data.category | default: '' | escape }}",
+      "image": "{{ item.data.image | default: '/icons/icon-512x512.png' }}",
+      "price": "{{ item.data.price | default: '' }}",
+      "url": "{{ item.url }}",
+      "description": "{{ item.data.description | strip_html | strip_newlines | escape }}",
+      "ideal_for": "{{ item.data.ideal_for | default: '' | escape }}",
+      "colour": "{{ item.data.colour | default: '' | escape }}",
+      "fabric": "{{ item.data.fabric | default: '' | escape }}",
+      "work": "{{ item.data.work | default: '' | escape }}",
+      "pattern": "{{ item.data.pattern | default: '' | escape }}"
+    }{% unless forloop.last %},{% endunless %}
+    {% endif %}
+  {% endfor %}
+]
