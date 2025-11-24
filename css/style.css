@@ -1639,3 +1639,31 @@ details[open] .pm-icon-minus { display: block; }
     background: #000;
     color: #fff;
         }
+/* 💡 FASHION TICKER (MARQUEE STRIP) */
+.marquee-container {
+    background: #000;  /* Black Background */
+    color: #fff;       /* White Text */
+    padding: 12px 0;   /* Thoda gap upar neeche */
+    overflow: hidden;  /* Jo text bahar jaye wo na dikhe */
+    white-space: nowrap; /* Text ko tootne nahi dega (Ek line mein rakhega) */
+    position: relative;
+    border-bottom: 1px solid #333;
+    width: 100%;
+}
+
+.marquee-content {
+    display: inline-block;
+    padding-left: 100%; /* Screen ke bahar se shuru hoga */
+    animation: scrollText 20s linear infinite; /* Chalne wala animation */
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Ye Animation text ko chalayega */
+@keyframes scrollText {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
