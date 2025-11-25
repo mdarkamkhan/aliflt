@@ -6,6 +6,15 @@ function debugLog(msg) {
     box.textContent += `\n[${now}] ${msg}`;
   }
 }
+
+debugLog("✅ JS Loaded & Debug Active");
+
+document.addEventListener("DOMContentLoaded", () => {
+  debugLog("🔰 DOM ready");
+
+
+});
+}
 debugLog("✅ JS Loaded & Debug Active");
 debugLog("JS loaded");
 }
