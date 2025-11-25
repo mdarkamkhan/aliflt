@@ -1,11 +1,12 @@
 function debugLog(msg) {
   const box = document.getElementById("debug-box");
   if (box) {
+    box.style.display = "block";
     const now = new Date().toLocaleTimeString().split(" ")[0];
     box.textContent += `\n[${now}] ${msg}`;
   }
 }
-
+debugLog("✅ JS Loaded & Debug Active");
 debugLog("JS loaded");
 
 if (splash && !sessionStorage.getItem("alifSplashSeen")) {
