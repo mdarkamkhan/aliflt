@@ -278,7 +278,27 @@
                 }
             });
         });
-    </script>
+    <script>
+  const box = document.getElementById("debug-box");
+  if (box) {
+    box.style.display = "block";
+    box.textContent = "✅ HTML loaded... waiting for JS";
+
+    window.addEventListener("DOMContentLoaded", () => {
+      box.textContent += "\n✅ DOMContentLoaded event fired";
+    });
+
+    window.addEventListener("load", () => {
+      box.textContent += "\n✅ Window load event fired (JS active)";
+    });
+
+    setTimeout(() => {
+      if (!box.textContent.includes("load event")) {
+        box.textContent += "\n⚠️ JS might not be running or crashed";
+      }
+    }, 4000);
+  }
+</script>
 
     <script>
         if ("serviceWorker" in navigator) { navigator.serviceWorker.register("/sw.js"); }
