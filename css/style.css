@@ -1963,17 +1963,19 @@ ubic-bezier(0.22, 1, 0.36, 1) forwards;
 
 #debug-box {
   position: fixed;
-  bottom: 10px;
-  left: 10px;
-  background: rgba(0,0,0,0.8);
-  color: #0f0;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  color: #00ff88; /* bright neon green */
   font-family: monospace;
-  font-size: 12px;
-  padding: 8px 10px;
-  border-radius: 6px;
+  font-size: 14px; /* bigger text */
+  padding: 12px 16px;
+  border-radius: 8px;
   z-index: 999999;
-  max-width: 300px;
+  max-width: 90%;
+  max-height: 50vh;
+  overflow-y: auto;
   white-space: pre-line;
-  line-height: 1.4;
-  pointer-events: none;
+  line-height: 1.5;
+  box-shadow: 0 0 10px rgba(0,255,100,0.3);
 }
