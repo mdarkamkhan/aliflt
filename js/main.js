@@ -1,3 +1,11 @@
+function debugLog(msg) {
+  const box = document.getElementById("debug-box");
+  if (box) {
+    const now = new Date().toLocaleTimeString().split(" ")[0];
+    box.textContent += `\n[${now}] ${msg}`;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const splash = document.getElementById("app-splash");
   const site = document.getElementById("site-content");
