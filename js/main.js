@@ -8,37 +8,51 @@ function debugLog(msg) {
 }
 debugLog("✅ JS Loaded & Debug Active");
 debugLog("JS loaded");
-
-if (splash && !sessionStorage.getItem("alifSplashSeen")) {
-  debugLog("Splash active - first visit");
-  const triggerZoomExit = () => {
-    debugLog("Zoom-out started");
-    splash.classList.add("zoom-out-effect");
-    setTimeout(() => {
-      splash.style.opacity = "0";
-      site.style.opacity = "1";
-      debugLog("Site revealed");
-      sessionStorage.setItem("alifSplashSeen", "true");
-      setTimeout(() => {
-        splash.style.display = "none";
-        debugLog("Splash hidden");
-      }, 700);
-    }, 1200);
-  };
-
-  window.addEventListener("load", () => {
-    debugLog("Window loaded, triggering exit soon");
-    setTimeout(triggerZoomExit, 2000);
-  });
-  setTimeout(() => {
-    debugLog("Backup trigger running");
-    triggerZoomExit();
-  }, 5000);
-} else {
-  debugLog("Splash skipped (already seen)");
-  splash.style.display = "none";
-  site.style.opacity = "1";
 }
+document.addEventListener("DOMContentLoaded", () => {
+  const splash = document.getElementById("app-splash");
+  const site = document.querySelector("main");
+  
+  debugLog("🔰 DOM ready");
+
+  if (splash && !sessionStorage.getItem("alifSplashSeen")) {
+    debugLog("🟢 Splash active (first visit)");
+
+    const triggerZoomExit = () => {
+      debugLog("⚡ Zoom animation triggered");
+      splash.classList.add("zoom-out-effect");
+
+      setTimeout(() => {
+        debugLog("🎨 Starting site reveal...");
+        splash.style.opacity = "0";
+        if (site) site.style.opacity = "1";
+        setTimeout(() => {
+          splash.style.display = "none";
+          sessionStorage.setItem("alifSplashSeen", "true");
+          debugLog("✅ Splash hidden & site visible");
+        }, 800);
+      }, 1000);
+    };
+
+    window.addEventListener("load", () => {
+      debugLog("🌍 Window fully loaded");
+      setTimeout(triggerZoomExit, 1500);
+    });
+
+    // Safety fallback
+    setTimeout(() => {
+      if (getComputedStyle(splash).display !== "none") {
+        debugLog("🛠️ Backup trigger running...");
+        triggerZoomExit();
+      }
+    }, 5000);
+
+  } else {
+    debugLog("⏭️ Splash skipped (already seen)");
+    if (splash) splash.style.display = "none";
+    if (site) site.style.opacity = "1";
+  }
+});
     /* ================================
           1. CART LOGIC
     ================================ */
