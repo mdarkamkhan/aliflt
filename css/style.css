@@ -1960,3 +1960,20 @@ ubic-bezier(0.22, 1, 0.36, 1) forwards;
   from { opacity: 1; }
   to { opacity: 0; visibility: hidden; }
 }
+
+#debug-box {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0,0,0,0.8);
+  color: #0f0;
+  font-family: monospace;
+  font-size: 12px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  z-index: 999999;
+  max-width: 300px;
+  white-space: pre-line;
+  line-height: 1.4;
+  pointer-events: none;
+}
