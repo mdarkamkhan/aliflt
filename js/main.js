@@ -6,42 +6,38 @@ function debugLog(msg) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const splash = document.getElementById("app-splash");
-  const site = document.getElementById("site-content");
+debugLog("JS loaded");
 
-  if (splash && !sessionStorage.getItem("alifSplashSeen")) {
-    const triggerZoomExit = () => {
-      splash.classList.add("zoom-out-effect");
-
-      setTimeout(() => {
-        splash.style.opacity = "0";
-        splash.style.pointerEvents = "none";
-        site.style.opacity = "1"; // ✅ reveal the website
-        sessionStorage.setItem("alifSplashSeen", "true");
-
-        setTimeout(() => {
-          splash.style.display = "none";
-        }, 700);
-      }, 1200);
-    };
-
-    // Start entry fade
+if (splash && !sessionStorage.getItem("alifSplashSeen")) {
+  debugLog("Splash active - first visit");
+  const triggerZoomExit = () => {
+    debugLog("Zoom-out started");
+    splash.classList.add("zoom-out-effect");
     setTimeout(() => {
-      splash.querySelector(".splash-logo-img").style.opacity = "1";
-    }, 200);
+      splash.style.opacity = "0";
+      site.style.opacity = "1";
+      debugLog("Site revealed");
+      sessionStorage.setItem("alifSplashSeen", "true");
+      setTimeout(() => {
+        splash.style.display = "none";
+        debugLog("Splash hidden");
+      }, 700);
+    }, 1200);
+  };
 
-    window.addEventListener("load", () => {
-      setTimeout(triggerZoomExit, 2000);
-    });
-
-    setTimeout(triggerZoomExit, 5000); // safety
-  } else {
-    if (splash) splash.style.display = "none";
-    if (site) site.style.opacity = "1"; // ensure visible after reload
-  }
-});
-
+  window.addEventListener("load", () => {
+    debugLog("Window loaded, triggering exit soon");
+    setTimeout(triggerZoomExit, 2000);
+  });
+  setTimeout(() => {
+    debugLog("Backup trigger running");
+    triggerZoomExit();
+  }, 5000);
+} else {
+  debugLog("Splash skipped (already seen)");
+  splash.style.display = "none";
+  site.style.opacity = "1";
+}
     /* ================================
           1. CART LOGIC
     ================================ */
