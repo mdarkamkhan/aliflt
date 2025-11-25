@@ -1,38 +1,36 @@
-/* ✅ FIXED Zoom-Through Splash Animation */
 document.addEventListener("DOMContentLoaded", () => {
   const splash = document.getElementById("app-splash");
+  const site = document.getElementById("site-content");
 
-  // Sirf tab chalega jab splash screen pehli baar ho
   if (splash && !sessionStorage.getItem("alifSplashSeen")) {
-
-    // Safe trigger function
     const triggerZoomExit = () => {
       splash.classList.add("zoom-out-effect");
 
-      // Animation khatam hone ke baad hide kar do
       setTimeout(() => {
         splash.style.opacity = "0";
         splash.style.pointerEvents = "none";
-        splash.style.transition = "opacity 0.5s ease";
-        setTimeout(() => (splash.style.display = "none"), 600);
+        site.style.opacity = "1"; // ✅ reveal the website
         sessionStorage.setItem("alifSplashSeen", "true");
-      }, 1100);
+
+        setTimeout(() => {
+          splash.style.display = "none";
+        }, 700);
+      }, 1200);
     };
 
-    // Ensure animation chalu ho after short delay (smooth entry)
+    // Start entry fade
     setTimeout(() => {
       splash.querySelector(".splash-logo-img").style.opacity = "1";
     }, 200);
 
-    // 2s baad zoom start karo
     window.addEventListener("load", () => {
       setTimeout(triggerZoomExit, 2000);
     });
 
-    // Backup: agar kabhi window.load trigger na ho to bhi hide ho
-    setTimeout(triggerZoomExit, 5000);
-  } else if (splash) {
-    splash.style.display = "none";
+    setTimeout(triggerZoomExit, 5000); // safety
+  } else {
+    if (splash) splash.style.display = "none";
+    if (site) site.style.opacity = "1"; // ensure visible after reload
   }
 });
 
