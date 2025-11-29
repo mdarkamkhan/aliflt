@@ -1,42 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const splash = document.getElementById("app-splash");
-  const site = document.querySelector("main"); // Ya jo aapka main wrapper hai
-  
-  debugLog("🔰 DOM ready");
 
-  // NOTE: Testing ke liye maine '!sessionStorage' hata diya hai.
-  // Jab final launch karein, tab wapas laga sakte hain.
-  if (splash) { 
-    debugLog("🟢 Splash active");
-
-    const triggerZoomExit = () => {
-      debugLog("⚡ Zoom animation triggered");
-      // CSS class add karte hi animation shuru hoga
-      splash.classList.add("zoom-out-effect");
-
-      // Animation khatam hone ke baad cleanup
-      setTimeout(() => {
-        splash.style.display = "none";
-        debugLog("✅ Splash hidden");
-      }, 1200); // 1.2 seconds wait (animation duration ke hisaab se)
-    };
-
-    // Window load hone ke thodi der baad animation chalayein
-    window.addEventListener("load", () => {
-      debugLog("🌍 Window fully loaded");
-      // 1 second ruka taaki user logo dekh sake, fir zoom kare
-      setTimeout(triggerZoomExit, 1000); 
-    });
-
-    // Safety: Agar load event miss ho jaye to 4 sec baad chala do
-    setTimeout(() => {
-        if (!splash.classList.contains("zoom-out-effect")) {
-            triggerZoomExit();
-        }
-    }, 4000);
-
-  }
-});
 
     /* ================================
           1. CART LOGIC
