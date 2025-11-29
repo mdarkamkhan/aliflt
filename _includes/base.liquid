@@ -29,21 +29,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css?v=luxury2025">
 
-    <script>
-        if (sessionStorage.getItem("alifSplashSeen")) {
-            document.write('<style>#app-splash { display: none !important; }</style>');
-        }
-        if (location.hash.includes("invite_token")) location.href = "/admin/" + location.hash;
-    </script>
+    
 </head>
 
 <body>
-
-<div id="debug-box">Initializing Debug...</div>
-
-    <div id="app-splash">
-  <img src="/icons/icon-512x512.png" alt="ALiF Logo" class="splash-logo-img">
-</div>
 
 <div id="site-content">
   {{ content }}
