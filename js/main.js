@@ -1,67 +1,43 @@
-function debugLog(msg) {
-  const box = document.getElementById("debug-box");
-  if (box) {
-    box.style.display = "block";
-    const now = new Date().toLocaleTimeString().split(" ")[0];
-    box.textContent += `\n[${now}] ${msg}`;
-  }
-}
-
-debugLog("✅ JS Loaded & Debug Active");
-
-document.addEventListener("DOMContentLoaded", () => {
-  debugLog("🔰 DOM ready");
-
-
-});
-}
-debugLog("✅ JS Loaded & Debug Active");
-debugLog("JS loaded");
-}
 document.addEventListener("DOMContentLoaded", () => {
   const splash = document.getElementById("app-splash");
-  const site = document.querySelector("main");
+  const site = document.querySelector("main"); // Ya jo aapka main wrapper hai
   
   debugLog("🔰 DOM ready");
 
-  if (splash && !sessionStorage.getItem("alifSplashSeen")) {
-    debugLog("🟢 Splash active (first visit)");
+  // NOTE: Testing ke liye maine '!sessionStorage' hata diya hai.
+  // Jab final launch karein, tab wapas laga sakte hain.
+  if (splash) { 
+    debugLog("🟢 Splash active");
 
     const triggerZoomExit = () => {
       debugLog("⚡ Zoom animation triggered");
+      // CSS class add karte hi animation shuru hoga
       splash.classList.add("zoom-out-effect");
 
+      // Animation khatam hone ke baad cleanup
       setTimeout(() => {
-        debugLog("🎨 Starting site reveal...");
-        splash.style.opacity = "0";
-        if (site) site.style.opacity = "1";
-        setTimeout(() => {
-          splash.style.display = "none";
-          sessionStorage.setItem("alifSplashSeen", "true");
-          debugLog("✅ Splash hidden & site visible");
-        }, 800);
-      }, 1000);
+        splash.style.display = "none";
+        debugLog("✅ Splash hidden");
+      }, 1200); // 1.2 seconds wait (animation duration ke hisaab se)
     };
 
+    // Window load hone ke thodi der baad animation chalayein
     window.addEventListener("load", () => {
       debugLog("🌍 Window fully loaded");
-      setTimeout(triggerZoomExit, 1500);
+      // 1 second ruka taaki user logo dekh sake, fir zoom kare
+      setTimeout(triggerZoomExit, 1000); 
     });
 
-    // Safety fallback
+    // Safety: Agar load event miss ho jaye to 4 sec baad chala do
     setTimeout(() => {
-      if (getComputedStyle(splash).display !== "none") {
-        debugLog("🛠️ Backup trigger running...");
-        triggerZoomExit();
-      }
-    }, 5000);
+        if (!splash.classList.contains("zoom-out-effect")) {
+            triggerZoomExit();
+        }
+    }, 4000);
 
-  } else {
-    debugLog("⏭️ Splash skipped (already seen)");
-    if (splash) splash.style.display = "none";
-    if (site) site.style.opacity = "1";
   }
 });
+
     /* ================================
           1. CART LOGIC
     ================================ */
