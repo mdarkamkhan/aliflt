@@ -1554,8 +1554,9 @@ details[open] .pm-icon-minus { display: block; }
     opacity: 0; /* Pehle gayab rahega */
     
     /* Animation: Breathe + Reveal */
-    animation: logoReveal 2.5s c/* =========================================
-   🚀 NEXT-LEVEL SPLASH SCREEN (Zoom-Through)
+    animation: logoReveal 2.5s c
+/* =========================================
+   🚀 FINAL SPLASH SCREEN (Zoom-Through)
 ========================================= */
 
 #app-splash {
@@ -1564,73 +1565,55 @@ details[open] .pm-icon-minus { display: block; }
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #ffffff;
-    z-index: 99999;
+    background-color: #FBF9F6; /* Theme background */
+    z-index: 99999; /* Sabse upar */
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Zaroori hai taaki zoom hone par scroll na aaye */
+    overflow: hidden;
 }
 
-/* Initial State: Logo Fades In */
+/* 1. Initial State: Logo Entry */
 .splash-logo-img {
-    width: 120px; /* Logo size thoda chhota rakha hai taaki zoom impactful lage */
+    width: 140px; 
     height: auto;
     opacity: 0;
-    animation: initialFadeIn 1s ease-out forwards;
+    transform: scale(0.9);
+    /* Logo dheere se aayega */
+    animation: logoEnter 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* --- PHASE 2: THE ZOOM EXIT (Triggered by JS) --- */
-
-/* 1. Background Fade Out */
+/* 2. Exit State: Background Fade Out */
 #app-splash.zoom-out-effect {
-    animation: fadeOutBg 0.6s ease-out forwards 0.4s; /* Thoda delay taaki logo bada hone lage tab fade ho */
-    pointer-events: none; /* Click through ho jaye */
+    /* Background 0.5s wait karega fir gayab hoga */
+    animation: bgFadeOut 0.8s ease forwards 0.2s; 
+    pointer-events: none; /* Taaki click through ho sake */
 }
 
-/* 2. Logo Zooms Into Screen */
+/* 3. Exit State: Logo Rocket Zoom */
 #app-splash.zoom-out-effect .splash-logo-img {
-    animation: zoomThroughLogo 0.8s cubic-bezier(0.6, 0, 0.05, 1) forwards;
+    /* Logo screen faad ke bahar aayega */
+    animation: logoZoomThrough 0.8s cubic-bezier(0.7, 0, 0.2, 1) forwards;
 }
 
 /* --- KEYFRAMES --- */
 
-@keyframes initialFadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
+@keyframes logoEnter {
+    from { opacity: 0; transform: scale(0.8) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-@keyframes zoomThroughLogo {
+@keyframes logoZoomThrough {
     0% { transform: scale(1); opacity: 1; }
-    30% { transform: scale(0.7); opacity: 1; } /* Peeche khinchega (Anticipation) */
-    100% { transform: scale(50); opacity: 0; } /* Phir Rocket ki tarah screen faad ke niklega */
+    40% { transform: scale(0.8); opacity: 1; } /* Thoda peeche khinchega (Anticipation) */
+    100% { transform: scale(60); opacity: 0; } /* Zoom OUT */
 }
 
-@keyframes fadeOutBg {
-    from { opacity: 1; }
+@keyframes bgFadeOut {
+    from { opacity: 1; visibility: visible; }
     to { opacity: 0; visibility: hidden; }
 }
-ubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
 
-/* --- KEYFRAMES --- */
-
-@keyframes logoReveal {
-    0% {
-        opacity: 0;
-        transform: scale(0.8) translateY(20px); /* Chhota aur neeche */
-        filter: blur(5px); /* Dhundhla */
-    }
-    40% {
-        opacity: 1;
-        transform: scale(1.1) translateY(0); /* Thoda bada (Pop effect) */
-        filter: blur(0px); /* Saaf */
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1); /* Normal size */
-    }
-}
 
 /* =========================================
    PREMIUM LUXURY SEARCH (FIXED)
