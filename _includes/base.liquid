@@ -28,15 +28,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css?v=luxury2025">
-
-    
 </head>
 
 <body>
-
-<div id="site-content">
-  {{ content }}
-</div>
 
     <div id="search-overlay">
         <div class="search-header">
@@ -46,11 +40,10 @@
         <div id="search-results"></div>
     </div>
 
-        <nav class="fixed-top-nav">
+    <nav class="fixed-top-nav">
         <a href="/" class="nav-logo">ALiF</a>
 
         <div class="nav-actions">
-            
             <button class="nav-search-btn" id="open-search" style="background:none; border:none; padding:5px; cursor:pointer;">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color:#000;">
                     <circle cx="11" cy="11" r="8"></circle>
@@ -74,10 +67,8 @@
                     <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
             </button>
-            
         </div>
     </nav>
-
 
     <div class="marquee-container">
         <div class="marquee-content">
@@ -86,33 +77,6 @@
     </div>
 
     <main>{{ content }}</main>
-
-    <nav class="bottom-nav">
-        <a href="/" class="b-nav-item {% if page.url == '/' %}active{% endif %}">
-            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            Home
-        </a>
-        <a href="/products/" class="b-nav-item {% if page.url contains '/products/' %}active{% endif %}">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            Products
-        </a>
-        <a href="/designs/" class="b-nav-item {% if page.url contains '/designs/' %}active{% endif %}">
-            <svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
-            Designs
-        </a>
-        <a href="/cart/" class="b-nav-item {% if page.url contains '/cart/' %}active{% endif %}">
-            <div style="position: relative;">
-                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                <span class="mobile-badge" id="cartCountMobile">0</span>
-            </div>
-            Cart
-        </a>
-        <a href="/contact-us/" class="b-nav-item {% if page.url contains '/contact-us/' %}active{% endif %}">
-            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            Contact
-        </a>
-    </nav>
-
 
     <nav class="bottom-nav">
         <a href="/" class="b-nav-item {% if page.url == '/' %}active{% endif %}">
@@ -267,28 +231,7 @@
                 }
             });
         });
-    <script>
-  const box = document.getElementById("debug-box");
-  if (box) {
-    box.style.display = "block";
-    box.textContent = "✅ HTML loaded... waiting for JS";
-
-    window.addEventListener("DOMContentLoaded", () => {
-      box.textContent += "\n✅ DOMContentLoaded event fired";
-    });
-
-    window.addEventListener("load", () => {
-      box.textContent += "\n✅ Window load event fired (JS active)";
-    });
-
-    setTimeout(() => {
-      if (!box.textContent.includes("load event")) {
-        box.textContent += "\n⚠️ JS might not be running or crashed";
-      }
-    }, 4000);
-  }
-</script>
-
+    </script> 
     <script>
         if ("serviceWorker" in navigator) { navigator.serviceWorker.register("/sw.js"); }
     </script>
