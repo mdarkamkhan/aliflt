@@ -73,8 +73,9 @@
         }, 3000);
     }
 
+    
     /* ================================
-         3. NAVIGATION MENU (Fixed)
+         3. SIDEBAR NAVIGATION (Fix)
     ================================ */
     const navToggle = document.getElementById("navToggleBtn");
     const sidebar = document.getElementById("sidebarMenu");
@@ -84,14 +85,15 @@
 
     if (navToggle && sidebar && overlay) {
         const openMenu = () => {
-            sidebar.classList.add("is-open");
-            overlay.classList.add("is-open");
-            body.classList.add("sidebar-open");
+            // Yahan hum 'active' class use karenge taaki CSS se match kare
+            sidebar.classList.add("active");
+            overlay.classList.add("active");
+            body.style.overflow = "hidden"; // Scroll rokne ke liye
         };
         const closeMenu = () => {
-            sidebar.classList.remove("is-open");
-            overlay.classList.remove("is-open");
-            body.classList.remove("sidebar-open");
+            sidebar.classList.remove("active");
+            overlay.classList.remove("active");
+            body.style.overflow = "auto"; // Scroll wapis chalu
         };
 
         navToggle.addEventListener("click", openMenu);
@@ -99,6 +101,9 @@
         overlay.addEventListener("click", closeMenu);
     }
 
+ 
+
+    
     /* ================================
          4. FILTER BUTTONS (NEW FIXED LOGIC) 🛠️
     ================================ */
