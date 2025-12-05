@@ -353,19 +353,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
         });
-            /* ================================
-         11. INTRO SPLASH REMOVER
+    /* ================================
+         11. INTRO SPLASH REMOVER (ONE TIME ONLY)
     ================================ */
     const splash = document.getElementById('intro-splash');
-    
-    if(splash) {
-        // 3 seconds ke baad splash screen ko HTML se hata do
-        setTimeout(() => {
-            splash.remove();
-        }, 3000);
-    }
+
+    // 1. Check karo: Kya user ne pehle animation dekha hai?
+    if (sessionStorage.getItem('alifAppVisited') === 'true') {
         
+        // Agar Haan: Toh splash screen ko turant chupao
+        if (splash) {
+            splash.style.display = 'none'; 
+        }
 
-
-}); // Closing Main Event Listener
+    } else {
+        
+        // Agar Nahi: Toh animation chalne do
+        if (splash) {
+            setTimeout(() => {
+                splash.remove(); // 3 second baad hatao
                 
+                // Memory mein save kar lo ki "Dekh Liya"
+                sessionStorage.setItem('alifAppVisited', 'true'); 
+            }, 3000);
+        }
+    }
