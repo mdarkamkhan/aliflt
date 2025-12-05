@@ -74,6 +74,15 @@
 
     <div id="rows-container"></div>
 
+<div style="text-align: center; margin: 20px 0;">
+    <input type="file" id="bulkInput" multiple accept="image/*" style="display: none;" onchange="handleBulkImages(this)">
+    
+    <button onclick="document.getElementById('bulkInput').click()" style="background: linear-gradient(135deg, #6e8efb, #a777e3); color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        📸 Select Multiple Photos (Bulk Mode)
+    </button>
+</div>
+    
+    
     <div class="fab-container">
         <button class="btn btn-add" onclick="addRow()">+ Add</button>
         <button class="btn btn-upload" id="uploadBtn" onclick="startUpload()">Upload 🚀</button>
