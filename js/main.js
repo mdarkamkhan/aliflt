@@ -88,15 +88,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (navToggle && sidebar && overlay) {
         const openMenu = () => {
-            // Updated to '.active' to match CSS
-            sidebar.classList.add("active");
-            overlay.classList.add("active");
-            body.style.overflow = "hidden"; // Scroll Lock
+            // FIX: 'active' ki jagah 'is-open' use kiya CSS match karne ke liye
+            sidebar.classList.add("is-open");
+            overlay.classList.add("is-open");
+            body.classList.add("sidebar-open"); // CSS class for overflow hidden
         };
         const closeMenu = () => {
-            sidebar.classList.remove("active");
-            overlay.classList.remove("active");
-            body.style.overflow = "auto"; // Scroll Unlock
+            sidebar.classList.remove("is-open");
+            overlay.classList.remove("is-open");
+            body.classList.remove("sidebar-open");
         };
 
         navToggle.addEventListener("click", openMenu);
@@ -111,7 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentPath = window.location.pathname;
 
     bottomNavItems.forEach(item => {
-        // Check if the link matches current page
         if (item.getAttribute('href') === currentPath) {
             item.classList.add('active');
         }
@@ -135,9 +134,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (closeSearchBtn && searchOverlay) {
         closeSearchBtn.addEventListener('click', () => {
             searchOverlay.classList.remove('active');
-            if(searchInput) searchInput.value = ''; // Clear text
+            if(searchInput) searchInput.value = ''; 
             const results = document.getElementById('search-results');
-            if(results) results.innerHTML = ''; // Clear results
+            if(results) results.innerHTML = ''; 
         });
     }
 
@@ -182,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const target = e.target.closest('button') || e.target; 
 
         // Add To Cart Logic
-        if (target.id === "addToCartBtn" || target.classList.contains("add-to-cart-btn")) {
+        if (target && (target.id === "addToCartBtn" || target.classList.contains("add-to-cart-btn"))) {
             
             if (target.textContent.includes("GO TO CART")) {
                 window.location.href = "/cart/";
@@ -208,13 +207,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Buy Now (WhatsApp)
-        if (target.id === "buyNowBtn") {
+        if (target && target.id === "buyNowBtn") {
             const msg = `*Hi Alif!* I want to buy:\n*${target.dataset.title}*\nPrice: ₹${target.dataset.price}`;
             window.open(`https://wa.me/7250470009?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         // Cart Page Logic
-        if (target.classList.contains("qty-btn")) {
+        if (target && target.classList.contains("qty-btn")) {
             const id = target.dataset.id;
             if (target.dataset.action === "inc") cart.items[id].qty++;
             if (target.dataset.action === "dec" && cart.items[id].qty > 1) cart.items[id].qty--;
@@ -223,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
             cart.updateIcon();
         }
         
-        if (target.classList.contains("remove-btn")) {
+        if (target && target.classList.contains("remove-btn")) {
             cart.remove(target.dataset.id);
             renderCartPage();
         }
@@ -342,19 +341,21 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ================================
          11. INTRO SPLASH REMOVER
     ================================ */
-    const splash = document.getElementById('app-splash'); // Updated ID to match HTML
+    // FIX: ID changed to 'intro-splash' to match your HTML
+    const splash = document.getElementById('intro-splash'); 
 
     if (sessionStorage.getItem('alifAppVisited') === 'true') {
         if (splash) splash.style.display = 'none'; 
     } else {
         if (splash) {
             setTimeout(() => {
-                splash.style.opacity = '0';
+                // CSS Animation handles most of it, we just remove element
+                splash.style.opacity = '0'; 
                 setTimeout(() => splash.remove(), 500);
+                
                 sessionStorage.setItem('alifAppVisited', 'true'); 
-            }, 2500);
+            }, 2500); // 2.5 seconds sync with CSS animation
         }
     }
 
 });
-     
