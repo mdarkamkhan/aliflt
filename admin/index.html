@@ -94,176 +94,296 @@
       </div>
   </div>
 
-  <script>
-    // --- 1. CONNECTION CHECKER ---
-    let cmsBackend = null;
-    
-    function checkConnection() {
-        const statusEl = document.getElementById('connectionStatus');
-        const saveBtn = document.getElementById('saveAllBtn');
-        
-        try {
-            cmsBackend = window.CMS.getBackend();
-            if(cmsBackend) {
-                statusEl.textContent = "🟢 Connected";
-                statusEl.className = "ready";
-                saveBtn.disabled = false;
-            } else {
-                statusEl.textContent = "🔴 Connecting...";
-                statusEl.className = "";
-                saveBtn.disabled = true;
-            }
-        } catch(e) {
-            console.log("Waiting for CMS...");
-        }
-    }
-    setInterval(checkConnection, 1000);
-
-    // --- 2. TOGGLE MODES ---
-    function toggleMassMode() {
-        const ui = document.getElementById('mass-upload-ui');
-        const btn = document.getElementById('modeSwitchBtn');
-        const cmsRoot = document.getElementById('nc-root');
-
-        if (ui.style.display === 'none' || ui.style.display === '') {
-            ui.style.display = 'block';
-            btn.style.display = 'none';
-            if(cmsRoot) cmsRoot.style.display = 'none';
-            if(document.querySelectorAll('.mu-card').length === 0) addNewRow();
-        } else {
-            ui.style.display = 'none';
-            btn.style.display = 'block';
-            if(cmsRoot) cmsRoot.style.display = 'block';
-        }
-    }
-
-    // --- 3. FORM GENERATOR ---
-    const list = document.getElementById('formList');
-    const selector = document.getElementById('collectionSelector');
+<script>
+    const container = document.getElementById('rows-container');
+    const logBox = document.getElementById('logs');
     let rowCount = 0;
 
-    const configs = {
-        products: { layout: 'product.liquid', tag: 'product' },
-        services: { layout: 'service.liquid', tag: 'service' },
-        works:    { layout: 'service.liquid', tag: 'work' },
-        designs:  { layout: 'design.liquid',  tag: 'design' },
-        offers:   { layout: 'product.liquid', tag: 'offer' }
+    const productCats = ["lace", "latkan", "thread", "aster", "fall", "blouse piece", "plain saten", "plain crape", "plain cotton", "plain reyon", "net", "organza", "jorget", "banarasi", "velvet", "cotton"];
+    const serviceCats = ["blouse", "kurti pant", "kurti patyala", "kurti palazzo", "kurti", "garara", "sharara", "gown", "anarkali gown", "frock", "afgani kurti", "lehanga", "trendy lehanga", "saree fall & pico"];
+
+    window.onload = () => {
+        document.getElementById('owner').value = localStorage.getItem('gh_owner') || '';
+        document.getElementById('repo').value = localStorage.getItem('gh_repo') || '';
+        document.getElementById('token').value = localStorage.getItem('gh_token') || '';
+        checkConfigInputs();
+        // Pehli row automatically add na karein, taaki user bulk select kar sake
+        // addRow(); 
     };
 
-    selector.addEventListener('change', () => {
-        if(confirm("Change Category? Current list will be cleared.")) {
-            list.innerHTML = ""; rowCount = 0; addNewRow();
+    /* =========================================
+       1. BULK UPLOAD HANDLER (Magic Feature 📸)
+    ========================================= */
+    function handleBulkImages(input) {
+        const files = input.files;
+        if (files.length === 0) return;
+
+        if (!confirm(`Selected ${files.length} photos. Create ${files.length} new cards?`)) {
+            input.value = ''; 
+            return;
+        }
+
+        // Loop through each selected photo
+        Array.from(files).forEach((file) => {
+            addRow(); // Nayi row banao
+            
+            const lastRow = container.lastElementChild;
+            const imgPreview = lastRow.querySelector('.img-preview');
+            const fileWrapper = lastRow.querySelector('.file-wrapper');
+            const fileInput = lastRow.querySelector('.inp-file');
+            const titleInput = lastRow.querySelector('.inp-title');
+
+            // 1. File input mein photo set karo (DataTransfer API)
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInput.files = dataTransfer.files;
+
+            // 2. Preview dikhao
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imgPreview.src = e.target.result;
+                imgPreview.style.display = 'block';
+                fileWrapper.classList.add('filled');
+            };
+            reader.readAsDataURL(file);
+
+            // 3. Auto Title (Optional: File name se title banao)
+            // let autoTitle = file.name.split('.')[0].replace(/-/g, ' ').replace(/_/g, ' ');
+            // titleInput.value = autoTitle;
+            // titleInput.classList.add('filled');
+        });
+
+        // Scroll to new items
+        setTimeout(() => container.lastElementChild.scrollIntoView({ behavior: 'smooth' }), 500);
+        input.value = ''; // Reset input to allow selecting same files again
+    }
+
+    /* =========================================
+       2. HELPER FUNCTIONS
+    ========================================= */
+
+    function checkConfigInputs() {
+        ['owner', 'repo', 'token'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el && el.value) el.classList.add('filled');
+        });
+    }
+
+    document.addEventListener('input', function(e) {
+        if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+            if(e.target.type !== 'file' && e.target.type !== 'checkbox') {
+                e.target.value.trim() !== "" ? e.target.classList.add('filled') : e.target.classList.remove('filled');
+            }
         }
     });
 
-    function createInp(label, cls, ph, type="text", showCopy=false) {
-        return `
-        <div class="form-group">
-            <label>${label} ${showCopy ? `<button class="btn-copy" onclick="copyToAll('${cls}')">⬇ Copy to All</button>` : ''}</label>
-            ${type === 'textarea' 
-                ? `<textarea class="${cls}" placeholder="${ph}" rows="2"></textarea>` 
-                : `<input type="${type}" class="${cls}" placeholder="${ph}">` }
-        </div>`;
+    window.previewImage = function(input) {
+        const file = input.files[0];
+        const wrapper = input.closest('.file-wrapper');
+        const img = wrapper.querySelector('.img-preview');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                img.style.display = 'block';
+                wrapper.classList.add('filled');
+            }
+            reader.readAsDataURL(file);
+        } else {
+            img.style.display = 'none';
+            wrapper.classList.remove('filled');
+        }
     }
 
-    function addNewRow() {
+    window.toggleAd = function(div) {
+        const checkbox = div.querySelector('input');
+        checkbox.checked = !checkbox.checked;
+        if(checkbox.checked) div.classList.add('active');
+        else div.classList.remove('active');
+    }
+
+    function resetRows() {
+        if(rowCount > 0 && !confirm("Change Category? Current rows will be cleared.")) return;
+        container.innerHTML = ""; rowCount = 0; addRow();
+    }
+
+    function log(msg) {
+        logBox.style.display = 'block'; logBox.innerHTML += `<div>> ${msg}</div>`;
+    }
+
+    const mkInp = (label, cls, ph, type="text") => `
+        <div class="field-group">
+            <label>${label} ${rowCount===1 ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label>
+            ${type === 'textarea' ? `<textarea class="${cls}" rows="2" placeholder="${ph}"></textarea>` : `<input type="${type}" class="${cls}" placeholder="${ph}" ${label.includes('Category') ? 'list="cat-list"' : ''}>`}
+        </div>`;
+
+    const mkSelect = (label, cls, options) => {
+        let opts = options.map(o => `<option value="${o}">${o.toUpperCase()}</option>`).join('');
+        return `<div class="field-group"><label>${label} ${rowCount===1 ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label><select class="${cls}"><option value="">-- Select --</option>${opts}</select></div>`;
+    };
+
+    function addRow() {
         rowCount++;
         const div = document.createElement('div');
-        div.className = 'mu-card';
-        const isFirst = rowCount === 1;
-        const type = selector.value;
-
-        let html = `<h4>Item #${rowCount} <button class="btn-delete" onclick="this.parentElement.parentElement.remove()">×</button></h4>
-        ${createInp("Title *", "inp-title", "Name")}
+        div.className = 'card';
+        const type = document.getElementById('folder').value;
         
-        <div class="form-group">
-            <label>Image (Select File) *</label>
-            <input type="file" accept="image/*" onchange="this.nextElementSibling.value = '/uploads/' + this.files[0].name">
-            <input type="text" class="inp-image" readonly style="background:#eee; margin-top:5px;" placeholder="/uploads/...">
-        </div>
-        ${ selector.value !== 'offers' ? 
-            createInp("Category", "inp-cat", "e.g. Lace", "text", isFirst) +
-            createInp("Price (Number)", "inp-price", "0", "number", isFirst) +
-            createInp("Description", "inp-desc", "Details...", "textarea", isFirst)
-        : ''}
-        ${ selector.value === 'products' ? 
-            `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">${createInp("Size", "inp-size", "9m", "text", isFirst)}${createInp("Color", "inp-color", "Red", "text", isFirst)}</div>` +
-            createInp("Fabric", "inp-fab", "Velvet", "text", isFirst)
-        : ''}
-        `;
-        list.appendChild(div);
-        div.scrollIntoView({behavior:'smooth'});
+        let html = `
+            <div class="card-header"><span class="row-num">#${rowCount}</span><button class="btn-del" onclick="this.parentElement.parentElement.remove()">×</button></div>
+            
+            ${mkInp("Title *", "inp-title", "Item Name")}
+            
+            <div class="field-group">
+                <label>Image *</label>
+                <div class="file-wrapper">
+                    <input type="file" class="inp-file" accept="image/*" onchange="previewImage(this)">
+                    <img class="img-preview">
+                </div>
+            </div>
+            
+            <div class="ad-wrapper" onclick="toggleAd(this)">
+                <input type="checkbox" class="inp-ad" style="pointer-events:none;">
+                <label class="ad-label">📢 Mark as Ad</label>
+            </div>
+            `;
+
+        if (type === 'products') {
+            html += `<div class="two-col">${mkInp("Price", "inp-price", "0", "number")}${mkSelect("Category", "inp-cat", productCats)}</div>
+            ${mkInp("Description", "inp-desc", "Details...", "textarea")}
+            <div class="section-title">Details</div>
+            <div class="two-col">${mkInp("Size", "inp-size", "e.g. 9m")}${mkInp("Color", "inp-color", "e.g. Red")}</div>
+            <div class="two-col">${mkInp("Pieces/Meter", "inp-pieces", "e.g. 1 Bundle")}${mkInp("Fabric", "inp-fabric", "e.g. Velvet")}</div>
+            <div class="two-col">${mkInp("Work", "inp-work", "e.g. Dhaga")}${mkInp("Pattern", "inp-pattern", "e.g. Floral")}</div>
+            ${mkInp("Ideal For", "inp-ideal", "e.g. Saree Border")}
+            <div class="section-title">Policy</div>
+            <div class="two-col">${mkInp("Del. Charges", "inp-del-charge", "Free")}${mkInp("Return Policy", "inp-return", "No Returns")}</div>`;
+        } 
+        else if (type === 'services' || type === 'works') {
+            html += `<div class="two-col">${mkInp("Price", "inp-price", "0", "number")}${mkSelect("Category", "inp-cat", serviceCats)}</div>
+            ${mkInp("Description", "inp-desc", "Description...", "textarea")}
+            ${ type === 'services' ? mkInp("Service Info", "inp-serv-info", "Extra details...", "textarea") : '' }`;
+        } 
+        else if (type === 'designs') {
+            html += `<div class="two-col">${mkInp("Charges (Price)", "inp-price", "0", "number")}${mkInp("Widely Use For", "inp-cat", "e.g. Blouse")}</div>`;
+        }
+
+        div.innerHTML = html;
+        container.appendChild(div);
     }
 
-    window.copyToAll = function(cls) {
+    function copyAll(cls) {
         const val = document.querySelector(`.${cls}`).value;
-        document.querySelectorAll(`.${cls}`).forEach(el => el.value = val);
+        if(!val) return alert("Fill this field first!");
+        document.querySelectorAll(`.${cls}`).forEach(el => {
+            el.value = val; el.classList.add('filled');
+        });
     }
 
-    // --- 4. SAVE LOGIC (WITH UNIQUE SLUG) ---
-    document.getElementById('saveAllBtn').addEventListener('click', async () => {
-        const btn = document.getElementById('saveAllBtn');
-        const type = selector.value;
-        
-        btn.textContent = "Uploading...";
-        btn.disabled = true;
-        let success = 0;
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+    });
 
-        const cards = document.querySelectorAll('.mu-card');
-        for (const card of cards) {
-            const getVal = (c) => card.querySelector(`.${c}`)?.value || "";
+    async function startUpload() {
+        const owner = document.getElementById('owner').value.trim();
+        const repo = document.getElementById('repo').value.trim();
+        const token = document.getElementById('token').value.trim();
+        const folder = document.getElementById('folder').value;
+        const btn = document.getElementById('uploadBtn');
+
+        if(!owner || !repo || !token) return alert("Fill GitHub Details first!");
+        localStorage.setItem('gh_owner', owner); localStorage.setItem('gh_repo', repo); localStorage.setItem('gh_token', token);
+
+        const rows = document.querySelectorAll('.card');
+        btn.innerText = "Uploading..."; btn.disabled = true;
+        log("Starting upload process...");
+
+        for (const row of rows) {
+            const getVal = (c) => row.querySelector(`.${c}`)?.value || "";
             const title = getVal('inp-title');
+            const fileInput = row.querySelector('.inp-file');
+            const isAd = row.querySelector('.inp-ad').checked;
+            
             if(!title) continue;
 
-            // 🔥 UNIQUE SLUG FIX: Append Timestamp to prevent duplicates
-            const cleanTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-            const uniqueId = Date.now().toString().slice(-4); // Last 4 digits of time
-            const slug = `${cleanTitle}-${uniqueId}`;
+            const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+            const uniqueId = Date.now().toString().slice(-4);
+            const finalSlug = `${slug}-${uniqueId}`;
             const date = new Date().toISOString();
             
+            let imagePath = "";
+            if(fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                log(`Uploading Image: ${file.name}...`);
+                const uniqueFileName = `${Date.now()}-${file.name.replace(/\s+/g, '-').toLowerCase()}`;
+                try {
+                    const base64Content = await toBase64(file);
+                    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/uploads/${uniqueFileName}`, {
+                        method: 'PUT',
+                        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: `Img: ${title}`, content: base64Content })
+                    });
+                    if(res.ok) imagePath = `/uploads/${uniqueFileName}`;
+                } catch(e) { log(`❌ Image Error`); }
+            }
+
+            let layout = "product.liquid";
+            if(folder === 'designs') layout = "design.liquid";
+            if(folder === 'services' || folder === 'works') layout = "service.liquid";
+
             let content = `---
 title: "${title}"
 date: "${date}"
-layout: "${configs[type].layout}"
-tags: "${configs[type].tag}"
+layout: "${layout}"
+tags: "${folder === 'offers' ? 'offer' : folder.slice(0, -1)}"
+image: "${imagePath}"
+is_ad: ${isAd}
+price: ${getVal('inp-price') || 0}
+category: "${getVal('inp-cat')}"
+description: "${getVal('inp-desc').replace(/"/g, '\\"')}"
 permalink: false
 `;
-            const fields = {
-                image: getVal('inp-image'), price: getVal('inp-price'),
-                category: getVal('inp-cat'), description: getVal('inp-desc'),
-                size: getVal('inp-size'), colour: getVal('inp-color'), fabric: getVal('inp-fab')
-            };
-
-            for(let k in fields) {
-                if(fields[k]) {
-                    content += `${k}: ${isNaN(fields[k]) ? `"${fields[k]}"` : fields[k]}\n`;
-                }
+            if(folder === 'products') {
+                if(getVal('inp-size')) content += `size: "${getVal('inp-size')}"\n`;
+                if(getVal('inp-color')) content += `colour: "${getVal('inp-color')}"\n`;
+                if(getVal('inp-pieces')) content += `number_of_pieces: "${getVal('inp-pieces')}"\n`;
+                if(getVal('inp-fabric')) content += `fabric: "${getVal('inp-fabric')}"\n`;
+                if(getVal('inp-work')) content += `work: "${getVal('inp-work')}"\n`;
+                if(getVal('inp-pattern')) content += `pattern: "${getVal('inp-pattern')}"\n`;
+                if(getVal('inp-ideal')) content += `ideal_for: "${getVal('inp-ideal')}"\n`;
+                if(getVal('inp-del-charge')) content += `delivery_charges: "${getVal('inp-del-charge')}"\n`;
+                if(getVal('inp-return')) content += `return_policy: "${getVal('inp-return')}"\n`;
+            }
+            if(folder === 'services' && getVal('inp-serv-info')) {
+                content += `service_information: "${getVal('inp-serv-info').replace(/"/g, '\\"')}"\n`;
             }
             content += `---`;
 
+            const contentEncoded = btoa(unescape(encodeURIComponent(content)));
             try {
-                await cmsBackend.persistEntry({
-                    collection: type,
-                    slug: slug,
-                    entry: { path: `${type}/${slug}.md`, raw: content }
+                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}/${finalSlug}.md`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: `Add ${title}`, content: contentEncoded })
                 });
-                success++;
-                card.style.border = "2px solid green";
-            } catch(e) {
-                console.error(e);
-                card.style.border = "2px solid red";
-                alert("Failed: " + title);
-            }
+                if(res.ok) {
+                    log(`✅ Uploaded: ${title}`);
+                    row.style.borderLeft = "5px solid green";
+                    row.style.opacity = "0.5";
+                } else {
+                    log(`❌ Error: Check Token`);
+                    row.style.borderLeft = "5px solid red";
+                }
+            } catch(err) { log(`❌ Net Error`); }
         }
-
-        btn.textContent = "Save All";
-        btn.disabled = false;
         
-        if(success > 0) {
-            alert(`✅ Successfully uploaded ${success} items!`);
-            location.reload();
-        }
-    });
-  </script>
+        btn.innerText = "Done! Refresh 🔄";
+        btn.onclick = function() { location.reload(); };
+        btn.disabled = false;
+        alert("Upload Complete!");
+    }
+</script>
 </body>
 </html>
