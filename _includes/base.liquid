@@ -33,9 +33,15 @@
 <body>
 
 <div id="intro-splash">
-    <img src="/icons/icon-512x512.png" alt="Alif Logo" class="intro-logo">
+   <img src="/icons/icon-512x512.png" alt="Alif Logo" class="intro-logo">
 </div>
 
+<script>
+    // Agar user pehle aa chuka hai, to turant splash gayab karo (No Flash)
+    if (sessionStorage.getItem('alifAppVisited') === 'true') {
+        document.getElementById('intro-splash').style.display = 'none';
+    }
+</script>
 
     <div id="search-overlay">
         <div class="search-header">
