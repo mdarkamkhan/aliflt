@@ -1,5 +1,4 @@
-
-
+document.addEventListener("DOMContentLoaded", () => {
     /* ================================
           1. CART LOGIC
     ================================ */
@@ -28,25 +27,24 @@
             this.save();
             this.updateIcon();
         },
-            updateIcon() {
-        let total = 0;
-        for (const id in this.items) total += this.items[id].qty;
+        updateIcon() {
+            let total = 0;
+            for (const id in this.items) total += this.items[id].qty;
 
-        // 1. Desktop Icon Update
-        const desktopCount = document.getElementById("cartCount");
-        if (desktopCount) {
-            desktopCount.textContent = total;
-            // Optional: Hide if 0
-            desktopCount.style.display = total > 0 ? 'flex' : 'none';
-        }
+            // 1. Desktop Icon Update
+            const desktopCount = document.getElementById("cartCount");
+            if (desktopCount) {
+                desktopCount.textContent = total;
+                desktopCount.style.display = total > 0 ? 'flex' : 'none';
+            }
 
-        // 2. Mobile Bottom Icon Update
-        const mobileCount = document.getElementById("cartCountMobile");
-        if (mobileCount) {
-            mobileCount.textContent = total;
-            mobileCount.style.display = total > 0 ? 'inline-block' : 'none';
-        }
-    },
+            // 2. Mobile Bottom Icon Update
+            const mobileCount = document.getElementById("cartCountMobile");
+            if (mobileCount) {
+                mobileCount.textContent = total;
+                mobileCount.style.display = total > 0 ? 'inline-block' : 'none';
+            }
+        },
         getTotalPrice() {
             let total = 0;
             for (const id in this.items) {
@@ -61,7 +59,7 @@
     /* ================================
          2. TOAST MESSAGE
     ================================ */
-    function showToast(msg) {
+    window.showToast = function(msg) {
         const t = document.createElement("div");
         t.className = "toast";
         t.textContent = msg;
@@ -71,29 +69,28 @@
             t.classList.remove("show");
             setTimeout(() => t.remove(), 300);
         }, 3000);
-    }
+    };
 
-    
     /* ================================
-         3. SIDEBAR NAVIGATION (Fix)
+         3. SIDEBAR NAVIGATION (FIXED) 🛠️
     ================================ */
     const navToggle = document.getElementById("navToggleBtn");
     const sidebar = document.getElementById("sidebarMenu");
     const overlay = document.getElementById("sidebarOverlay");
     const closeBtn = document.getElementById("sidebarCloseBtn");
-    const body = document.body; 
+    const body = document.body;
 
     if (navToggle && sidebar && overlay) {
         const openMenu = () => {
-            // Yahan hum 'active' class use karenge taaki CSS se match kare
-            sidebar.classList.add("active");
-            overlay.classList.add("active");
-            body.style.overflow = "hidden"; // Scroll rokne ke liye
+            // FIX: 'active' ki jagah 'is-open' use kiya CSS match karne ke liye
+            sidebar.classList.add("is-open");
+            overlay.classList.add("is-open");
+            body.classList.add("sidebar-open"); // Body scroll rokne ke liye
         };
         const closeMenu = () => {
-            sidebar.classList.remove("active");
-            overlay.classList.remove("active");
-            body.style.overflow = "auto"; // Scroll wapis chalu
+            sidebar.classList.remove("is-open");
+            overlay.classList.remove("is-open");
+            body.classList.remove("sidebar-open");
         };
 
         navToggle.addEventListener("click", openMenu);
@@ -101,11 +98,8 @@
         overlay.addEventListener("click", closeMenu);
     }
 
- 
-
-    
     /* ================================
-         4. FILTER BUTTONS (NEW FIXED LOGIC) 🛠️
+         4. FILTER BUTTONS (FIXED) 🛠️
     ================================ */
     const filterButtons = document.querySelectorAll(".filter-btn");
     const productCards = document.querySelectorAll(".product-card");
@@ -113,36 +107,35 @@
     if (filterButtons.length > 0) {
         filterButtons.forEach(btn => {
             btn.addEventListener("click", (e) => {
-                e.preventDefault(); // Click jump rokne ke liye
+                e.preventDefault();
 
                 // 1. Remove Active from all
                 filterButtons.forEach(b => b.classList.remove("active"));
-                
-                // 2. Add Active to clicked button (Use currentTarget to handle icon clicks)
+
+                // 2. Add Active to clicked button
                 const clickedBtn = e.currentTarget;
                 clickedBtn.classList.add("active");
 
                 // 3. Get Filter Value
-                // Check for both attribute styles just in case
                 const rawValues = clickedBtn.dataset.filterValues || clickedBtn.dataset.filter || "all";
                 const filterValues = rawValues.split(",").map(s => s.trim().toLowerCase());
 
                 // 4. Show/Hide Products
                 productCards.forEach(card => {
                     const cardCategory = (card.dataset.category || "").toLowerCase();
-                    
+
                     if (filterValues.includes("all") || filterValues.includes(cardCategory)) {
                         // Show
                         card.classList.remove("hidden");
-                        card.style.display = "block"; 
+                        card.style.display = "block";
                         setTimeout(() => card.classList.add("is-visible"), 10);
                     } else {
                         // Hide
                         card.classList.remove("is-visible");
                         card.classList.add("hidden");
                         setTimeout(() => {
-                             if(card.classList.contains("hidden")) card.style.display = "none"; 
-                        }, 300); // Wait for animation
+                            if (card.classList.contains("hidden")) card.style.display = "none";
+                        }, 300);
                     }
                 });
             });
@@ -153,32 +146,37 @@
          5. CLICK HANDLING (Add to Cart / Buy)
     ================================ */
     document.addEventListener("click", (e) => {
-        const target = e.target;
+        // FIX: e.target se parent element dhoondna zaruri hai agar user icon pe click kare
+        const target = e.target.closest('button') || e.target; 
 
-        // Add To Cart Logic (UPDATED)
-        if (target.id === "addToCartBtn") {
+        // Add To Cart Logic (Supports ID and Class)
+        // FIX: Added check for class 'add-to-cart-btn' as IDs should be unique
+        if (target.id === "addToCartBtn" || target.classList.contains("add-to-cart-btn")) {
             
-            // Check 1: Agar button pehle se "GO TO CART" ban chuka hai
-            if (target.textContent === "GO TO CART") {
+            // Prevent multiple clicks if already added
+            if (target.textContent.includes("GO TO CART")) {
                 window.location.href = "/cart/";
                 return;
             }
 
-            // Check 2: Normal Add to Cart process
-            cart.add(
-                target.dataset.productId,
-                target.dataset.title,
-                target.dataset.price,
-                target.dataset.image
-            );
-
-            // Change Button Text & Style
-            target.textContent = "GO TO CART";
-            target.style.backgroundColor = "#000"; // Black
-            target.style.color = "#fff"; // White Text
+            const productId = target.dataset.productId || target.dataset.id;
             
-            // Show Toast with Product Name
-            showToast(`${target.dataset.title} added to cart`);
+            if(productId) {
+                cart.add(
+                    productId,
+                    target.dataset.title,
+                    target.dataset.price,
+                    target.dataset.image
+                );
+
+                // Change Button Text
+                target.textContent = "GO TO CART";
+                target.style.backgroundColor = "#000";
+                target.style.color = "#fff";
+                
+                // Show Toast
+                if(window.showToast) window.showToast(`${target.dataset.title} added to cart`);
+            }
         }
 
         // Buy Now (WhatsApp)
@@ -187,7 +185,7 @@
             window.open(`https://wa.me/7250470009?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Cart Page Logic (Same as before)
+        // Cart Page Logic
         if (target.classList.contains("qty-btn") && target.dataset.action === "inc") {
             cart.items[target.dataset.id].qty++;
             cart.save();
@@ -241,11 +239,11 @@
                 <div class="cart-img-box"><img src="${item.image}" alt="product"></div>
                 <div class="cart-info">
                     <h4>${item.title}</h4>
-                    <p>₹${item.price}</p>
-                    <div class="qty-controls">
-                        <button class="qty-btn" data-id="${id}" data-action="dec">-</button>
-                        <span>${item.qty}</span>
-                        <button class="qty-btn" data-id="${id}" data-action="inc">+</button>
+                    <p class="price">₹${item.price}</p>
+                    <div class="cart-item-quantity">
+                        <button class="cart-item-qty-btn qty-btn" data-id="${id}" data-action="dec">-</button>
+                        <span class="cart-item-qty-text">${item.qty}</span>
+                        <button class="cart-item-qty-btn qty-btn" data-id="${id}" data-action="inc">+</button>
                     </div>
                 </div>
                 <button class="remove-btn" data-id="${id}">&times;</button>
@@ -256,7 +254,7 @@
         if (totalDisplay) totalDisplay.textContent = "Total: ₹" + cart.getTotalPrice();
     }
     renderCartPage();
-    
+
     /* ================================
          7. WHATSAPP ORDER BUTTON
     ================================ */
@@ -276,7 +274,7 @@
     }
 
     /* ================================
-         8. SWAPPER / GALLERY LOGIC (Restored)
+         8. SWAPPER / GALLERY LOGIC
     ================================ */
     function initSwapper(selector) {
         const wrap = document.querySelector(selector);
@@ -285,8 +283,8 @@
         const items = wrap.querySelectorAll(".swapper-item");
         const prevBtn = wrap.querySelector(".prev-btn");
         const nextBtn = wrap.querySelector(".next-btn");
-        
-        if(items.length === 0) return;
+
+        if (items.length === 0) return;
 
         let current = 0;
         function show(i) {
@@ -307,18 +305,18 @@
 
         // Swipe Support
         let startX = 0;
-        wrap.addEventListener("touchstart", e => (startX = e.touches[0].clientX), {passive: true});
+        wrap.addEventListener("touchstart", e => (startX = e.touches[0].clientX), { passive: true });
         wrap.addEventListener("touchend", e => {
             let endX = e.changedTouches[0].clientX;
             if (endX < startX - 50) { // Swipe Left -> Next
-                if(nextBtn) nextBtn.click();
+                if (nextBtn) nextBtn.click();
                 else show((current + 1) % items.length);
             }
             if (endX > startX + 50) { // Swipe Right -> Prev
-                if(prevBtn) prevBtn.click();
+                if (prevBtn) prevBtn.click();
                 else show((current - 1 + items.length) % items.length);
             }
-        }, {passive: true});
+        }, { passive: true });
     }
 
     // Initialize all galleries
@@ -328,40 +326,34 @@
     initSwapper(".services-panel-gallery");
     initSwapper(".works-panel-gallery");
     initSwapper(".designs-panel-gallery");
-    
-});
+
     /* ================================
-         10. PWA INSTALL LOGIC (NEW)
+         10. PWA INSTALL LOGIC
     ================================ */
     let deferredPrompt;
     const installBtn = document.getElementById('install-pwa-btn');
 
     window.addEventListener('beforeinstallprompt', (e) => {
-        // 1. Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
-        // 2. Stash the event so it can be triggered later.
         deferredPrompt = e;
-        // 3. Button ko Visible karo (CSS display: flex dekar)
-        if(installBtn) installBtn.style.display = 'flex';
+        if (installBtn) installBtn.style.display = 'flex';
         console.log("📲 App is installable! Button shown.");
     });
 
-    if(installBtn) {
+    if (installBtn) {
         installBtn.addEventListener('click', () => {
-            // Hide the app provided install promotion
             installBtn.style.display = 'none';
-            // Show the install prompt
-            if(deferredPrompt) {
+            if (deferredPrompt) {
                 deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         console.log('User accepted the install prompt');
-                    } else {
-                        console.log('User dismissed the install prompt');
                     }
                     deferredPrompt = null;
                 });
             }
         });
     }
+
+}); // Closing Main Event Listener
+                
