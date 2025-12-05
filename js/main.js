@@ -353,7 +353,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
         });
+            /* ================================
+         11. INTRO SPLASH REMOVER
+    ================================ */
+    const splash = document.getElementById('intro-splash');
+    
+    if(splash) {
+        // 3 seconds ke baad splash screen ko HTML se hata do
+        setTimeout(() => {
+            splash.remove();
+        }, 3000);
     }
+        
+
 
 }); // Closing Main Event Listener
                 
