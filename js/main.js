@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    
     /* ================================
           1. CART LOGIC
     ================================ */
@@ -20,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             this.save();
             this.updateIcon();
-            showToast("Added to cart!");
+            if(window.showToast) window.showToast("Added to cart!");
         },
         remove(id) {
             delete this.items[id];
@@ -82,10 +83,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (navToggle && sidebar && overlay) {
         const openMenu = () => {
-            // FIX: 'active' ki jagah 'is-open' use kiya CSS match karne ke liye
+            // CSS class match karne ke liye 'is-open' use kiya
             sidebar.classList.add("is-open");
             overlay.classList.add("is-open");
-            body.classList.add("sidebar-open"); // Body scroll rokne ke liye
+            body.classList.add("sidebar-open");
         };
         const closeMenu = () => {
             sidebar.classList.remove("is-open");
@@ -146,14 +147,11 @@ document.addEventListener("DOMContentLoaded", () => {
          5. CLICK HANDLING (Add to Cart / Buy)
     ================================ */
     document.addEventListener("click", (e) => {
-        // FIX: e.target se parent element dhoondna zaruri hai agar user icon pe click kare
         const target = e.target.closest('button') || e.target; 
 
-        // Add To Cart Logic (Supports ID and Class)
-        // FIX: Added check for class 'add-to-cart-btn' as IDs should be unique
+        // Add To Cart Logic
         if (target.id === "addToCartBtn" || target.classList.contains("add-to-cart-btn")) {
             
-            // Prevent multiple clicks if already added
             if (target.textContent.includes("GO TO CART")) {
                 window.location.href = "/cart/";
                 return;
@@ -169,12 +167,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     target.dataset.image
                 );
 
-                // Change Button Text
                 target.textContent = "GO TO CART";
                 target.style.backgroundColor = "#000";
                 target.style.color = "#fff";
                 
-                // Show Toast
                 if(window.showToast) window.showToast(`${target.dataset.title} added to cart`);
             }
         }
@@ -337,7 +333,6 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         deferredPrompt = e;
         if (installBtn) installBtn.style.display = 'flex';
-        console.log("📲 App is installable! Button shown.");
     });
 
     if (installBtn) {
@@ -347,12 +342,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the install prompt');
+                        console.log('User accepted install');
                     }
                     deferredPrompt = null;
                 });
             }
         });
+    }
+
     /* ================================
          11. INTRO SPLASH REMOVER (ONE TIME ONLY)
     ================================ */
@@ -378,3 +375,5 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 3000);
         }
     }
+
+}); // Closing Main Event Listener
