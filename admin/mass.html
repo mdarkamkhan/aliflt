@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALiF Ultimate Uploader</title>
+    <title>ALiF Ultimate Uploader (Multi-Angle)</title>
     <style>
         /* --- STYLING --- */
         body { font-family: sans-serif; padding: 15px; background: #f0f2f5; padding-bottom: 120px; }
@@ -26,9 +26,26 @@
 
         .field-group { margin-bottom: 12px; }
         .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        /* IMAGE PREVIEW AREA */
         .file-wrapper { background: #eef; padding: 10px; border-radius: 5px; border: 1px dashed #007bff; text-align: center; margin-top: 5px; transition: all 0.3s ease; }
         .file-wrapper.filled { border: 2px solid #28a745; background-color: #e8f5e9; }
-        .img-preview { display: none; width: 100px; height: 100px; object-fit: cover; border-radius: 5px; margin: 10px auto 0 auto; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        
+        .gallery-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .thumb-preview {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
 
         /* AD CHECKBOX STYLE */
         .ad-wrapper {
@@ -50,7 +67,7 @@
 </head>
 <body>
 
-    <h2>🚀 Ultimate Uploader</h2>
+    <h2>🚀 Ultimate Multi-Image Uploader</h2>
     
     <div class="config-box">
         <div class="config-row">
@@ -72,19 +89,17 @@
         </div>
     </div>
 
+    <div style="text-align: center; margin: 20px 0;">
+        <input type="file" id="bulkInput" multiple accept="image/*" style="display: none;" onchange="handleBulkImages(this)">
+        <button onclick="document.getElementById('bulkInput').click()" style="background: linear-gradient(135deg, #007bff, #6610f2); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            📸 Batch Create Rows (1 Photo/Row)
+        </button>
+    </div>
+
     <div id="rows-container"></div>
 
-<div style="text-align: center; margin: 20px 0;">
-    <input type="file" id="bulkInput" multiple accept="image/*" style="display: none;" onchange="handleBulkImages(this)">
-    
-    <button onclick="document.getElementById('bulkInput').click()" style="background: linear-gradient(135deg, #6e8efb, #a777e3); color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-        📸 Select Multiple Photos (Bulk Mode)
-    </button>
-</div>
-    
-    
     <div class="fab-container">
-        <button class="btn btn-add" onclick="addRow()">+ Add</button>
+        <button class="btn btn-add" onclick="addRow()">+ Add Row</button>
         <button class="btn btn-upload" id="uploadBtn" onclick="startUpload()">Upload 🚀</button>
     </div>
 
@@ -107,9 +122,41 @@
             document.getElementById('repo').value = localStorage.getItem('gh_repo') || '';
             document.getElementById('token').value = localStorage.getItem('gh_token') || '';
             checkConfigInputs();
-            addRow();
+            // addRow(); // Optional: Start with 0 rows
         };
 
+        /* =========================================
+           1. BULK ROW CREATOR (1 Photo = 1 Row)
+        ========================================= */
+        function handleBulkImages(input) {
+            const files = input.files;
+            if (files.length === 0) return;
+
+            if (!confirm(`Create ${files.length} separate rows for these images?`)) {
+                input.value = ''; return;
+            }
+
+            Array.from(files).forEach((file) => {
+                addRow(); // New Row
+                const lastRow = container.lastElementChild;
+                const fileInput = lastRow.querySelector('.inp-file');
+                
+                // Set file
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+
+                // Trigger Preview logic
+                previewImages(fileInput);
+            });
+
+            setTimeout(() => container.lastElementChild.scrollIntoView({ behavior: 'smooth' }), 500);
+            input.value = '';
+        }
+
+        /* =========================================
+           2. HELPER FUNCTIONS
+        ========================================= */
         function checkConfigInputs() {
             ['owner', 'repo', 'token'].forEach(id => {
                 const el = document.getElementById(id);
@@ -125,34 +172,40 @@
             }
         });
 
-        window.previewImage = function(input) {
-            const file = input.files[0];
+        // ✅ NEW: Supports Multiple Images Preview
+        window.previewImages = function(input) {
+            const files = input.files;
             const wrapper = input.closest('.file-wrapper');
-            const img = wrapper.querySelector('.img-preview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    wrapper.classList.add('filled');
-                }
-                reader.readAsDataURL(file);
+            const galleryDiv = wrapper.querySelector('.gallery-container');
+            
+            galleryDiv.innerHTML = ""; // Clear old previews
+
+            if (files.length > 0) {
+                wrapper.classList.add('filled');
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'thumb-preview';
+                        galleryDiv.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
             } else {
-                img.style.display = 'none';
                 wrapper.classList.remove('filled');
             }
         }
 
-        // Toggle Ad Box Color
         window.toggleAd = function(div) {
             const checkbox = div.querySelector('input');
-            checkbox.checked = !checkbox.checked; // Toggle check
+            checkbox.checked = !checkbox.checked;
             if(checkbox.checked) div.classList.add('active');
             else div.classList.remove('active');
         }
 
         function resetRows() {
-            if(rowCount > 0 && !confirm("Change Category? Current rows will be cleared.")) return;
+            if(rowCount > 0 && !confirm("Clear rows?")) return;
             container.innerHTML = ""; rowCount = 0; addRow();
         }
 
@@ -177,22 +230,23 @@
             div.className = 'card';
             const type = document.getElementById('folder').value;
             
+            // ✅ Updated HTML for Multiple File Input
             let html = `
                 <div class="card-header"><span class="row-num">#${rowCount}</span><button class="btn-del" onclick="this.parentElement.parentElement.remove()">×</button></div>
                 
                 ${mkInp("Title *", "inp-title", "Item Name")}
                 
                 <div class="field-group">
-                    <label>Image *</label>
+                    <label>Images (Select Multiple) *</label>
                     <div class="file-wrapper">
-                        <input type="file" class="inp-file" accept="image/*" onchange="previewImage(this)">
-                        <img class="img-preview">
+                        <input type="file" class="inp-file" accept="image/*" multiple onchange="previewImages(this)">
+                        <div class="gallery-container"></div>
                     </div>
                 </div>
                 
                 <div class="ad-wrapper" onclick="toggleAd(this)">
                     <input type="checkbox" class="inp-ad" style="pointer-events:none;">
-                    <label class="ad-label">📢 Mark as Ad (Show in "You May Also Like")</label>
+                    <label class="ad-label">📢 Mark as Ad</label>
                 </div>
                 `;
 
@@ -204,7 +258,6 @@
                 <div class="two-col">${mkInp("Pieces/Meter", "inp-pieces", "e.g. 1 Bundle")}${mkInp("Fabric", "inp-fabric", "e.g. Velvet")}</div>
                 <div class="two-col">${mkInp("Work", "inp-work", "e.g. Dhaga")}${mkInp("Pattern", "inp-pattern", "e.g. Floral")}</div>
                 ${mkInp("Ideal For", "inp-ideal", "e.g. Saree Border")}
-                <div class="section-title">Policy</div>
                 <div class="two-col">${mkInp("Del. Charges", "inp-del-charge", "Free")}${mkInp("Return Policy", "inp-return", "No Returns")}</div>`;
             } 
             else if (type === 'services' || type === 'works') {
@@ -218,15 +271,12 @@
 
             div.innerHTML = html;
             container.appendChild(div);
-            setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
         }
 
         function copyAll(cls) {
             const val = document.querySelector(`.${cls}`).value;
             if(!val) return alert("Fill this field first!");
-            document.querySelectorAll(`.${cls}`).forEach(el => {
-                el.value = val; el.classList.add('filled');
-            });
+            document.querySelectorAll(`.${cls}`).forEach(el => { el.value = val; el.classList.add('filled'); });
         }
 
         const toBase64 = file => new Promise((resolve, reject) => {
@@ -254,7 +304,7 @@
                 const getVal = (c) => row.querySelector(`.${c}`)?.value || "";
                 const title = getVal('inp-title');
                 const fileInput = row.querySelector('.inp-file');
-                const isAd = row.querySelector('.inp-ad').checked; // GET AD VALUE
+                const isAd = row.querySelector('.inp-ad').checked;
                 
                 if(!title) continue;
 
@@ -263,32 +313,48 @@
                 const finalSlug = `${slug}-${uniqueId}`;
                 const date = new Date().toISOString();
                 
-                let imagePath = "";
+                // ✅ HANDLE MULTIPLE IMAGES UPLOAD
+                let mainImagePath = "";
+                let galleryPaths = [];
+                
                 if(fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    log(`Uploading Image: ${file.name}...`);
-                    const uniqueFileName = `${Date.now()}-${file.name.replace(/\s+/g, '-').toLowerCase()}`;
-                    try {
-                        const base64Content = await toBase64(file);
-                        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/uploads/${uniqueFileName}`, {
-                            method: 'PUT',
-                            headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ message: `Img: ${title}`, content: base64Content })
-                        });
-                        if(res.ok) imagePath = `/uploads/${uniqueFileName}`;
-                    } catch(e) { log(`❌ Image Error`); }
+                    const files = Array.from(fileInput.files);
+                    log(`Uploading ${files.length} images for: ${title}`);
+
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        const uniqueFileName = `${Date.now()}-${i}-${file.name.replace(/\s+/g, '-').toLowerCase()}`;
+                        
+                        try {
+                            const base64Content = await toBase64(file);
+                            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/uploads/${uniqueFileName}`, {
+                                method: 'PUT',
+                                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ message: `Img: ${title} (${i+1})`, content: base64Content })
+                            });
+                            
+                            if(res.ok) {
+                                const path = `/uploads/${uniqueFileName}`;
+                                galleryPaths.push(path);
+                                if(i === 0) mainImagePath = path; // First image is main
+                            }
+                        } catch(e) { log(`❌ Image Error: ${file.name}`); }
+                    }
                 }
 
                 let layout = "product.liquid";
                 if(folder === 'designs') layout = "design.liquid";
                 if(folder === 'services' || folder === 'works') layout = "service.liquid";
 
+                // ✅ BUILD CONTENT WITH GALLERY
                 let content = `---
 title: "${title}"
 date: "${date}"
 layout: "${layout}"
 tags: "${folder === 'offers' ? 'offer' : folder.slice(0, -1)}"
-image: "${imagePath}"
+image: "${mainImagePath}"
+gallery:
+${galleryPaths.map(p => `  - "${p}"`).join('\n')}
 is_ad: ${isAd}
 price: ${getVal('inp-price') || 0}
 category: "${getVal('inp-cat')}"
@@ -304,8 +370,6 @@ permalink: false
                     if(getVal('inp-pattern')) content += `pattern: "${getVal('inp-pattern')}"\n`;
                     if(getVal('inp-ideal')) content += `ideal_for: "${getVal('inp-ideal')}"\n`;
                     if(getVal('inp-del-charge')) content += `delivery_charges: "${getVal('inp-del-charge')}"\n`;
-                    if(getVal('inp-del-time')) content += `delivery_within: "${getVal('inp-del-time')}"\n`;
-                    if(getVal('inp-pay')) content += `payment_type: "${getVal('inp-pay')}"\n`;
                     if(getVal('inp-return')) content += `return_policy: "${getVal('inp-return')}"\n`;
                 }
                 if(folder === 'services' && getVal('inp-serv-info')) {
@@ -319,7 +383,7 @@ permalink: false
                         method: 'PUT',
                         headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                         body: JSON.stringify({ message: `Add ${title}`, content: contentEncoded })
-                    });
+                      });
                     if(res.ok) {
                         log(`✅ Uploaded: ${title}`);
                         row.style.borderLeft = "5px solid green";
@@ -332,7 +396,6 @@ permalink: false
             }
             
             btn.innerText = "Done! Refresh 🔄";
-            btn.style.backgroundColor = "#333";
             btn.onclick = function() { location.reload(); };
             btn.disabled = false;
             alert("Upload Complete!");
