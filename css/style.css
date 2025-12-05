@@ -1970,4 +1970,60 @@ details[open] .pm-icon-minus { display: block; }
     justify-content: center;
     padding: 0;
 }
+/* =========================================
+   🎬 NETFLIX STYLE OPENING ANIMATION
+========================================= */
+
+#intro-splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000; /* Netflix Black */
+    z-index: 999999; /* Sabse upar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    
+    /* Animation: Background Fade Out after logo effect */
+    animation: bgFadeOut 0.5s ease-out 2.5s forwards;
+}
+
+.intro-logo {
+    width: 150px; /* Logo ka initial size */
+    opacity: 0;
+    
+    /* Animation: Logo Zoom Through */
+    animation: netflixZoom 2.5s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+}
+
+/* --- ANIMATION KEYFRAMES --- */
+
+/* 1. Logo Zoom Effect */
+@keyframes netflixZoom {
+    0% {
+        opacity: 0;
+        transform: scale(0.5); /* Chota start */
+    }
+    20% {
+        opacity: 1;
+        transform: scale(1); /* Normal dikhega */
+    }
+    70% {
+        opacity: 1;
+        transform: scale(1.2); /* Thoda bada hoga (suspense) */
+    }
+    100% {
+        opacity: 0;
+        transform: scale(30); /* ZOOM BOMB! Camera logo ke andar ghus jayega */
+    }
+}
+
+/* 2. Background Gayab Hona */
+@keyframes bgFadeOut {
+    0% { opacity: 1; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; }
+}
 
