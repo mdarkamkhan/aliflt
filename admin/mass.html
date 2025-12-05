@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALiF Ultimate Uploader (Multi-Angle)</title>
+    <title>ALiF Ultimate Uploader (Gallery Supported)</title>
     <style>
         /* --- STYLING --- */
         body { font-family: sans-serif; padding: 15px; background: #f0f2f5; padding-bottom: 120px; }
@@ -27,21 +27,42 @@
         .field-group { margin-bottom: 12px; }
         .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         
-        /* IMAGE WRAPPERS */
-        .file-wrapper { background: #eef; padding: 10px; border-radius: 5px; border: 1px dashed #007bff; text-align: center; margin-top: 5px; transition: all 0.3s ease; position: relative; }
+        /* IMAGE PREVIEW AREA */
+        .file-wrapper { background: #eef; padding: 10px; border-radius: 5px; border: 1px dashed #007bff; text-align: center; margin-top: 5px; transition: all 0.3s ease; }
         .file-wrapper.filled { border: 2px solid #28a745; background-color: #e8f5e9; }
-        .img-preview { display: none; width: 100px; height: 100px; object-fit: cover; border-radius: 5px; margin: 10px auto 0 auto; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-
-        /* EXTRA ANGLES STYLE */
-        .gallery-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-        .extra-img-box { width: 80px; position: relative; }
-        .extra-file-wrapper { width: 80px; height: 80px; border: 1px dashed #999; display: flex; align-items: center; justify-content: center; background: #f9f9f9; border-radius: 5px; overflow: hidden; cursor: pointer; }
-        .extra-file-wrapper img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        .btn-remove-angle { position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; display: none; }
-        .btn-add-angle { background: #333; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; margin-top: 5px; }
+        
+        .gallery-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .thumb-preview {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* EXTRA ANGLE STYLE */
+        .extra-angle-box {
+            background: #fff8e1;
+            border: 1px dashed #ffa000;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .thumb-small {
+            width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin: 2px; border: 1px solid #ccc;
+        }
 
         /* AD CHECKBOX STYLE */
-        .ad-wrapper { display: flex; align-items: center; gap: 10px; background: #f9f9f9; padding: 10px; border-radius: 5px; border: 1px solid #ddd; cursor: pointer; margin-bottom: 15px; margin-top: 15px; }
+        .ad-wrapper {
+            display: flex; align-items: center; gap: 10px; background: #f9f9f9; padding: 10px; border-radius: 5px; border: 1px solid #ddd; cursor: pointer; margin-bottom: 15px; margin-top: 15px;
+        }
         .ad-wrapper.active { background: #fff3cd; border-color: #ffc107; }
         .ad-checkbox { width: 20px; height: 20px; margin: 0; cursor: pointer; }
         .ad-label { margin: 0; cursor: pointer; color: #856404; font-size: 14px; }
@@ -58,7 +79,7 @@
 </head>
 <body>
 
-    <h2>🚀 Ultimate Uploader (Multi-Angle)</h2>
+    <h2>🚀 Ultimate Multi-Image Uploader</h2>
     
     <div class="config-box">
         <div class="config-row">
@@ -83,14 +104,14 @@
     <div style="text-align: center; margin: 20px 0;">
         <input type="file" id="bulkInput" multiple accept="image/*" style="display: none;" onchange="handleBulkImages(this)">
         <button onclick="document.getElementById('bulkInput').click()" style="background: linear-gradient(135deg, #007bff, #6610f2); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-            📸 Select Multiple Photos
+            📸 Batch Create Rows (1 Photo/Row)
         </button>
     </div>
 
     <div id="rows-container"></div>
 
     <div class="fab-container">
-        <button class="btn btn-add" onclick="addRow()">+ Add</button>
+        <button class="btn btn-add" onclick="addRow()">+ Add Row</button>
         <button class="btn btn-upload" id="uploadBtn" onclick="startUpload()">Upload 🚀</button>
     </div>
 
@@ -101,7 +122,6 @@
     </datalist>
 
     <script>
-        // --- GLOBAL VARIABLES ---
         const container = document.getElementById('rows-container');
         const logBox = document.getElementById('logs');
         let rowCount = 0;
@@ -109,7 +129,6 @@
         const productCats = ["lace", "latkan", "thread", "aster", "fall", "blouse piece", "plain saten", "plain crape", "plain cotton", "plain reyon", "net", "organza", "jorget", "banarasi", "velvet", "cotton"];
         const serviceCats = ["blouse", "kurti pant", "kurti patyala", "kurti palazzo", "kurti", "garara", "sharara", "gown", "anarkali gown", "frock", "afgani kurti", "lehanga", "trendy lehanga", "saree fall & pico"];
 
-        // --- ON LOAD ---
         window.onload = () => {
             document.getElementById('owner').value = localStorage.getItem('gh_owner') || '';
             document.getElementById('repo').value = localStorage.getItem('gh_repo') || '';
@@ -117,135 +136,38 @@
             checkConfigInputs();
         };
 
-        // --- BULK IMAGE HANDLER ---
-        window.handleBulkImages = function(input) {
+        /* =========================================
+           1. BULK ROW CREATOR (Your Working Logic)
+        ========================================= */
+        function handleBulkImages(input) {
             const files = input.files;
             if (files.length === 0) return;
 
-            if (!confirm(`Selected ${files.length} photos. Create ${files.length} new cards?`)) {
-                input.value = ''; 
-                return;
+            if (!confirm(`Create ${files.length} separate rows for these images?`)) {
+                input.value = ''; return;
             }
 
             Array.from(files).forEach((file) => {
-                addRow();
+                addRow(); // New Row
                 const lastRow = container.lastElementChild;
-                const imgPreview = lastRow.querySelector('.main-preview');
-                const fileWrapper = lastRow.querySelector('.file-wrapper');
                 const fileInput = lastRow.querySelector('.inp-file');
-
+                
+                // Set file to Main Image
                 const dataTransfer = new DataTransfer();
                 dataTransfer.items.add(file);
                 fileInput.files = dataTransfer.files;
 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imgPreview.src = e.target.result;
-                    imgPreview.style.display = 'block';
-                    fileWrapper.classList.add('filled');
-                };
-                reader.readAsDataURL(file);
+                // Trigger Preview logic
+                previewImages(fileInput);
             });
 
-            setTimeout(() => {
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            }, 300);
+            setTimeout(() => container.lastElementChild.scrollIntoView({ behavior: 'smooth' }), 500);
             input.value = '';
-        };
-
-        // --- ADD ROW FUNCTION ---
-        window.addRow = function() {
-            rowCount++;
-            const div = document.createElement('div');
-            div.className = 'card';
-            const type = document.getElementById('folder').value;
-            
-            let html = `
-                <div class="card-header"><span class="row-num">#${rowCount}</span><button class="btn-del" onclick="this.parentElement.parentElement.remove()">×</button></div>
-                
-                ${mkInp("Title *", "inp-title", "Item Name")}
-                
-                <div class="field-group">
-                    <label>Main Image *</label>
-                    <div class="file-wrapper">
-                        <input type="file" class="inp-file" accept="image/*" onchange="previewImage(this)">
-                        <img class="img-preview main-preview">
-                    </div>
-                </div>
-
-                <div class="field-group">
-                    <label>Other Angles (Gallery)</label>
-                    <div class="gallery-container"></div>
-                    <button class="btn-add-angle" onclick="addExtraAngle(this)">+ Add Angle</button>
-                </div>
-                
-                <div class="ad-wrapper" onclick="toggleAd(this)">
-                    <input type="checkbox" class="inp-ad" style="pointer-events:none;">
-                    <label class="ad-label">📢 Mark as Ad</label>
-                </div>
-                `;
-
-            if (type === 'products') {
-                html += `<div class="two-col">${mkInp("Price", "inp-price", "0", "number")}${mkSelect("Category", "inp-cat", productCats)}</div>
-                ${mkInp("Description", "inp-desc", "Details...", "textarea")}
-                <div class="section-title">Details</div>
-                <div class="two-col">${mkInp("Size", "inp-size", "e.g. 9m")}${mkInp("Color", "inp-color", "e.g. Red")}</div>
-                <div class="two-col">${mkInp("Pieces/Meter", "inp-pieces", "e.g. 1 Bundle")}${mkInp("Fabric", "inp-fabric", "e.g. Velvet")}</div>
-                <div class="two-col">${mkInp("Work", "inp-work", "e.g. Dhaga")}${mkInp("Pattern", "inp-pattern", "e.g. Floral")}</div>
-                ${mkInp("Ideal For", "inp-ideal", "e.g. Saree Border")}
-                <div class="section-title">Policy</div>
-                <div class="two-col">${mkInp("Del. Charges", "inp-del-charge", "Free")}${mkInp("Return Policy", "inp-return", "No Returns")}</div>`;
-            } 
-            else if (type === 'services' || type === 'works') {
-                html += `<div class="two-col">${mkInp("Price", "inp-price", "0", "number")}${mkSelect("Category", "inp-cat", serviceCats)}</div>
-                ${mkInp("Description", "inp-desc", "Description...", "textarea")}
-                ${ type === 'services' ? mkInp("Service Info", "inp-serv-info", "Extra details...", "textarea") : '' }`;
-            } 
-            else if (type === 'designs') {
-                html += `<div class="two-col">${mkInp("Charges (Price)", "inp-price", "0", "number")}${mkInp("Widely Use For", "inp-cat", "e.g. Blouse")}</div>`;
-            }
-
-            div.innerHTML = html;
-            container.appendChild(div);
-        };
-
-        // --- NEW: ADD EXTRA ANGLE ---
-        window.addExtraAngle = function(btn) {
-            const container = btn.previousElementSibling;
-            const div = document.createElement('div');
-            div.className = 'extra-img-box';
-            div.innerHTML = `
-                <div class="extra-file-wrapper" onclick="this.querySelector('input').click()">
-                    <span style="font-size:20px; color:#ccc;">+</span>
-                    <img class="extra-preview">
-                    <input type="file" class="inp-extra-file" accept="image/*" style="display:none;" onchange="previewExtra(this)">
-                </div>
-                <button class="btn-remove-angle" onclick="this.parentElement.remove()">×</button>
-            `;
-            container.appendChild(div);
         }
 
-        window.previewExtra = function(input) {
-            const file = input.files[0];
-            const wrapper = input.parentElement;
-            const img = wrapper.querySelector('img');
-            const span = wrapper.querySelector('span');
-            const removeBtn = wrapper.nextElementSibling;
-            
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    span.style.display = 'none';
-                    removeBtn.style.display = 'block';
-                    wrapper.style.border = '2px solid #28a745';
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // --- HELPER FUNCTIONS ---
+        /* =========================================
+           2. HELPER FUNCTIONS
+        ========================================= */
         function checkConfigInputs() {
             ['owner', 'repo', 'token'].forEach(id => {
                 const el = document.getElementById(id);
@@ -261,35 +183,62 @@
             }
         });
 
-        window.previewImage = function(input) {
-            const file = input.files[0];
+        // Main Image Preview
+        window.previewImages = function(input) {
+            const files = input.files;
             const wrapper = input.closest('.file-wrapper');
-            const img = wrapper.querySelector('.img-preview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    wrapper.classList.add('filled');
-                }
-                reader.readAsDataURL(file);
+            const galleryDiv = wrapper.querySelector('.gallery-container');
+            
+            galleryDiv.innerHTML = ""; 
+
+            if (files.length > 0) {
+                wrapper.classList.add('filled');
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'thumb-preview';
+                        galleryDiv.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
             } else {
-                img.style.display = 'none';
                 wrapper.classList.remove('filled');
             }
-        };
+        }
+
+        // Gallery/Extra Images Preview
+        window.previewGallery = function(input) {
+            const files = input.files;
+            const previewContainer = input.nextElementSibling;
+            previewContainer.innerHTML = ""; // Clear old
+
+            if (files.length > 0) {
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'thumb-small';
+                        previewContainer.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
 
         window.toggleAd = function(div) {
             const checkbox = div.querySelector('input');
             checkbox.checked = !checkbox.checked;
             if(checkbox.checked) div.classList.add('active');
             else div.classList.remove('active');
-        };
+        }
 
-        window.resetRows = function() {
-            if(rowCount > 0 && !confirm("Change Category? Current rows will be cleared.")) return;
+        function resetRows() {
+            if(rowCount > 0 && !confirm("Clear rows?")) return;
             container.innerHTML = ""; rowCount = 0; addRow();
-        };
+        }
 
         function log(msg) {
             logBox.style.display = 'block'; logBox.innerHTML += `<div>> ${msg}</div>`;
@@ -306,13 +255,65 @@
             return `<div class="field-group"><label>${label} ${rowCount===1 ? `<button class="btn-copy" onclick="copyAll('${cls}')">⬇ Copy</button>` : ''}</label><select class="${cls}"><option value="">-- Select --</option>${opts}</select></div>`;
         };
 
-        window.copyAll = function(cls) {
+        function addRow() {
+            rowCount++;
+            const div = document.createElement('div');
+            div.className = 'card';
+            const type = document.getElementById('folder').value;
+            
+            let html = `
+                <div class="card-header"><span class="row-num">#${rowCount}</span><button class="btn-del" onclick="this.parentElement.parentElement.remove()">×</button></div>
+                
+                ${mkInp("Title *", "inp-title", "Item Name")}
+                
+                <div class="field-group">
+                    <label>Main Image *</label>
+                    <div class="file-wrapper">
+                        <input type="file" class="inp-file" accept="image/*" onchange="previewImages(this)">
+                        <div class="gallery-container"></div>
+                    </div>
+                </div>
+
+                <div class="extra-angle-box">
+                    <label>📸 Extra Angles / Gallery (Multiple)</label>
+                    <input type="file" class="inp-gallery" accept="image/*" multiple onchange="previewGallery(this)" style="margin-top:5px;">
+                    <div class="gallery-preview-container" style="display:flex; flex-wrap:wrap; margin-top:5px;"></div>
+                </div>
+                
+                <div class="ad-wrapper" onclick="toggleAd(this)">
+                    <input type="checkbox" class="inp-ad" style="pointer-events:none;">
+                    <label class="ad-label">📢 Mark as Ad</label>
+                </div>
+                `;
+
+            if (type === 'products') {
+                html += `<div class="two-col">${mkInp("Price", "inp-price", "0", "number")}${mkSelect("Category", "inp-cat", productCats)}</div>
+                ${mkInp("Description", "inp-desc", "Details...", "textarea")}
+                <div class="section-title">Details</div>
+                <div class="two-col">${mkInp("Size", "inp-size", "e.g. 9m")}${mkInp("Color", "inp-color", "e.g. Red")}</div>
+                <div class="two-col">${mkInp("Pieces/Meter", "inp-pieces", "e.g. 1 Bundle")}${mkInp("Fabric", "inp-fabric", "e.g. Velvet")}</div>
+                <div class="two-col">${mkInp("Work", "inp-work", "e.g. Dhaga")}${mkInp("Pattern", "inp-pattern", "e.g. Floral")}</div>
+                ${mkInp("Ideal For", "inp-ideal", "e.g. Saree Border")}
+                <div class="two-col">${mkInp("Del. Charges", "inp-del-charge", "Free")}${mkInp("Return Policy", "inp-return", "No Returns")}</div>`;
+            } 
+            else if (type === 'services' || type === 'works') {
+                html += `<div class="two-col">${mkInp("Price", "inp-price", "0", "number")}${mkSelect("Category", "inp-cat", serviceCats)}</div>
+                ${mkInp("Description", "inp-desc", "Description...", "textarea")}
+                ${ type === 'services' ? mkInp("Service Info", "inp-serv-info", "Extra details...", "textarea") : '' }`;
+            } 
+            else if (type === 'designs') {
+                html += `<div class="two-col">${mkInp("Charges (Price)", "inp-price", "0", "number")}${mkInp("Widely Use For", "inp-cat", "e.g. Blouse")}</div>`;
+            }
+
+            div.innerHTML = html;
+            container.appendChild(div);
+        }
+
+        function copyAll(cls) {
             const val = document.querySelector(`.${cls}`).value;
             if(!val) return alert("Fill this field first!");
-            document.querySelectorAll(`.${cls}`).forEach(el => {
-                el.value = val; el.classList.add('filled');
-            });
-        };
+            document.querySelectorAll(`.${cls}`).forEach(el => { el.value = val; el.classList.add('filled'); });
+        }
 
         const toBase64 = file => new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -321,7 +322,7 @@
             reader.onerror = error => reject(error);
         });
 
-        window.startUpload = async function() {
+        async function startUpload() {
             const owner = document.getElementById('owner').value.trim();
             const repo = document.getElementById('repo').value.trim();
             const token = document.getElementById('token').value.trim();
@@ -332,15 +333,14 @@
             localStorage.setItem('gh_owner', owner); localStorage.setItem('gh_repo', repo); localStorage.setItem('gh_token', token);
 
             const rows = document.querySelectorAll('.card');
-            if(rows.length === 0) return alert("No items to upload!");
-
             btn.innerText = "Uploading..."; btn.disabled = true;
             log("Starting upload process...");
 
             for (const row of rows) {
                 const getVal = (c) => row.querySelector(`.${c}`)?.value || "";
                 const title = getVal('inp-title');
-                const fileInput = row.querySelector('.inp-file');
+                const fileInput = row.querySelector('.inp-file'); // Main Image
+                const galleryInput = row.querySelector('.inp-gallery'); // Extra Images
                 const isAd = row.querySelector('.inp-ad').checked;
                 
                 if(!title) continue;
@@ -350,12 +350,12 @@
                 const finalSlug = `${slug}-${uniqueId}`;
                 const date = new Date().toISOString();
                 
-                // 1. MAIN IMAGE UPLOAD
-                let imagePath = "";
+                // 1. UPLOAD MAIN IMAGE
+                let mainImagePath = "";
                 if(fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     log(`Uploading Main: ${file.name}...`);
-                    const uniqueFileName = `${Date.now()}-${file.name.replace(/\s+/g, '-').toLowerCase()}`;
+                    const uniqueFileName = `${Date.now()}-main-${file.name.replace(/\s+/g, '-').toLowerCase()}`;
                     try {
                         const base64Content = await toBase64(file);
                         const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/uploads/${uniqueFileName}`, {
@@ -363,26 +363,28 @@
                             headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                             body: JSON.stringify({ message: `Img: ${title}`, content: base64Content })
                         });
-                        if(res.ok) imagePath = `/uploads/${uniqueFileName}`;
-                    } catch(e) { log(`❌ Image Error`); }
+                        if(res.ok) mainImagePath = `/uploads/${uniqueFileName}`;
+                    } catch(e) { log(`❌ Main Image Error`); }
                 }
 
-                // 2. EXTRA ANGLES UPLOAD (New Loop)
+                // 2. UPLOAD EXTRA GALLERY IMAGES
                 let galleryPaths = [];
-                const extraInputs = row.querySelectorAll('.inp-extra-file');
-                for (let i = 0; i < extraInputs.length; i++) {
-                    if(extraInputs[i].files.
-                       log(`Uploading Angle ${i+1}...`);
-                        const exName = `${Date.now()}-extra-${i}-${exFile.name.replace(/\s+/g, '-').toLowerCase()}`;
+                if(galleryInput && galleryInput.files.length > 0) {
+                    const gFiles = Array.from(galleryInput.files);
+                    log(`Uploading ${gFiles.length} extra angles...`);
+                    
+                    for (let i = 0; i < gFiles.length; i++) {
+                        const gFile = gFiles[i];
+                        const gName = `${Date.now()}-gal-${i}-${gFile.name.replace(/\s+/g, '-').toLowerCase()}`;
                         try {
-                            const exBase64 = await toBase64(exFile);
-                            const exRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/uploads/${exName}`, {
+                            const gBase64 = await toBase64(gFile);
+                            const gRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/uploads/${gName}`, {
                                 method: 'PUT',
                                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ message: `Gallery: ${title}`, content: exBase64 })
+                                body: JSON.stringify({ message: `Gallery: ${title} ${i}`, content: gBase64 })
                             });
-                            if(exRes.ok) galleryPaths.push(`/uploads/${exName}`);
-                        } catch(e) { log(`❌ Extra Img Error`); }
+                            if(gRes.ok) galleryPaths.push(`/uploads/${gName}`);
+                        } catch(e) { log(`❌ Gallery Upload Error`); }
                     }
                 }
 
@@ -390,13 +392,13 @@
                 if(folder === 'designs') layout = "design.liquid";
                 if(folder === 'services' || folder === 'works') layout = "service.liquid";
 
-                // 3. CONSTRUCT YAML
+                // 3. GENERATE YAML CONTENT
                 let content = `---
 title: "${title}"
 date: "${date}"
 layout: "${layout}"
 tags: "${folder === 'offers' ? 'offer' : folder.slice(0, -1)}"
-image: "${imagePath}"
+image: "${mainImagePath}"
 gallery: ${JSON.stringify(galleryPaths)}
 is_ad: ${isAd}
 price: ${getVal('inp-price') || 0}
@@ -439,11 +441,10 @@ permalink: false
             }
             
             btn.innerText = "Done! Refresh 🔄";
-            btn.style.backgroundColor = "#333";
             btn.onclick = function() { location.reload(); };
             btn.disabled = false;
             alert("Upload Complete!");
-        };
+        }
     </script>
 </body>
 </html>
