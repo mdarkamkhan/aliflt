@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     
     /* ================================
-          1. CART LOGIC
+          1. CART LOGIC 🛒
     ================================ */
     const cart = {
         items: {},
@@ -58,13 +58,18 @@ document.addEventListener("DOMContentLoaded", () => {
     cart.init(); // Start Cart
 
     /* ================================
-         2. TOAST MESSAGE
+         2. TOAST MESSAGE 🍞
     ================================ */
     window.showToast = function(msg) {
+        // Purana toast hatao agar koi hai
+        const existing = document.querySelector('.toast');
+        if(existing) existing.remove();
+
         const t = document.createElement("div");
         t.className = "toast";
         t.textContent = msg;
         document.body.appendChild(t);
+        
         setTimeout(() => t.classList.add("show"), 100);
         setTimeout(() => {
             t.classList.remove("show");
@@ -83,15 +88,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (navToggle && sidebar && overlay) {
         const openMenu = () => {
-            // CSS class match karne ke liye 'is-open' use kiya
-            sidebar.classList.add("is-open");
-            overlay.classList.add("is-open");
-            body.classList.add("sidebar-open");
+            // Updated to '.active' to match CSS
+            sidebar.classList.add("active");
+            overlay.classList.add("active");
+            body.style.overflow = "hidden"; // Scroll Lock
         };
         const closeMenu = () => {
-            sidebar.classList.remove("is-open");
-            overlay.classList.remove("is-open");
-            body.classList.remove("sidebar-open");
+            sidebar.classList.remove("active");
+            overlay.classList.remove("active");
+            body.style.overflow = "auto"; // Scroll Unlock
         };
 
         navToggle.addEventListener("click", openMenu);
@@ -100,7 +105,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ================================
-         4. FILTER BUTTONS (FIXED) 🛠️
+         4. BOTTOM NAVIGATION ACTIVE STATE 📱
+    ================================ */
+    const bottomNavItems = document.querySelectorAll('.b-nav-item');
+    const currentPath = window.location.pathname;
+
+    bottomNavItems.forEach(item => {
+        // Check if the link matches current page
+        if (item.getAttribute('href') === currentPath) {
+            item.classList.add('active');
+        }
+    });
+
+    /* ================================
+         5. SEARCH OVERLAY UI 🔍
+    ================================ */
+    const searchOverlay = document.getElementById('search-overlay');
+    const openSearchBtn = document.getElementById('open-search');
+    const closeSearchBtn = document.getElementById('close-search');
+    const searchInput = document.getElementById('search-input');
+
+    if (openSearchBtn && searchOverlay) {
+        openSearchBtn.addEventListener('click', () => {
+            searchOverlay.classList.add('active');
+            setTimeout(() => { if(searchInput) searchInput.focus(); }, 100);
+        });
+    }
+
+    if (closeSearchBtn && searchOverlay) {
+        closeSearchBtn.addEventListener('click', () => {
+            searchOverlay.classList.remove('active');
+            if(searchInput) searchInput.value = ''; // Clear text
+            const results = document.getElementById('search-results');
+            if(results) results.innerHTML = ''; // Clear results
+        });
+    }
+
+    /* ================================
+         6. FILTER BUTTONS
     ================================ */
     const filterButtons = document.querySelectorAll(".filter-btn");
     const productCards = document.querySelectorAll(".product-card");
@@ -109,29 +151,19 @@ document.addEventListener("DOMContentLoaded", () => {
         filterButtons.forEach(btn => {
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
-
-                // 1. Remove Active from all
                 filterButtons.forEach(b => b.classList.remove("active"));
+                e.currentTarget.classList.add("active");
 
-                // 2. Add Active to clicked button
-                const clickedBtn = e.currentTarget;
-                clickedBtn.classList.add("active");
-
-                // 3. Get Filter Value
-                const rawValues = clickedBtn.dataset.filterValues || clickedBtn.dataset.filter || "all";
+                const rawValues = e.currentTarget.dataset.filterValues || e.currentTarget.dataset.filter || "all";
                 const filterValues = rawValues.split(",").map(s => s.trim().toLowerCase());
 
-                // 4. Show/Hide Products
                 productCards.forEach(card => {
                     const cardCategory = (card.dataset.category || "").toLowerCase();
-
                     if (filterValues.includes("all") || filterValues.includes(cardCategory)) {
-                        // Show
                         card.classList.remove("hidden");
                         card.style.display = "block";
                         setTimeout(() => card.classList.add("is-visible"), 10);
                     } else {
-                        // Hide
                         card.classList.remove("is-visible");
                         card.classList.add("hidden");
                         setTimeout(() => {
@@ -144,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ================================
-         5. CLICK HANDLING (Add to Cart / Buy)
+         7. CLICK HANDLING (Add to Cart / Buy)
     ================================ */
     document.addEventListener("click", (e) => {
         const target = e.target.closest('button') || e.target; 
@@ -182,19 +214,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Cart Page Logic
-        if (target.classList.contains("qty-btn") && target.dataset.action === "inc") {
-            cart.items[target.dataset.id].qty++;
-            cart.save();
-            renderCartPage();
-            cart.updateIcon();
-        }
-        if (target.classList.contains("qty-btn") && target.dataset.action === "dec") {
+        if (target.classList.contains("qty-btn")) {
             const id = target.dataset.id;
-            if (cart.items[id].qty > 1) cart.items[id].qty--;
+            if (target.dataset.action === "inc") cart.items[id].qty++;
+            if (target.dataset.action === "dec" && cart.items[id].qty > 1) cart.items[id].qty--;
             cart.save();
             renderCartPage();
             cart.updateIcon();
         }
+        
         if (target.classList.contains("remove-btn")) {
             cart.remove(target.dataset.id);
             renderCartPage();
@@ -202,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* ================================
-         6. RENDER CART PAGE
+         8. RENDER CART PAGE
     ================================ */
     function renderCartPage() {
         const container = document.getElementById("cart-items-container");
@@ -252,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCartPage();
 
     /* ================================
-         7. WHATSAPP ORDER BUTTON
+         9. WHATSAPP ORDER BUTTON
     ================================ */
     const orderBtn = document.getElementById("proceedToOrderBtn");
     if (orderBtn) {
@@ -270,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ================================
-         8. SWAPPER / GALLERY LOGIC
+         10. SWAPPER / GALLERY LOGIC
     ================================ */
     function initSwapper(selector) {
         const wrap = document.querySelector(selector);
@@ -290,90 +318,43 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         show(0);
 
-        if (prevBtn) prevBtn.onclick = (e) => {
-            e.preventDefault();
-            show((current - 1 + items.length) % items.length);
-        };
-        if (nextBtn) nextBtn.onclick = (e) => {
-            e.preventDefault();
-            show((current + 1) % items.length);
-        };
+        if (prevBtn) prevBtn.onclick = (e) => { e.preventDefault(); show((current - 1 + items.length) % items.length); };
+        if (nextBtn) nextBtn.onclick = (e) => { e.preventDefault(); show((current + 1) % items.length); };
 
-        // Swipe Support
         let startX = 0;
         wrap.addEventListener("touchstart", e => (startX = e.touches[0].clientX), { passive: true });
         wrap.addEventListener("touchend", e => {
             let endX = e.changedTouches[0].clientX;
-            if (endX < startX - 50) { // Swipe Left -> Next
-                if (nextBtn) nextBtn.click();
-                else show((current + 1) % items.length);
+            if (endX < startX - 50) { // Swipe Left
+                if (nextBtn) nextBtn.click(); else show((current + 1) % items.length);
             }
-            if (endX > startX + 50) { // Swipe Right -> Prev
-                if (prevBtn) prevBtn.click();
-                else show((current - 1 + items.length) % items.length);
+            if (endX > startX + 50) { // Swipe Right
+                if (prevBtn) prevBtn.click(); else show((current - 1 + items.length) % items.length);
             }
         }, { passive: true });
     }
 
-    // Initialize all galleries
-    initSwapper(".product-swapper");
-    initSwapper(".banner-swapper");
-    initSwapper(".products-panel-gallery");
-    initSwapper(".services-panel-gallery");
-    initSwapper(".works-panel-gallery");
-    initSwapper(".designs-panel-gallery");
+    // Initialize all
+    [".product-swapper", ".banner-swapper", ".products-panel-gallery", 
+     ".services-panel-gallery", ".works-panel-gallery", ".designs-panel-gallery"]
+    .forEach(sel => initSwapper(sel));
 
     /* ================================
-         10. PWA INSTALL LOGIC
+         11. INTRO SPLASH REMOVER
     ================================ */
-    let deferredPrompt;
-    const installBtn = document.getElementById('install-pwa-btn');
+    const splash = document.getElementById('app-splash'); // Updated ID to match HTML
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        if (installBtn) installBtn.style.display = 'flex';
-    });
-
-    if (installBtn) {
-        installBtn.addEventListener('click', () => {
-            installBtn.style.display = 'none';
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted install');
-                    }
-                    deferredPrompt = null;
-                });
-            }
-        });
-    }
-
-    /* ================================
-         11. INTRO SPLASH REMOVER (ONE TIME ONLY)
-    ================================ */
-    const splash = document.getElementById('intro-splash');
-
-    // 1. Check karo: Kya user ne pehle animation dekha hai?
     if (sessionStorage.getItem('alifAppVisited') === 'true') {
-        
-        // Agar Haan: Toh splash screen ko turant chupao
-        if (splash) {
-            splash.style.display = 'none'; 
-        }
-
+        if (splash) splash.style.display = 'none'; 
     } else {
-        
-        // Agar Nahi: Toh animation chalne do
         if (splash) {
             setTimeout(() => {
-                splash.remove(); // 3 second baad hatao
-                
-                // Memory mein save kar lo ki "Dekh Liya"
+                splash.style.opacity = '0';
+                setTimeout(() => splash.remove(), 500);
                 sessionStorage.setItem('alifAppVisited', 'true'); 
-            }, 3000);
+            }, 2500);
         }
     }
 
-}); // Closing Main Event Listener
+});
+     
