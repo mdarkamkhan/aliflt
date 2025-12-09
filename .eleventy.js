@@ -15,7 +15,7 @@ Module.exports = function(eleventyConfig) {
   // Note: Yahan 'designs' folder se utha rahe hain, lekin tag 'design' ho sakta hai
   eleventyConfig.addCollection("design",   api => api.getFilteredByGlob("designs/*.md"));
 
-  // 3. 🔥 MAGIC FIX: FORCE URL GENERATION 🔥
+  // 3. 🔥 MAGIC FIX: FORCE URL GENERATION 
   // Yeh code check karega ki file kis folder mein hai aur uska link zabardasti banayega.
   eleventyConfig.addGlobalData("eleventyComputed", {
     permalink: (data) => {
