@@ -1,4 +1,4 @@
-Module.exports = function(eleventyConfig) {
+module.exports = function(eleventyConfig) {
   
   // 1. Files Copy Karna
   eleventyConfig.addPassthroughCopy("css");
