@@ -474,28 +474,51 @@ document.addEventListener("DOMContentLoaded", () => {
             msgArea.scrollTop = msgArea.scrollHeight; // Auto scroll to bottom
         }
 
-        // 5. 🧠 ALiF AI BRAIN (Hinglish Rules)
+                // 5. 🧠 ALiF AI BRAIN (Advanced Hinglish Version)
         function getBotReply(input) {
-            if (input.includes('price') || input.includes('daam') || input.includes('rate') || input.includes('kitne ka')) {
-                return "Blouse ki stitching ₹120 se shuru hoti hai. Designs ke hisaab se price alag ho sakta hai.";
+            input = input.toLowerCase();
+
+            // 1. GREETINGS (Salam/Dua)
+            if (match(input, ['hi', 'hello', 'hey', 'salam', 'assalam', 'namaste'])) {
+                return "Walekum Assalam! 👋 Kahiye, aaj hum aapke liye kya design kar sakte hain?";
             }
-            if (input.includes('address') || input.includes('kahan') || input.includes('location') || input.includes('shop')) {
-                return "Humara shop Joy Fastfood ke paas, Daal Kuan, College Road, Sahibganj mein hai.";
+
+            // 2. TIMING / OPENING (Smart Check: Kl, Aaj, Kab, Kula, Time)
+            if (match(input, ['time', 'kab', 'khula', 'kula', 'open', 'band', 'closed', 'timing', 'baje', 'kl', 'kal', 'aaj'])) {
+                return "🕒 Humara shop Subah 10:00 se Raat 9:00 tak khula rehta hai.\n(Note: Friday ko shop band rehti hai).";
             }
-            if (input.includes('contact') || input.includes('number') || input.includes('phone') || input.includes('call')) {
-                return "Aap humein call ya WhatsApp kar sakte hain: +91 7250-47-0009 par.";
+
+            // 3. ADDRESS / LOCATION (Kahan, Kidhar, Jagah, Shop)
+            if (match(input, ['address', 'kahan', 'kidhar', 'jagah', 'location', 'shop', 'dukan', 'map', 'sahibganj'])) {
+                return "📍 Humara pata hai: Joy Fastfood ke paas, Daal Kuan, College Road, Sahibganj.";
             }
-            if (input.includes('open') || input.includes('khula') || input.includes('time')) {
-                return "Hum Subah 10 baje se Raat 9 baje tak khule rehte hain (Friday Closed).";
+
+            // 4. PRICE / RATES (Daam, Kitna, Paisa, Charges)
+            if (match(input, ['price', 'daam', 'rate', 'kitne', 'kitna', 'cost', 'charge', 'paisa', 'money', 'silai'])) {
+                return "💰 Blouse ki stitching ₹120 se shuru hoti hai. Lehenga aur Gown ke rates design ke hisaab se alag ho sakte hain.";
             }
-            if (input.includes('hello') || input.includes('hi') || input.includes('salam')) {
-                return "Walekum Assalam! Kahiye, aaj hum aapke liye kya design kar sakte hain?";
+
+            // 5. SERVICES (Kya banate ho, Blouse, Suit)
+            if (match(input, ['blouse', 'suit', 'lehenga', 'gown', 'kurti', 'latkan', 'design', 'banate', 'silte'])) {
+                return "👗 Hum Custom Bridal Blouses, Lehengas, Gowns aur Designer Suits banate hain. Aap apna design dikha kar bhi banwa sakte hain!";
             }
-            if (input.includes('thank') || input.includes('shukriya')) {
-                return "Welcome! ALiF Ladies Tailor aane ke liye shukriya. 😊";
+
+            // 6. CONTACT (Number, Call, Phone)
+            if (match(input, ['contact', 'number', 'phone', 'call', 'whatsapp', 'baat'])) {
+                return "📞 Aap humein Call ya WhatsApp kar sakte hain: +91 7250-47-0009 par.";
             }
             
-            // Default Reply
-            return "Maaf kijiye, main samajh nahi paya. Aap 'Price', 'Address' ya 'Contact' ke baare mein pooch sakte hain.";
+            // 7. APPRECIATION
+            if (match(input, ['thank', 'shukriya', 'good', 'nice', 'mast', 'badhiya'])) {
+                return "Pasand karne ke liye shukriya! ❤️ ALiF Ladies Tailor hamesha aapki seva mein hai.";
+            }
+
+            // Default Fallback
+            return "Maaf kijiye, main abhi seekh raha hun. 😅\nAap 'Price', 'Address', 'Time' ya 'Contact' ke baare mein pooch sakte hain.";
+        }
+
+        // HELPER: Multiple words check karne ke liye smart function
+        function match(text, words) {
+            return words.some(word => text.includes(word));
         }
     }
