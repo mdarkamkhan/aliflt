@@ -404,3 +404,98 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+    /* ================================
+         13. ALiF AI CHATBOT (RESTORED) 🤖
+    ================================ */
+    const chatContainer = document.getElementById('chat-widget');
+    
+    if (chatContainer) {
+        // 1. Inject HTML UI
+        chatContainer.innerHTML = `
+            <button id="chat-button">💬</button>
+            <div id="chat-window">
+                <div id="chat-header">
+                    <span>ALiF ASSISTANT</span>
+                    <button id="close-chat" style="background:none;border:none;color:white;font-size:20px;cursor:pointer;">&times;</button>
+                </div>
+                <div id="chat-messages">
+                    <div class="message ai-message">Hello! Main ALiF hun. Main aapki kya madad kar sakta hun? (Price, Address, Contact...)</div>
+                </div>
+                <form id="chat-input-area">
+                    <input type="text" id="chat-input" placeholder="Yahan likhein..." autocomplete="off">
+                    <button type="submit" id="chat-send">➤</button>
+                </form>
+            </div>
+        `;
+
+        // 2. Logic Variables
+        const chatBtn = document.getElementById('chat-button');
+        const chatWindow = document.getElementById('chat-window');
+        const closeChat = document.getElementById('close-chat');
+        const msgArea = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-input-area');
+        const chatInput = document.getElementById('chat-input');
+
+        // 3. Toggle Chat
+        chatBtn.addEventListener('click', () => {
+            chatWindow.style.display = 'flex';
+            chatBtn.style.display = 'none';
+            chatInput.focus();
+        });
+
+        closeChat.addEventListener('click', () => {
+            chatWindow.style.display = 'none';
+            chatBtn.style.display = 'flex';
+        });
+
+        // 4. Send Message Logic
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            // User Message Show karo
+            addMessage(text, 'user-message');
+            chatInput.value = '';
+
+            // AI Reply (Thinking Simulation)
+            setTimeout(() => {
+                const reply = getBotReply(text.toLowerCase());
+                addMessage(reply, 'ai-message');
+            }, 600);
+        });
+
+        // Helper: Add Message to UI
+        function addMessage(text, className) {
+            const div = document.createElement('div');
+            div.className = `message ${className}`;
+            div.textContent = text;
+            msgArea.appendChild(div);
+            msgArea.scrollTop = msgArea.scrollHeight; // Auto scroll to bottom
+        }
+
+        // 5. 🧠 ALiF AI BRAIN (Hinglish Rules)
+        function getBotReply(input) {
+            if (input.includes('price') || input.includes('daam') || input.includes('rate') || input.includes('kitne ka')) {
+                return "Blouse ki stitching ₹120 se shuru hoti hai. Designs ke hisaab se price alag ho sakta hai.";
+            }
+            if (input.includes('address') || input.includes('kahan') || input.includes('location') || input.includes('shop')) {
+                return "Humara shop Joy Fastfood ke paas, Daal Kuan, College Road, Sahibganj mein hai.";
+            }
+            if (input.includes('contact') || input.includes('number') || input.includes('phone') || input.includes('call')) {
+                return "Aap humein call ya WhatsApp kar sakte hain: +91 7250-47-0009 par.";
+            }
+            if (input.includes('open') || input.includes('khula') || input.includes('time')) {
+                return "Hum Subah 10 baje se Raat 9 baje tak khule rehte hain (Friday Closed).";
+            }
+            if (input.includes('hello') || input.includes('hi') || input.includes('salam')) {
+                return "Walekum Assalam! Kahiye, aaj hum aapke liye kya design kar sakte hain?";
+            }
+            if (input.includes('thank') || input.includes('shukriya')) {
+                return "Welcome! ALiF Ladies Tailor aane ke liye shukriya. 😊";
+            }
+            
+            // Default Reply
+            return "Maaf kijiye, main samajh nahi paya. Aap 'Price', 'Address' ya 'Contact' ke baare mein pooch sakte hain.";
+        }
+    }
