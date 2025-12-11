@@ -1930,4 +1930,86 @@ details[open] .pm-icon-minus { display: block; }
     0% { opacity: 1; visibility: visible; }
     100% { opacity: 0; visibility: hidden; }
 }
+/* =========================================
+   🤖 ALiF AI CHAT WIDGET
+========================================= */
+#chat-widget {
+    position: fixed;
+    bottom: 90px; /* Bottom Nav (65px) ke upar */
+    right: 20px;
+    z-index: 10000;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Floating Button */
+#chat-button {
+    background-color: #000; /* Black Theme */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s;
+}
+#chat-button:hover { transform: scale(1.1); }
+
+/* Chat Window */
+#chat-window {
+    display: none; /* Hidden initially */
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 320px;
+    height: 450px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 10001;
+    border: 1px solid #eee;
+}
+
+/* Header */
+#chat-header {
+    background-color: #000;
+    color: white;
+    padding: 15px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-weight: 500; letter-spacing: 1px;
+}
+
+/* Messages Area */
+#chat-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f9f9f9;
+    display: flex; flex-direction: column; gap: 10px;
+}
+
+/* Bubbles */
+.message { padding: 10px 15px; border-radius: 10px; max-width: 80%; font-size: 0.9rem; line-height: 1.4; }
+.ai-message { background-color: #eee; color: #000; align-self: flex-start; border-bottom-left-radius: 0; }
+.user-message { background-color: #000; color: #fff; align-self: flex-end; border-bottom-right-radius: 0; }
+
+/* Input Area */
+#chat-input-area {
+    display: flex; border-top: 1px solid #eee; padding: 10px; background: #fff;
+}
+#chat-input {
+    flex-grow: 1; border: 1px solid #ddd; padding: 10px; border-radius: 20px; outline: none; font-size: 0.9rem;
+}
+#chat-send {
+    background: #000; color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; margin-left: 10px; cursor: pointer;
+}
+
+/* Mobile Adjustment */
+@media (max-width: 480px) {
+    #chat-window { width: 90%; right: 5%; bottom: 90px; height: 60vh; }
+}
 
