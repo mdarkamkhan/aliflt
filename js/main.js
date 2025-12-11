@@ -359,3 +359,48 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+    /* ================================
+         12. PWA INSTALL LOGIC (RESTORED) 📱
+    ================================ */
+    let deferredPrompt;
+    const installBtn = document.getElementById('install-pwa-btn');
+
+    // 1. Browser se signal ka wait karo (Standard Way)
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Agar signal mila, toh button dikhao
+        if(installBtn) installBtn.style.display = 'flex';
+        console.log("📲 PWA Ready to install");
+    });
+
+    // 2. FORCE SHOW ON MOBILE (iPhone/Android fix)
+    // Agar browser signal na bhi de, tab bhi mobile par button dikhao
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile && installBtn) {
+        installBtn.style.display = 'flex'; 
+    }
+
+    // 3. Button Click Logic
+    if(installBtn) {
+        installBtn.addEventListener('click', () => {
+            if(deferredPrompt) {
+                // Scenario A: Automatic Prompt Available (Android Chrome)
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the A2HS prompt');
+                    } else {
+                        console.log('User dismissed the A2HS prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                // Scenario B: Manual Instructions (iPhone / App already installed)
+                alert("To install app:\n\n1. Tap Share icon / Menu (⋮)\n2. Select 'Add to Home Screen'");
+            }
+        });
+    }
