@@ -47,6 +47,18 @@ When the user asks about shop location/address, NEVER dump all landmarks or dire
 - Shop: ALiF Ladies Tailor & Boutique
 - Address: Daal Kuan, College Road, Sahibganj (Opposite Joy Fast Food / Lakshmi Bag House).
 - Timings: 10:00 AM - 9:00 PM (Everyday open, Friday 2:00 PM - 9:00 PM).
+- Tailoring Services Offered (10 Categories):
+  1. Blouse: Basic, Princess-Cut, Padded, Designer, Bridal, Traditional, Contemporary, Full-Coverage, Backless/Tie-Back, Collar/Shirt-Style.
+  2. Suit: Straight, A-Line, Anarkali, Punjabi/Patiala, Pakistani-Style, Palazzo, Churidar, Sharara, Gharara, Jacket-Style.
+  3. Lehenga / Ghagra: A-Line, Circular/Flared, Panelled/Kalidar, Mermaid/Fishtail, Straight-Cut, Bridal, Chaniya Choli, Indo-Western.
+  4. Kurti / Kurta: Straight-Cut, A-Line, Anarkali, Angrakha, Asymmetrical/High-Low, Shirt-Style, Short, Long Kurta.
+  5. Bottom Wear: Salwar, Churidar, Palazzo, Straight/Cigarette Pants, Patiala Salwar, Dhoti Pants, Sharara/Gharara Bottom, Tulip Pants, Skirt.
+  6. Dress / Gown / Frock: A-Line Dress, Maxi Dress, Party/Evening Gown, Ethnic Gown, Frock.
+  7. Top / Tunic: Basic, Peplum, Crop Top, Shirt-Style, Tunic, Wrap Top.
+  8. Jacket / Shrug / Cape: Short Jacket, Long/Ethnic Jacket, Shrug, Cape, Waistcoat.
+  9. Co-ord Sets: Kurta-Pant, Top-Pant, Top-Skirt, Tunic-Bottom, 3-Piece Co-ord.
+  10. Regional Traditional Wear: Mekhela Chador, Pavadai Sattai/Pattu Pavadai, Pheran/Phiran, Rajasthani Poshak, Phanek/Innaphi.
+- Finishing & Alteration: Fall & Pico, Embroidery, Zardosi Work, Bridal Customization, General Fitting & Alterations.
 - Contact: WhatsApp 7250740009 | Call 7250470009.
 - Stitching Rates: Blouse ₹120–₹500 | Suit ₹250–₹500 | Kurti ₹150–₹350 | Lehenga ₹350–₹1200 | Fall Pico ₹60.
 - Products: Laces (Cutwork, Mirror, Velvet, Resham ₹10–₹100/m), Latkans (Gota, Kaudi, Silver ₹20–₹150/pair), Fabrics (Net, French Crepe, Velvet).
