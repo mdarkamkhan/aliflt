@@ -758,10 +758,49 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // 6. Conversation History Array
+        // 6. Conversation History & Catalog Index
         const conversationHistory = [];
+        let searchIndex = [];
+        fetch('/search.json').then(r => r.json()).then(data => { searchIndex = data; }).catch(e => console.warn(e));
 
-        // 6. Send Message Function
+        // 7. Render Catalog Cards in Chat
+        function renderChatCatalog(category) {
+            if (!searchIndex || searchIndex.length === 0) return;
+            const targetCat = (category || 'all').toLowerCase();
+            
+            const matchedItems = searchIndex.filter(item => {
+                if (targetCat === 'all') return true;
+                const catStr = (item.category || '').toLowerCase();
+                const titleStr = (item.title || '').toLowerCase();
+                return catStr.includes(targetCat) || titleStr.includes(targetCat);
+            }).slice(0, 4);
+
+            if (matchedItems.length === 0) return;
+
+            const slider = document.createElement('div');
+            slider.className = 'chat-catalog-slider';
+            
+            matchedItems.forEach(item => {
+                const card = document.createElement('a');
+                card.href = item.url;
+                card.className = 'chat-catalog-item';
+                card.innerHTML = `
+                    <div class="chat-catalog-img">
+                        <img src="${item.image}" alt="${item.title}">
+                    </div>
+                    <div class="chat-catalog-info">
+                        <span class="chat-catalog-title">${item.title}</span>
+                        <span class="chat-catalog-price">${item.price ? '₹' + item.price : 'View Item'}</span>
+                    </div>
+                `;
+                slider.appendChild(card);
+            });
+
+            msgArea.appendChild(slider);
+            msgArea.scrollTop = msgArea.scrollHeight;
+        }
+
+        // 8. Send Message Function
         async function sendMessage(text) {
             if (!text) return;
 
@@ -797,8 +836,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (loadingEl) loadingEl.remove();
 
                 if (response.ok) {
-                    addMessage(data.reply, 'ai-message');
-                    conversationHistory.push({ role: 'model', parts: [{ text: data.reply }] });
+                    let replyText = data.reply || "";
+                    let catalogCat = null;
+                    
+                    const match = replyText.match(/\[SHOW_CATALOG:?\s*(\w*)\]/i);
+                    if (match) {
+                        catalogCat = match[1] || 'all';
+                        replyText = replyText.replace(/\[SHOW_CATALOG:?\s*\w*\]/gi, '').trim();
+                    }
+
+                    addMessage(replyText, 'ai-message');
+                    conversationHistory.push({ role: 'model', parts: [{ text: replyText }] });
+
+                    if (catalogCat) {
+                        renderChatCatalog(catalogCat);
+                    }
                 } else {
                     addMessage(data.error || "Server down. Please call us directly.", 'ai-message');
                 }

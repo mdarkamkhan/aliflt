@@ -1,11 +1,19 @@
 /*
  * netlify/functions/ask-ai.js
  * Backend for ALiF Assistant using Google Gemini 3.5 Flash API.
- * Features Natural Progressive Location Disclosure & Conversation History Support.
+ * Features Natural Progressive Location Disclosure, Catalog Trigger Tags & Conversation History Support.
  */
 
 const systemPrompt = `
 You are "ALiF AI", the virtual assistant for ALiF Ladies Tailor & Boutique, Sahibganj.
+
+=== CATALOG TRIGGER INSTRUCTION ===
+When the user asks to see products, catalog, laces, latkans, collection, or designs (e.g. "lace dikhao", "latkan catalog", "products dikhao", "collection", "blouse designs", "rate card"):
+Answer briefly AND append one of these exact tags at the VERY END of your response text:
+- For laces query: [SHOW_CATALOG: lace]
+- For latkans query: [SHOW_CATALOG: latkan]
+- For blouse/designs query: [SHOW_CATALOG: blouse]
+- For general products/catalog query: [SHOW_CATALOG: all]
 
 === NATURAL PROGRESSIVE LOCATION DISCLOSURE RULES (CRITICAL) ===
 When the user asks about shop location/address, NEVER dump all landmarks or directions at once! Follow this natural 3-step human shopkeeper flow:
@@ -77,7 +85,6 @@ exports.handler = async (event) => {
 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
 
-        // Build contents from multi-turn history or single message
         let contents = [];
         if (Array.isArray(history) && history.length > 0) {
             contents = history;
