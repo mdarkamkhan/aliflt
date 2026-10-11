@@ -1,0 +1,57 @@
+---
+layout: base.liquid
+title: Our Designs
+permalink: /designs/
+---
+
+<div class="container section fade-in-section">
+
+  <p style="text-align: center; margin-top: -15px; margin-bottom: 30px; color: #555;">Our portfolio of unique blouse, suit, and lehenga designs.</p>
+
+  <div class="product-grid" data-shuffle-type="design">
+
+    {%- comment -%} 
+      NOTE: Changed 'collections.designs' to 'collections.design' 
+      because Mass Uploader uses the singular tag "design".
+    {%- endcomment -%}
+    
+    {% for item in collections.design reversed %}
+      
+      <a href="{{ item.url }}" class="product-card" data-category="{{ item.data.category | default: 'uncategorized' | downcase | escape }}">
+        
+        <div class="product-card-image-wrapper">
+          {% if item.data.image %}
+            <img src="{{ item.data.image }}" alt="{{ item.data.title | escape }}">
+          {% else %}
+            <img src="/icons/icon-512x512.png" alt="ALiF Design">
+          {% endif %}
+        </div>
+
+        <div class="product-card-name">
+          <div class="product-card-title">
+            {{ item.data.title | default: 'Design' }}
+          </div>
+
+          {% if item.data.price %}
+          <div class="product-card-price">
+            ₹{{ item.data.price }}
+          </div>
+          {% endif %}
+
+          {% if item.data.category %}
+          <div class="product-card-category">
+            {{ item.data.category }}
+          </div>
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+
+    {%- comment -%} Empty state {%- endcomment -%}
+    {% if collections.design.size == 0 %}
+      <p class="empty-gallery-message" style="position:static; transform:none; color:#333; text-align:center; width:100%;">
+        No designs found. Please check back soon.
+      </p>
+    {% endif %}
+  </div>
+</div>

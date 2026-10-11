@@ -1,0 +1,81 @@
+---
+layout: base.liquid
+title: Our Products
+permalink: /products/
+---
+
+<div class="container section fade-in-section">
+
+    <div class="filter-bar-scroll-container">
+        <button class="filter-btn active" data-filter-values="all">
+            <img src="/icons/all-categories.png" alt="All Categories" class="filter-icon">
+            <span class="filter-name">All</span>
+        </button>
+        {% for category in categoryFilters.categories %}
+        <button class="filter-btn" data-filter-values="{{ category.values | join: ',' | downcase }}">
+            <img src="/icons/{{ category.icon }}" alt="{{ category.name }}" class="filter-icon">
+            <span class="filter-name">{{ category.name }}</span>
+        </button>
+        {% endfor %}
+    </div>
+
+    <div class="product-grid" data-shuffle-type="product">
+        
+        {% for item in collections.products reversed %}
+        
+        <a href="{{ item.url }}" class="product-card" data-category="{{ item.data.category | downcase }}">
+            
+            <div class="product-card-image-wrapper">
+                {% if item.data.offer_price %}
+                    {% assign discount = item.data.price | minus: item.data.offer_price %}
+                    {% assign percent = discount | times: 100.0 | divided_by: item.data.price %}
+                    <div class="discount-badge">-{{ percent | round }}%</div>
+                {% endif %}
+                
+                {% if item.data.image %}
+                  <img src="{{ item.data.image | url }}" alt="{{ item.data.title }}">
+                {% else %}
+                  <img src="/icons/icon-512x512.png" alt="Product">
+                {% endif %}
+            </div>
+            
+            <div class="product-card-name">
+                <div class="product-card-title">
+                    {{ item.data.title }}
+                </div>
+                
+                <div class="product-card-price-wrapper">
+                    {% if item.data.offer_price %}
+                        <div class="product-card-price has-offer" data-offer-end="{{ item.data.offer_end_date | default: '' }}">
+                            <del class="original-price">₹{{ item.data.price }}</del>
+                            <span class="offer-price">₹{{ item.data.offer_price }}</span>
+                        </div>
+                        {% if item.data.offer_end_date %}
+                        <div class="offer-timer-mini" data-end-date="{{ item.data.offer_end_date }}">
+                            <!-- Timer injected by JS -->
+                        </div>
+                        {% endif %}
+                    {% elsif item.data.price %}
+                        <div class="product-card-price">
+                            ₹{{ item.data.price }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if item.data.category %}
+                <div class="product-card-category">
+                    {{ item.data.category }}
+                </div>
+                {% endif %}
+            </div>
+
+        </a>
+        {% endfor %}
+
+        {% if collections.products.size == 0 %}
+            <p class='empty-gallery-message' style="position: static; transform: none; color: #333; width:100%; text-align:center;">
+                No products found. Please check back soon.
+            </p>
+        {% endif %}
+    </div>
+</div>

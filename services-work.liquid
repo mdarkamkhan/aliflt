@@ -1,0 +1,74 @@
+---
+layout: base.liquid
+title: Our Services & Works
+permalink: /services-work/
+---
+
+<div class="container section fade-in-section">
+
+  <div class="product-grid">
+
+    {%- comment -%} 1. SERVICES LOOP (Clickable) {%- endcomment -%}
+    {% for item in collections.service reversed %}
+      
+      <a href="{{ item.url }}" class="product-card">
+        
+        <div class="product-card-image-wrapper">
+          {% if item.data.image %}
+            <img src="{{ item.data.image }}" alt="{{ item.data.title | escape }}">
+          {% else %}
+            <img src="/icons/icon-512x512.png" alt="Service">
+          {% endif %}
+        </div>
+
+        <div class="product-card-name">
+          <div class="product-card-title">
+            {{ item.data.title | default: 'Service' }}
+          </div>
+
+          {% if item.data.price %}
+          <div class="product-card-price">
+            ₹{{ item.data.price }}
+          </div>
+          {% endif %}
+
+          {% if item.data.category %}
+          <div class="product-card-category">
+            {{ item.data.category }}
+          </div>
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+
+    {%- comment -%} 2. WORKS LOOP (Display Only) {%- endcomment -%}
+    {% for item in collections.work reversed %}
+      <div class="product-card" style="opacity:0.95; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div class="product-card-image-wrapper">
+          {% if item.data.image %}
+            <img src="{{ item.data.image }}" alt="{{ item.data.title | escape }}">
+          {% else %}
+            <img src="/icons/icon-512x512.png" alt="Our Work">
+          {% endif %}
+        </div>
+
+        <div class="product-card-name" style="text-align:left; padding:15px; font-weight:normal;">
+          <div class="product-card-title" style="font-weight:bold; font-size:1.1rem; text-transform:capitalize; color:#333;">
+            {{ item.data.title | default: 'Our Work' }}
+          </div>
+
+          <div class="product-card-category" style="font-size:0.9rem; color:#777; margin-top:8px; text-transform:capitalize;">
+            (Our Work) {{ item.data.category }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    {%- comment -%} Empty state {%- endcomment -%}
+    {% if collections.service.size == 0 and collections.work.size == 0 %}
+      <p class="empty-gallery-message" style="position:static; transform:none; color:#333; width:100%; text-align:center;">
+        No services or works found. Please check back soon.
+      </p>
+    {% endif %}
+  </div>
+</div>

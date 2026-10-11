@@ -1,0 +1,15 @@
+# This file tells Netlify exactly how to build your site.
+
+[build]
+  # This is the command to build your Eleventy site.
+  command = "npx @11ty/eleventy"
+  
+  # This is the folder that Eleventy builds.
+  publish = "_site"
+
+  # Define where serverless functions are stored
+  functions = "netlify/functions"
+
+[context.production.environment]
+  # We set a modern, stable Node.js version.
+  NODE_VERSION = "18"
