@@ -3,6 +3,7 @@ title: "Saree Fall & Pico"
 date: "2026-10-11T12:17:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/saree-fall-pico.webp"
 price: 60
 category: "Finishing"
 description: "Professional saree edge finishing service. High-grade cotton fall stitching ensures smooth, elegant pleating and fall, while durable interlocking pico gives a clean, fray-free border to your saree edges and pallu."

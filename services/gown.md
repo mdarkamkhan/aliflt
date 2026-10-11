@@ -3,6 +3,7 @@ title: "Gown"
 date: "2026-10-11T12:07:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/gown.webp"
 price: 450
 category: "Gown"
 description: "Graceful red-carpet evening gowns, reception gowns, and ethnic fusion party gowns. Expertly tailored with structured bodices, multi-layered flowing skirts, and impeccable silhouettes."

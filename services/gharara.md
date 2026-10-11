@@ -3,6 +3,7 @@ title: "Gharara"
 date: "2026-10-11T12:13:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/gharara.webp"
 price: 350
 category: "Suit"
 description: "Regal Awadhi and Mughal-style Gharara tailoring featuring rich, gathered ruched panels below the knee band, paired with an elegant short kurti and royal dupatta."

@@ -3,6 +3,7 @@ title: "Anarkali"
 date: "2026-10-11T12:12:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/anarkali.webp"
 price: 350
 category: "Suit"
 description: "Flared Anarkali suits with multiple panels (kalis) cut to create a graceful twirl and regal silhouette. Tailored with fitted bodice, matching churidar or cigarette pant, and finished dupatta."

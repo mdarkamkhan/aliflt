@@ -3,6 +3,7 @@ title: "Bottom Wear (Pant / Salwar)"
 date: "2026-10-11T12:10:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/bottom-wear.webp"
 price: 120
 category: "Bottom Wear"
 description: "Expertly cut and stitched ladies bottom wear ensuring comfort, flexibility, and a sharp silhouette. Styles include Cigarette / Straight Pants, Salwar, Patiala Salwar, Palazzo, Churidar, Dhoti Pants, and Tulip Pants."

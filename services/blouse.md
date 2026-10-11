@@ -3,6 +3,7 @@ title: "Blouse"
 date: "2026-10-11T12:18:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/blouse.webp"
 price: 120
 category: "Blouse"
 description: "Precision-tailored designer blouses crafted with flawless neckline fit, clean bust darts, and high-quality boutique finishing. Styles include Basic Blouse, Princess-Cut, Padded Blouse, Designer & Bridal Blouse, Traditional, Backless / Tie-Back, and Collar / Shirt-Style Blouse."

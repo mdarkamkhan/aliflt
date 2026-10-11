@@ -3,6 +3,7 @@ title: "Top / Kurti"
 date: "2026-10-11T12:11:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/kurti-top.webp"
 price: 150
 category: "Kurti"
 description: "Versatile tailoring for daily wear, office wear, and festive Kurtis and Tops. Patterns include Straight-Cut Kurti, A-Line Kurti, Angrakha, Asymmetrical / High-Low Kurti, Shirt-Style Kurti, Short Kurti, and Long Designer Kurta."

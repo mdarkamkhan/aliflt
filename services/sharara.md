@@ -3,6 +3,7 @@ title: "Sharara"
 date: "2026-10-11T12:14:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/sharara.webp"
 price: 350
 category: "Suit"
 description: "Flared, dramatic Sharara ensemble tailoring. Features flared leg panels beginning at the knee joint with delicate trims, paired with an expertly stitched matching kurti and dupatta."

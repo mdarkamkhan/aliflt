@@ -3,6 +3,7 @@ title: "Salwar Suit"
 date: "2026-10-11T12:15:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/salwar-suit.webp"
 price: 250
 category: "Suit"
 description: "Complete 3-piece bespoke suit tailoring. Styles include Straight Suit, Punjabi / Patiala Suit, Pakistani-Style Suit, Palazzo Suit, and Churidar Suit, crafted with precision necklines, side slit reinforcers, and flawless fit."

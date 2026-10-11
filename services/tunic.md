@@ -3,6 +3,7 @@ title: "Tunic"
 date: "2026-10-11T12:09:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/tunic.webp"
 price: 180
 category: "Top & Tunic"
 description: "Contemporary and fusion tunic tailoring offering relaxed comfort and smart silhouettes. Styles include A-line tunics, high-low hemline tunics, shirt-collared tunics, and front-pleat fusion tunics."

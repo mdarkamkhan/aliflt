@@ -3,6 +3,7 @@ title: "Maxi Dress"
 date: "2026-10-11T12:06:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/maxi-dress.webp"
 price: 300
 category: "Dress"
 description: "Floor-length breezy and elegant maxi dress tailoring. Perfect for resort vacations, bohemian styling, or comfortable summer wear. Styles include Tiered Maxi, Wrap Maxi, Empire Waist Maxi, and Smocked / Pleated Maxi Dresses."

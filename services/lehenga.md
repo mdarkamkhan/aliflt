@@ -3,6 +3,7 @@ title: "Lehenga"
 date: "2026-10-11T12:16:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/lehenga.webp"
 price: 350
 category: "Lehenga"
 description: "Custom bridal and festive lehenga tailoring with majestic flare, premium waistband construction, and impeccable drape. Styles include A-Line Lehenga, Circular / Flared Lehenga, Panelled / Kalidar Lehenga, Mermaid / Fishtail, Bridal Lehenga, and Chaniya Choli."

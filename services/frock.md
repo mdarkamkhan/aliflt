@@ -3,6 +3,7 @@ title: "Frock"
 date: "2026-10-11T12:08:00.000Z"
 layout: "service.liquid"
 tags: "service"
+image: "/uploads/services/frock.webp"
 price: 200
 category: "Dress"
 description: "Flared, tiered, and pleated frock tailoring tailored for youthful charm and effortless comfort. Options include everyday cotton frocks, tiered ruffled frocks, box-pleated frocks, and festive ethnic frocks."
