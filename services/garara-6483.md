@@ -3,7 +3,7 @@ title: "Garara "
 date: "2025-11-23T15:52:46.483Z"
 layout: "service.liquid"
 tags: "service"
-image: "/uploads/1763913166486-1000022547.jpg"
+image: "/uploads/1763913166486-1000022547.webp"
 is_ad: true
 price: 399
 category: "garara"

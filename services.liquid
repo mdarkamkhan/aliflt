@@ -1,0 +1,51 @@
+---
+layout: base.liquid
+title: Tailoring Services
+description: Custom blouse stitching, designer suits, bridal lehengas, and boutique tailoring services in Sahibganj by ALiF Ladies Tailor.
+permalink: /services/
+---
+
+<div class="container section fade-in-section">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 2px;">Tailoring Services</h1>
+    <p style="color: #666; font-size: 0.9rem; margin: 0; font-family: var(--font-body); letter-spacing: 0.5px;">Custom boutique stitching, bridal wear, and designer tailoring crafted to perfection.</p>
+  </div>
+
+  <div class="product-grid">
+    {% for item in collections.service reversed %}
+      <a href="{{ item.url }}" class="product-card">
+        <div class="product-card-image-wrapper">
+          {% if item.data.image %}
+            <img src="{{ item.data.image }}" alt="{{ item.data.title | escape }}">
+          {% else %}
+            <img src="/icons/icon-512x512.png" alt="Service">
+          {% endif %}
+        </div>
+
+        <div class="product-card-name">
+          <div class="product-card-title">
+            {{ item.data.title | default: 'Tailoring Service' }}
+          </div>
+
+          {% if item.data.price %}
+          <div class="product-card-price">
+            Starting at ₹{{ item.data.price }}
+          </div>
+          {% endif %}
+
+          {% if item.data.category %}
+          <div class="product-card-category">
+            {{ item.data.category }}
+          </div>
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+
+    {% if collections.service.size == 0 %}
+      <p class="empty-gallery-message" style="position:static; transform:none; color:#333; width:100%; text-align:center; padding: 40px 0;">
+        Services coming soon. Please contact us for custom stitching orders.
+      </p>
+    {% endif %}
+  </div>
+</div>

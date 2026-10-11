@@ -1,74 +1,28 @@
 ---
 layout: base.liquid
-title: Our Services & Works
+title: Services & Works
 permalink: /services-work/
 ---
 
 <div class="container section fade-in-section">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 2px;">Services & Our Works</h1>
+    <p style="color: #666; font-size: 0.95rem; margin: 0; font-family: var(--font-body);">Explore our dedicated tailoring services or view our completed customer portfolio.</p>
+  </div>
 
-  <div class="product-grid">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 800px; margin: 0 auto 40px auto;">
+    
+    <a href="/services/" style="text-decoration: none; color: inherit; border: 1px solid #111; padding: 30px 24px; text-align: center; background: #fff; transition: all 0.25s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+      <h2 style="font-family: var(--font-heading); font-size: 1.4rem; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 1.5px;">Tailoring Services</h2>
+      <p style="font-size: 0.88rem; color: #666; margin: 0 0 20px 0; line-height: 1.5;">Custom blouse stitching, bridal lehenga fitting, suits, kurtis, and boutique tailoring rates.</p>
+      <span style="display: inline-block; padding: 10px 24px; background: #000; color: #fff; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px;">View Services &rarr;</span>
+    </a>
 
-    {%- comment -%} 1. SERVICES LOOP (Clickable) {%- endcomment -%}
-    {% for item in collections.service reversed %}
-      
-      <a href="{{ item.url }}" class="product-card">
-        
-        <div class="product-card-image-wrapper">
-          {% if item.data.image %}
-            <img src="{{ item.data.image }}" alt="{{ item.data.title | escape }}">
-          {% else %}
-            <img src="/icons/icon-512x512.png" alt="Service">
-          {% endif %}
-        </div>
+    <a href="/works/" style="text-decoration: none; color: inherit; border: 1px solid #111; padding: 30px 24px; text-align: center; background: #fff; transition: all 0.25s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+      <h2 style="font-family: var(--font-heading); font-size: 1.4rem; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 1.5px;">Our Work Portfolio</h2>
+      <p style="font-size: 0.88rem; color: #666; margin: 0 0 20px 0; line-height: 1.5;">Showcase gallery of real customer orders, finished stitching creations, and craftsmanship.</p>
+      <span style="display: inline-block; padding: 10px 24px; background: #000; color: #fff; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px;">View Portfolio &rarr;</span>
+    </a>
 
-        <div class="product-card-name">
-          <div class="product-card-title">
-            {{ item.data.title | default: 'Service' }}
-          </div>
-
-          {% if item.data.price %}
-          <div class="product-card-price">
-            ₹{{ item.data.price }}
-          </div>
-          {% endif %}
-
-          {% if item.data.category %}
-          <div class="product-card-category">
-            {{ item.data.category }}
-          </div>
-          {% endif %}
-        </div>
-      </a>
-    {% endfor %}
-
-    {%- comment -%} 2. WORKS LOOP (Display Only) {%- endcomment -%}
-    {% for item in collections.work reversed %}
-      <div class="product-card" style="opacity:0.95; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
-        <div class="product-card-image-wrapper">
-          {% if item.data.image %}
-            <img src="{{ item.data.image }}" alt="{{ item.data.title | escape }}">
-          {% else %}
-            <img src="/icons/icon-512x512.png" alt="Our Work">
-          {% endif %}
-        </div>
-
-        <div class="product-card-name" style="text-align:left; padding:15px; font-weight:normal;">
-          <div class="product-card-title" style="font-weight:bold; font-size:1.1rem; text-transform:capitalize; color:#333;">
-            {{ item.data.title | default: 'Our Work' }}
-          </div>
-
-          <div class="product-card-category" style="font-size:0.9rem; color:#777; margin-top:8px; text-transform:capitalize;">
-            (Our Work) {{ item.data.category }}
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-
-    {%- comment -%} Empty state {%- endcomment -%}
-    {% if collections.service.size == 0 and collections.work.size == 0 %}
-      <p class="empty-gallery-message" style="position:static; transform:none; color:#333; width:100%; text-align:center;">
-        No services or works found. Please check back soon.
-      </p>
-    {% endif %}
   </div>
 </div>
