@@ -580,24 +580,107 @@ footer {
     .prada-panel-label { font-size: 0.95rem; top: 18px; left: 18px; }
 }
 
-/* Full width button wrapper for panels */
-.panel-btn-wrapper {
-    width: calc(100% - 40px);
-    max-width: 1600px;
-    margin: -10px auto 40px auto;
-    text-align: center;
+/* ==================================================
+===== EXPLORE BUTTON (FROM ELEMENTS/explore buttons) =====
+================================================== */
+.panel-explore-btn.cta {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    border: none;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 30px;
+    padding: 8px 16px 8px 18px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    text-decoration: none;
+    color: #111;
+    pointer-events: auto;
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
+
+.panel-explore-btn.cta span {
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #111;
+    padding-right: 8px;
+    position: relative;
+    line-height: 1;
+}
+
+.panel-explore-btn.cta svg {
+    width: 26px;
+    height: 9px;
+    transform: translateX(-4px);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    fill: #111;
+}
+
+.prada-panel:hover .panel-explore-btn.cta svg,
+.panel-explore-btn.cta:hover svg {
+    transform: translateX(2px);
+}
+
+.panel-explore-btn.cta:hover {
+    background: #ffffff;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+    transform: scale(1.04);
+}
+
+.panel-explore-btn.cta:active svg {
+    transform: scale(0.9);
+}
+
+.panel-explore-btn .hover-underline-animation {
+    position: relative;
+    color: #111;
+    display: inline-block;
+}
+
+.panel-explore-btn .hover-underline-animation:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 1.5px;
+    bottom: -2px;
+    left: 0;
+    background-color: #111;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+}
+
+.prada-panel:hover .panel-explore-btn .hover-underline-animation:after,
+.panel-explore-btn.cta:hover .hover-underline-animation:after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
 @media (max-width: 600px) {
-    .panel-btn-wrapper {
-        width: calc(100% - 20px);
-        margin: -5px auto 30px auto;
+    .panel-explore-btn.cta {
+        bottom: 14px;
+        right: 14px;
+        padding: 6px 12px 6px 14px;
+        border-radius: 20px;
+    }
+    .panel-explore-btn.cta span {
+        font-size: 10px;
+        letter-spacing: 2px;
+        padding-right: 6px;
+    }
+    .panel-explore-btn.cta svg {
+        width: 22px;
+        height: 8px;
     }
 }
-.panel-btn-wrapper a.btn-full {
-    display: block;
-    width: 100%;
-    margin: 0;
-    box-sizing: border-box;
 }
 
 
