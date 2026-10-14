@@ -1,5 +1,7 @@
 node_modules/
 _site/
+dist/
+.astro/
 .env
 .DS_Store
 Thumbs.db
