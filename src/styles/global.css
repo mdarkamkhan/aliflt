@@ -507,31 +507,21 @@ footer {
     width: 260px;
     height: 260px;
     border-radius: 50%;
+    background: radial-gradient(circle, #ff0044 0%, #ff4b72 65%, transparent 100%);
     background-color: #ff0000;
     opacity: 1;
     filter: blur(20px);
-    animation: blob-bounce 6s infinite ease-in-out;
+    animation: blob-bounce 5s infinite ease-in-out;
     pointer-events: none;
 }
 
-.prada-panel .blob-products {
+/* Uniform vibrant red across all panels */
+.prada-panel .blob-products,
+.prada-panel .blob-services,
+.prada-panel .blob-works,
+.prada-panel .blob-designs {
     background: radial-gradient(circle, #ff0044 0%, #ff4b72 65%, transparent 100%);
     background-color: #ff0000;
-}
-.prada-panel .blob-services {
-    background: radial-gradient(circle, #00b894 0%, #55efc4 65%, transparent 100%);
-    background-color: #00b894;
-    animation-delay: -1.5s;
-}
-.prada-panel .blob-works {
-    background: radial-gradient(circle, #6c5ce7 0%, #a29bfe 65%, transparent 100%);
-    background-color: #6c5ce7;
-    animation-delay: -3s;
-}
-.prada-panel .blob-designs {
-    background: radial-gradient(circle, #fd79a8 0%, #e84393 65%, transparent 100%);
-    background-color: #fd79a8;
-    animation-delay: -4.5s;
 }
 
 @keyframes blob-bounce {

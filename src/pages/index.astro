@@ -125,8 +125,11 @@ for (const p of [...products].reverse()) {
     </div>
 
     <script is:inline>
-        // Swapper slideshow logic
+        // Swapper slideshow logic synchronized with 5s blob-bounce orbit
         function initSwappers() {
+            if (window._swappersInitialized) return;
+            window._swappersInitialized = true;
+
             const containers = document.querySelectorAll('.swapper-container');
             containers.forEach(container => {
                 const items = container.querySelectorAll('.swapper-item');
@@ -136,10 +139,13 @@ for (const p of [...products].reverse()) {
                     items[current].classList.remove('active');
                     current = (current + 1) % items.length;
                     items[current].classList.add('active');
-                }, 3500);
+                }, 5000); // Exactly 5000ms = 1 full round of blob orbit (5s)
             });
         }
-        document.addEventListener('DOMContentLoaded', initSwappers);
-        initSwappers();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSwappers);
+        } else {
+            initSwappers();
+        }
     </script>
 </BaseLayout>
