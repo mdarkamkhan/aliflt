@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import categoryFilters from '../../data/categoryFilters.json';
+
+const allProducts = await getCollection('products');
+const products = [...allProducts].reverse();
+---
+
+<BaseLayout 
+  title="Our Products" 
+  description="Explore our exquisite collection of designer laces, borders, latkans, and boutique fabrics at ALiF Ladies Tailor."
+>
+  <div class="container section fade-in-section">
+
+    <!-- Category Filter Bar -->
+    <div class="filter-bar-scroll-container">
+      <button class="filter-btn active" data-filter-values="all">
+        <img src="/icons/all-categories.png" alt="All Categories" class="filter-icon" />
+        <span class="filter-name">All</span>
+      </button>
+      {categoryFilters.categories.map((category) => (
+        <button class="filter-btn" data-filter-values={category.values.join(',').toLowerCase()}>
+          <img src={`/icons/${category.icon}`} alt={category.name} class="filter-icon" />
+          <span class="filter-name">{category.name}</span>
+        </button>
+      ))}
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid" data-shuffle-type="product" id="productGrid">
+      {products.map((item) => {
+        const { title, price, offer_price, image, category } = item.data;
+        const discountPercent = offer_price && price ? Math.round(((Number(price) - Number(offer_price)) * 100) / Number(price)) : null;
+
+        return (
+          <a href={`/products/${item.id}/`} class="product-card" data-category={(category || '').toLowerCase()}>
+            <div class="product-card-image-wrapper">
+              {discountPercent && discountPercent > 0 && (
+                <div class="discount-badge">-{discountPercent}%</div>
+              )}
+              <img src={image || '/icons/icon-512x512.png'} alt={title} loading="lazy" />
+            </div>
+
+            <div class="product-card-name">
+              <div class="product-card-title">{title}</div>
+
+              <div class="product-card-price-wrapper">
+                {offer_price ? (
+                  <div class="product-card-price has-offer">
+                    <del class="original-price">₹{price}</del>
+                    <span class="offer-price">₹{offer_price}</span>
+                  </div>
+                ) : (
+                  <div class="product-card-price">₹{price}</div>
+                )}
+              </div>
+
+              {category && (
+                <div class="product-card-category">{category}</div>
+              )}
+            </div>
+          </a>
+        );
+      })}
+
+      {products.length === 0 && (
+        <p class="empty-gallery-message" style="position:static; transform:none; color:#333; width:100%; text-align:center; padding: 40px 0;">
+          Products coming soon.
+        </p>
+      )}
+    </div>
+
+  </div>
+
+  <script is:inline>
+    // Category Filtering logic
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.product-card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filterVal = btn.getAttribute('data-filter-values') || 'all';
+        const allowed = filterVal === 'all' ? null : filterVal.split(',').map(s => s.trim().toLowerCase());
+
+        cards.forEach(card => {
+          const cardCat = (card.getAttribute('data-category') || '').toLowerCase();
+          if (!allowed || allowed.includes(cardCat)) {
+            card.style.display = '';
+            card.classList.remove('hidden');
+          } else {
+            card.style.display = 'none';
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
+  </script>
+</BaseLayout>

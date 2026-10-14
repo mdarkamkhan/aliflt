@@ -1,11 +1,133 @@
 ---
-// src/pages/index.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const offers = await getCollection('offers');
+const products = await getCollection('products');
+const services = await getCollection('services');
+const works = await getCollection('works');
+const designs = await getCollection('designs');
+
+const recentOffers = [...offers].reverse();
+const recentServices = [...services].reverse().slice(0, 5);
+const recentWorks = [...works].reverse().slice(0, 5);
+const recentDesigns = [...designs].reverse().slice(0, 5);
+
+// Get distinct category highlights for products
+const seenCategories = new Set();
+const highlightedProducts = [];
+for (const p of [...products].reverse()) {
+  const cat = (p.data.category || '').toLowerCase();
+  if (cat && !seenCategories.has(cat)) {
+    seenCategories.add(cat);
+    highlightedProducts.push(p);
+  }
+}
 ---
-<html>
-  <head>
-    <title>ALiF Ladies Tailor</title>
-  </head>
-  <body>
-    <h1>ALiF Ladies Tailor</h1>
-  </body>
-</html>
+
+<BaseLayout title="Home" description="Custom bridal blouses, lehengas, gowns — premium ladies tailoring in Sahibganj.">
+    <!-- Top Offers Banner -->
+    <div id="top-banner">
+        <div class="swapper-container banner-swapper">
+            {recentOffers.map((item, index) => (
+                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                    <img src={item.data.image} alt={item.data.title || 'Advertisement'} />
+                </div>
+            ))}
+            {recentOffers.length === 0 && (
+                <p class="empty-gallery-message">Welcome to ALiF Ladies Tailor.</p>
+            )}
+        </div>
+    </div>
+
+    <!-- Products Showcase Panel -->
+    <a href="/products/" class="prada-panel">
+        <div class="prada-panel-label">ALiF Products</div>
+        <div class="swapper-container products-panel-gallery">
+            {highlightedProducts.map((item, index) => (
+                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                    <img src={item.data.image} alt={item.data.title} />
+                </div>
+            ))}
+            {highlightedProducts.length === 0 && (
+                <p class="empty-gallery-message">Products coming soon.</p>
+            )}
+        </div>
+    </a>
+    <div class="cta-buttons panel-btn-wrapper">
+        <a href="/products/" class="btn-full">Explore Products</a>
+    </div>
+
+    <!-- Tailoring Services Showcase Panel -->
+    <a href="/services/" class="prada-panel">
+        <div class="prada-panel-label">ALiF Services</div>
+        <div class="swapper-container services-panel-gallery">
+            {recentServices.map((item, index) => (
+                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} />
+                </div>
+            ))}
+            {recentServices.length === 0 && (
+                <p class="empty-gallery-message">Services coming soon.</p>
+            )}
+        </div>
+    </a>
+    <div class="cta-buttons panel-btn-wrapper">
+        <a href="/services/" class="btn-full">Explore Services</a>
+    </div>
+
+    <!-- Our Works Showcase Panel -->
+    <a href="/works/" class="prada-panel">
+        <div class="prada-panel-label">ALiF Works</div>
+        <div class="swapper-container works-panel-gallery">
+            {recentWorks.map((item, index) => (
+                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Our Work'} />
+                </div>
+            ))}
+            {recentWorks.length === 0 && (
+                <p class="empty-gallery-message">Our work coming soon.</p>
+            )}
+        </div>
+    </a>
+    <div class="cta-buttons panel-btn-wrapper">
+        <a href="/works/" class="btn-full">Explore Our Work</a>
+    </div>
+
+    <!-- Designs Showcase Panel -->
+    <a href="/designs/" class="prada-panel">
+        <div class="prada-panel-label">ALiF Designs</div>
+        <div class="swapper-container designs-panel-gallery">
+            {recentDesigns.map((item, index) => (
+                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Design'} />
+                </div>
+            ))}
+            {recentDesigns.length === 0 && (
+                <p class="empty-gallery-message">Designs coming soon.</p>
+            )}
+        </div>
+    </a>
+    <div class="cta-buttons panel-btn-wrapper">
+        <a href="/designs/" class="btn-full">Explore Designs</a>
+    </div>
+
+    <script is:inline>
+        // Swapper slideshow logic
+        function initSwappers() {
+            const containers = document.querySelectorAll('.swapper-container');
+            containers.forEach(container => {
+                const items = container.querySelectorAll('.swapper-item');
+                if (items.length <= 1) return;
+                let current = 0;
+                setInterval(() => {
+                    items[current].classList.remove('active');
+                    current = (current + 1) % items.length;
+                    items[current].classList.add('active');
+                }, 3500);
+            });
+        }
+        document.addEventListener('DOMContentLoaded', initSwappers);
+        initSwappers();
+    </script>
+</BaseLayout>

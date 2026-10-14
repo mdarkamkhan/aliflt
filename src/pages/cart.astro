@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Your Cart" description="Review selected items and place your order directly on WhatsApp with ALiF Ladies Tailor.">
+  <div class="container section fade-in-section" style="max-width: 800px; margin: 0 auto;">
+    <h1 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; font-size: 1.8rem; text-align: center;">Your Cart</h1>
+    
+    <div id="cart-items-container" style="display: flex; flex-direction: column; gap: 15px;"></div>
+    
+    <div id="cart-actions" style="display: none; text-align: center; margin: 30px 0 15px 0;">
+      <a href="/products/" class="btn-cart" style="text-decoration: none; display: inline-block; padding: 12px 24px; border: 1px solid #000; color: #000; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem;">+ Add More Products</a>
+    </div>
+
+    <!-- Delivery Notice -->
+    <div id="delivery-progress-container" style="display: none; background: #f9f9f9; padding: 16px; border: 1px solid #eee; margin: 20px 0; text-align: center;">
+      <p id="delivery-progress-text" style="font-size: 0.85rem; margin: 0; color: #444;"></p>
+    </div>
+
+    <!-- Cart Summary -->
+    <div id="cart-summary" style="display: none; border-top: 2px solid #111; padding-top: 20px; margin-top: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <span style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">Estimated Total:</span>
+        <h3 id="cart-total" style="font-family: var(--font-heading); font-size: 1.5rem; margin: 0;">₹0</h3>
+      </div>
+      <button class="btn-buy" id="proceedToOrderBtn" style="width: 100%; padding: 18px 0; background: #000; color: #fff; border: 1px solid #000; text-transform: uppercase; letter-spacing: 2px; font-size: 0.95rem; font-weight: 500; cursor: pointer;">
+        Proceed to Order on WhatsApp
+      </button>
+    </div>
+    
+    <!-- Empty Cart State -->
+    <div id="cart-empty-message" style="display: none; text-align: center; padding: 60px 0;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 15px; color: #aaa;">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+      <p style="font-size: 1.1rem; color: #555; margin-bottom: 20px;">Your cart is currently empty.</p>
+      <a href="/products/" style="display: inline-block; padding: 12px 30px; background: #000; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem;">Browse Products</a>
+    </div>
+  </div>
+
+  <script is:inline>
+    function renderCart() {
+      const container = document.getElementById('cart-items-container');
+      const actions = document.getElementById('cart-actions');
+      const delivery = document.getElementById('delivery-progress-container');
+      const deliveryText = document.getElementById('delivery-progress-text');
+      const summary = document.getElementById('cart-summary');
+      const totalEl = document.getElementById('cart-total');
+      const emptyMsg = document.getElementById('cart-empty-message');
+
+      const cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+
+      if (cart.length === 0) {
+        if (container) container.innerHTML = '';
+        if (actions) actions.style.display = 'none';
+        if (delivery) delivery.style.display = 'none';
+        if (summary) summary.style.display = 'none';
+        if (emptyMsg) emptyMsg.style.display = 'block';
+        return;
+      }
+
+      if (emptyMsg) emptyMsg.style.display = 'none';
+      if (actions) actions.style.display = 'block';
+      if (summary) summary.style.display = 'block';
+
+      let total = 0;
+      let html = '';
+
+      cart.forEach((item, index) => {
+        const itemTotal = Number(item.price) * (item.quantity || 1);
+        total += itemTotal;
+
+        html += `
+          <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; padding: 15px; background: #fff;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+              <img src="${item.image || '/icons/icon-512x512.png'}" style="width: 60px; height: 75px; object-fit: cover; border: 1px solid #f0f0f0;" alt="${item.title}" />
+              <div>
+                <h4 style="margin: 0 0 5px 0; font-size: 0.95rem;">${item.title}</h4>
+                <p style="margin: 0; color: #666; font-size: 0.85rem;">₹${item.price} &times; ${item.quantity || 1} = <strong>₹${itemTotal}</strong></p>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <button onclick="updateQty(${index}, -1)" style="width: 28px; height: 28px; background: #eee; border: none; cursor: pointer;">-</button>
+              <span style="font-size: 0.9rem; font-weight: 500;">${item.quantity || 1}</span>
+              <button onclick="updateQty(${index}, 1)" style="width: 28px; height: 28px; background: #eee; border: none; cursor: pointer;">+</button>
+              <button onclick="removeItem(${index})" style="background: none; border: none; color: #c00; cursor: pointer; margin-left: 10px;" aria-label="Remove item">&times;</button>
+            </div>
+          </div>
+        `;
+      });
+
+      if (container) container.innerHTML = html;
+      if (totalEl) totalEl.innerText = '₹' + total;
+
+      if (delivery && deliveryText) {
+        delivery.style.display = 'block';
+        if (total >= 199) {
+          deliveryText.innerText = '🎉 You unlocked Free Delivery in Sahibganj!';
+        } else {
+          deliveryText.innerText = `Add ₹${199 - total} more for Free Delivery in Sahibganj!`;
+        }
+      }
+    }
+
+    window.updateQty = function(index, delta) {
+      let cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+      if (cart[index]) {
+        cart[index].quantity = (cart[index].quantity || 1) + delta;
+        if (cart[index].quantity <= 0) {
+          cart.splice(index, 1);
+        }
+      }
+      localStorage.setItem('alif_cart', JSON.stringify(cart));
+      renderCart();
+      updateBadge();
+    };
+
+    window.removeItem = function(index) {
+      let cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+      cart.splice(index, 1);
+      localStorage.setItem('alif_cart', JSON.stringify(cart));
+      renderCart();
+      updateBadge();
+    };
+
+    function updateBadge() {
+      const cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+      const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      const b1 = document.getElementById('cartCount');
+      const b2 = document.getElementById('cartCountMobile');
+      if (b1) b1.innerText = count;
+      if (b2) b2.innerText = count;
+    }
+
+    document.getElementById('proceedToOrderBtn')?.addEventListener('click', () => {
+      const cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+      if (cart.length === 0) return;
+
+      let msg = 'Hello ALiF, I want to place an order from your website:\n\n';
+      let total = 0;
+      cart.forEach((item, idx) => {
+        const itemTotal = Number(item.price) * (item.quantity || 1);
+        total += itemTotal;
+        msg += `${idx + 1}. ${item.title} (Qty: ${item.quantity || 1}) - ₹${itemTotal}\n`;
+      });
+      msg += `\n*Total Amount:* ₹${total}\n\nPlease confirm availability and delivery.`;
+
+      window.open(`https://wa.me/7250470009?text=${encodeURIComponent(msg)}`, '_blank');
+    });
+
+    renderCart();
+  </script>
+</BaseLayout>

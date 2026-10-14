@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allWorks = await getCollection('works');
+const works = [...allWorks].reverse();
+---
+
+<BaseLayout 
+  title="Our Work Portfolio" 
+  description="Explore finished custom outfits, bridal blouses, suits, and hand-stitched garments crafted by master tailors at ALiF."
+>
+  <div class="container section fade-in-section">
+    <div style="text-align: center; margin-bottom: 30px;">
+      <h1 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 2px;">Our Work Portfolio</h1>
+      <p style="color: #666; font-size: 0.9rem; margin: 0; font-family: var(--font-body); letter-spacing: 0.5px;">Real customer orders and finished outfits handcrafted by ALiF experienced tailors.</p>
+    </div>
+
+    <div class="product-grid">
+      {works.map((item) => (
+        <div class="product-card" style="box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 1px solid #EAEAEA;">
+          <div class="product-card-image-wrapper">
+            <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Our Work'} loading="lazy" />
+          </div>
+
+          <div class="product-card-name" style="text-align: left; padding: 14px;">
+            <div class="product-card-title" style="font-weight: 500; font-size: 1rem; color: #111;">
+              {item.data.title || 'Our Work'}
+            </div>
+
+            {item.data.category && (
+              <div class="product-card-category" style="font-size: 0.8rem; color: #777; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
+                {item.data.category}
+              </div>
+            )}
+
+            {item.data.description && (
+              <p style="font-size: 0.82rem; color: #555; margin: 8px 0 0 0; line-height: 1.4;">
+                {item.data.description}
+              </p>
+            )}
+          </div>
+        </div>
+      ))}
+
+      {works.length === 0 && (
+        <p class="empty-gallery-message" style="position:static; transform:none; color:#333; width:100%; text-align:center; padding: 40px 0;">
+          Our work gallery coming soon. Check back shortly to see our latest creations!
+        </p>
+      )}
+    </div>
+  </div>
+</BaseLayout>

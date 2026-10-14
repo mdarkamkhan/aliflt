@@ -1,0 +1,171 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.map((entry) => ({
+    params: { slug: entry.id },
+    props: { product: entry },
+  }));
+}
+
+const { product } = Astro.props;
+const {
+  title,
+  price,
+  offer_price,
+  image,
+  category,
+  description,
+  size,
+  colour,
+  fabric,
+  pattern,
+  ideal_for,
+  work,
+  delivery_charges = "Free",
+  return_policy = "No"
+} = product.data;
+
+const finalPrice = offer_price || price;
+const discountPercent = offer_price && price ? Math.round(((Number(price) - Number(offer_price)) * 100) / Number(price)) : null;
+
+const wappOrderText = `Hello ALiF, I want to purchase '${title}' (Price: ₹${finalPrice}).`;
+const wappOrderLink = `https://wa.me/7250470009?text=${encodeURIComponent(wappOrderText)}`;
+---
+
+<BaseLayout 
+  title={title} 
+  description={description || `${title} available at ALiF Ladies Tailor, Sahibganj.`}
+  image={image}
+>
+  <div class="container section">
+    <div class="product-detail-grid">
+
+      <div class="product-detail-image">
+        <div class="swapper-container product-swapper" style="min-height: unset; aspect-ratio: 1 / 1.25; overflow: hidden; border: 1px solid #eee;">
+          <img src={image || '/icons/icon-512x512.png'} alt={title} style="width: 100%; height: 100%; object-fit: cover;" />
+        </div>
+      </div>
+
+      <div class="product-detail-info">
+        <h1 class="product-detail-title">{title}</h1>
+
+        {offer_price ? (
+          <div class="product-offer-container">
+            <div class="product-detail-price has-offer">
+              <del class="original-price">₹{price}</del> 
+              <span class="offer-price">₹{offer_price}</span>
+              {discountPercent && (
+                <span class="discount-badge-large">-{discountPercent}% OFF</span>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div class="product-detail-price">₹{price}</div>
+        )}
+
+        {category && (
+          <span class="product-detail-category" style="display:inline-block; margin-top:8px; text-transform:uppercase; color:#777; font-size:0.85rem; letter-spacing:1px;">
+            {category}
+          </span>
+        )}
+
+        <div class="product-delivery-promo" style="margin-top: 15px; font-size: 0.85rem; color: #555;">
+          Free delivery on orders above ₹199 (within Sahibganj)
+        </div>
+
+        <div class="product-detail-actions" style="margin-top: 25px; display: flex; flex-direction: column; gap: 12px;">
+          <button 
+            class="btn-cart" 
+            id="addToCartBtn"
+            data-product-id={product.id}
+            data-title={title}
+            data-price={finalPrice}
+            data-image={image}
+            style="width: 100%; padding: 16px 0; background: #000; color: #fff; border: 1px solid #000; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease;"
+          >
+            Add to Cart
+          </button>
+
+          <a 
+            href={wappOrderLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-buy"
+            style="display: block; width: 100%; padding: 16px 0; background: #fff; color: #000; border: 1px solid #000; text-align: center; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease;"
+          >
+            Buy Now on WhatsApp
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="product-accordion-container" style="margin-top: 40px;">
+    {description && (
+      <details class="accordion-item" open>
+        <summary class="accordion-summary">
+          <h3 class="accordion-heading">Description</h3>
+          <span class="accordion-caret">^</span>
+        </summary>
+        <div class="accordion-content">
+          <p class="accordion-description-text" style="padding: 15px 0; line-height: 1.6; color: #555;">{description}</p>
+        </div>
+      </details>
+    )}
+
+    <details class="accordion-item" open>
+      <summary class="accordion-summary">
+        <h3 class="accordion-heading">Product Information</h3>
+        <span class="accordion-caret">^</span>
+      </summary>
+      <div class="accordion-content" style="padding: 15px 0;">
+        <div class="spec-row-wrapper" style="display: flex; flex-direction: column; gap: 8px;">
+          {size && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Size</span><span style="font-weight:500;">{size}</span></div>}
+          {colour && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Colour</span><span style="font-weight:500;">{colour}</span></div>}
+          {fabric && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Fabric</span><span style="font-weight:500;">{fabric}</span></div>}
+          {pattern && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Pattern</span><span style="font-weight:500;">{pattern}</span></div>}
+          {ideal_for && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Ideal For</span><span style="font-weight:500;">{ideal_for}</span></div>}
+          {work && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Work</span><span style="font-weight:500;">{work}</span></div>}
+          <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Delivery Charges</span><span style="font-weight:500;">{delivery_charges}</span></div>
+          <div class="spec-row" style="display: flex; justify-content: space-between; padding: 6px 0;"><span style="color:#777;">Return Policy</span><span style="font-weight:500;">{return_policy}</span></div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <script is:inline>
+    // Add to cart local storage handler
+    const addBtn = document.getElementById('addToCartBtn');
+    if (addBtn) {
+      addBtn.addEventListener('click', () => {
+        const id = addBtn.getAttribute('data-product-id');
+        const title = addBtn.getAttribute('data-title');
+        const price = Number(addBtn.getAttribute('data-price'));
+        const image = addBtn.getAttribute('data-image');
+
+        let cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+        const existing = cart.find(item => item.id === id);
+        if (existing) {
+          existing.quantity = (existing.quantity || 1) + 1;
+        } else {
+          cart.push({ id, title, price, image, quantity: 1 });
+        }
+        localStorage.setItem('alif_cart', JSON.stringify(cart));
+
+        // Update badges
+        const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const b1 = document.getElementById('cartCount');
+        const b2 = document.getElementById('cartCountMobile');
+        if (b1) b1.innerText = count;
+        if (b2) b2.innerText = count;
+
+        addBtn.innerText = 'Added to Cart ✓';
+        setTimeout(() => { addBtn.innerText = 'Add to Cart'; }, 2000);
+      });
+    }
+  </script>
+</BaseLayout>
