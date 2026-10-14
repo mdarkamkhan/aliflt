@@ -1,15 +1,33 @@
-# This file tells Netlify exactly how to build your site.
+# Netlify Configuration for ALiF Ladies Tailor (Astro + React Stack)
 
 [build]
-  # This is the command to build your Eleventy site.
-  command = "npx @11ty/eleventy"
-  
-  # This is the folder that Eleventy builds.
-  publish = "_site"
-
-  # Define where serverless functions are stored
+  command = "npm run build"
+  publish = "dist"
   functions = "netlify/functions"
 
 [context.production.environment]
-  # We set a modern, stable Node.js version.
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
+
+[context.deploy-preview.environment]
+  NODE_VERSION = "20"
+
+# Caching and Performance Optimization Headers
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/uploads/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/icons/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
