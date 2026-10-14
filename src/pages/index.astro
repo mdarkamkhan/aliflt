@@ -42,16 +42,19 @@ for (const p of [...products].reverse()) {
 
     <!-- Products Showcase Panel -->
     <a href="/products/" class="prada-panel">
-        <div class="prada-panel-label">ALiF Products</div>
-        <div class="swapper-container products-panel-gallery">
-            {highlightedProducts.map((item, index) => (
-                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                    <img src={item.data.image} alt={item.data.title} />
-                </div>
-            ))}
-            {highlightedProducts.length === 0 && (
-                <p class="empty-gallery-message">Products coming soon.</p>
-            )}
+        <div class="blob blob-products" aria-hidden="true"></div>
+        <div class="panel-inner-bg">
+            <div class="prada-panel-label">ALiF Products</div>
+            <div class="swapper-container products-panel-gallery">
+                {highlightedProducts.map((item, index) => (
+                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                        <img src={item.data.image} alt={item.data.title} />
+                    </div>
+                ))}
+                {highlightedProducts.length === 0 && (
+                    <p class="empty-gallery-message">Products coming soon.</p>
+                )}
+            </div>
         </div>
     </a>
     <div class="cta-buttons panel-btn-wrapper">
@@ -60,16 +63,19 @@ for (const p of [...products].reverse()) {
 
     <!-- Tailoring Services Showcase Panel -->
     <a href="/services/" class="prada-panel">
-        <div class="prada-panel-label">ALiF Services</div>
-        <div class="swapper-container services-panel-gallery">
-            {recentServices.map((item, index) => (
-                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} />
-                </div>
-            ))}
-            {recentServices.length === 0 && (
-                <p class="empty-gallery-message">Services coming soon.</p>
-            )}
+        <div class="blob blob-services" aria-hidden="true"></div>
+        <div class="panel-inner-bg">
+            <div class="prada-panel-label">ALiF Services</div>
+            <div class="swapper-container services-panel-gallery">
+                {recentServices.map((item, index) => (
+                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                        <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} />
+                    </div>
+                ))}
+                {recentServices.length === 0 && (
+                    <p class="empty-gallery-message">Services coming soon.</p>
+                )}
+            </div>
         </div>
     </a>
     <div class="cta-buttons panel-btn-wrapper">
@@ -78,16 +84,19 @@ for (const p of [...products].reverse()) {
 
     <!-- Our Works Showcase Panel -->
     <a href="/works/" class="prada-panel">
-        <div class="prada-panel-label">ALiF Works</div>
-        <div class="swapper-container works-panel-gallery">
-            {recentWorks.map((item, index) => (
-                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Our Work'} />
-                </div>
-            ))}
-            {recentWorks.length === 0 && (
-                <p class="empty-gallery-message">Our work coming soon.</p>
-            )}
+        <div class="blob blob-works" aria-hidden="true"></div>
+        <div class="panel-inner-bg">
+            <div class="prada-panel-label">ALiF Works</div>
+            <div class="swapper-container works-panel-gallery">
+                {recentWorks.map((item, index) => (
+                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                        <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Our Work'} />
+                    </div>
+                ))}
+                {recentWorks.length === 0 && (
+                    <p class="empty-gallery-message">Our work coming soon.</p>
+                )}
+            </div>
         </div>
     </a>
     <div class="cta-buttons panel-btn-wrapper">
@@ -96,16 +105,19 @@ for (const p of [...products].reverse()) {
 
     <!-- Designs Showcase Panel -->
     <a href="/designs/" class="prada-panel">
-        <div class="prada-panel-label">ALiF Designs</div>
-        <div class="swapper-container designs-panel-gallery">
-            {recentDesigns.map((item, index) => (
-                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Design'} />
-                </div>
-            ))}
-            {recentDesigns.length === 0 && (
-                <p class="empty-gallery-message">Designs coming soon.</p>
-            )}
+        <div class="blob blob-designs" aria-hidden="true"></div>
+        <div class="panel-inner-bg">
+            <div class="prada-panel-label">ALiF Designs</div>
+            <div class="swapper-container designs-panel-gallery">
+                {recentDesigns.map((item, index) => (
+                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                        <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Design'} />
+                    </div>
+                ))}
+                {recentDesigns.length === 0 && (
+                    <p class="empty-gallery-message">Designs coming soon.</p>
+                )}
+            </div>
         </div>
     </a>
     <div class="cta-buttons panel-btn-wrapper">
