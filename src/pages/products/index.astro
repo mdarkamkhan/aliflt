@@ -35,11 +35,11 @@ const products = [...allProducts].reverse();
 
         return (
           <a href={`/products/${item.id}/`} class="product-card" data-category={(category || '').toLowerCase()}>
-            <div class="product-card-image-wrapper" style="aspect-ratio: 3 / 4; overflow: hidden; position: relative; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+            <div class="product-card-image-wrapper" style="aspect-ratio: 4 / 5; overflow: hidden; position: relative; border-top-left-radius: 10px; border-top-right-radius: 10px;">
               {discountPercent && discountPercent > 0 && (
                 <div class="discount-badge">-{discountPercent}%</div>
               )}
-              <img src={image || '/icons/icon-512x512.png'} alt={title} style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;" loading="lazy" />
+              <img src={image || '/icons/icon-512x512.png'} alt={title} style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;" loading="lazy" />
             </div>
 
             <div class="product-card-name">

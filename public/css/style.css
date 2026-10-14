@@ -594,10 +594,9 @@ footer {
     display: none;
 }
 
-/* ✅ ISE PASTE KARO */
-/* 💡 LUXURY SLOW ZOOM EFFECT */
+/* 💡 LUXURY COMPACT 4:5 ASPECT RATIO & CLEAN E-COMMERCE SPACING */
 .product-card-image-wrapper {
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -612,9 +611,9 @@ footer {
     width: 100%;
     height: 100%;
     display: block;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 5;
     object-fit: cover;
-    object-position: top center;
+    object-position: center;
 
     /* Smooth Transition */
     transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -626,35 +625,62 @@ footer {
 }
 .product-card-name {
     text-align: left;
-    padding: 15px;
+    padding: 10px 12px 14px 12px;
+    display: flex;
+    flex-direction: column;
 }
 .product-card-title {
-    font-weight: 400;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    text-transform: capitalize;
-    color: var(--text-color);
-}
-.product-card-price {
     font-weight: 500;
     font-family: var(--font-body);
-    font-size: 1rem;
-    margin-top: 8px;
+    font-size: 0.92rem;
+    text-transform: capitalize;
     color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+}
+.product-card-price-wrapper {
+    margin-top: 4px;
+}
+.product-card-price {
+    font-weight: 600;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--text-color);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+.product-card-price.has-offer .original-price {
+    font-size: 0.82rem;
+    color: #999;
+    text-decoration: line-through;
+    font-weight: 400;
+}
+.product-card-price.has-offer .offer-price {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #111;
 }
 .product-card-category {
-    font-weight: 300;
+    font-weight: 400;
     font-family: var(--font-body);
-    font-size: 0.85rem;
-    color: #777;
-    margin-top: 8px;
-    text-transform: capitalize;
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 @media (max-width: 600px) {
-    .section { padding: 20px; }
-    .container .section { margin: 10px 0; }
-    .product-card-name { padding: 12px; }
-    .product-card-title, .product-card-price { font-size: 0.95rem; }
+    .section { padding: 16px 12px; }
+    .container .section { margin: 8px 0; }
+    .product-card-name { padding: 8px 10px 12px 10px; }
+    .product-card-title { font-size: 0.86rem; }
+    .product-card-price { font-size: 0.9rem; }
+    .product-card-price.has-offer .offer-price { font-size: 0.9rem; }
+    .product-card-price.has-offer .original-price { font-size: 0.78rem; }
+    .product-card-category { font-size: 0.7rem; margin-top: 2px; }
 }
 
 
