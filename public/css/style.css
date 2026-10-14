@@ -467,7 +467,7 @@ footer {
 }
 .prada-panel .swapper-container { max-width: none; width: 100%; height: 100%; min-height: 0; }
 .prada-panel .swapper-item { height: 100%; }
-.prada-panel .swapper-item img { height: 100%; min-height: 0; object-fit: cover; border-radius: 0; }
+.prada-panel .swapper-item img { height: 100%; min-height: 0; object-fit: cover; object-position: top center; border-radius: 0; }
 .prada-panel .swapper-nav,
 .prada-panel .product-label,
 .prada-panel .service-details,
@@ -553,19 +553,23 @@ footer {
 /* ✅ ISE PASTE KARO */
 /* 💡 LUXURY SLOW ZOOM EFFECT */
 .product-card-image-wrapper {
+    aspect-ratio: 3 / 4;
     overflow: hidden;
     border-radius: 0;
     position: relative;
+    background: #f5f5f5;
     /* Masking fix for safari if needed */
     -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
-.product-card img {
+.product-card img,
+.product-card-image-wrapper img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
-    aspect-ratio: 1 / 1.25;
+    aspect-ratio: 3 / 4;
     object-fit: cover;
+    object-position: top center;
 
     /* Smooth Transition */
     transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1763,8 +1767,10 @@ details[open] .pm-icon-minus { display: block; }
 
 .search-item img {
     width: 60px;
-    height: 80px; /* Portrait Ratio */
+    height: 80px; /* Portrait Ratio 3:4 */
+    aspect-ratio: 3 / 4;
     object-fit: cover;
+    object-position: top center;
     border-radius: 0; /* Sharp edges for premium look */
     background: #f4f4f4;
 }
@@ -2298,7 +2304,8 @@ body.chat-active {
 
 .chat-catalog-img {
     width: 100%;
-    height: 90px;
+    aspect-ratio: 3 / 4;
+    height: auto;
     overflow: hidden;
     background: #F5F5F5;
 }
@@ -2307,6 +2314,7 @@ body.chat-active {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: top center;
 }
 
 .chat-catalog-info {
