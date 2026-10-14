@@ -5,6 +5,9 @@ interface Props {
   image?: string;
 }
 
+import AIChatWidget from '../components/AIChatWidget';
+import SearchModal from '../components/SearchModal';
+
 const {
   title = "ALiF Ladies Tailor",
   description = "Custom bridal blouses, lehengas, gowns — premium ladies tailoring in Sahibganj.",
@@ -45,14 +48,8 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
 </head>
 
 <body>
-    <!-- Search Overlay -->
-    <div id="search-overlay">
-        <div class="search-header">
-            <input type="text" id="search-input" placeholder="Search..." autocomplete="off">
-            <button id="close-search" aria-label="Close search">&times;</button>
-        </div>
-        <div id="search-results"></div>
-    </div>
+    <!-- React Island: Search Overlay with Fuse.js & Typewriter -->
+    <SearchModal client:idle />
 
     <!-- Fixed Top Nav -->
     <nav class="fixed-top-nav">
@@ -182,8 +179,8 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
         <div class="pm-bottom-bar"><p>© 2025 ALiF LADIES TAILOR</p></div>
     </footer>
 
-    <!-- Chat Widget Anchor -->
-    <div id="chat-widget"></div>
+    <!-- React Island: ALiF AI Assistant Widget -->
+    <AIChatWidget client:load />
 
     <script is:inline>
         // Drawer Nav logic
