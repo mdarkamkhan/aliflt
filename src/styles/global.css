@@ -18,11 +18,31 @@ body {
     margin: 0;
     padding: 0;
     color: var(--text-color);
-    background-color: var(--bg-color);
+    background-color: transparent;
     padding-bottom: 0px;
     padding-top: 70px; 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================
+   FIXED BACKGROUND CANVAS FROM ELEMENTS/BG
+========================================= */
+#fixed-bg-pattern {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--bg-color, #FBF9F6);
+    background-image: 
+        linear-gradient(90deg, rgba(200, 0, 0, 0.5) 50%, transparent 50%),
+        linear-gradient(rgba(200, 0, 0, 0.5) 50%, transparent 50%);
+    background-size: 50px 50px;
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 body.sidebar-open {
@@ -533,11 +553,17 @@ footer {
     text-decoration: none;
     color: var(--text-color);
     display: block;
+    background: #ffffff;
+    border: 1px solid #eaeaea;
     border-radius: 0;
     opacity: 1; 
     transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
     /* 💡 ADDED transition for display */
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out, display 0.3s ease;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, display 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.09);
 }
 .product-card.is-visible {
     opacity: 1;

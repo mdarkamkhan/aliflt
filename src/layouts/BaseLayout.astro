@@ -48,6 +48,9 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
 </head>
 
 <body>
+    <!-- Fixed Background Canvas from ELEMENTS/BG -->
+    <div id="fixed-bg-pattern" aria-hidden="true"></div>
+
     <!-- React Island: Search Overlay with Fuse.js & Typewriter -->
     <SearchModal client:idle />
 
