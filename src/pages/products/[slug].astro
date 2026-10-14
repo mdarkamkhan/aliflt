@@ -54,8 +54,8 @@ const wappOrderLink = `https://wa.me/7250470009?text=${encodeURIComponent(wappOr
     <div class="product-detail-grid">
 
       <div class="product-detail-image">
-        <div class="swapper-container product-swapper" style="min-height: unset; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid #eee;">
-          <img src={image || '/icons/icon-512x512.png'} alt={title} style="width: 100%; height: 100%; object-fit: cover; object-position: top center;" />
+        <div class="swapper-container product-swapper" style="min-height: unset; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 10px; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(190, 190, 190), 0.3em 0.3em 1em rgba(0,0,0,0.3); background: white;">
+          <img src={image || '/icons/icon-512x512.png'} alt={title} style="width: 100%; height: 100%; object-fit: cover; object-position: top center; border-radius: 10px;" />
         </div>
       </div>
 
@@ -152,12 +152,14 @@ const wappOrderLink = `https://wa.me/7250470009?text=${encodeURIComponent(wappOr
       <h3 style="text-align: center; margin-bottom: 20px; font-family: var(--font-heading); letter-spacing: 1.5px; font-size: 1.1rem; text-transform: uppercase;">Similar Items</h3>
       <div id="similar-items-container" style="display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
         {similar.map((item) => (
-          <a href={`/products/${item.id}/`} style="text-decoration: none; color: #000; min-width: 140px; max-width: 140px; flex-shrink: 0;">
-            <div style="aspect-ratio: 3 / 4; overflow: hidden; margin-bottom: 10px; border: 1px solid #f0f0f0;">
+          <a href={`/products/${item.id}/`} style="text-decoration: none; color: #000; min-width: 145px; max-width: 145px; flex-shrink: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(190, 190, 190), 0.3em 0.3em 1em rgba(0,0,0,0.3); display: flex; flex-direction: column; margin: 10px 4px 15px 4px;">
+            <div style="aspect-ratio: 3 / 4; overflow: hidden; border-top-left-radius: 10px; border-top-right-radius: 10px;">
               <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: top center;" loading="lazy" />
             </div>
-            <p style="margin: 0; font-size: 0.85rem; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{item.data.title}</p>
-            <p style="margin: 0; font-size: 0.8rem; text-align: center; color: #666; font-weight: 500;">₹{item.data.offer_price || item.data.price}</p>
+            <div style="padding: 10px 8px; text-align: center;">
+              <p style="margin: 0; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500;">{item.data.title}</p>
+              <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; font-weight: 600;">₹{item.data.offer_price || item.data.price}</p>
+            </div>
           </a>
         ))}
       </div>
@@ -169,12 +171,14 @@ const wappOrderLink = `https://wa.me/7250470009?text=${encodeURIComponent(wappOr
       <h3 style="text-align: center; margin-bottom: 20px; font-family: var(--font-heading); letter-spacing: 1.5px; font-size: 1.1rem; text-transform: uppercase;">You May Also Like</h3>
       <div id="ymal-container" style="display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
         {ymal.map((item) => (
-          <a href={`/products/${item.id}/`} style="text-decoration: none; color: #000; min-width: 140px; max-width: 140px; flex-shrink: 0;">
-            <div style="aspect-ratio: 3 / 4; overflow: hidden; margin-bottom: 10px; border: 1px solid #f0f0f0;">
+          <a href={`/products/${item.id}/`} style="text-decoration: none; color: #000; min-width: 145px; max-width: 145px; flex-shrink: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(190, 190, 190), 0.3em 0.3em 1em rgba(0,0,0,0.3); display: flex; flex-direction: column; margin: 10px 4px 15px 4px;">
+            <div style="aspect-ratio: 3 / 4; overflow: hidden; border-top-left-radius: 10px; border-top-right-radius: 10px;">
               <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: top center;" loading="lazy" />
             </div>
-            <p style="margin: 0; font-size: 0.85rem; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{item.data.title}</p>
-            <p style="margin: 0; font-size: 0.8rem; text-align: center; color: #666; font-weight: 500;">₹{item.data.offer_price || item.data.price}</p>
+            <div style="padding: 10px 8px; text-align: center;">
+              <p style="margin: 0; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500;">{item.data.title}</p>
+              <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; font-weight: 600;">₹{item.data.offer_price || item.data.price}</p>
+            </div>
           </a>
         ))}
       </div>

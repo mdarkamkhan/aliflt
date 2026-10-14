@@ -35,7 +35,7 @@ const products = [...allProducts].reverse();
 
         return (
           <a href={`/products/${item.id}/`} class="product-card" data-category={(category || '').toLowerCase()}>
-            <div class="product-card-image-wrapper" style="aspect-ratio: 3 / 4; overflow: hidden; position: relative;">
+            <div class="product-card-image-wrapper" style="aspect-ratio: 3 / 4; overflow: hidden; position: relative; border-top-left-radius: 10px; border-top-right-radius: 10px;">
               {discountPercent && discountPercent > 0 && (
                 <div class="discount-badge">-{discountPercent}%</div>
               )}

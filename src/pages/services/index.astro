@@ -18,8 +18,8 @@ const services = [...allServices].reverse();
 
     <div class="product-grid">
       {services.map((item) => (
-        <a href={`/services/${item.id}/`} class="product-card" style="border: 1px solid #eaeaea; background: #fff; transition: transform 0.3s ease, box-shadow 0.3s ease; text-decoration: none; color: inherit; display: flex; flex-direction: column;">
-          <div class="product-card-image-wrapper" style="aspect-ratio: 3 / 4; background: #e9eaec; overflow: hidden; position: relative;">
+        <a href={`/services/${item.id}/`} class="product-card">
+          <div class="product-card-image-wrapper" style="aspect-ratio: 3 / 4; background: #e9eaec; overflow: hidden; position: relative; border-top-left-radius: 10px; border-top-right-radius: 10px;">
             {item.data.image ? (
               <img src={item.data.image} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;" loading="lazy" />
             ) : (
