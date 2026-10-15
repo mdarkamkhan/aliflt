@@ -1639,7 +1639,7 @@ details[open] > .accordion-content {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 32px;
     padding-top: 24px;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
@@ -1705,7 +1705,7 @@ details[open] > .accordion-content {
     background-color: #ffc4d9;
 }
 .link-facebook {
-    background-color: #bfe2ff;
+    background-color: #1877f2;
 }
 .link-whatsapp {
     background-color: #caffbf;
@@ -1722,9 +1722,18 @@ details[open] > .accordion-content {
     transition: all 0.3s ease;
 }
 
+/* Facebook Icon is always white on blue background */
+.link-facebook .doodle-svg,
+.link-facebook .doodle-svg-fb {
+    fill: #ffffff;
+    stroke: #ffffff;
+    color: #ffffff;
+}
+
 /* Wiggling & Hover Animations */
 .doodle-link:hover,
-.doodle-link.is-wiggling {
+.doodle-link.is-wiggling,
+.doodle-icon-content:has(.doodle-tooltip:hover) .doodle-link {
     transform: translateY(-8px) scale(1.1);
     box-shadow: 6px 10px 0px #1e1e24;
     animation: child-wiggle 0.3s ease-in-out infinite alternate;
@@ -1738,7 +1747,7 @@ details[open] > .accordion-content {
 }
 .link-facebook:hover,
 .link-facebook.is-wiggling {
-    background-color: #1877f2;
+    background-color: #1464cc;
     border-radius: 60% 40% 40% 60% / 50% 50% 40% 60%;
 }
 .link-whatsapp:hover,
@@ -1754,7 +1763,8 @@ details[open] > .accordion-content {
 
 /* Icon turning white on hover & wiggle */
 .doodle-link:hover .doodle-svg,
-.doodle-link.is-wiggling .doodle-svg {
+.doodle-link.is-wiggling .doodle-svg,
+.doodle-icon-content:has(.doodle-tooltip:hover) .doodle-svg {
     fill: #ffffff;
     stroke: #ffffff;
     filter: drop-shadow(2px 2px 0px #1e1e24) drop-shadow(-1px -1px 0px #1e1e24);
@@ -1772,20 +1782,28 @@ details[open] > .accordion-content {
     top: 0px;
     left: 50%;
     transform: translateX(-50%) rotate(-5deg);
-    padding: 6px 14px;
+    padding: 7px 14px;
     color: #1e1e24;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     border: 3.5px solid #1e1e24;
     border-radius: 255px 25px 225px 25px / 25px 225px 25px 255px;
     box-shadow: 4px 6px 0px #1e1e24;
     opacity: 0;
     visibility: hidden;
-    font-size: 16px;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     pointer-events: none;
     z-index: 50;
     white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .doodle-tooltip::after {
@@ -1803,7 +1821,7 @@ details[open] > .accordion-content {
 .tooltip-instagram {
     background-color: #ff0a54;
     color: #ffffff;
-    text-shadow: 2px 2px 0px #1e1e24;
+    text-shadow: 1px 1px 0px #1e1e24;
 }
 .tooltip-instagram::after {
     background-color: #ff0a54;
@@ -1812,7 +1830,7 @@ details[open] > .accordion-content {
 .tooltip-facebook {
     background-color: #1877f2;
     color: #ffffff;
-    text-shadow: 2px 2px 0px #1e1e24;
+    text-shadow: 1px 1px 0px #1e1e24;
 }
 .tooltip-facebook::after {
     background-color: #1877f2;
@@ -1821,7 +1839,7 @@ details[open] > .accordion-content {
 .tooltip-whatsapp {
     background-color: #25D366;
     color: #ffffff;
-    text-shadow: 2px 2px 0px #1e1e24;
+    text-shadow: 1px 1px 0px #1e1e24;
 }
 .tooltip-whatsapp::after {
     background-color: #25D366;
@@ -1835,16 +1853,34 @@ details[open] > .accordion-content {
     background-color: #fcd22a;
 }
 
-/* Tooltip trigger on hover OR active wiggle */
+/* Tooltip trigger on hover, focus-within, or active wiggle */
 .doodle-icon-content:hover .doodle-tooltip,
+.doodle-icon-content:focus-within .doodle-tooltip,
+.doodle-icon-content.is-wiggling .doodle-tooltip,
 .doodle-link:hover + .doodle-tooltip,
 .doodle-link:focus + .doodle-tooltip,
-.doodle-icon-content.is-wiggling .doodle-tooltip,
 .doodle-link.is-wiggling + .doodle-tooltip {
     opacity: 1;
     visibility: visible;
-    top: -65px;
-    transform: translateX(-50%) rotate(3deg);
+    top: -54px;
+    transform: translateX(-50%) rotate(2deg);
+    pointer-events: auto;
+}
+
+.doodle-tooltip:hover {
+    transform: translateX(-50%) rotate(0deg) scale(1.06) !important;
+    box-shadow: 6px 10px 0px #1e1e24 !important;
+}
+
+.doodle-tooltip-arrow {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 900;
+    transition: transform 0.2s ease;
+}
+
+.doodle-tooltip:hover .doodle-tooltip-arrow {
+    transform: translate(2px, -2px);
 }
 
 /* Footer Bottom Bar */
