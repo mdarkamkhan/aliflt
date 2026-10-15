@@ -502,7 +502,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         if (idx < 0 || idx >= pillars.length) return;
         currentIndex = idx;
         const current = pillars[currentIndex];
-        const isMobile = window.innerWidth < 860;
         const step = getStep();
 
         // 1. Update pills classes
@@ -512,9 +511,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           if (dist === 0) {
             pill.classList.add('is-active');
             pill.setAttribute('aria-selected', 'true');
-            if (isMobile) {
-              pill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-            }
           } else if (dist === 1) {
             pill.classList.add('is-near');
             pill.setAttribute('aria-selected', 'false');
@@ -524,12 +520,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           }
         });
 
-        // 2. Adjust track position (desktop only)
-        if (!isMobile) {
-          track.style.transform = `translateY(${-currentIndex * step}px)`;
-        } else {
-          track.style.transform = 'none';
-        }
+        // 2. Adjust track position
+        track.style.transform = `translateY(${-currentIndex * step}px)`;
 
         // 3. Update detail card
         if (animateDetail) {
@@ -545,12 +537,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         }
       }
 
-      // Scroll-Driven Progression Engine (Desktop only)
+      // Scroll-Driven Progression Engine
       function handleScrollDrivenPillars() {
         if (isProgrammaticScroll) return;
-        if (window.innerWidth < 860) return;
 
-        const stickyTop = 80;
+        const isMobile = window.innerWidth < 860;
+        const stickyTop = isMobile ? 68 : 80;
         const trackRect = scrollTrack.getBoundingClientRect();
         const sectionHeight = stickySection.offsetHeight;
         const totalScrollDistance = scrollTrack.offsetHeight - sectionHeight;
@@ -572,7 +564,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       // Optimized scroll listener using requestAnimationFrame
       let ticking = false;
       window.addEventListener('scroll', () => {
-        if (window.innerWidth < 860) return;
         if (!ticking) {
           window.requestAnimationFrame(() => {
             handleScrollDrivenPillars();
@@ -582,15 +573,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         }
       }, { passive: true });
 
-      // Click pill to sync active pillar (and desktop scroll position)
+      // Click pill to sync both active pillar & page scroll position
       pills.forEach((pill) => {
         pill.addEventListener('click', () => {
           const idx = parseInt(pill.getAttribute('data-index') || '0', 10);
           selectPillar(idx, true);
 
-          if (window.innerWidth < 860) return;
-
-          const stickyTop = 80;
+          const isMobile = window.innerWidth < 860;
+          const stickyTop = isMobile ? 68 : 80;
           const trackTop = scrollTrack.getBoundingClientRect().top + window.scrollY;
           const sectionHeight = stickySection.offsetHeight;
           const totalScrollDistance = scrollTrack.offsetHeight - sectionHeight;
@@ -612,12 +602,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       // Window resize listener
       window.addEventListener('resize', () => {
-        if (window.innerWidth < 860) {
-          track.style.transform = 'none';
-        } else {
-          const step = getStep();
-          track.style.transform = `translateY(${-currentIndex * step}px)`;
-        }
+        const step = getStep();
+        track.style.transform = `translateY(${-currentIndex * step}px)`;
       }, { passive: true });
 
       // Initial check on load
@@ -1442,161 +1428,148 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .zara-trust-scroll-track {
     position: relative;
     width: 100%;
-    height: auto;
-    margin-top: 16px;
-    margin-bottom: 36px;
+    height: 240vh; /* Smooth virtual scroll distance */
+    margin-top: 24px;
+    margin-bottom: 40px;
   }
 
   .zara-trust-section {
-    position: relative;
-    width: 100%;
-    min-height: auto;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 68px;
+    min-height: calc(100dvh - 125px);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    background: #ffffff; /* Solid white barrier prevents any bleed-through from header above */
-    padding: 0 0 16px 0;
+    background: transparent;
+    padding: 12px 0 20px 0;
     box-sizing: border-box;
     z-index: 10;
   }
 
-  /* 2-Column Responsive Layout (Mobile: Order 1 Pills rail, Order 2 Detail card) */
+  /* 2-Column Responsive Layout */
   .pillar-system-grid {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
+    align-items: center;
     width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
   }
 
-  /* Column 1: Interactive Capsule Ticker (Horizontal swipe rail on mobile) */
+  /* Column 1: Vertical Capsule Ticker */
   .pillar-ticker-col {
     width: 100%;
-    order: 1; /* Pills come FIRST on mobile */
+    order: 2;
   }
 
   .pillar-ticker-box {
-    height: auto;
-    overflow-x: auto;
-    overflow-y: hidden;
+    height: 186px;
+    overflow: hidden;
     position: relative;
-    padding: 2px 0 6px 0;
+    padding: 0 4px;
     user-select: none;
     outline: none;
-    border-radius: 0;
-    -webkit-mask-image: none;
-    mask-image: none;
-    scrollbar-width: none;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
+    border-radius: 9999px;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
   }
 
-  .pillar-ticker-box::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Top & Bottom Gradient Fades (Disabled) */
+  /* Top & Bottom Gradient Fades for Ticker Effect (Replaced by clean mask-image) */
   .pillar-gradient-top,
   .pillar-gradient-bottom {
     display: none;
   }
 
-  /* Sliding Track (Horizontal rail on mobile) */
+  /* Sliding Track */
   .pillar-track {
     display: flex;
-    flex-direction: row;
-    gap: 8px;
-    padding: 0 4px;
-    width: max-content;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 67px;
+    padding-bottom: 67px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
   }
 
-  /* Capsule Pill Button — Slim 36px on mobile */
+  /* Capsule Pill Button — Slim & Elegant 52px */
   .pillar-pill {
-    width: auto;
-    height: 36px;
-    min-height: 36px;
-    padding: 0 16px;
+    width: 100%;
+    height: 52px;
+    min-height: 52px;
+    padding: 0 1.25rem;
     border-radius: 9999px;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
     text-align: left;
     background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid transparent;
     cursor: pointer;
-    color: #666666;
+    color: inherit;
     font-family: inherit;
     box-sizing: border-box;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     -webkit-tap-highlight-color: transparent;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-    white-space: nowrap;
-    opacity: 1;
   }
 
-  /* Active Pill: Solid black on mobile */
+  /* Active Pill: Ultra-Minimal Zara Hairline Capsule */
   .pillar-pill.is-active {
     opacity: 1;
-    border-color: #111111;
-    background: #111111;
-    color: #ffffff;
+    border: 1px solid #111111;
+    background: #ffffff;
     box-shadow: none;
     transform: none;
   }
 
-  .pillar-pill.is-near,
+  .pillar-pill.is-near {
+    opacity: 0.35;
+  }
+
   .pillar-pill.is-far {
-    opacity: 1;
-    border-color: rgba(0, 0, 0, 0.15);
-    color: #666666;
+    opacity: 0.12;
   }
 
   .pillar-pill:hover:not(.is-active) {
-    opacity: 1;
-    border-color: #111111;
-    color: #111111;
+    opacity: 0.65;
+    border-color: rgba(0, 0, 0, 0.15);
   }
 
   .pillar-pill-title {
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: inherit;
+    font-size: 0.88rem;
+    letter-spacing: -0.01em;
+    color: #555555;
     transition: color 0.25s ease;
+    font-weight: 400;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .pillar-pill.is-active .pillar-pill-title {
-    color: #ffffff;
-    font-weight: 600;
+    color: #111111;
+    font-weight: 500;
   }
 
   .pillar-pill-num {
-    order: -1;
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    color: inherit;
-    font-weight: 600;
-    opacity: 0.65;
-    margin: 0;
+    color: #888888;
+    margin-left: 1rem;
+    font-weight: 400;
+    transition: color 0.25s ease;
   }
 
   .pillar-pill.is-active .pillar-pill-num {
-    color: #ffffff;
-    opacity: 1;
-    font-weight: 700;
+    color: #111111;
+    font-weight: 500;
   }
 
   /* Column 2: Active Detail Card (Crisp & High-Fashion) */
   .pillar-detail-col {
-    order: 2; /* Detail card comes SECOND on mobile */
+    order: 1;
     width: 100%;
-    padding: 18px 20px;
-    background: #fafafa;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 8px;
-    box-sizing: border-box;
   }
 
   .pillar-detail-inner {
@@ -1609,12 +1582,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .pillar-detail-inner.is-switching {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(6px);
   }
 
   .pillar-detail-title {
     font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: 1.35rem;
+    font-size: 1.45rem;
     font-weight: 400;
     color: #111111;
     letter-spacing: -0.015em;
@@ -1626,7 +1599,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: #555555;
     font-size: 0.84rem;
     font-weight: 300;
-    line-height: 1.6;
+    line-height: 1.55;
     margin: 0;
     max-width: 480px;
   }
@@ -1710,13 +1683,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     .zara-trust-section {
-      position: -webkit-sticky;
-      position: sticky;
       top: 80px;
       min-height: calc(100vh - 120px);
       padding: 20px 0 32px 0;
       justify-content: flex-start;
-      background: transparent;
     }
 
     .pillar-system-grid {
@@ -1733,98 +1703,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     .pillar-ticker-box {
       height: 230px;
-      overflow: hidden;
-      border-radius: 9999px;
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
-      mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
-      padding: 0 4px;
-      scroll-snap-type: none;
     }
 
     .pillar-track {
-      flex-direction: column;
-      width: 100%;
       gap: 12px;
       padding-top: 86px;
       padding-bottom: 86px;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: transform;
     }
 
     .pillar-pill {
-      width: 100%;
       height: 58px;
       min-height: 58px;
       padding: 0 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      border: 1px solid transparent;
-      background: transparent;
-      color: inherit;
-      white-space: normal;
-    }
-
-    .pillar-pill.is-active {
-      border: 1px solid #111111;
-      background: #ffffff;
-      color: #111111;
-      box-shadow: none;
-      transform: none;
-    }
-
-    .pillar-pill.is-near {
-      opacity: 0.35;
-      border-color: transparent;
-      color: inherit;
-    }
-
-    .pillar-pill.is-far {
-      opacity: 0.12;
-      border-color: transparent;
-      color: inherit;
-    }
-
-    .pillar-pill:hover:not(.is-active) {
-      opacity: 0.65;
-      border-color: rgba(0, 0, 0, 0.15);
     }
 
     .pillar-pill-title {
       font-size: 0.95rem;
-      letter-spacing: -0.01em;
-      color: #555555;
-      font-weight: 400;
-      text-transform: none;
-    }
-
-    .pillar-pill.is-active .pillar-pill-title {
-      color: #111111;
-      font-weight: 500;
-    }
-
-    .pillar-pill-num {
-      order: 2;
-      font-size: 0.75rem;
-      color: #888888;
-      margin-left: 1rem;
-      font-weight: 400;
-      opacity: 1;
-    }
-
-    .pillar-pill.is-active .pillar-pill-num {
-      color: #111111;
-      font-weight: 500;
-      opacity: 1;
     }
 
     .pillar-detail-col {
       order: 2;
-      width: 100%;
-      background: transparent;
-      border: none;
+      padding-left: 3rem;
       border-left: 1px solid rgba(0, 0, 0, 0.12);
-      border-radius: 0;
-      padding: 0 0 0 3rem;
       min-height: 230px;
       display: flex;
       align-items: center;
