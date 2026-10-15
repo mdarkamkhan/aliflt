@@ -111,76 +111,80 @@ const wappOrderLink = `https://wa.me/7250470009?text=${encodeURIComponent(wappOr
         </div>
       </div>
 
+      <div class="product-accordion-container" style="margin-top: var(--space-2xl); grid-column: 1 / -1;">
+        {description && (
+          <details class="accordion-item" open>
+            <summary class="accordion-summary">
+              <h3 class="accordion-heading">Description</h3>
+              <span class="accordion-caret">^</span>
+            </summary>
+            <div class="accordion-content">
+              <p class="accordion-description-text" style="padding: 15px 0; line-height: 1.6; color: #555;">{description}</p>
+            </div>
+          </details>
+        )}
+
+        <details class="accordion-item" open>
+          <summary class="accordion-summary">
+            <h3 class="accordion-heading">Product Information</h3>
+            <span class="accordion-caret">^</span>
+          </summary>
+          <div class="accordion-content" style="padding: 15px 0;">
+            <div class="spec-row-wrapper" style="display: flex; flex-direction: column; gap: 8px;">
+              {size && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Size</span><span style="font-weight:500;">{size}</span></div>}
+              {colour && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Colour</span><span style="font-weight:500;">{colour}</span></div>}
+              {fabric && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Fabric</span><span style="font-weight:500;">{fabric}</span></div>}
+              {pattern && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Pattern</span><span style="font-weight:500;">{pattern}</span></div>}
+              {ideal_for && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Ideal For</span><span style="font-weight:500;">{ideal_for}</span></div>}
+              {work && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Work</span><span style="font-weight:500;">{work}</span></div>}
+              <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Delivery Charges</span><span style="font-weight:500;">{delivery_charges}</span></div>
+              <div class="spec-row" style="display: flex; justify-content: space-between; padding: 6px 0;"><span style="color:#777;">Return Policy</span><span style="font-weight:500;">{return_policy}</span></div>
+            </div>
+          </div>
+        </details>
+      </div>
+
     </div>
   </div>
 
-  <div class="product-accordion-container" style="margin-top: 40px;">
-    {description && (
-      <details class="accordion-item" open>
-        <summary class="accordion-summary">
-          <h3 class="accordion-heading">Description</h3>
-          <span class="accordion-caret">^</span>
-        </summary>
-        <div class="accordion-content">
-          <p class="accordion-description-text" style="padding: 15px 0; line-height: 1.6; color: #555;">{description}</p>
-        </div>
-      </details>
-    )}
-
-    <details class="accordion-item" open>
-      <summary class="accordion-summary">
-        <h3 class="accordion-heading">Product Information</h3>
-        <span class="accordion-caret">^</span>
-      </summary>
-      <div class="accordion-content" style="padding: 15px 0;">
-        <div class="spec-row-wrapper" style="display: flex; flex-direction: column; gap: 8px;">
-          {size && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Size</span><span style="font-weight:500;">{size}</span></div>}
-          {colour && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Colour</span><span style="font-weight:500;">{colour}</span></div>}
-          {fabric && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Fabric</span><span style="font-weight:500;">{fabric}</span></div>}
-          {pattern && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Pattern</span><span style="font-weight:500;">{pattern}</span></div>}
-          {ideal_for && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Ideal For</span><span style="font-weight:500;">{ideal_for}</span></div>}
-          {work && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Work</span><span style="font-weight:500;">{work}</span></div>}
-          <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Delivery Charges</span><span style="font-weight:500;">{delivery_charges}</span></div>
-          <div class="spec-row" style="display: flex; justify-content: space-between; padding: 6px 0;"><span style="color:#777;">Return Policy</span><span style="font-weight:500;">{return_policy}</span></div>
-        </div>
-      </div>
-    </details>
-  </div>
-
   {similar && similar.length > 0 && (
-    <div class="section" style="padding: 30px 20px; background: #fcfcfc; border-top: 1px solid #eee;" id="similar-items-section">
-      <h3 style="text-align: center; margin-bottom: 20px; font-family: var(--font-heading); letter-spacing: 1.5px; font-size: 1.1rem; text-transform: uppercase;">Similar Items</h3>
-      <div id="similar-items-container" style="display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
-        {similar.map((item) => (
-          <a href={`/products/${item.id}/`} style="text-decoration: none; color: #000; min-width: 145px; max-width: 145px; flex-shrink: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(190, 190, 190), 0.3em 0.3em 1em rgba(0,0,0,0.3); display: flex; flex-direction: column; margin: 10px 4px 15px 4px;">
-            <div style="aspect-ratio: 4 / 5; overflow: hidden; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-              <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: center;" loading="lazy" />
-            </div>
-            <div style="padding: 10px 8px; text-align: center;">
-              <p style="margin: 0; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500;">{item.data.title}</p>
-              <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; font-weight: 600;">₹{item.data.offer_price || item.data.price}</p>
-            </div>
-          </a>
-        ))}
+    <div class="section" style="border-top: 1px solid #eee;" id="similar-items-section">
+      <div class="container">
+        <h3 style="text-align: center; margin-bottom: var(--space-lg); font-family: var(--font-heading); letter-spacing: 1.5px; font-size: 1.15rem; text-transform: uppercase;">Similar Items</h3>
+        <div id="similar-items-container" style="display: flex; overflow-x: auto; gap: var(--space-md); padding-bottom: var(--space-md); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+          {similar.map((item) => (
+            <a href={`/products/${item.id}/`} style="text-decoration: none; color: #000; min-width: 155px; max-width: 155px; flex-shrink: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.06); display: flex; flex-direction: column;">
+              <div style="aspect-ratio: 4 / 5; overflow: hidden; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: center;" loading="lazy" />
+              </div>
+              <div style="padding: 10px 10px 12px 10px; text-align: left;">
+                <p style="margin: 0; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500;">{item.data.title}</p>
+                <p style="margin: 4px 0 0 0; font-size: 0.82rem; color: #111; font-weight: 600;">₹{item.data.offer_price || item.data.price}</p>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   )}
 
   {ymal && ymal.length > 0 && (
-    <div class="section" style="padding: 30px 20px; background: #fff; border-top: 1px solid #eee;" id="ymal-section">
-      <h3 style="text-align: center; margin-bottom: 20px; font-family: var(--font-heading); letter-spacing: 1.5px; font-size: 1.1rem; text-transform: uppercase;">You May Also Like</h3>
-      <div id="ymal-container" style="display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
-        {ymal.map((item) => (
-          <a href={`/products/${item.id}/`} style="text-decoration: none; color: #000; min-width: 145px; max-width: 145px; flex-shrink: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(190, 190, 190), 0.3em 0.3em 1em rgba(0,0,0,0.3); display: flex; flex-direction: column; margin: 10px 4px 15px 4px;">
-            <div style="aspect-ratio: 4 / 5; overflow: hidden; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-              <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: center;" loading="lazy" />
-            </div>
-            <div style="padding: 10px 8px; text-align: center;">
-              <p style="margin: 0; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500;">{item.data.title}</p>
-              <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; font-weight: 600;">₹{item.data.offer_price || item.data.price}</p>
-            </div>
-          </a>
-        ))}
+    <div class="section" style="border-top: 1px solid #eee;" id="ymal-section">
+      <div class="container">
+        <h3 style="text-align: center; margin-bottom: var(--space-lg); font-family: var(--font-heading); letter-spacing: 1.5px; font-size: 1.15rem; text-transform: uppercase;">You May Also Like</h3>
+        <div id="ymal-container" style="display: flex; overflow-x: auto; gap: var(--space-md); padding-bottom: var(--space-md); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+          {ymal.map((item) => (
+            <a href={`/products/${item.id}/`} style="text-decoration: none; color: #000; min-width: 155px; max-width: 155px; flex-shrink: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.06); display: flex; flex-direction: column;">
+              <div style="aspect-ratio: 4 / 5; overflow: hidden; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: center;" loading="lazy" />
+              </div>
+              <div style="padding: 10px 10px 12px 10px; text-align: left;">
+                <p style="margin: 0; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500;">{item.data.title}</p>
+                <p style="margin: 4px 0 0 0; font-size: 0.82rem; color: #111; font-weight: 600;">₹{item.data.offer_price || item.data.price}</p>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   )}

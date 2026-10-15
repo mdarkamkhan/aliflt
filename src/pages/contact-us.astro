@@ -3,46 +3,42 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Contact Us" description="Get in touch with ALiF Ladies Tailor & Boutique in Sahibganj, Jharkhand. Call or WhatsApp 7250470009.">
-  <div class="container section fade-in-section">
-    <div style="max-width: 900px; margin: 0 auto; padding: 40px 0;">
+  <div class="container-narrow section fade-in-section">
+    <div class="page-header">
+      <h1>Contact Us</h1>
+      <p>Visit our boutique or get in touch for custom stitching &amp; product inquiries.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-lg); margin-bottom: var(--space-2xl);">
       
-      <div style="text-align: center; margin-bottom: 50px;">
-        <h1 style="font-family: var(--font-heading); font-size: 2.5rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Contact Us</h1>
-        <p style="color: #666; font-size: 0.95rem; letter-spacing: 0.5px;">Visit our boutique or get in touch for custom stitching &amp; product inquiries.</p>
+      <div style="border: 1px solid #eee; padding: var(--space-lg); background: #fff; border-radius: 8px;">
+        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0;">Our Boutique</h3>
+        <p style="font-size: 0.95rem; line-height: 1.6; color: #444; margin-bottom: 15px;">
+          <strong>ALiF Ladies Tailor &amp; Boutique</strong><br />
+          Daal Kuan, College Road,<br />
+          Opposite Joy Fast Food &amp; Lakshmi Bag House,<br />
+          Sahibganj, Jharkhand - 816109
+        </p>
+        <span style="display: inline-block; font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px;">Serving Sahibganj since 2008</span>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; margin-bottom: 50px;">
-        
-        <div style="border: 1px solid #eee; padding: 30px; background: #fff;">
-          <h3 style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0;">Our Boutique</h3>
-          <p style="font-size: 0.95rem; line-height: 1.6; color: #444; margin-bottom: 15px;">
-            <strong>ALiF Ladies Tailor &amp; Boutique</strong><br />
-            Daal Kuan, College Road,<br />
-            Opposite Joy Fast Food &amp; Lakshmi Bag House,<br />
-            Sahibganj, Jharkhand - 816109
-          </p>
-          <span style="display: inline-block; font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px;">Serving Sahibganj since 2008</span>
-        </div>
-
-        <div style="border: 1px solid #eee; padding: 30px; background: #fff;">
-          <h3 style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0;">Shop Timings</h3>
-          <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.92rem; line-height: 1.8; color: #444;">
-            <li><strong>Saturday – Thursday:</strong> 10:00 AM – 9:00 PM</li>
-            <li><strong>Friday:</strong> 2:00 PM – 9:00 PM</li>
-            <li><strong>Weekly Off:</strong> None (Open 7 Days a Week)</li>
-          </ul>
-        </div>
-
+      <div style="border: 1px solid #eee; padding: var(--space-lg); background: #fff; border-radius: 8px;">
+        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0;">Shop Timings</h3>
+        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.92rem; line-height: 1.8; color: #444;">
+          <li><strong>Saturday – Thursday:</strong> 10:00 AM – 9:00 PM</li>
+          <li><strong>Friday:</strong> 2:00 PM – 9:00 PM</li>
+          <li><strong>Weekly Off:</strong> None (Open 7 Days a Week)</li>
+        </ul>
       </div>
 
-      <div style="text-align: center; border-top: 1px solid #eee; padding-top: 40px;">
-        <h3 style="font-family: var(--font-heading); font-size: 1.3rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px;">Direct Communication</h3>
-        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-          <a href="https://wa.me/7250470009" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 15px 35px; background: #000; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem;">Chat on WhatsApp</a>
-          <a href="tel:7250470009" style="display: inline-block; padding: 15px 35px; background: #fff; color: #000; border: 1px solid #000; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem;">Call 7250470009</a>
-        </div>
-      </div>
+    </div>
 
+    <div style="text-align: center; border-top: 1px solid #eee; padding-top: var(--space-xl);">
+      <h3 style="font-family: var(--font-heading); font-size: 1.3rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px;">Direct Communication</h3>
+      <div style="display: flex; justify-content: center; gap: var(--space-md); flex-wrap: wrap;">
+        <a href="https://wa.me/7250470009" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 14px 32px; background: #000; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem;">Chat on WhatsApp</a>
+        <a href="tel:7250470009" style="display: inline-block; padding: 14px 32px; background: #fff; color: #000; border: 1px solid #000; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem;">Call 7250470009</a>
+      </div>
     </div>
   </div>
 </BaseLayout>
