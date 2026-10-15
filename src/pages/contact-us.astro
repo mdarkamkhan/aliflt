@@ -93,6 +93,100 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       </section>
 
+      <!-- Store Trust & Perfection Section Header (Normal Page Flow, NOT locked) -->
+      <div class="zara-trust-head">
+        <h2 class="zara-trust-title">Why Sahibganj Chooses ALIF</h2>
+      </div>
+
+      <!-- Store Trust & Perfection Pillars (Sticky Scroll-Driven Showcase) -->
+      <div class="zara-trust-scroll-track" id="pillarScrollTrack">
+        <section class="zara-trust-section" id="pillarStickySection" aria-label="ALIF Guarantees">
+          
+          <!-- Interactive 2-Column Layout -->
+          <div class="pillar-system-grid">
+            
+            <!-- Column 1: Interactive Capsule Ticker (Slim 52px Pills) -->
+            <div class="pillar-ticker-col">
+              <div 
+                class="pillar-ticker-box" 
+                id="pillarTickerBox" 
+                tabindex="0" 
+                role="region" 
+                aria-label="The ALIF Standard Interactive Pillars"
+              >
+                <!-- Top and bottom gradient fades for vertical ticker effect -->
+                <div class="pillar-gradient-top"></div>
+                <div class="pillar-gradient-bottom"></div>
+
+                <!-- Sliding Track -->
+                <div class="pillar-track" id="pillarTrack">
+                  <!-- Pillar 01 -->
+                  <button 
+                    type="button" 
+                    class="pillar-pill is-active" 
+                    data-index="0" 
+                    aria-selected="true" 
+                    role="tab"
+                  >
+                    <span class="pillar-pill-title">17+ Years Legacy</span>
+                    <span class="pillar-pill-num">01</span>
+                  </button>
+
+                  <!-- Pillar 02 -->
+                  <button 
+                    type="button" 
+                    class="pillar-pill is-near" 
+                    data-index="1" 
+                    aria-selected="false" 
+                    role="tab"
+                  >
+                    <span class="pillar-pill-title">Perfect Fit Guarantee</span>
+                    <span class="pillar-pill-num">02</span>
+                  </button>
+
+                  <!-- Pillar 03 -->
+                  <button 
+                    type="button" 
+                    class="pillar-pill is-far" 
+                    data-index="2" 
+                    aria-selected="false" 
+                    role="tab"
+                  >
+                    <span class="pillar-pill-title">Express Processing</span>
+                    <span class="pillar-pill-num">03</span>
+                  </button>
+
+                  <!-- Pillar 04 -->
+                  <button 
+                    type="button" 
+                    class="pillar-pill is-far" 
+                    data-index="3" 
+                    aria-selected="false" 
+                    role="tab"
+                  >
+                    <span class="pillar-pill-title">Matching Trims &amp; Laces</span>
+                    <span class="pillar-pill-num">04</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 2: Active Detail Card (Crisp & High-Fashion) -->
+            <div class="pillar-detail-col">
+              <div class="pillar-detail-box" id="pillarDetailBox" aria-live="polite">
+                <div class="pillar-detail-inner" id="pillarDetailInner">
+                  <h3 class="pillar-detail-title" id="activePillarTitle">17+ Years Legacy</h3>
+                  <p class="pillar-detail-desc" id="activePillarDesc">
+                    Specialized in women's bespoke tailoring, bridal craft, and fine fabrics in Sahibganj since 2008. Handcrafted by master artisans with generational cutting expertise.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+
       <!-- Main Open Editorial Layout (No Box Containers) -->
       <div class="zara-main-grid">
 
@@ -260,101 +354,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         </div>
 
-      </div>
-
-      <!-- Store Trust & Perfection Section Header (Normal Page Flow, NOT locked) -->
-      <div class="zara-trust-head">
-        <span class="zara-eyebrow">THE ALIF STANDARD</span>
-        <h2 class="zara-trust-title">Why Sahibganj Chooses ALIF</h2>
-      </div>
-
-      <!-- Store Trust & Perfection Pillars (Sticky Scroll-Driven Showcase) -->
-      <div class="zara-trust-scroll-track" id="pillarScrollTrack">
-        <section class="zara-trust-section" id="pillarStickySection" aria-label="ALIF Guarantees">
-          
-          <!-- Interactive 2-Column Layout -->
-          <div class="pillar-system-grid">
-            
-            <!-- Column 1: Interactive Capsule Ticker (Slim 52px Pills) -->
-            <div class="pillar-ticker-col">
-              <div 
-                class="pillar-ticker-box" 
-                id="pillarTickerBox" 
-                tabindex="0" 
-                role="region" 
-                aria-label="The ALIF Standard Interactive Pillars"
-              >
-                <!-- Top and bottom gradient fades for vertical ticker effect -->
-                <div class="pillar-gradient-top"></div>
-                <div class="pillar-gradient-bottom"></div>
-
-                <!-- Sliding Track -->
-                <div class="pillar-track" id="pillarTrack">
-                  <!-- Pillar 01 -->
-                  <button 
-                    type="button" 
-                    class="pillar-pill is-active" 
-                    data-index="0" 
-                    aria-selected="true" 
-                    role="tab"
-                  >
-                    <span class="pillar-pill-title">17+ Years Legacy</span>
-                    <span class="pillar-pill-num">01</span>
-                  </button>
-
-                  <!-- Pillar 02 -->
-                  <button 
-                    type="button" 
-                    class="pillar-pill is-near" 
-                    data-index="1" 
-                    aria-selected="false" 
-                    role="tab"
-                  >
-                    <span class="pillar-pill-title">Perfect Fit Guarantee</span>
-                    <span class="pillar-pill-num">02</span>
-                  </button>
-
-                  <!-- Pillar 03 -->
-                  <button 
-                    type="button" 
-                    class="pillar-pill is-far" 
-                    data-index="2" 
-                    aria-selected="false" 
-                    role="tab"
-                  >
-                    <span class="pillar-pill-title">Express Processing</span>
-                    <span class="pillar-pill-num">03</span>
-                  </button>
-
-                  <!-- Pillar 04 -->
-                  <button 
-                    type="button" 
-                    class="pillar-pill is-far" 
-                    data-index="3" 
-                    aria-selected="false" 
-                    role="tab"
-                  >
-                    <span class="pillar-pill-title">Matching Trims &amp; Laces</span>
-                    <span class="pillar-pill-num">04</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Column 2: Active Detail Card (Crisp & High-Fashion) -->
-            <div class="pillar-detail-col">
-              <div class="pillar-detail-box" id="pillarDetailBox" aria-live="polite">
-                <div class="pillar-detail-inner" id="pillarDetailInner">
-                  <h3 class="pillar-detail-title" id="activePillarTitle">17+ Years Legacy</h3>
-                  <p class="pillar-detail-desc" id="activePillarDesc">
-                    Specialized in women's bespoke tailoring, bridal craft, and fine fabrics in Sahibganj since 2008. Handcrafted by master artisans with generational cutting expertise.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
       </div>
 
     </div>
@@ -833,6 +832,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     flex-direction: column;
     gap: 44px;
     margin-bottom: 60px;
+    border-top: 1px solid #111111;
+    padding-top: 48px;
   }
 
   .zara-section-head {
@@ -1278,9 +1279,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* --- SECTION HEADER (NORMAL FLOW, NOT PINNED) --- */
   .zara-trust-head {
     border-top: 1px solid #111111;
-    padding-top: 48px;
-    margin-top: 48px;
-    margin-bottom: 24px;
+    padding-top: 36px;
+    margin-top: 0;
+    margin-bottom: 20px;
     text-align: left;
   }
 
@@ -1301,6 +1302,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     width: 100%;
     height: 240vh; /* Smooth virtual scroll distance */
     margin-top: 16px;
+    margin-bottom: 40px;
   }
 
   .zara-trust-section {
@@ -1516,6 +1518,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       gap: 64px;
       align-items: start;
       margin-bottom: 80px;
+      border-top: 1px solid #111111;
+      padding-top: 60px;
     }
 
     .zara-col-title {
@@ -1524,8 +1528,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     /* Pinned Showcase Desktop Overrides */
     .zara-trust-head {
-      margin-top: 64px;
-      margin-bottom: 32px;
+      margin-top: 0;
+      padding-top: 48px;
+      margin-bottom: 30px;
     }
 
     .zara-trust-title {
@@ -1535,6 +1540,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     .zara-trust-scroll-track {
       height: 280vh;
       margin-top: 24px;
+      margin-bottom: 60px;
     }
 
     .zara-trust-section {
