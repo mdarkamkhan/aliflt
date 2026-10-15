@@ -24,7 +24,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           
           <!-- Section Header (Fitted on the locked screen) -->
           <div class="zara-trust-head">
-            <h2 class="zara-trust-title">Why Sahibganj Chooses ALIF</h2>
+            <h2 class="zara-trust-title">
+              <span>WHY SAHIBGANJ CHOOSES</span>
+              <span class="zara-trust-brand">ALIF</span>
+            </h2>
           </div>
 
           <!-- Interactive 2-Column Layout -->
@@ -496,7 +499,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         if (isProgrammaticScroll) return;
 
         const isMobile = window.innerWidth < 860;
-        const stickyTop = isMobile ? 54 : 70;
+        const stickyTop = isMobile ? 68 : 80;
         const trackRect = scrollTrack.getBoundingClientRect();
         const sectionHeight = stickySection.offsetHeight;
         const totalScrollDistance = scrollTrack.offsetHeight - sectionHeight;
@@ -534,7 +537,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           selectPillar(idx, true);
 
           const isMobile = window.innerWidth < 860;
-          const stickyTop = isMobile ? 54 : 70;
+          const stickyTop = isMobile ? 68 : 80;
           const trackTop = scrollTrack.getBoundingClientRect().top + window.scrollY;
           const sectionHeight = stickySection.offsetHeight;
           const totalScrollDistance = scrollTrack.offsetHeight - sectionHeight;
@@ -1093,7 +1096,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* --- SECTION HEADER (ANCHORED AT TOP OF LOCKED SCREEN) --- */
   .zara-trust-head {
     border-top: 1px solid #111111;
-    padding-top: 12px;
+    padding-top: 14px;
     margin-top: 0;
     margin-bottom: 24px;
     width: 100%;
@@ -1102,13 +1105,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .zara-trust-title {
     font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: 1.35rem;
+    font-size: 1.75rem;
     font-weight: 400;
     letter-spacing: 1px;
     text-transform: uppercase;
     color: #111111;
     margin: 0;
-    line-height: 1.2;
+    line-height: 1.15;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .zara-trust-brand {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    color: #111111;
   }
 
   /* --- SCROLL-DRIVEN PINNING TRACK & THE SYSTEM SHOWCASE --- */
@@ -1123,13 +1136,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .zara-trust-section {
     position: -webkit-sticky;
     position: sticky;
-    top: 54px;
-    min-height: calc(100dvh - 110px);
+    top: 68px;
+    min-height: calc(100dvh - 125px);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     background: transparent;
-    padding: 8px 0 20px 0;
+    padding: 12px 0 20px 0;
     box-sizing: border-box;
     z-index: 10;
   }
@@ -1330,12 +1343,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     /* Pinned Showcase Desktop Overrides */
     .zara-trust-head {
       margin-top: 0;
-      padding-top: 20px;
-      margin-bottom: 28px;
+      padding-top: 24px;
+      margin-bottom: 32px;
     }
 
     .zara-trust-title {
-      font-size: 2.1rem;
+      font-size: 2.5rem;
+      letter-spacing: 1.5px;
+      gap: 4px;
+    }
+
+    .zara-trust-brand {
+      letter-spacing: 3.5px;
     }
 
     .zara-trust-scroll-track {
@@ -1345,8 +1364,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     .zara-trust-section {
-      top: 70px;
-      min-height: calc(100vh - 100px);
+      top: 80px;
+      min-height: calc(100vh - 120px);
       padding: 20px 0 32px 0;
       justify-content: flex-start;
     }
