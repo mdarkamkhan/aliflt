@@ -160,6 +160,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 <span>ASK ALIF AI ↗</span>
               </button>
             </div>
+
+            <!-- Full-Bleed 3:4 Map Frame (No Left/Right Spacing, Pure Monochrome) -->
+            <div class="zara-map-frame">
+              <iframe 
+                src="https://maps.google.com/maps?q=6JRP%2BRQ%20Sahibganj%2C%20Jharkhand&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                class="zara-map-iframe" 
+                title="ALIF Ladies Tailor Map Location" 
+                loading="lazy" 
+                allowfullscreen>
+              </iframe>
+              <div class="zara-map-bar">
+                <a 
+                  href="https://www.google.com/maps/dir/?api=1&destination=6JRP%2BRQ+Sahibganj,+Jharkhand" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="zara-map-link"
+                >
+                  OPEN IN GOOGLE MAPS ↗
+                </a>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -552,6 +573,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     padding: 30px 16px 80px 16px;
     font-family: var(--font-body, 'Poppins', sans-serif);
     color: #111111;
+    overflow-x: hidden;
   }
 
   .zara-container {
@@ -600,10 +622,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .zara-main-grid {
     display: flex;
     flex-direction: column;
-    gap: 52px;
+    gap: 0;
     margin-bottom: 60px;
     border-top: 1px solid #111111;
-    padding-top: 40px;
+    padding-top: 36px;
+  }
+
+  .zara-col-store {
+    min-height: calc(100dvh - 75px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-bottom: 48px;
   }
 
   .zara-atelier-card {
@@ -729,6 +759,57 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .zara-action-chip:hover {
     background: #111111;
     color: #ffffff;
+  }
+
+  /* Full-Bleed 3:4 Map Frame (Zero Left/Right Spacing, Pure Monochrome) */
+  .zara-map-frame {
+    position: relative;
+    width: calc(100% + 32px);
+    margin-left: -16px;
+    margin-right: -16px;
+    border-top: 1px solid #111111;
+    border-bottom: 1px solid #111111;
+    background: #ffffff;
+    margin-top: 24px;
+    margin-bottom: 0;
+  }
+
+  .zara-map-iframe {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border: 0;
+    display: block;
+    filter: grayscale(100%) contrast(1.05);
+    -webkit-filter: grayscale(100%) contrast(1.05);
+  }
+
+  .zara-map-bar {
+    padding: 10px 16px;
+    background: #ffffff;
+    border-top: 1px solid #111111;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .zara-map-link {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #111111;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .zara-map-link:hover {
+    opacity: 0.6;
+  }
+
+  /* Form Column (Dedicated Screen Section on Mobile) */
+  .zara-col-form {
+    padding-top: 50px;
+    border-top: 1px solid #111111;
+    min-height: calc(100dvh - 75px);
   }
 
   /* --- BESPOKE INQUIRY FORM (EXACT DESIGN FROM ELEMENTS/form) --- */
@@ -1181,6 +1262,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       margin-bottom: 80px;
       border-top: 1px solid #111111;
       padding-top: 60px;
+    }
+
+    .zara-col-store {
+      min-height: auto;
+      padding-bottom: 0;
+    }
+
+    .zara-col-form {
+      min-height: auto;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .zara-map-frame {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+      border-left: 1px solid #111111;
+      border-right: 1px solid #111111;
     }
 
     .zara-col-title {
