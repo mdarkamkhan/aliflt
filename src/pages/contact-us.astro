@@ -131,19 +131,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 Opposite Joy Fast Food<br />
                 Sahibganj, Jharkhand — 816109
               </p>
-              <p class="landmark-hint">
-                <span class="landmark-pin">📍</span> <strong>Easy Landmark:</strong> Enter the lane directly opposite Daal Kuan / Lakshmi Bag House.
-              </p>
             </div>
 
             <!-- Action buttons inside card -->
             <div class="address-actions">
-              <button type="button" class="btn-copy-address" id="btnCopyAddress">
+              <button 
+                type="button" 
+                class="btn-ask-ai" 
+                id="btnAskAIAddress"
+                title="Ask AI Assistant for exact shop directions"
+              >
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                  <path d="M5 3v4M3 5h4M19 17v4M17 19h4"/>
                 </svg>
-                <span id="copyBtnText">Copy Address</span>
+                <span>Ask ALIF AI ✨</span>
               </button>
               <a 
                 href="https://www.google.com/maps/dir/?api=1&destination=6JRP%2BRQ+Sahibganj,+Jharkhand" 
@@ -378,38 +380,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
     }
 
-    // 1-Tap Copy Address to Clipboard
-    function initAddressCopy() {
-      const btn = document.getElementById('btnCopyAddress');
-      const textSpan = document.getElementById('copyBtnText');
-      if (!btn || !textSpan) return;
+    // Trigger AI Chatbot with Pretyped Question for Address/Directions
+    function initAddressAIChat() {
+      const btn = document.getElementById('btnAskAIAddress');
+      if (!btn) return;
 
       btn.addEventListener('click', function(e) {
         e.preventDefault();
-        const address = "alif ladies tailor, daal kuan, college road, sahibganj. near joy fastfood";
+        const addressQuery = "Muje address samajh nahi aaya, aapka dukan daal kuan college road me kahan pr h?";
         
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(address).then(() => {
-            textSpan.innerText = "✓ Copied to Clipboard!";
-            btn.classList.add('is-copied');
-            setTimeout(() => {
-              textSpan.innerText = "Copy Address";
-              btn.classList.remove('is-copied');
-            }, 2500);
-          }).catch(() => fallbackCopy(address));
+        if (typeof window.openALiFChat === 'function') {
+          window.openALiFChat(addressQuery, true);
         } else {
-          fallbackCopy(address);
-        }
-
-        function fallbackCopy(str) {
-          const el = document.createElement('textarea');
-          el.value = str;
-          document.body.appendChild(el);
-          el.select();
-          document.execCommand('copy');
-          document.body.removeChild(el);
-          textSpan.innerText = "✓ Copied!";
-          setTimeout(() => { textSpan.innerText = "Copy Address"; }, 2500);
+          window.dispatchEvent(new CustomEvent('open-alif-chat', {
+            detail: { message: addressQuery, autoSend: true }
+          }));
+          const chatBtn = document.getElementById('chat-button');
+          if (chatBtn) chatBtn.click();
         }
       });
     }
@@ -477,9 +464,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       if (!aiBtn) return;
       aiBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        const chatBtn = document.getElementById('chat-button');
-        if (chatBtn) {
-          chatBtn.click();
+        if (typeof window.openALiFChat === 'function') {
+          window.openALiFChat();
+        } else {
+          const chatBtn = document.getElementById('chat-button');
+          if (chatBtn) {
+            chatBtn.click();
+          }
         }
       });
     }
@@ -487,10 +478,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     // Page Load Handler
     function initContactPage() {
       updateLiveBoutiqueStatus();
-      initAddressCopy();
       initServiceChips();
       initInquiryForm();
       initAICardTrigger();
+      initAddressAIChat();
     }
 
     if (document.readyState === 'loading') {
@@ -803,44 +794,48 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: #000000;
   }
 
-  .landmark-hint {
-    background: #fbf9f5;
-    border-left: 3px solid #111111;
-    padding: 10px 14px;
-    border-radius: 4px;
-    font-size: 0.82rem;
-    line-height: 1.5;
-    color: #444444;
-    margin: 0;
-  }
-
   .address-actions {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
   }
 
-  .btn-copy-address {
+  .btn-ask-ai {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     padding: 10px 16px;
-    background: #f4f4f4;
-    border: 1px solid #dddddd;
+    background: #fbf5ff;
+    border: 1px solid #ebd5ff;
     border-radius: 8px;
     font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.5px;
-    color: #222222;
+    color: #7c3aed;
     cursor: pointer;
+    font-family: inherit;
     transition: all 0.2s ease;
   }
 
-  .btn-copy-address:active,
-  .btn-copy-address.is-copied {
-    background: #111111;
+  .btn-ask-ai svg {
+    color: #8b5cf6;
+    transition: transform 0.2s ease;
+  }
+
+  .btn-ask-ai:hover {
+    background: #7c3aed;
     color: #ffffff;
-    border-color: #111111;
+    border-color: #7c3aed;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+  }
+
+  .btn-ask-ai:hover svg {
+    color: #ffffff;
+    transform: rotate(15deg) scale(1.1);
+  }
+
+  .btn-ask-ai:active {
+    transform: scale(0.97);
   }
 
   .btn-maps-link {
@@ -854,11 +849,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-weight: 600;
     letter-spacing: 0.5px;
     text-decoration: none;
-    transition: opacity 0.2s ease;
+    transition: all 0.2s ease;
   }
 
   .btn-maps-link:hover {
-    opacity: 0.85;
+    background: #333333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-maps-link:active {
+    transform: scale(0.97);
   }
 
   /* --- TIMINGS CARD --- */

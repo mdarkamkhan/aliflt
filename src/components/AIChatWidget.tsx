@@ -167,6 +167,42 @@ export default function AIChatWidget() {
     }
   };
 
+  const sendMessageRef = useRef<(rawText: string) => Promise<void>>(sendMessage);
+  sendMessageRef.current = sendMessage;
+
+  // External trigger listener (for contact page, navigation, or anywhere across the site)
+  useEffect(() => {
+    const triggerOpen = (msg?: string, autoSend: boolean = false) => {
+      setIsOpen(true);
+      if (msg && msg.trim()) {
+        const text = msg.trim();
+        if (autoSend) {
+          setTimeout(() => {
+            sendMessageRef.current?.(text);
+          }, 150);
+        } else {
+          setInput(text);
+          setTimeout(() => inputRef.current?.focus(), 150);
+        }
+      }
+    };
+
+    const handleCustomEvent = (e: Event) => {
+      const customEvt = e as CustomEvent<{ message?: string; autoSend?: boolean }>;
+      triggerOpen(customEvt.detail?.message, customEvt.detail?.autoSend ?? false);
+    };
+
+    (window as any).openALiFChat = triggerOpen;
+    window.addEventListener('open-alif-chat', handleCustomEvent);
+
+    return () => {
+      window.removeEventListener('open-alif-chat', handleCustomEvent);
+      if ((window as any).openALiFChat === triggerOpen) {
+        delete (window as any).openALiFChat;
+      }
+    };
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim().length >= 4) {
