@@ -1313,7 +1313,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: #ffffff;
+    background: transparent;
     padding: 16px 0;
     box-sizing: border-box;
     z-index: 10;
@@ -1342,25 +1342,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     user-select: none;
     outline: none;
     border-radius: 9999px;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
   }
 
-  /* Top & Bottom Gradient Fades for Ticker Effect */
-  .pillar-gradient-top {
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 2.5rem;
-    background: linear-gradient(to bottom, #ffffff 25%, rgba(255, 255, 255, 0));
-    z-index: 10;
-    pointer-events: none;
-  }
-
+  /* Top & Bottom Gradient Fades for Ticker Effect (Replaced by clean mask-image) */
+  .pillar-gradient-top,
   .pillar-gradient-bottom {
-    position: absolute;
-    inset: auto 0 0 0;
-    height: 2.5rem;
-    background: linear-gradient(to top, #ffffff 25%, rgba(255, 255, 255, 0));
-    z-index: 10;
-    pointer-events: none;
+    display: none;
   }
 
   /* Sliding Track */
@@ -1385,7 +1374,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     align-items: center;
     justify-content: space-between;
     text-align: left;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 1.5px solid rgba(0, 0, 0, 0.1);
     cursor: pointer;
     color: inherit;
