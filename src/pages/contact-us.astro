@@ -81,6 +81,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
           <div class="quick-card-arrow">↗</div>
         </a>
+
+        <!-- Ask ALIF AI Assistant -->
+        <button 
+          type="button" 
+          class="quick-card card-ai"
+          id="actionAI"
+          aria-label="Open ALIF AI Assistant"
+        >
+          <div class="quick-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+              <path d="M5 3v4M3 5h4M19 17v4M17 19h4"/>
+            </svg>
+          </div>
+          <div class="quick-card-body">
+            <span class="quick-card-tag quick-tag-ai">✨ 24/7 INSTANT AI</span>
+            <h2 class="quick-card-title">Ask ALIF AI</h2>
+            <span class="quick-card-value">Rates, Fabrics &amp; Timings</span>
+          </div>
+          <div class="quick-card-arrow">✨</div>
+        </button>
       </section>
 
       <!-- Main Two-Column Atelier Showcase -->
@@ -450,12 +471,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     }
 
+    // 1-Tap Trigger for ALIF AI Assistant
+    function initAICardTrigger() {
+      const aiBtn = document.getElementById('actionAI');
+      if (!aiBtn) return;
+      aiBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const chatBtn = document.getElementById('chat-button');
+        if (chatBtn) {
+          chatBtn.click();
+        }
+      });
+    }
+
     // Page Load Handler
     function initContactPage() {
       updateLiveBoutiqueStatus();
       initAddressCopy();
       initServiceChips();
       initInquiryForm();
+      initAICardTrigger();
     }
 
     if (document.readyState === 'loading') {
@@ -585,6 +620,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .card-maps .quick-card-icon svg {
     color: #1877f2;
+  }
+
+  .card-ai {
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    width: 100%;
+  }
+
+  .card-ai .quick-card-icon {
+    background: #fbf5ff;
+    color: #8b5cf6;
+    border-color: #ebd5ff;
+  }
+
+  .card-ai .quick-card-icon svg {
+    color: #8b5cf6;
+  }
+
+  .quick-tag-ai {
+    color: #7c3aed !important;
   }
 
   .quick-card-body {
@@ -1113,13 +1169,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     .quick-actions-grid {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
       margin-bottom: 48px;
     }
 
     .quick-card {
-      padding: 20px 22px;
+      padding: 18px 16px;
     }
 
     .atelier-main-grid {
@@ -1146,10 +1202,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   @media (min-width: 600px) and (max-width: 859px) {
     .quick-actions-grid {
       grid-template-columns: repeat(2, 1fr);
-    }
-
-    .quick-actions-grid .quick-card:last-child {
-      grid-column: span 2;
+      gap: 14px;
     }
 
     .trust-grid {
