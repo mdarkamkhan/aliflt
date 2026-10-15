@@ -125,43 +125,112 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <span class="zara-col-eyebrow">FLAGSHIP ATELIER</span>
             <h2 class="zara-col-title">ALIF Ladies Tailor</h2>
 
-            <div class="zara-atelier-meta">
-              <p class="zara-atelier-address">
-                Daal Kuan, College Road<br />
-                <span class="zara-atelier-landmark">Opposite Joy Fast Food · Sahibganj 816109</span>
-              </p>
+            <!-- Minimalist 2-Segment Switcher -->
+            <div class="atelier-tabs-row" role="tablist" aria-label="Atelier Details">
+              <button 
+                type="button" 
+                class="atelier-tab-btn is-active" 
+                id="tabBtnLocation" 
+                role="tab" 
+                aria-selected="true" 
+                aria-controls="panelLocation"
+              >
+                <span class="tab-btn-num">01</span>
+                <span class="tab-btn-title">LOCATION</span>
+              </button>
+              <button 
+                type="button" 
+                class="atelier-tab-btn" 
+                id="tabBtnTimings" 
+                role="tab" 
+                aria-selected="false" 
+                aria-controls="panelTimings"
+              >
+                <span class="tab-btn-num">02</span>
+                <span class="tab-btn-title">TIMINGS</span>
+              </button>
+            </div>
 
-              <div class="zara-atelier-schedule">
-                <span class="zara-schedule-text">Sat — Thu: 10:00 — 21:00 &nbsp;•&nbsp; Fri: 14:00 — 21:00</span>
+            <!-- Tab 1: Location Panel -->
+            <div class="atelier-tab-panel is-active" id="panelLocation" role="tabpanel" aria-labelledby="tabBtnLocation">
+              <div class="zara-atelier-meta">
+                <p class="zara-atelier-address">
+                  Daal Kuan, College Road<br />
+                  <span class="zara-atelier-landmark">Opposite Joy Fast Food · Sahibganj 816109</span>
+                </p>
+                <p class="zara-atelier-guide">
+                  Centrally located on College Road, 2 minutes from Sahibganj Railway Station.
+                </p>
+              </div>
+
+              <!-- Action Duo: Minimalist Editorial Action Chips -->
+              <div class="zara-actions-row">
+                <a 
+                  href="https://www.google.com/maps/dir/?api=1&destination=6JRP%2BRQ+Sahibganj,+Jharkhand" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="zara-action-chip"
+                >
+                  <span>GET DIRECTIONS ↗</span>
+                </a>
+
+                <button 
+                  type="button" 
+                  class="zara-action-chip" 
+                  id="btnAskAIAddress"
+                  title="Ask AI Assistant for exact shop directions"
+                >
+                  <span>ASK ALIF AI ↗</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tab 2: Timings Panel -->
+            <div class="atelier-tab-panel" id="panelTimings" role="tabpanel" aria-labelledby="tabBtnTimings" hidden>
+              <div class="zara-atelier-timings-block">
                 <div class="zara-status-line" id="liveStatusBadge">
                   <span class="zara-status-dot"></span>
                   <span class="zara-status-text" id="liveStatusText">Verifying Store Timings...</span>
                 </div>
+
+                <div class="zara-hours-list">
+                  <div class="zara-hours-row">
+                    <span class="hours-days">SATURDAY — THURSDAY</span>
+                    <span class="hours-time">10:00 — 21:00</span>
+                  </div>
+                  <div class="zara-hours-row">
+                    <span class="hours-days">FRIDAY (POST-JUMMAH)</span>
+                    <span class="hours-time">14:00 — 21:00</span>
+                  </div>
+                </div>
+
+                <p class="zara-timing-note">
+                  Walk-ins welcome during all store hours. Bridal fittings & custom embroidery trials available.
+                </p>
+              </div>
+
+              <!-- Timing Action Duo: Direct Call / WhatsApp Chips -->
+              <div class="zara-actions-row">
+                <a 
+                  href="https://wa.me/917250470009?text=Hi%20ALIF,%20I%20would%20like%20to%20inquire%20about%20visiting%20the%20atelier." 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="zara-action-chip"
+                >
+                  <span>CHAT ON WHATSAPP ↗</span>
+                </a>
+
+                <a 
+                  href="tel:+917250470009" 
+                  class="zara-action-chip"
+                  title="Call ALIF Ladies Tailor store"
+                >
+                  <span>CALL ATELIER ↗</span>
+                </a>
               </div>
             </div>
 
-            <!-- Action Duo: Minimalist Editorial Action Chips -->
-            <div class="zara-actions-row">
-              <a 
-                href="https://www.google.com/maps/dir/?api=1&destination=6JRP%2BRQ+Sahibganj,+Jharkhand" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="zara-action-chip"
-              >
-                <span>GET DIRECTIONS ↗</span>
-              </a>
-
-              <button 
-                type="button" 
-                class="zara-action-chip" 
-                id="btnAskAIAddress"
-                title="Ask AI Assistant for exact shop directions"
-              >
-                <span>ASK ALIF AI ↗</span>
-              </button>
-            </div>
-
-            <!-- Full-Bleed 3:4 Map Frame (No Left/Right Spacing, Pure Monochrome) -->
+            <!-- Full-Bleed 3:4 Map Frame (No Left/Right Spacing, Pure Monochrome - Stays Visible in Both Tabs) -->
             <div class="zara-map-frame">
               <iframe 
                 src="https://maps.google.com/maps?q=6JRP%2BRQ%20Sahibganj%2C%20Jharkhand&t=&z=16&ie=UTF8&iwloc=&output=embed" 
@@ -541,9 +610,46 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       handleScrollDrivenPillars();
     }
 
+    // Atelier 2-Segment Switcher (Location vs Timings)
+    function initAtelierTabs() {
+      const tabLoc = document.getElementById('tabBtnLocation');
+      const tabTime = document.getElementById('tabBtnTimings');
+      const panelLoc = document.getElementById('panelLocation');
+      const panelTime = document.getElementById('panelTimings');
+      if (!tabLoc || !tabTime || !panelLoc || !panelTime) return;
+
+      function switchTab(target) {
+        if (target === 'location') {
+          tabLoc.classList.add('is-active');
+          tabLoc.setAttribute('aria-selected', 'true');
+          tabTime.classList.remove('is-active');
+          tabTime.setAttribute('aria-selected', 'false');
+
+          panelLoc.classList.add('is-active');
+          panelLoc.hidden = false;
+          panelTime.classList.remove('is-active');
+          panelTime.hidden = true;
+        } else {
+          tabTime.classList.add('is-active');
+          tabTime.setAttribute('aria-selected', 'true');
+          tabLoc.classList.remove('is-active');
+          tabLoc.setAttribute('aria-selected', 'false');
+
+          panelTime.classList.add('is-active');
+          panelTime.hidden = false;
+          panelLoc.classList.remove('is-active');
+          panelLoc.hidden = true;
+        }
+      }
+
+      tabLoc.addEventListener('click', () => switchTab('location'));
+      tabTime.addEventListener('click', () => switchTab('timings'));
+    }
+
     // Page Load Handler
     function initContactPage() {
       updateLiveStoreStatus();
+      initAtelierTabs();
       initServiceChips();
       initInquiryForm();
       initAddressAIChat();
@@ -661,12 +767,77 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     line-height: 1.25;
   }
 
+  /* --- ATELIER 2-SEGMENT SWITCHER --- */
+  .atelier-tabs-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 12px;
+  }
+
+  .atelier-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 16px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #888888;
+    transition: all 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .atelier-tab-btn .tab-btn-num {
+    font-size: 0.62rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    opacity: 0.7;
+  }
+
+  .atelier-tab-btn.is-active {
+    color: #111111;
+    border-color: #111111;
+    background: #ffffff;
+    font-weight: 600;
+  }
+
+  .atelier-tab-btn:hover:not(.is-active) {
+    color: #111111;
+  }
+
+  .atelier-tab-panel {
+    display: none;
+    animation: atelierTabFade 0.25s ease forwards;
+  }
+
+  .atelier-tab-panel.is-active {
+    display: block;
+  }
+
+  @keyframes atelierTabFade {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   /* --- STORE DETAILS: STREAMLINED EDITORIAL CARD --- */
   .zara-atelier-meta {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    margin-bottom: 22px;
+    gap: 10px;
+    margin-bottom: 20px;
   }
 
   .zara-atelier-address {
@@ -685,16 +856,59 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin-top: 2px;
   }
 
-  .zara-atelier-schedule {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  .zara-atelier-guide {
+    font-size: 0.8rem;
+    color: #777777;
+    line-height: 1.5;
+    margin: 4px 0 0 0;
+    font-weight: 300;
   }
 
-  .zara-schedule-text {
+  /* --- TIMINGS PANEL STYLES --- */
+  .zara-atelier-timings-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .zara-hours-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 14px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+  }
+
+  .zara-hours-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 0.82rem;
-    color: #555555;
-    font-weight: 400;
+  }
+
+  .hours-days {
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    color: #444444;
+    font-size: 0.72rem;
+  }
+
+  .hours-time {
+    font-weight: 600;
+    color: #111111;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+  }
+
+  .zara-timing-note {
+    font-size: 0.78rem;
+    color: #777777;
+    line-height: 1.5;
+    margin: 0;
+    font-weight: 300;
   }
 
   .zara-status-line {
