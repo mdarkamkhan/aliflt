@@ -112,16 +112,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
 
           </div>
-
-          <!-- Progress Indicator & Step Counter (Fills bottom void on mobile with clean luxury UI) -->
-          <div class="pillar-mobile-footer" aria-hidden="true">
-            <div class="pillar-progress-track">
-              <div class="pillar-progress-fill" id="pillarProgressFill" style="width: 25%;"></div>
-            </div>
-            <div class="pillar-step-text">
-              <span id="pillarCurrentCount">01</span> / 04
-            </div>
-          </div>
         </section>
       </div>
 
@@ -547,12 +537,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           if (activeTitle) activeTitle.textContent = current.title;
           if (activeDesc) activeDesc.textContent = current.desc;
         }
-
-        // 4. Update mobile progress footer
-        const progressFill = document.getElementById('pillarProgressFill');
-        const currentCount = document.getElementById('pillarCurrentCount');
-        if (progressFill) progressFill.style.width = `${((currentIndex + 1) / 4) * 100}%`;
-        if (currentCount) currentCount.textContent = `0${currentIndex + 1}`;
       }
 
       // Scroll-Driven Progression Engine
@@ -1454,22 +1438,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .zara-trust-section {
     position: -webkit-sticky;
     position: sticky;
-    top: 60px; /* Aligned flush under 60px mobile navbar */
-    height: calc(100dvh - 120px); /* Exactly fills between top navbar and bottom nav */
-    max-height: 560px;
-    min-height: 480px;
+    top: 60px;
+    min-height: calc(100dvh - 125px);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    background-color: #f8fafc;
-    background-image: repeating-radial-gradient(
-      circle at 0% 50%,
-      rgba(0, 0, 0, 0.04) 0px,
-      rgba(0, 0, 0, 0.04) 2px,
-      transparent 2px,
-      transparent 30px
-    );
-    padding: 12px 0 16px 0;
+    justify-content: flex-start;
+    background: transparent;
+    padding: 12px 0 20px 0;
     box-sizing: border-box;
     z-index: 10;
   }
@@ -1478,11 +1453,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .pillar-system-grid {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
     align-items: center;
     width: 100%;
-    margin-top: 0;
-    margin-bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
   }
 
   /* Column 1: Vertical Capsule Ticker */
@@ -1632,38 +1607,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     line-height: 1.55;
     margin: 0;
     max-width: 480px;
-  }
-
-  /* Mobile Footer Step Bar (Eliminates bottom blank void) */
-  .pillar-mobile-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding-top: 10px;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
-  }
-
-  .pillar-progress-track {
-    flex: 1;
-    max-width: 140px;
-    height: 2px;
-    background: rgba(0, 0, 0, 0.08);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .pillar-progress-fill {
-    height: 100%;
-    background: #111111;
-    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .pillar-step-text {
-    font-size: 0.72rem;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-weight: 500;
-    color: #666666;
+  }#666666;
     letter-spacing: 1px;
   }
 
@@ -1777,10 +1721,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       gap: 12px;
       padding-top: 70px;
       padding-bottom: 70px;
-    }
-
-    .pillar-mobile-footer {
-      display: none;
     }
 
     .pillar-pill {
