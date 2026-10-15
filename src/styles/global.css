@@ -4,7 +4,7 @@
 :root {
     --accent-color: #000000;
     --accent-color-dark: #333333;
-    --bg-color: #FBF9F6; /* Soft beige/cream */
+    --bg-color: #f8fafc;
     --text-color: #111111;
     --border-color: #e0e0e0;
     --font-heading: 'Playfair Display', serif;
@@ -36,13 +36,24 @@ body {
     height: 100vh;
     z-index: -1;
     pointer-events: none;
-    background-color: var(--bg-color, #FBF9F6);
-    background-image: 
-        linear-gradient(90deg, rgba(200, 0, 0, 0.5) 50%, transparent 50%),
-        linear-gradient(rgba(200, 0, 0, 0.5) 50%, transparent 50%);
-    background-size: 50px 50px;
+    background-color: #f8fafc;
+    overflow: hidden;
     will-change: transform;
     transform: translateZ(0);
+}
+
+#fixed-bg-pattern::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-radial-gradient(
+        circle at 0% 50%,
+        rgba(0, 0, 0, 0.04) 0px,
+        rgba(0, 0, 0, 0.04) 2px,
+        transparent 2px,
+        transparent 30px
+    );
+    pointer-events: none;
 }
 
 body.sidebar-open {
