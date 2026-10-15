@@ -262,121 +262,123 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       </div>
 
-      <!-- Store Trust & Perfection Pillars (The System Interactive Layout from ELEMENTS/the system) -->
-      <section class="zara-trust-section" aria-label="ALIF Guarantees">
-        <!-- Minimal & Elegant Header -->
-        <div class="zara-trust-head">
-          <span class="zara-eyebrow">THE ALIF STANDARD</span>
-          <h2 class="zara-trust-title">Why Sahibganj Chooses ALIF</h2>
-        </div>
-        
-        <!-- Interactive 2-Column Layout -->
-        <div class="pillar-system-grid">
+      <!-- Store Trust & Perfection Pillars (Sticky Scroll-Driven Showcase) -->
+      <div class="zara-trust-scroll-track" id="pillarScrollTrack">
+        <section class="zara-trust-section" id="pillarStickySection" aria-label="ALIF Guarantees">
+          <!-- Minimal & Elegant Header -->
+          <div class="zara-trust-head">
+            <span class="zara-eyebrow">THE ALIF STANDARD</span>
+            <h2 class="zara-trust-title">Why Sahibganj Chooses ALIF</h2>
+          </div>
           
-          <!-- Column 1: Interactive Capsule Ticker -->
-          <div class="pillar-ticker-col">
-            <div 
-              class="pillar-ticker-box" 
-              id="pillarTickerBox" 
-              tabindex="0" 
-              role="region" 
-              aria-label="The ALIF Standard Interactive Pillars"
-            >
-              <!-- Top and bottom gradient fades for vertical ticker effect -->
-              <div class="pillar-gradient-top"></div>
-              <div class="pillar-gradient-bottom"></div>
+          <!-- Interactive 2-Column Layout -->
+          <div class="pillar-system-grid">
+            
+            <!-- Column 1: Interactive Capsule Ticker -->
+            <div class="pillar-ticker-col">
+              <div 
+                class="pillar-ticker-box" 
+                id="pillarTickerBox" 
+                tabindex="0" 
+                role="region" 
+                aria-label="The ALIF Standard Interactive Pillars"
+              >
+                <!-- Top and bottom gradient fades for vertical ticker effect -->
+                <div class="pillar-gradient-top"></div>
+                <div class="pillar-gradient-bottom"></div>
 
-              <!-- Sliding Track -->
-              <div class="pillar-track" id="pillarTrack">
-                <!-- Pillar 01 -->
-                <button 
-                  type="button" 
-                  class="pillar-pill is-active" 
-                  data-index="0" 
-                  aria-selected="true" 
-                  role="tab"
-                >
-                  <div class="pillar-pill-info">
-                    <span class="pillar-pill-title">17+ Years Legacy</span>
-                    <span class="pillar-pill-sub">01 / HERITAGE</span>
-                  </div>
-                  <span class="pillar-pill-num">01</span>
-                </button>
+                <!-- Sliding Track -->
+                <div class="pillar-track" id="pillarTrack">
+                  <!-- Pillar 01 -->
+                  <button 
+                    type="button" 
+                    class="pillar-pill is-active" 
+                    data-index="0" 
+                    aria-selected="true" 
+                    role="tab"
+                  >
+                    <div class="pillar-pill-info">
+                      <span class="pillar-pill-title">17+ Years Legacy</span>
+                      <span class="pillar-pill-sub">01 / HERITAGE</span>
+                    </div>
+                    <span class="pillar-pill-num">01</span>
+                  </button>
 
-                <!-- Pillar 02 -->
-                <button 
-                  type="button" 
-                  class="pillar-pill is-near" 
-                  data-index="1" 
-                  aria-selected="false" 
-                  role="tab"
-                >
-                  <div class="pillar-pill-info">
-                    <span class="pillar-pill-title">Perfect Fit Guarantee</span>
-                    <span class="pillar-pill-sub">02 / PRECISION</span>
-                  </div>
-                  <span class="pillar-pill-num">02</span>
-                </button>
+                  <!-- Pillar 02 -->
+                  <button 
+                    type="button" 
+                    class="pillar-pill is-near" 
+                    data-index="1" 
+                    aria-selected="false" 
+                    role="tab"
+                  >
+                    <div class="pillar-pill-info">
+                      <span class="pillar-pill-title">Perfect Fit Guarantee</span>
+                      <span class="pillar-pill-sub">02 / PRECISION</span>
+                    </div>
+                    <span class="pillar-pill-num">02</span>
+                  </button>
 
-                <!-- Pillar 03 -->
-                <button 
-                  type="button" 
-                  class="pillar-pill is-far" 
-                  data-index="2" 
-                  aria-selected="false" 
-                  role="tab"
-                >
-                  <div class="pillar-pill-info">
-                    <span class="pillar-pill-title">Express Processing</span>
-                    <span class="pillar-pill-sub">03 / PRIORITY</span>
-                  </div>
-                  <span class="pillar-pill-num">03</span>
-                </button>
+                  <!-- Pillar 03 -->
+                  <button 
+                    type="button" 
+                    class="pillar-pill is-far" 
+                    data-index="2" 
+                    aria-selected="false" 
+                    role="tab"
+                  >
+                    <div class="pillar-pill-info">
+                      <span class="pillar-pill-title">Express Processing</span>
+                      <span class="pillar-pill-sub">03 / PRIORITY</span>
+                    </div>
+                    <span class="pillar-pill-num">03</span>
+                  </button>
 
-                <!-- Pillar 04 -->
-                <button 
-                  type="button" 
-                  class="pillar-pill is-far" 
-                  data-index="3" 
-                  aria-selected="false" 
-                  role="tab"
-                >
-                  <div class="pillar-pill-info">
-                    <span class="pillar-pill-title">Matching Trims &amp; Laces</span>
-                    <span class="pillar-pill-sub">04 / CURATION</span>
-                  </div>
-                  <span class="pillar-pill-num">04</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Column 2: Active Detail Card -->
-          <div class="pillar-detail-col">
-            <div class="pillar-detail-box" id="pillarDetailBox" aria-live="polite">
-              <div class="pillar-detail-inner" id="pillarDetailInner">
-                <div class="pillar-detail-header">
-                  <span class="pillar-detail-tag" id="activePillarTag">01 / HERITAGE</span>
-                  <span class="pillar-detail-badge">ATELIER STANDARD</span>
-                </div>
-                <h3 class="pillar-detail-title" id="activePillarTitle">17+ Years Legacy</h3>
-                <p class="pillar-detail-desc" id="activePillarDesc">
-                  Specialized in women's bespoke tailoring, bridal craft, and fine fabrics in Sahibganj since 2008. Handcrafted by master artisans with generational cutting expertise.
-                </p>
-                <div class="pillar-detail-footer">
-                  <div class="pillar-feature-item">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span id="activePillarMeta">Generational Tailoring • Sahibganj Since 2008</span>
-                  </div>
+                  <!-- Pillar 04 -->
+                  <button 
+                    type="button" 
+                    class="pillar-pill is-far" 
+                    data-index="3" 
+                    aria-selected="false" 
+                    role="tab"
+                  >
+                    <div class="pillar-pill-info">
+                      <span class="pillar-pill-title">Matching Trims &amp; Laces</span>
+                      <span class="pillar-pill-sub">04 / CURATION</span>
+                    </div>
+                    <span class="pillar-pill-num">04</span>
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
 
-        </div>
-      </section>
+            <!-- Column 2: Active Detail Card -->
+            <div class="pillar-detail-col">
+              <div class="pillar-detail-box" id="pillarDetailBox" aria-live="polite">
+                <div class="pillar-detail-inner" id="pillarDetailInner">
+                  <div class="pillar-detail-header">
+                    <span class="pillar-detail-tag" id="activePillarTag">01 / HERITAGE</span>
+                    <span class="pillar-detail-badge">ATELIER STANDARD</span>
+                  </div>
+                  <h3 class="pillar-detail-title" id="activePillarTitle">17+ Years Legacy</h3>
+                  <p class="pillar-detail-desc" id="activePillarDesc">
+                    Specialized in women's bespoke tailoring, bridal craft, and fine fabrics in Sahibganj since 2008. Handcrafted by master artisans with generational cutting expertise.
+                  </p>
+                  <div class="pillar-detail-footer">
+                    <div class="pillar-feature-item">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      <span id="activePillarMeta">Generational Tailoring • Sahibganj Since 2008</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
 
     </div>
   </div>
@@ -524,7 +526,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     }
 
-    // The System Interactive Pillar Showcase
+    // The System Interactive Pillar Showcase with Sticky Scroll-Driven Pinning
     function initPillarSystem() {
       const pillars = [
         {
@@ -557,6 +559,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         }
       ];
 
+      const scrollTrack = document.getElementById('pillarScrollTrack');
+      const stickySection = document.getElementById('pillarStickySection');
       const track = document.getElementById('pillarTrack');
       const pills = document.querySelectorAll('.pillar-pill');
       const tickerBox = document.getElementById('pillarTickerBox');
@@ -566,15 +570,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const activeDesc = document.getElementById('activePillarDesc');
       const activeMeta = document.getElementById('activePillarMeta');
 
-      if (!track || !pills.length || !detailInner) return;
+      if (!track || !pills.length || !detailInner || !scrollTrack || !stickySection) return;
 
       let currentIndex = 0;
-      const step = 84; // 72px pill + 12px gap
+      let isProgrammaticScroll = false;
 
-      function selectPillar(idx) {
+      function getStep() {
+        return window.innerWidth < 860 ? 74 : 84;
+      }
+
+      function selectPillar(idx, animateDetail = true) {
         if (idx < 0 || idx >= pillars.length) return;
         currentIndex = idx;
         const current = pillars[currentIndex];
+        const step = getStep();
 
         // 1. Update pills classes
         pills.forEach((pill, i) => {
@@ -595,49 +604,95 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         // 2. Adjust track position
         track.style.transform = `translateY(${-currentIndex * step}px)`;
 
-        // 3. Update detail card with silky transition
-        detailInner.classList.add('is-switching');
-        setTimeout(() => {
+        // 3. Update detail card
+        if (animateDetail) {
+          detailInner.classList.add('is-switching');
+          setTimeout(() => {
+            if (activeTag) activeTag.textContent = current.tag;
+            if (activeTitle) activeTitle.textContent = current.title;
+            if (activeDesc) activeDesc.textContent = current.desc;
+            if (activeMeta) activeMeta.textContent = current.meta;
+            detailInner.classList.remove('is-switching');
+          }, 140);
+        } else {
           if (activeTag) activeTag.textContent = current.tag;
           if (activeTitle) activeTitle.textContent = current.title;
           if (activeDesc) activeDesc.textContent = current.desc;
           if (activeMeta) activeMeta.textContent = current.meta;
-          detailInner.classList.remove('is-switching');
-        }, 150);
+        }
       }
 
-      // Click event
+      // Scroll-Driven Progression Engine
+      function handleScrollDrivenPillars() {
+        if (isProgrammaticScroll) return;
+
+        const isMobile = window.innerWidth < 860;
+        const stickyTop = isMobile ? 54 : 70;
+        const trackRect = scrollTrack.getBoundingClientRect();
+        const sectionHeight = stickySection.offsetHeight;
+        const totalScrollDistance = scrollTrack.offsetHeight - sectionHeight;
+
+        if (totalScrollDistance <= 0) return;
+
+        // How much have we scrolled past the point where the section pins?
+        const scrolledPast = stickyTop - trackRect.top;
+        const progress = Math.max(0, Math.min(1, scrolledPast / totalScrollDistance));
+
+        // Map progress 0.0 – 1.0 smoothly to pillars (0, 1, 2, 3)
+        const targetIndex = Math.min(3, Math.floor(progress * 4));
+
+        if (targetIndex !== currentIndex) {
+          selectPillar(targetIndex, true);
+        }
+      }
+
+      // Optimized scroll listener using requestAnimationFrame
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            handleScrollDrivenPillars();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // Click pill to sync both active pillar & page scroll position
       pills.forEach((pill) => {
         pill.addEventListener('click', () => {
           const idx = parseInt(pill.getAttribute('data-index') || '0', 10);
-          selectPillar(idx);
+          selectPillar(idx, true);
+
+          const isMobile = window.innerWidth < 860;
+          const stickyTop = isMobile ? 54 : 70;
+          const trackTop = scrollTrack.getBoundingClientRect().top + window.scrollY;
+          const sectionHeight = stickySection.offsetHeight;
+          const totalScrollDistance = scrollTrack.offsetHeight - sectionHeight;
+
+          // Target center of target pillar slot
+          const targetProgress = (idx + 0.5) / 4;
+          const targetScrollY = trackTop - stickyTop + (targetProgress * totalScrollDistance);
+
+          isProgrammaticScroll = true;
+          window.scrollTo({
+            top: targetScrollY,
+            behavior: 'smooth'
+          });
+          setTimeout(() => {
+            isProgrammaticScroll = false;
+          }, 600);
         });
       });
 
-      // Mouse wheel scrolling over ticker
-      if (tickerBox) {
-        tickerBox.addEventListener('wheel', (e) => {
-          if (Math.abs(e.deltaY) > 20) {
-            e.preventDefault();
-            if (e.deltaY > 0 && currentIndex < pillars.length - 1) {
-              selectPillar(currentIndex + 1);
-            } else if (e.deltaY < 0 && currentIndex > 0) {
-              selectPillar(currentIndex - 1);
-            }
-          }
-        }, { passive: false });
+      // Window resize listener
+      window.addEventListener('resize', () => {
+        const step = getStep();
+        track.style.transform = `translateY(${-currentIndex * step}px)`;
+      }, { passive: true });
 
-        // Keyboard arrow navigation
-        tickerBox.addEventListener('keydown', (e) => {
-          if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-            e.preventDefault();
-            selectPillar(Math.min(pillars.length - 1, currentIndex + 1));
-          } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-            e.preventDefault();
-            selectPillar(Math.max(0, currentIndex - 1));
-          }
-        });
-      }
+      // Initial check on load
+      handleScrollDrivenPillars();
     }
 
     // Page Load Handler
@@ -1258,20 +1313,36 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin: -8px 0 0 0;
   }
 
-  /* --- THE ALIF STANDARD INTERACTIVE SYSTEM (From ELEMENTS/the system) --- */
+  /* --- SCROLL-DRIVEN PINNING TRACK & THE SYSTEM SHOWCASE --- */
+  .zara-trust-scroll-track {
+    position: relative;
+    width: 100%;
+    height: 280vh; /* Virtual scroll distance on mobile */
+    margin-top: 36px;
+  }
+
   .zara-trust-section {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 54px;
+    min-height: calc(100dvh - 110px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #ffffff;
     border-top: 1px solid #111111;
-    padding-top: 56px;
-    margin-top: 56px;
+    padding: 16px 0 24px 0;
+    box-sizing: border-box;
+    z-index: 10;
   }
 
   .zara-trust-head {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 
   .zara-trust-title {
     font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: 2rem;
+    font-size: 1.85rem;
     font-weight: 400;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -1282,17 +1353,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* 2-Column Responsive Layout */
   .pillar-system-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     align-items: center;
-  }
-
-  @media (min-width: 860px) {
-    .pillar-system-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 56px;
-    }
+    width: 100%;
   }
 
   /* Column 1: Vertical Capsule Ticker */
@@ -1301,14 +1366,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     order: 2;
   }
 
-  @media (min-width: 860px) {
-    .pillar-ticker-col {
-      order: 1;
-    }
-  }
-
   .pillar-ticker-box {
-    height: 290px;
+    height: 236px;
     overflow: hidden;
     position: relative;
     padding: 0 4px;
@@ -1321,7 +1380,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .pillar-gradient-top {
     position: absolute;
     inset: 0 0 auto 0;
-    height: 3.5rem;
+    height: 3rem;
     background: linear-gradient(to bottom, #ffffff 25%, rgba(255, 255, 255, 0));
     z-index: 10;
     pointer-events: none;
@@ -1330,7 +1389,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .pillar-gradient-bottom {
     position: absolute;
     inset: auto 0 0 0;
-    height: 3.5rem;
+    height: 3rem;
     background: linear-gradient(to top, #ffffff 25%, rgba(255, 255, 255, 0));
     z-index: 10;
     pointer-events: none;
@@ -1340,9 +1399,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .pillar-track {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding-top: 109px;
-    padding-bottom: 109px;
+    gap: 10px;
+    padding-top: 86px;
+    padding-bottom: 86px;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
   }
@@ -1350,8 +1409,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* Capsule Pill Button */
   .pillar-pill {
     width: 100%;
-    min-height: 72px;
-    padding: 0 1.6rem;
+    min-height: 64px;
+    padding: 0 1.25rem;
     border-radius: 9999px;
     display: flex;
     align-items: center;
@@ -1577,6 +1636,71 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     .zara-col-title {
       font-size: 2rem;
+    }
+
+    /* Pinned Showcase Desktop Overrides */
+    .zara-trust-scroll-track {
+      height: 320vh;
+      margin-top: 56px;
+    }
+
+    .zara-trust-section {
+      top: 70px;
+      min-height: calc(100vh - 100px);
+      padding: 36px 0;
+    }
+
+    .zara-trust-title {
+      font-size: 2.1rem;
+    }
+
+    .pillar-system-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+    }
+
+    .pillar-ticker-col {
+      order: 1;
+    }
+
+    .pillar-ticker-box {
+      height: 290px;
+    }
+
+    .pillar-track {
+      gap: 12px;
+      padding-top: 109px;
+      padding-bottom: 109px;
+    }
+
+    .pillar-pill {
+      min-height: 72px;
+      padding: 0 1.6rem;
+    }
+
+    .pillar-pill-title {
+      font-size: 0.98rem;
+    }
+
+    .pillar-detail-col {
+      order: 2;
+      padding-left: 3rem;
+      border-left: 1px solid rgba(0, 0, 0, 0.12);
+      min-height: 290px;
+      display: flex;
+      align-items: center;
+    }
+
+    .pillar-detail-title {
+      font-size: 2.6rem;
+      margin: 0 0 16px 0;
+    }
+
+    .pillar-detail-desc {
+      font-size: 0.98rem;
+      line-height: 1.7;
+      margin: 0 0 24px 0;
     }
   }
 
