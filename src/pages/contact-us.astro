@@ -112,6 +112,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
 
           </div>
+
+          <!-- Progress Indicator & Step Counter (Fills bottom void on mobile with clean luxury UI) -->
+          <div class="pillar-mobile-footer" aria-hidden="true">
+            <div class="pillar-progress-track">
+              <div class="pillar-progress-fill" id="pillarProgressFill" style="width: 25%;"></div>
+            </div>
+            <div class="pillar-step-text">
+              <span id="pillarCurrentCount">01</span> / 04
+            </div>
+          </div>
         </section>
       </div>
 
@@ -493,6 +503,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       let currentIndex = 0;
       let isProgrammaticScroll = false;
+      let detailSwitchTimeout = null;
 
       function getStep() {
         return window.innerWidth < 860 ? 62 : 70;
@@ -526,7 +537,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         // 3. Update detail card
         if (animateDetail) {
           detailInner.classList.add('is-switching');
-          setTimeout(() => {
+          if (detailSwitchTimeout) clearTimeout(detailSwitchTimeout);
+          detailSwitchTimeout = setTimeout(() => {
             if (activeTitle) activeTitle.textContent = current.title;
             if (activeDesc) activeDesc.textContent = current.desc;
             detailInner.classList.remove('is-switching');
@@ -535,6 +547,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           if (activeTitle) activeTitle.textContent = current.title;
           if (activeDesc) activeDesc.textContent = current.desc;
         }
+
+        // 4. Update mobile progress footer
+        const progressFill = document.getElementById('pillarProgressFill');
+        const currentCount = document.getElementById('pillarCurrentCount');
+        if (progressFill) progressFill.style.width = `${((currentIndex + 1) / 4) * 100}%`;
+        if (currentCount) currentCount.textContent = `0${currentIndex + 1}`;
       }
 
       // Scroll-Driven Progression Engine
@@ -542,7 +560,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         if (isProgrammaticScroll) return;
 
         const isMobile = window.innerWidth < 860;
-        const stickyTop = isMobile ? 68 : 80;
+        const stickyTop = isMobile ? 60 : 80;
         const trackRect = scrollTrack.getBoundingClientRect();
         const sectionHeight = stickySection.offsetHeight;
         const totalScrollDistance = scrollTrack.offsetHeight - sectionHeight;
@@ -580,7 +598,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           selectPillar(idx, true);
 
           const isMobile = window.innerWidth < 860;
-          const stickyTop = isMobile ? 68 : 80;
+          const stickyTop = isMobile ? 60 : 80;
           const trackTop = scrollTrack.getBoundingClientRect().top + window.scrollY;
           const sectionHeight = stickySection.offsetHeight;
           const totalScrollDistance = scrollTrack.offsetHeight - sectionHeight;
@@ -679,7 +697,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     padding: 30px 16px 36px 16px;
     font-family: var(--font-body, 'Poppins', sans-serif);
     color: #111111;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .zara-container {
@@ -1430,19 +1448,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     width: 100%;
     height: 240vh; /* Smooth virtual scroll distance */
     margin-top: 24px;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
   }
 
   .zara-trust-section {
     position: -webkit-sticky;
     position: sticky;
-    top: 68px;
-    min-height: calc(100dvh - 125px);
+    top: 60px; /* Aligned flush under 60px mobile navbar */
+    height: calc(100dvh - 120px); /* Exactly fills between top navbar and bottom nav */
+    max-height: 560px;
+    min-height: 480px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    background: transparent;
-    padding: 12px 0 20px 0;
+    justify-content: space-between;
+    background-color: #f8fafc;
+    background-image: repeating-radial-gradient(
+      circle at 0% 50%,
+      rgba(0, 0, 0, 0.04) 0px,
+      rgba(0, 0, 0, 0.04) 2px,
+      transparent 2px,
+      transparent 30px
+    );
+    padding: 12px 0 16px 0;
     box-sizing: border-box;
     z-index: 10;
   }
@@ -1451,11 +1478,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .pillar-system-grid {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     align-items: center;
     width: 100%;
-    margin-top: auto;
-    margin-bottom: auto;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   /* Column 1: Vertical Capsule Ticker */
@@ -1465,18 +1492,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   .pillar-ticker-box {
-    height: 186px;
+    height: 176px; /* Exactly fits 3 pills: 52 + 10 + 52 + 10 + 52 */
     overflow: hidden;
     position: relative;
     padding: 0 4px;
     user-select: none;
     outline: none;
     border-radius: 9999px;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
+    touch-action: pan-y;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
-  /* Top & Bottom Gradient Fades for Ticker Effect (Replaced by clean mask-image) */
+  /* Top & Bottom Gradient Fades for Ticker Effect (Disabled) */
   .pillar-gradient-top,
   .pillar-gradient-bottom {
     display: none;
@@ -1487,8 +1515,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding-top: 67px;
-    padding-bottom: 67px;
+    padding-top: 62px;
+    padding-bottom: 62px;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
   }
@@ -1505,7 +1533,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     justify-content: space-between;
     text-align: left;
     background: transparent;
-    border: 1px solid transparent;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     cursor: pointer;
     color: inherit;
     font-family: inherit;
@@ -1519,16 +1547,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     opacity: 1;
     border: 1px solid #111111;
     background: #ffffff;
-    box-shadow: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     transform: none;
   }
 
   .pillar-pill.is-near {
     opacity: 0.35;
+    border: 1px solid rgba(0, 0, 0, 0.06);
   }
 
   .pillar-pill.is-far {
     opacity: 0.12;
+    border: 1px solid transparent;
   }
 
   .pillar-pill:hover:not(.is-active) {
@@ -1602,6 +1632,39 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     line-height: 1.55;
     margin: 0;
     max-width: 480px;
+  }
+
+  /* Mobile Footer Step Bar (Eliminates bottom blank void) */
+  .pillar-mobile-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .pillar-progress-track {
+    flex: 1;
+    max-width: 140px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .pillar-progress-fill {
+    height: 100%;
+    background: #111111;
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pillar-step-text {
+    font-size: 0.72rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 500;
+    color: #666666;
+    letter-spacing: 1px;
   }
 
   /* --- DESKTOP ENHANCEMENTS (>= 860px) --- */
@@ -1685,8 +1748,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     .zara-trust-section {
       top: 80px;
       min-height: calc(100vh - 120px);
+      max-height: none;
+      height: auto;
       padding: 20px 0 32px 0;
       justify-content: flex-start;
+      background: transparent;
     }
 
     .pillar-system-grid {
@@ -1702,13 +1768,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     .pillar-ticker-box {
-      height: 230px;
+      height: 198px;
+      -webkit-mask-image: none;
+      mask-image: none;
     }
 
     .pillar-track {
       gap: 12px;
-      padding-top: 86px;
-      padding-bottom: 86px;
+      padding-top: 70px;
+      padding-bottom: 70px;
+    }
+
+    .pillar-mobile-footer {
+      display: none;
     }
 
     .pillar-pill {
