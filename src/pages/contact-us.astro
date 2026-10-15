@@ -317,11 +317,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <span>SEND VIA WHATSAPP</span>
             </button>
 
-            <!-- Confidential note -->
-            <p class="element-privacy-note">
-              DIRECT STORE ASSISTANCE • 100% PRIVATE • ZERO SPAM
-            </p>
-
           </form>
 
         </div>
@@ -681,7 +676,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .zara-contact-page {
     background-color: transparent;
-    padding: 30px 16px 80px 16px;
+    padding: 30px 16px 36px 16px;
     font-family: var(--font-body, 'Poppins', sans-serif);
     color: #111111;
     overflow-x: hidden;
@@ -734,7 +729,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: flex;
     flex-direction: column;
     gap: 0;
-    margin-bottom: 60px;
+    margin-bottom: 24px;
     border-top: 1px solid #111111;
     padding-top: 36px;
   }
@@ -1187,24 +1182,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* Form Column (Dedicated Screen Section on Mobile) */
   .zara-col-form {
-    padding-top: 36px;
+    padding-top: 48px; /* Balanced spacing from top hairline divider */
     border-top: 1px solid #111111;
-    min-height: calc(100dvh - 75px);
+    min-height: auto; /* Remove huge empty void */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding-bottom: 110px; /* Safe clearance so floating chat button does not overlap submit button */
+    padding-bottom: 24px; /* Clean, compact finish before footer */
   }
 
   /* --- BESPOKE INQUIRY FORM (REFINED ARCHITECTURAL MINIMALISM) --- */
   .zara-form-header {
-    margin-bottom: 4px;
+    margin-bottom: 12px; /* Breathing room between header title and sub-heading */
   }
 
   .element-form-desc {
     font-size: 0.82rem;
     color: #666666;
-    margin: 0 0 32px 0;
+    margin: 0 0 38px 0; /* Breathing room between sub-heading and form starting point */
     font-weight: 300;
     line-height: 1.5;
     max-width: 440px;
@@ -1396,16 +1391,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .enter:active {
     transform: scale(0.98);
     box-shadow: none;
-  }
-
-  .element-privacy-note {
-    font-size: 0.62rem;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #888888;
-    text-align: center;
-    margin: -10px 0 0 0;
   }
 
   /* --- SECTION HEADER (ANCHORED AT TOP OF LOCKED SCREEN) --- */
