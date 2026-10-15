@@ -689,43 +689,49 @@ footer {
     margin: 0;
     box-shadow: none;
     border-radius: 0;
+    line-height: 1;
 }
 
 .panel-explore-btn.cta span {
-    padding-bottom: 7px;
+    padding-bottom: 0;
     letter-spacing: 4px;
     font-size: 13px;
-    padding-right: 14px;
+    padding-right: 12px;
     text-transform: uppercase;
     font-family: var(--font-body);
     font-weight: 500;
     color: #ffffff;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    line-height: 1;
+    display: inline-block;
 }
 
 .panel-explore-btn.cta svg {
     width: 30px;
     height: 10px;
-    transform: translateX(-8px);
+    transform: translateY(-0.5px) translateX(-8px);
     transition: all 0.3s ease;
     fill: #ffffff;
     filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+    display: block;
+    flex-shrink: 0;
 }
 
 .prada-panel:hover .panel-explore-btn.cta svg,
 .panel-explore-btn.cta:hover svg {
-    transform: translateX(0);
+    transform: translateY(-0.5px) translateX(0);
 }
 
 .panel-explore-btn.cta:active svg {
-    transform: scale(0.9);
+    transform: translateY(-0.5px) scale(0.9);
 }
 
 .panel-explore-btn .hover-underline-animation {
     position: relative;
     color: #ffffff;
-    padding-bottom: 6px;
+    padding-bottom: 0;
     display: inline-block;
+    line-height: 1;
 }
 
 .panel-explore-btn .hover-underline-animation:after {
@@ -733,8 +739,8 @@ footer {
     position: absolute;
     width: 100%;
     transform: scaleX(0);
-    height: 2px;
-    bottom: 0;
+    height: 1.5px;
+    bottom: -4px;
     left: 0;
     background-color: #ffffff;
     transform-origin: bottom right;
@@ -772,16 +778,17 @@ footer {
         font-size: 11px;
         letter-spacing: 3px;
         padding-right: 8px;
-        padding-bottom: 5px;
+        padding-bottom: 0;
+        line-height: 1;
     }
     .panel-explore-btn.cta svg {
         width: 24px;
         height: 8px;
-        transform: translateX(-6px);
+        transform: translateY(-0.5px) translateX(-6px);
     }
     .prada-panel:hover .panel-explore-btn.cta svg,
     .panel-explore-btn.cta:hover svg {
-        transform: translateX(0);
+        transform: translateY(-0.5px) translateX(0);
     }
 }
 
