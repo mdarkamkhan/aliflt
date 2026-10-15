@@ -1525,7 +1525,9 @@ details[open] > .accordion-content {
     color: #111111;
     border-top: 1px solid #111111;
     padding-top: 56px;
+    padding-bottom: 0;
     margin-top: 80px;
+    margin-bottom: 0;
     font-family: var(--font-body);
     position: relative;
     z-index: 10;
@@ -1886,7 +1888,7 @@ details[open] > .accordion-content {
 /* Footer Bottom Bar */
 .footer-bottom {
     border-top: 1px solid rgba(0, 0, 0, 0.08);
-    padding: 24px 32px;
+    padding: 16px 32px;
     background: #ffffff;
 }
 
@@ -1928,8 +1930,9 @@ details[open] > .accordion-content {
 @media (max-width: 600px) {
     .site-footer {
         padding-top: 40px;
-        padding-bottom: 95px !important; /* Clear bottom floating mobile nav */
+        padding-bottom: 0 !important;
         margin-top: 50px;
+        margin-bottom: 0 !important;
     }
 
     .footer-container {
@@ -1986,12 +1989,12 @@ details[open] > .accordion-content {
     }
 
     .footer-bottom {
-        padding: 20px 16px;
+        padding: 12px 16px;
     }
 
     .footer-bottom-inner {
         flex-direction: column;
-        gap: 8px;
+        gap: 4px;
         text-align: center;
     }
 }
@@ -2448,11 +2451,11 @@ details[open] > .accordion-content {
     /* Hide Top Cart on Mobile */
     .nav-actions #cartIcon { display: none !important; }
     
-    /* Body padding taaki content chhipe nahi */
-    body { padding-bottom: 80px !important; }
+    /* Body padding reset - eliminates unwanted gap at the bottom */
+    body { padding-bottom: 0 !important; }
     
-    /* Footer margin fix */
-    .prada-mobile-footer { padding-bottom: 90px; }
+    /* Footer margin reset - eliminates negative space below all rights reserved */
+    .prada-mobile-footer { padding-bottom: 0 !important; }
 }
 /* =========================================
    SIDEBAR FIX FOR BOTTOM NAV
