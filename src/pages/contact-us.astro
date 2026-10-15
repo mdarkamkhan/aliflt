@@ -122,10 +122,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="zara-col-store">
           
           <div class="zara-atelier-card">
-            <span class="zara-col-eyebrow">FLAGSHIP ATELIER</span>
-            <h2 class="zara-col-title">ALIF Ladies Tailor</h2>
+            <div class="zara-atelier-header">
+              <span class="zara-col-eyebrow">SAHIBGANJ</span>
+              <h2 class="zara-col-title">Flagship Atelier</h2>
+            </div>
 
-            <!-- Minimalist 2-Segment Switcher -->
+            <!-- Minimalist Pure Typography Switcher -->
             <div class="atelier-tabs-row" role="tablist" aria-label="Atelier Details">
               <button 
                 type="button" 
@@ -135,8 +137,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 aria-selected="true" 
                 aria-controls="panelLocation"
               >
-                <span class="tab-btn-num">01</span>
-                <span class="tab-btn-title">LOCATION</span>
+                <span>LOCATION</span>
               </button>
               <button 
                 type="button" 
@@ -146,8 +147,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 aria-selected="false" 
                 aria-controls="panelTimings"
               >
-                <span class="tab-btn-num">02</span>
-                <span class="tab-btn-title">TIMINGS</span>
+                <span>TIMINGS</span>
               </button>
             </div>
 
@@ -156,10 +156,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <div class="zara-atelier-meta">
                 <p class="zara-atelier-address">
                   Daal Kuan, College Road<br />
-                  <span class="zara-atelier-landmark">Opposite Joy Fast Food · Sahibganj 816109</span>
-                </p>
-                <p class="zara-atelier-guide">
-                  Centrally located on College Road, 2 minutes from Sahibganj Railway Station.
+                  <span class="zara-atelier-landmark">Opposite Joy Fast Food · 816109</span>
                 </p>
               </div>
 
@@ -193,20 +190,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <span class="zara-status-text" id="liveStatusText">Verifying Store Timings...</span>
                 </div>
 
-                <div class="zara-hours-list">
-                  <div class="zara-hours-row">
-                    <span class="hours-days">SATURDAY — THURSDAY</span>
-                    <span class="hours-time">10:00 — 21:00</span>
+                <div class="zara-hours-clean">
+                  <div class="hours-line">
+                    <span class="hours-label">Sat — Thu:</span>
+                    <span class="hours-val">10:00 — 21:00</span>
                   </div>
-                  <div class="zara-hours-row">
-                    <span class="hours-days">FRIDAY (POST-JUMMAH)</span>
-                    <span class="hours-time">14:00 — 21:00</span>
+                  <div class="hours-line">
+                    <span class="hours-label">Friday:</span>
+                    <span class="hours-val">14:00 — 21:00</span>
                   </div>
                 </div>
-
-                <p class="zara-timing-note">
-                  Walk-ins welcome during all store hours. Bridal fittings & custom embroidery trials available.
-                </p>
               </div>
 
               <!-- Timing Action Duo: Direct Call / WhatsApp Chips -->
@@ -747,65 +740,68 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     flex-direction: column;
   }
 
+  .zara-atelier-header {
+    margin-bottom: 14px;
+  }
+
   .zara-col-eyebrow {
     display: block;
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     font-weight: 600;
     letter-spacing: 2.5px;
     text-transform: uppercase;
-    color: #777777;
-    margin-bottom: 6px;
+    color: #888888;
+    margin-bottom: 4px;
   }
 
   .zara-col-title {
     font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: 1.55rem;
+    font-size: 1.45rem;
     font-weight: 400;
     letter-spacing: 0.5px;
     color: #111111;
-    margin: 0 0 16px 0;
-    line-height: 1.25;
+    margin: 0;
+    line-height: 1.2;
   }
 
-  /* --- ATELIER 2-SEGMENT SWITCHER --- */
+  /* --- ATELIER 2-SEGMENT TYPOGRAPHY SWITCHER --- */
   .atelier-tabs-row {
     display: flex;
-    gap: 8px;
-    margin-bottom: 18px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    padding-bottom: 12px;
+    gap: 24px;
+    margin-bottom: 14px;
+    border-bottom: none;
+    padding-bottom: 0;
   }
 
   .atelier-tab-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 7px 16px;
     background: transparent;
-    border: 1px solid transparent;
-    border-radius: 9999px;
+    border: none;
+    padding: 4px 0 6px 0;
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     color: #888888;
-    transition: all 0.25s ease;
+    position: relative;
+    transition: color 0.2s ease;
     -webkit-tap-highlight-color: transparent;
-  }
-
-  .atelier-tab-btn .tab-btn-num {
-    font-size: 0.62rem;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    opacity: 0.7;
   }
 
   .atelier-tab-btn.is-active {
     color: #111111;
-    border-color: #111111;
-    background: #ffffff;
     font-weight: 600;
+  }
+
+  .atelier-tab-btn.is-active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: #111111;
   }
 
   .atelier-tab-btn:hover:not(.is-active) {
@@ -814,7 +810,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .atelier-tab-panel {
     display: none;
-    animation: atelierTabFade 0.25s ease forwards;
+    animation: atelierTabFade 0.2s ease forwards;
   }
 
   .atelier-tab-panel.is-active {
@@ -824,7 +820,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   @keyframes atelierTabFade {
     from {
       opacity: 0;
-      transform: translateY(4px);
+      transform: translateY(3px);
     }
     to {
       opacity: 1;
@@ -836,79 +832,59 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .zara-atelier-meta {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 2px;
+    margin-bottom: 14px;
   }
 
   .zara-atelier-address {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     font-weight: 500;
     color: #111111;
-    line-height: 1.5;
+    line-height: 1.45;
     margin: 0;
   }
 
   .zara-atelier-landmark {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 300;
     color: #666666;
-    display: inline-block;
     margin-top: 2px;
-  }
-
-  .zara-atelier-guide {
-    font-size: 0.8rem;
-    color: #777777;
-    line-height: 1.5;
-    margin: 4px 0 0 0;
-    font-weight: 300;
+    display: inline-block;
   }
 
   /* --- TIMINGS PANEL STYLES --- */
   .zara-atelier-timings-block {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 8px;
+    margin-bottom: 14px;
   }
 
-  .zara-hours-list {
+  .zara-hours-clean {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 12px 14px;
-    background: rgba(0, 0, 0, 0.02);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 4px;
+    gap: 4px;
   }
 
-  .zara-hours-row {
+  .hours-line {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
+    gap: 12px;
     font-size: 0.82rem;
   }
 
-  .hours-days {
-    font-weight: 500;
-    letter-spacing: 0.8px;
-    color: #444444;
-    font-size: 0.72rem;
+  .hours-label {
+    color: #666666;
+    font-size: 0.78rem;
+    min-width: 76px;
+    font-weight: 400;
   }
 
-  .hours-time {
-    font-weight: 600;
+  .hours-val {
     color: #111111;
+    font-weight: 500;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.8rem;
-  }
-
-  .zara-timing-note {
-    font-size: 0.78rem;
-    color: #777777;
-    line-height: 1.5;
-    margin: 0;
-    font-weight: 300;
   }
 
   .zara-status-line {
@@ -943,9 +919,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* Zara Quiet Action Links (No Emoji, Pure Monochrome) */
   .zara-actions-row {
     display: flex;
-    gap: 10px;
-    margin-top: 4px;
-    margin-bottom: 12px;
+    gap: 8px;
+    margin-top: 2px;
+    margin-bottom: 14px;
     flex-wrap: wrap;
   }
 
@@ -953,15 +929,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 36px;
-    padding: 0 16px;
+    height: 32px;
+    padding: 0 14px;
     border-radius: 9999px;
     background: transparent;
     border: 1px solid #111111;
     color: #111111;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: 500;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
@@ -984,7 +960,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     border-top: 1px solid #111111;
     border-bottom: 1px solid #111111;
     background: #ffffff;
-    margin-top: 24px;
+    margin-top: 14px;
     margin-bottom: 0;
   }
 
