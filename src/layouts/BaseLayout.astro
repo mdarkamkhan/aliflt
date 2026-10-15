@@ -187,29 +187,68 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
 
     <script is:inline>
         // Drawer Nav logic
-        const toggleBtn = document.getElementById('navToggleBtn');
-        const closeBtn = document.getElementById('sidebarCloseBtn');
-        const sidebar = document.getElementById('sidebarMenu');
-        const overlay = document.getElementById('sidebarOverlay');
+        function initSidebar() {
+            const toggleBtn = document.getElementById('navToggleBtn');
+            const closeBtn = document.getElementById('sidebarCloseBtn');
+            const sidebar = document.getElementById('sidebarMenu');
+            const overlay = document.getElementById('sidebarOverlay');
 
-        function openSidebar() {
-            if (sidebar && overlay) {
-                sidebar.classList.add('active');
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
+            function openSidebar(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                if (sidebar && overlay) {
+                    sidebar.classList.add('is-open', 'active');
+                    overlay.classList.add('is-open', 'active');
+                    document.body.classList.add('sidebar-open');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            function closeSidebar(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                if (sidebar && overlay) {
+                    sidebar.classList.remove('is-open', 'active');
+                    overlay.classList.remove('is-open', 'active');
+                    document.body.classList.remove('sidebar-open');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if (toggleBtn) {
+                toggleBtn.onclick = openSidebar;
+            }
+            if (closeBtn) {
+                closeBtn.onclick = closeSidebar;
+            }
+            if (overlay) {
+                overlay.onclick = closeSidebar;
+            }
+
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeSidebar();
+            });
+
+            // Close when clicking a link inside the sidebar
+            if (sidebar) {
+                const links = sidebar.querySelectorAll('a');
+                links.forEach((link) => {
+                    link.addEventListener('click', () => closeSidebar());
+                });
             }
         }
-        function closeSidebar() {
-            if (sidebar && overlay) {
-                sidebar.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        }
 
-        if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
-        if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
-        if (overlay) overlay.addEventListener('click', closeSidebar);
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSidebar);
+        } else {
+            initSidebar();
+        }
+        document.addEventListener('astro:page-load', initSidebar);
 
         // Cart Count badge synchronization
         try {
