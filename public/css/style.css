@@ -1580,7 +1580,7 @@ details[open] > .accordion-content {
 /* Footer Links Columns */
 .footer-columns {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 40px;
 }
 
@@ -1633,6 +1633,211 @@ details[open] > .accordion-content {
     transform: translate(2px, -2px);
 }
 
+/* --- DOODLE NOTEBOOK SOCIAL SECTION (FROM ELEMENTS/social icons) --- */
+.footer-doodle-social-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.doodle-social-heading {
+    text-align: center;
+    margin: 0;
+}
+
+/* Notebook Container */
+.doodle-container {
+    list-style: none;
+    margin: 0 auto;
+    padding: 16px 28px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+
+    /* Beautiful textured lined paper look */
+    background-color: #fdfbf7;
+    background-image: repeating-linear-gradient(
+        transparent,
+        transparent 20px,
+        #8ef0ce 20px,
+        #8ef0ce 22px
+    );
+
+    /* Hand-drawn sketchy border */
+    border: 3.5px solid #1e1e24;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    box-shadow: 6px 8px 0px rgba(30, 30, 36, 0.15);
+
+    /* SVG Pencil Texture */
+    filter: url(#pencil-texture);
+}
+
+.doodle-icon-content {
+    margin: 0;
+    position: relative;
+    font-family: "Patrick Hand", "Comic Sans MS", cursive, sans-serif;
+}
+
+/* Drawn Buttons */
+.doodle-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    text-decoration: none;
+
+    /* Irregular hand-drawn circles */
+    border: 3.5px solid #1e1e24;
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    box-shadow: 3px 4px 0px #1e1e24;
+
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Base Pastel Colors */
+.link-instagram {
+    background-color: #ffc4d9;
+}
+.link-whatsapp {
+    background-color: #caffbf;
+}
+.link-mail {
+    background-color: #fdffb6;
+}
+.link-review {
+    background-color: #a0c4ff;
+}
+
+.doodle-svg {
+    width: 24px;
+    height: 24px;
+    fill: #1e1e24;
+    transform: rotate(-5deg);
+    transition: all 0.3s ease;
+}
+
+/* Hover Animations */
+.doodle-link:hover {
+    transform: translateY(-8px) scale(1.1);
+    box-shadow: 6px 10px 0px #1e1e24;
+    animation: child-wiggle 0.3s ease-in-out infinite alternate;
+}
+
+/* Crayon Fill Colors on Hover */
+.link-instagram:hover {
+    background-color: #ff0a54;
+    border-radius: 50% 50% 60% 40% / 40% 60% 50% 50%;
+}
+.link-whatsapp:hover {
+    background-color: #25D366;
+    border-radius: 60% 40% 40% 60% / 50% 50% 40% 60%;
+}
+.link-mail:hover {
+    background-color: #fcd22a;
+    border-radius: 70% 30% 50% 50% / 40% 60% 40% 60%;
+}
+.link-review:hover {
+    background-color: #00bbf9;
+    border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
+}
+
+/* Icon turning white on hover */
+.doodle-link:hover .doodle-svg {
+    fill: #ffffff;
+    stroke: #ffffff;
+    filter: drop-shadow(2px 2px 0px #1e1e24) drop-shadow(-1px -1px 0px #1e1e24);
+    transform: rotate(15deg) scale(1.2);
+}
+
+@keyframes child-wiggle {
+    0% { transform: translateY(-8px) scale(1.1) rotate(-4deg); }
+    100% { transform: translateY(-8px) scale(1.1) rotate(4deg); }
+}
+
+/* Speech Bubble Tooltips */
+.doodle-tooltip {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-5deg);
+    padding: 6px 14px;
+    color: #1e1e24;
+    border: 3.5px solid #1e1e24;
+    border-radius: 255px 25px 225px 25px / 25px 225px 25px 255px;
+    box-shadow: 4px 6px 0px #1e1e24;
+    opacity: 0;
+    visibility: hidden;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: none;
+    z-index: 50;
+    white-space: nowrap;
+}
+
+.doodle-tooltip::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(15deg) skewX(25deg);
+    width: 14px;
+    height: 14px;
+    border-bottom: 3.5px solid #1e1e24;
+    border-right: 3.5px solid #1e1e24;
+}
+
+.tooltip-instagram {
+    background-color: #ff0a54;
+    color: #ffffff;
+    text-shadow: 2px 2px 0px #1e1e24;
+}
+.tooltip-instagram::after {
+    background-color: #ff0a54;
+}
+
+.tooltip-whatsapp {
+    background-color: #25D366;
+    color: #ffffff;
+    text-shadow: 2px 2px 0px #1e1e24;
+}
+.tooltip-whatsapp::after {
+    background-color: #25D366;
+}
+
+.tooltip-mail {
+    background-color: #fcd22a;
+    color: #1e1e24;
+}
+.tooltip-mail::after {
+    background-color: #fcd22a;
+}
+
+.tooltip-review {
+    background-color: #00bbf9;
+    color: #ffffff;
+    text-shadow: 2px 2px 0px #1e1e24;
+}
+.tooltip-review::after {
+    background-color: #00bbf9;
+}
+
+.doodle-icon-content:hover .doodle-tooltip,
+.doodle-link:hover + .doodle-tooltip,
+.doodle-link:focus + .doodle-tooltip {
+    opacity: 1;
+    visibility: visible;
+    top: -65px;
+    transform: translateX(-50%) rotate(3deg);
+}
+
 /* Footer Bottom Bar */
 .footer-bottom {
     border-top: 1px solid rgba(0, 0, 0, 0.08);
@@ -1659,10 +1864,19 @@ details[open] > .accordion-content {
 }
 
 /* Mobile Responsiveness */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
     .footer-columns {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 32px 24px;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px 20px;
+    }
+
+    .footer-columns .footer-col:last-child {
+        grid-column: span 2;
+        text-align: center;
+    }
+
+    .footer-columns .footer-col:last-child .footer-links-list {
+        align-items: center;
     }
 }
 
@@ -1674,7 +1888,7 @@ details[open] > .accordion-content {
     }
 
     .footer-container {
-        padding: 0 20px 32px 20px;
+        padding: 0 16px 32px 16px;
         gap: 32px;
     }
 
@@ -1692,11 +1906,6 @@ details[open] > .accordion-content {
         letter-spacing: 2px;
     }
 
-    .footer-columns {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 28px 20px;
-    }
-
     .footer-col-title {
         margin-bottom: 14px;
         font-size: 0.62rem;
@@ -1711,8 +1920,28 @@ details[open] > .accordion-content {
         letter-spacing: 0.5px;
     }
 
+    .doodle-container {
+        padding: 12px 16px;
+        gap: 12px;
+    }
+
+    .doodle-link {
+        width: 42px;
+        height: 42px;
+    }
+
+    .doodle-svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .doodle-tooltip {
+        font-size: 14px;
+        padding: 4px 10px;
+    }
+
     .footer-bottom {
-        padding: 20px 20px;
+        padding: 20px 16px;
     }
 
     .footer-bottom-inner {
