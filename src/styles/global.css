@@ -1518,133 +1518,231 @@ details[open] > .accordion-content {
     font-weight: 600; /* Make active text slightly bolder */
     }
 /* =========================================
-   PRADA MOBILE FOOTER STYLES
+   MINIMAL LUXURY FOOTER STYLES
 ========================================= */
-.prada-mobile-footer {
+.site-footer {
     background-color: #ffffff;
-    color: #000000;
-    padding-top: 40px;
-    font-family: var(--font-body); /* Use your Poppins font */
+    color: #111111;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding-top: 48px;
+    margin-top: 60px;
+    font-family: var(--font-body);
+    position: relative;
+    z-index: 10;
 }
 
-/* 1. Social Icons */
-.pm-social-row {
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 36px 24px;
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 48px;
+    align-items: start;
+}
+
+/* Brand Section */
+.footer-brand {
     display: flex;
-    gap: 25px; /* Prada has wide spacing */
-    padding: 0 20px 40px 20px; /* Bottom padding important */
+    flex-direction: column;
+    gap: 6px;
 }
 
-.pm-social-row a {
-    color: #000;
-    transition: opacity 0.3s;
-}
-.pm-social-row a:hover { opacity: 0.6; }
-
-/* 2. Accordion Styles (Collapsible) */
-.pm-accordion-wrapper {
-    border-top: 1px solid #e5e5e5; /* Thin grey line top */
-}
-
-.pm-accordion {
-    border-bottom: 1px solid #e5e5e5; /* Thin grey line bottom */
+.footer-logo {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #111;
+    text-decoration: none;
+    line-height: 1;
 }
 
-.pm-accordion-header {
-    list-style: none; /* Hide default arrow */
-    padding: 20px;
-    font-family: var(--font-heading); /* Use Playfair or Heading font */
-    font-weight: 600;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    cursor: pointer;
+.footer-tagline {
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 400;
+    font-style: italic;
+    color: #555;
+    margin: 0;
+}
+
+.footer-desc {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #777;
+    margin: 6px 0 12px 0;
+    max-width: 320px;
+}
+
+.footer-social-row {
     display: flex;
-    justify-content: space-between;
+    gap: 12px;
     align-items: center;
 }
 
-/* Chrome/Safari marker hide */
-.pm-accordion-header::-webkit-details-marker { display: none; }
-
-/* Icons Logic */
-.pm-icon-plus, .pm-icon-minus { font-size: 1.2rem; font-weight: 300; }
-.pm-icon-minus { display: none; }
-
-/* Switch icons when open */
-details[open] .pm-icon-plus { display: none; }
-details[open] .pm-icon-minus { display: block; }
-
-.pm-accordion-content {
-    padding: 0 20px 25px 20px;
-    background: #fff;
-}
-
-/* Review Styling */
-.pm-review-item {
-    margin-bottom: 15px;
-    border-left: 2px solid #000;
-    padding-left: 15px;
-}
-.pm-review-text {
-    font-size: 0.9rem;
-    font-style: italic;
-    margin: 0 0 5px 0;
-    color: #333;
-}
-.pm-review-author {
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin: 0;
-    text-transform: uppercase;
-}
-.pm-view-all {
-    display: inline-block;
-    margin-top: 10px;
-    font-size: 0.8rem;
-    text-decoration: underline;
-    color: #000;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Links Styling inside accordion */
-.pm-links-list { list-style: none; padding: 0; margin: 0; }
-.pm-links-list li { margin-bottom: 10px; }
-.pm-links-list a { text-decoration: none; color: #333; font-size: 0.9rem; }
-
-
-/* 3. Contact Button (Like Store Locator) */
-.pm-contact-wrapper {
-    padding: 40px 0;
-    text-align: center;
-    border-bottom: 1px solid #e5e5e5; /* Line below button */
-}
-
-.pm-contact-btn {
+.footer-social-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    text-decoration: none;
-    color: #000;
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f8f8f8;
+    color: #222;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: all 0.25s ease;
 }
 
-/* 4. Bottom Bar */
-.pm-bottom-bar {
-    padding: 25px 20px;
+.footer-social-link:hover {
+    background: #111;
+    color: #ffffff;
+    border-color: #111;
+    transform: translateY(-2px);
+}
+
+/* Footer Links Columns */
+.footer-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.3fr;
+    gap: 32px;
+}
+
+.footer-col-title {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: #888;
+    margin: 0 0 16px 0;
+}
+
+.footer-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-links-list a {
+    text-decoration: none;
+    color: #333;
+    font-size: 0.88rem;
+    font-weight: 400;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.footer-links-list a:hover {
+    color: #000;
+    transform: translateX(3px);
+}
+
+/* Feedback & Reviews Column */
+.footer-review-text {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: #666;
+    margin: 0 0 14px 0;
+}
+
+.footer-review-card {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 16px;
+    background: #fafafa;
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.footer-review-stars {
+    color: #f59e0b;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+}
+
+.footer-review-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #111;
+    letter-spacing: 0.3px;
+}
+
+.footer-review-card:hover {
+    background: #111;
+    border-color: #111;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.footer-review-card:hover .footer-review-label {
+    color: #fff;
+}
+
+/* Footer Bottom Copyright */
+.footer-bottom {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 20px 24px;
     text-align: center;
 }
-.pm-bottom-bar p {
-    font-size: 0.7rem;
-    color: #000;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+
+.footer-copyright {
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: #888;
     margin: 0;
+    text-transform: uppercase;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .site-footer {
+        padding-top: 36px;
+        padding-bottom: 95px !important; /* Clears floating mobile bottom bar */
+        margin-top: 40px;
+    }
+    
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 0 20px 28px 20px;
+    }
+
+    .footer-brand {
+        text-align: left;
+    }
+
+    .footer-desc {
+        max-width: 100%;
+    }
+
+    .footer-columns {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px 20px;
+    }
+
+    .footer-col-review {
+        grid-column: span 2;
+        padding-top: 8px;
+        border-top: 1px dashed rgba(0, 0, 0, 0.08);
+    }
+
+    .footer-bottom {
+        padding: 16px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-columns {
+        grid-template-columns: 1fr 1fr;
+        gap: 22px 16px;
+    }
 }
 /* =========================================
    PREMIUM SIDEBAR STYLES (UPDATED)
