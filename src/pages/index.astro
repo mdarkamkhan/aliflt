@@ -43,92 +43,96 @@ for (const p of [...products].reverse()) {
     <!-- Products Showcase Panel -->
     <a href="/products/" class="prada-panel">
         <div class="blob blob-products" aria-hidden="true"></div>
-        <div class="prada-panel-overlay"></div>
-        <div class="prada-panel-label">ALiF Products</div>
-        <div class="swapper-container products-panel-gallery">
-            {highlightedProducts.map((item, index) => (
-                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                    <img src={item.data.image} alt={item.data.title} />
-                </div>
-            ))}
-            {highlightedProducts.length === 0 && (
-                <p class="empty-gallery-message">Products coming soon.</p>
-            )}
-        </div>
-        <div class="panel-explore-btn cta" aria-label="Explore Products">
-            <span class="hover-underline-animation">Shop Now</span>
-            <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" width="30" height="10" viewBox="0 0 46 16">
-                <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
-            </svg>
+        <div class="panel-inner-bg">
+            <div class="prada-panel-label">ALiF Products</div>
+            <div class="swapper-container products-panel-gallery">
+                {highlightedProducts.map((item, index) => (
+                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                        <img src={item.data.image} alt={item.data.title} />
+                    </div>
+                ))}
+                {highlightedProducts.length === 0 && (
+                    <p class="empty-gallery-message">Products coming soon.</p>
+                )}
+            </div>
+            <div class="panel-explore-btn cta" aria-label="Explore Products">
+                <span class="hover-underline-animation">Shop Now</span>
+                <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 16">
+                    <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
+                </svg>
+            </div>
         </div>
     </a>
 
     <!-- Tailoring Services Showcase Panel -->
     <a href="/services/" class="prada-panel">
         <div class="blob blob-services" aria-hidden="true"></div>
-        <div class="prada-panel-overlay"></div>
-        <div class="prada-panel-label">ALiF Services</div>
-        <div class="swapper-container services-panel-gallery">
-            {recentServices.map((item, index) => (
-                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} />
-                </div>
-            ))}
-            {recentServices.length === 0 && (
-                <p class="empty-gallery-message">Services coming soon.</p>
-            )}
-        </div>
-        <div class="panel-explore-btn cta" aria-label="Explore Services">
-            <span class="hover-underline-animation">Explore</span>
-            <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" width="30" height="10" viewBox="0 0 46 16">
-                <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
-            </svg>
+        <div class="panel-inner-bg">
+            <div class="prada-panel-label">ALiF Services</div>
+            <div class="swapper-container services-panel-gallery">
+                {recentServices.map((item, index) => (
+                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                        <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} />
+                    </div>
+                ))}
+                {recentServices.length === 0 && (
+                    <p class="empty-gallery-message">Services coming soon.</p>
+                )}
+            </div>
+            <div class="panel-explore-btn cta" aria-label="Explore Services">
+                <span class="hover-underline-animation">Explore</span>
+                <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 16">
+                    <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
+                </svg>
+            </div>
         </div>
     </a>
 
     <!-- Our Works Showcase Panel -->
     <a href="/works/" class="prada-panel">
         <div class="blob blob-works" aria-hidden="true"></div>
-        <div class="prada-panel-overlay"></div>
-        <div class="prada-panel-label">ALiF Works</div>
-        <div class="swapper-container works-panel-gallery">
-            {recentWorks.map((item, index) => (
-                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Our Work'} />
-                </div>
-            ))}
-            {recentWorks.length === 0 && (
-                <p class="empty-gallery-message">Our work coming soon.</p>
-            )}
-        </div>
-        <div class="panel-explore-btn cta" aria-label="Explore Works">
-            <span class="hover-underline-animation">Explore</span>
-            <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" width="30" height="10" viewBox="0 0 46 16">
-                <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
-            </svg>
+        <div class="panel-inner-bg">
+            <div class="prada-panel-label">ALiF Works</div>
+            <div class="swapper-container works-panel-gallery">
+                {recentWorks.map((item, index) => (
+                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                        <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Our Work'} />
+                    </div>
+                ))}
+                {recentWorks.length === 0 && (
+                    <p class="empty-gallery-message">Our work coming soon.</p>
+                )}
+            </div>
+            <div class="panel-explore-btn cta" aria-label="Explore Works">
+                <span class="hover-underline-animation">Explore</span>
+                <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 16">
+                    <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
+                </svg>
+            </div>
         </div>
     </a>
 
     <!-- Designs Showcase Panel -->
     <a href="/designs/" class="prada-panel">
         <div class="blob blob-designs" aria-hidden="true"></div>
-        <div class="prada-panel-overlay"></div>
-        <div class="prada-panel-label">ALiF Designs</div>
-        <div class="swapper-container designs-panel-gallery">
-            {recentDesigns.map((item, index) => (
-                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Design'} />
-                </div>
-            ))}
-            {recentDesigns.length === 0 && (
-                <p class="empty-gallery-message">Designs coming soon.</p>
-            )}
-        </div>
-        <div class="panel-explore-btn cta" aria-label="Explore Designs">
-            <span class="hover-underline-animation">Explore</span>
-            <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" width="30" height="10" viewBox="0 0 46 16">
-                <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
-            </svg>
+        <div class="panel-inner-bg">
+            <div class="prada-panel-label">ALiF Designs</div>
+            <div class="swapper-container designs-panel-gallery">
+                {recentDesigns.map((item, index) => (
+                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
+                        <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Design'} />
+                    </div>
+                ))}
+                {recentDesigns.length === 0 && (
+                    <p class="empty-gallery-message">Designs coming soon.</p>
+                )}
+            </div>
+            <div class="panel-explore-btn cta" aria-label="Explore Designs">
+                <span class="hover-underline-animation">Explore</span>
+                <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 16">
+                    <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
+                </svg>
+            </div>
         </div>
     </a>
 

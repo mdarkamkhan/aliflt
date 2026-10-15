@@ -86,59 +86,55 @@ const wappLink = `https://wa.me/7250470009?text=${encodeURIComponent(wappText)}`
         </div>
       </div>
 
-      <div class="product-accordion-container" style="margin-top: var(--space-2xl); grid-column: 1 / -1;">
-        {service_information && (
-          <details class="accordion-item" open>
-            <summary class="accordion-summary">
-              <h3 class="accordion-heading">Service Details &amp; Customization</h3>
-              <span class="accordion-caret">^</span>
-            </summary>
-            <div class="accordion-content">
-              <pre style="font-family: var(--font-body); font-size: 0.88rem; line-height: 1.8; color: #444; white-space: pre-wrap; margin: 0; padding: 15px 0;">{service_information}</pre>
-            </div>
-          </details>
-        )}
-
-        {description && (
-          <details class="accordion-item">
-            <summary class="accordion-summary">
-              <h3 class="accordion-heading">Overview</h3>
-              <span class="accordion-caret">^</span>
-            </summary>
-            <div class="accordion-content">
-              <p class="accordion-description-text" style="padding: 15px 0; font-size: 0.9rem; line-height: 1.6; color: #555;">
-                {description}
-              </p>
-            </div>
-          </details>
-        )}
-      </div>
-
     </div>
   </div>
 
+  <div class="product-accordion-container" style="margin-top: 40px;">
+    {service_information && (
+      <details class="accordion-item" open>
+        <summary class="accordion-summary">
+          <h3 class="accordion-heading">Service Details &amp; Customization</h3>
+          <span class="accordion-caret">^</span>
+        </summary>
+        <div class="accordion-content">
+          <pre style="font-family: var(--font-body); font-size: 0.88rem; line-height: 1.8; color: #444; white-space: pre-wrap; margin: 0; padding: 15px 0;">{service_information}</pre>
+        </div>
+      </details>
+    )}
+
+    {description && (
+      <details class="accordion-item">
+        <summary class="accordion-summary">
+          <h3 class="accordion-heading">Overview</h3>
+          <span class="accordion-caret">^</span>
+        </summary>
+        <div class="accordion-content">
+          <p class="accordion-description-text" style="padding: 15px 0; font-size: 0.9rem; line-height: 1.6; color: #555;">
+            {description}
+          </p>
+        </div>
+      </details>
+    )}
+  </div>
+
   <!-- Related Tailoring Services Carousel -->
-  <div class="section" style="border-top: 1px solid #eee;" id="related-services-section">
-    <div class="container">
-      <h3 style="text-align: center; margin-bottom: var(--space-lg); font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px;">Other Tailoring Services</h3>
-      
-      <div style="display: flex; overflow-x: auto; gap: var(--space-md); padding-bottom: var(--space-md); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
-        {displaySimilar.map((item) => (
-          <a href={`/services/${item.id}/`} style="text-decoration: none; color: #000; min-width: 160px; max-width: 160px; flex-shrink: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.06); display: flex; flex-direction: column;">
-            <div style="aspect-ratio: 4 / 5; overflow: hidden; background: #e9eaec; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-              {item.data.image ? (
-                <img src={item.data.image} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: top center;" loading="lazy" />
-              ) : (
-                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #111; color: #fff; font-family: var(--font-heading); letter-spacing: 2px; font-size: 0.85rem;">ALiF</div>
-              )}
-            </div>
-            <div style="padding: 10px 10px 12px 10px; text-align: left;">
-              <p style="margin: 0; font-size: 0.88rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{item.data.title}</p>
-              <p style="margin: 4px 0 0 0; font-size: 0.82rem; color: #111; font-weight: 600;">Starting ₹{item.data.price}</p>
-            </div>
-          </a>
-        ))}
-      </div>
+  <div class="section" style="padding: 40px 20px; background: #fcfcfc; border-top: 1px solid #eee; margin-top: 40px;">
+    <h3 style="text-align: center; margin-bottom: 25px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px;">Other Tailoring Services</h3>
+    
+    <div style="display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+      {displaySimilar.map((item) => (
+        <a href={`/services/${item.id}/`} style="text-decoration: none; color: #000; min-width: 170px; flex-shrink: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(190, 190, 190), 0.3em 0.3em 1em rgba(0,0,0,0.3); display: flex; flex-direction: column; margin: 10px 4px 15px 4px; padding-bottom: 12px;">
+          <div style="aspect-ratio: 4 / 5; overflow: hidden; margin-bottom: 10px; background: #e9eaec; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+            {item.data.image ? (
+              <img src={item.data.image} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: top center;" loading="lazy" />
+            ) : (
+              <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #111; color: #fff; font-family: var(--font-heading); letter-spacing: 2px; font-size: 0.85rem;">ALiF</div>
+            )}
+          </div>
+          <p style="margin: 0; font-size: 0.9rem; text-align: center; font-weight: 500; padding: 0 8px;">{item.data.title}</p>
+          <p style="margin: 4px 0 0 0; font-size: 0.82rem; text-align: center; color: #666;">Starting ₹{item.data.price}</p>
+        </a>
+      ))}
     </div>
   </div>
 </BaseLayout>
