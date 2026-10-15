@@ -399,6 +399,13 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
             if (badge1) badge1.innerText = count;
             if (badge2) badge2.innerText = count;
         } catch(e) {}
+
+        // Service Worker Registration & Cache Busting
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(reg => {
+                reg.update();
+            }).catch(() => {});
+        }
     </script>
 </body>
 </html>
