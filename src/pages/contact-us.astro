@@ -253,74 +253,76 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         </div>
 
-        <!-- Column 2: Form (Design from ELEMENTS/form) -->
+        <!-- Column 2: Form (Minimalist Luxury Bespoke Inquiry) -->
         <div class="zara-col-form">
           
-          <div class="element-form-card">
-            <span class="login">ONLINE INQUIRY</span>
-            <p class="element-form-desc">Inquire about custom tailoring, bridal lehengas, or fine fabric collections.</p>
-
-            <form id="tailorInquiryForm" class="element-form-body" novalidate>
-              
-              <!-- Full Name Input from ELEMENTS/form -->
-              <div class="inputBox">
-                <input 
-                  type="text" 
-                  id="inqName" 
-                  required="required" 
-                  autocomplete="name"
-                />
-                <span class="user">Full Name</span>
-              </div>
-
-              <!-- Phone / WhatsApp Input from ELEMENTS/form -->
-              <div class="inputBox">
-                <input 
-                  type="tel" 
-                  id="inqPhone" 
-                  required="required" 
-                  autocomplete="tel"
-                />
-                <span>Phone / WhatsApp</span>
-              </div>
-
-              <!-- Category Chips Selector -->
-              <div class="element-category-group">
-                <span class="element-category-title">Select Category</span>
-                <div class="element-chips-grid" id="serviceChipsGrid">
-                  <button type="button" class="service-chip is-selected" data-service="Designer Blouse">Designer Blouse</button>
-                  <button type="button" class="service-chip" data-service="Bridal Lehenga">Bridal Lehenga</button>
-                  <button type="button" class="service-chip" data-service="Salwar Suit">Salwar Suit</button>
-                  <button type="button" class="service-chip" data-service="Fabrics &amp; Material">Fabrics &amp; Material</button>
-                  <button type="button" class="service-chip" data-service="Laces &amp; Latkans">Laces &amp; Latkans</button>
-                  <button type="button" class="service-chip" data-service="Saree Fall &amp; Pico">Saree Fall &amp; Pico</button>
-                  <button type="button" class="service-chip" data-service="Gown / Western Dress">Gown &amp; Western</button>
-                  <button type="button" class="service-chip" data-service="Other Inquiry">Other Inquiry</button>
-                </div>
-              </div>
-
-              <!-- Message / Notes Input from ELEMENTS/form -->
-              <div class="inputBox inputBox-textarea">
-                <textarea 
-                  id="inqMessage" 
-                  placeholder=" " 
-                  rows="3"
-                ></textarea>
-                <span>Requirements (Optional)</span>
-              </div>
-
-              <!-- Enter Submit Button from ELEMENTS/form -->
-              <button type="submit" class="enter" id="btnSubmitInquiry">
-                SEND VIA WHATSAPP →
-              </button>
-
-              <!-- Confidential note -->
-              <p class="element-privacy-note">
-                DIRECT STORE ASSISTANCE • 100% PRIVATE • ZERO SPAM
-              </p>
-
-            </form>
+          <div class="zara-form-header">
+            <span class="zara-col-eyebrow">BESPOKE ATELIER</span>
+            <h2 class="zara-col-title">Online Inquiry</h2>
           </div>
+          <p class="element-form-desc">Inquire about custom tailoring, bridal lehengas, or fine fabric collections.</p>
+
+          <form id="tailorInquiryForm" class="element-form-body" novalidate>
+            
+            <!-- Full Name Input from ELEMENTS/form (Refined 1px Architectural Hairline) -->
+            <div class="inputBox">
+              <input 
+                type="text" 
+                id="inqName" 
+                required="required" 
+                autocomplete="name"
+              />
+              <span class="user">Full Name</span>
+            </div>
+
+            <!-- Phone / WhatsApp Input from ELEMENTS/form (Refined 1px Architectural Hairline) -->
+            <div class="inputBox">
+              <input 
+                type="tel" 
+                id="inqPhone" 
+                required="required" 
+                autocomplete="tel"
+              />
+              <span>Phone / WhatsApp</span>
+            </div>
+
+            <!-- Category Chips Selector (Horizontal Smooth Swipe Rail - Option A) -->
+            <div class="element-category-group">
+              <span class="element-category-title">Select Category</span>
+              <div class="element-chips-grid" id="serviceChipsGrid">
+                <button type="button" class="service-chip is-selected" data-service="Designer Blouse">Designer Blouse</button>
+                <button type="button" class="service-chip" data-service="Bridal Lehenga">Bridal Lehenga</button>
+                <button type="button" class="service-chip" data-service="Salwar Suit">Salwar Suit</button>
+                <button type="button" class="service-chip" data-service="Fabrics &amp; Material">Fabrics &amp; Material</button>
+                <button type="button" class="service-chip" data-service="Laces &amp; Latkans">Laces &amp; Latkans</button>
+                <button type="button" class="service-chip" data-service="Saree Fall &amp; Pico">Saree Fall &amp; Pico</button>
+                <button type="button" class="service-chip" data-service="Gown / Western Dress">Gown &amp; Western</button>
+                <button type="button" class="service-chip" data-service="Other Inquiry">Other Inquiry</button>
+              </div>
+            </div>
+
+            <!-- Message / Requirements Input (Required - Not Optional) -->
+            <div class="inputBox inputBox-textarea">
+              <textarea 
+                id="inqMessage" 
+                required="required"
+                placeholder=" " 
+                rows="3"
+              ></textarea>
+              <span>Requirements</span>
+            </div>
+
+            <!-- Enter Submit Button (Solid Black Luxury Statement Bar) -->
+            <button type="submit" class="enter" id="btnSubmitInquiry">
+              <span>SEND VIA WHATSAPP</span>
+            </button>
+
+            <!-- Confidential note -->
+            <p class="element-privacy-note">
+              DIRECT STORE ASSISTANCE • 100% PRIVATE • ZERO SPAM
+            </p>
+
+          </form>
 
         </div>
 
@@ -440,14 +442,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           return;
         }
 
+        if (!notes) {
+          alert('Please enter your requirements.');
+          messageInput?.focus();
+          return;
+        }
+
         // Format professional WhatsApp message
         let waText = `✨ *New Inquiry — ALIF Sahibganj*\n\n`;
         waText += `👤 *Client Name:* ${name}\n`;
         waText += `📞 *Phone/WhatsApp:* ${phone}\n`;
         waText += `🛍️ *Category / Service:* ${service}\n`;
-        if (notes) {
-          waText += `📝 *Notes/Requirements:* ${notes}\n`;
-        }
+        waText += `📝 *Requirements:* ${notes}\n`;
         waText += `\n—\n_Sent via aliflt.com/contact-us_`;
 
         const waUrl = `https://wa.me/7250470009?text=${encodeURIComponent(waText)}`;
@@ -1181,52 +1187,37 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* Form Column (Dedicated Screen Section on Mobile) */
   .zara-col-form {
-    padding-top: 50px;
+    padding-top: 36px;
     border-top: 1px solid #111111;
     min-height: calc(100dvh - 75px);
-  }
-
-  /* --- BESPOKE INQUIRY FORM (EXACT DESIGN FROM ELEMENTS/form) --- */
-  .element-form-card {
     display: flex;
     flex-direction: column;
-    gap: 22px;
-    background: #ffffff;
-    border: 1px solid #111111;
-    border-radius: 4px;
-    padding: 26px 20px;
-    box-sizing: border-box;
-    width: 100%;
+    justify-content: flex-start;
+    padding-bottom: 110px; /* Safe clearance so floating chat button does not overlap submit button */
   }
 
-  .login {
-    color: #000000;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    display: block;
-    font-weight: 700;
-    font-size: 1.35rem;
-    font-family: inherit;
-    line-height: 1.2;
-    margin: 0;
+  /* --- BESPOKE INQUIRY FORM (REFINED ARCHITECTURAL MINIMALISM) --- */
+  .zara-form-header {
+    margin-bottom: 4px;
   }
 
   .element-form-desc {
     font-size: 0.82rem;
     color: #666666;
-    margin: -12px 0 4px 0;
+    margin: 0 0 32px 0;
     font-weight: 300;
     line-height: 1.5;
+    max-width: 440px;
   }
 
   .element-form-body {
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 28px;
     width: 100%;
   }
 
-  /* .inputBox exact from ELEMENTS/form */
+  /* .inputBox with refined 1px thin architectural hairline (not thick 2px) */
   .inputBox {
     position: relative;
     width: 100%;
@@ -1237,13 +1228,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     padding: 12px 14px;
     outline: none;
     border: none;
-    color: #000000;
+    color: #111111;
     font-size: 0.95rem;
     background: transparent;
-    border-left: 2px solid #000000;
-    border-bottom: 2px solid #000000;
-    transition: 0.15s ease;
-    border-bottom-left-radius: 8px;
+    border-left: 1px solid #111111;
+    border-bottom: 1px solid #111111;
+    transition: border 0.2s ease, border-radius 0.2s ease;
+    border-bottom-left-radius: 6px;
     box-sizing: border-box;
     font-family: inherit;
   }
@@ -1253,17 +1244,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     padding: 12px 14px;
     outline: none;
     border: none;
-    color: #000000;
+    color: #111111;
     font-size: 0.95rem;
     background: transparent;
-    border-left: 2px solid #000000;
-    border-bottom: 2px solid #000000;
-    transition: 0.15s ease;
-    border-bottom-left-radius: 8px;
+    border-left: 1px solid #111111;
+    border-bottom: 1px solid #111111;
+    transition: border 0.2s ease, border-radius 0.2s ease;
+    border-bottom-left-radius: 6px;
     box-sizing: border-box;
     font-family: inherit;
     resize: vertical;
-    min-height: 75px;
+    min-height: 80px;
     line-height: 1.5;
   }
 
@@ -1275,12 +1266,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin-left: 8px;
     padding: 0 6px;
     pointer-events: none;
-    font-size: 11px;
-    color: #444444;
+    font-size: 10.5px;
+    color: #666666;
     text-transform: uppercase;
-    transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    letter-spacing: 2px;
-    border-radius: 6px;
+    transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    letter-spacing: 1.5px;
+    border-radius: 4px;
     white-space: nowrap;
   }
 
@@ -1288,87 +1279,107 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     top: 22px;
   }
 
-  /* Float animation state from ELEMENTS/form */
+  /* Float animation state from ELEMENTS/form (Refined 1px thin badge) */
   .inputBox input:valid ~ span,
   .inputBox input:focus ~ span,
   .inputBox textarea:focus ~ span,
+  .inputBox textarea:valid ~ span,
   .inputBox textarea:not(:placeholder-shown) ~ span {
-    top: -12px;
+    top: -10px;
     transform: translateY(0);
-    font-size: 9px;
-    padding: 3px 10px;
-    background: #000000;
-    letter-spacing: 0.2em;
+    font-size: 8.5px;
+    padding: 2px 8px;
+    background: #111111;
+    letter-spacing: 1.5px;
     color: #ffffff;
-    border-radius: 4px;
-    font-weight: 700;
+    border-radius: 3px;
+    font-weight: 600;
   }
 
   .inputBox input:valid,
   .inputBox input:focus,
   .inputBox textarea:focus,
+  .inputBox textarea:valid,
   .inputBox textarea:not(:placeholder-shown) {
-    border: 2px solid #000000;
-    border-radius: 8px;
+    border: 1px solid #111111;
+    border-radius: 6px;
   }
 
-  /* Category selection chips matching ELEMENTS/form */
+  /* Category selection chips (Option A: Horizontal Smooth Swipe Rail) */
   .element-category-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
 
   .element-category-title {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: #000000;
+    color: #888888;
   }
 
   .element-chips-grid {
     display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+    padding-top: 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+  }
+
+  .element-chips-grid::-webkit-scrollbar {
+    display: none;
   }
 
   .service-chip {
-    padding: 7px 12px;
-    border-radius: 5px;
-    border: 2px solid #000000;
-    cursor: pointer;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    white-space: nowrap;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 9999px;
+    border: 1px solid #111111;
     background-color: transparent;
-    color: #000000;
-    transition: 0.25s ease;
+    color: #111111;
+    transition: all 0.25s ease;
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: 0.62rem;
+    font-weight: 500;
     letter-spacing: 1.2px;
-    font-weight: 600;
     font-family: inherit;
+    cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .service-chip:hover,
   .service-chip.is-selected {
-    background-color: #000000;
+    background-color: #111111;
     color: #ffffff;
+    font-weight: 600;
   }
 
-  /* .enter submit button exact from ELEMENTS/form */
+  /* .enter submit button (Solid Black Luxury Statement Bar) */
   .enter {
     height: 48px;
     width: 100%;
-    border-radius: 5px;
-    border: 2px solid #000000;
+    border-radius: 9999px;
+    border: 1px solid #111111;
     cursor: pointer;
-    background-color: transparent;
-    color: #000000;
-    transition: 0.4s ease;
+    background-color: #111111;
+    color: #ffffff;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     text-transform: uppercase;
-    font-size: 11px;
+    font-size: 0.68rem;
     letter-spacing: 2px;
-    font-weight: 700;
+    font-weight: 600;
     font-family: inherit;
     display: flex;
     align-items: center;
@@ -1377,22 +1388,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   .enter:hover {
-    background-color: #000000;
-    color: #ffffff;
+    background-color: #222222;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
   }
 
   .enter:active {
-    transform: scale(0.99);
+    transform: scale(0.98);
+    box-shadow: none;
   }
 
   .element-privacy-note {
     font-size: 0.62rem;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     color: #888888;
     text-align: center;
-    margin: -8px 0 0 0;
+    margin: -10px 0 0 0;
   }
 
   /* --- SECTION HEADER (ANCHORED AT TOP OF LOCKED SCREEN) --- */
