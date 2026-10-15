@@ -262,19 +262,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       </div>
 
+      <!-- Store Trust & Perfection Section Header (Normal Page Flow, NOT locked) -->
+      <div class="zara-trust-head">
+        <span class="zara-eyebrow">THE ALIF STANDARD</span>
+        <h2 class="zara-trust-title">Why Sahibganj Chooses ALIF</h2>
+      </div>
+
       <!-- Store Trust & Perfection Pillars (Sticky Scroll-Driven Showcase) -->
       <div class="zara-trust-scroll-track" id="pillarScrollTrack">
         <section class="zara-trust-section" id="pillarStickySection" aria-label="ALIF Guarantees">
-          <!-- Minimal & Elegant Header -->
-          <div class="zara-trust-head">
-            <span class="zara-eyebrow">THE ALIF STANDARD</span>
-            <h2 class="zara-trust-title">Why Sahibganj Chooses ALIF</h2>
-          </div>
           
           <!-- Interactive 2-Column Layout -->
           <div class="pillar-system-grid">
             
-            <!-- Column 1: Interactive Capsule Ticker -->
+            <!-- Column 1: Interactive Capsule Ticker (Slim 52px Pills) -->
             <div class="pillar-ticker-col">
               <div 
                 class="pillar-ticker-box" 
@@ -297,10 +298,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     aria-selected="true" 
                     role="tab"
                   >
-                    <div class="pillar-pill-info">
-                      <span class="pillar-pill-title">17+ Years Legacy</span>
-                      <span class="pillar-pill-sub">01 / HERITAGE</span>
-                    </div>
+                    <span class="pillar-pill-title">17+ Years Legacy</span>
                     <span class="pillar-pill-num">01</span>
                   </button>
 
@@ -312,10 +310,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     aria-selected="false" 
                     role="tab"
                   >
-                    <div class="pillar-pill-info">
-                      <span class="pillar-pill-title">Perfect Fit Guarantee</span>
-                      <span class="pillar-pill-sub">02 / PRECISION</span>
-                    </div>
+                    <span class="pillar-pill-title">Perfect Fit Guarantee</span>
                     <span class="pillar-pill-num">02</span>
                   </button>
 
@@ -327,10 +322,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     aria-selected="false" 
                     role="tab"
                   >
-                    <div class="pillar-pill-info">
-                      <span class="pillar-pill-title">Express Processing</span>
-                      <span class="pillar-pill-sub">03 / PRIORITY</span>
-                    </div>
+                    <span class="pillar-pill-title">Express Processing</span>
                     <span class="pillar-pill-num">03</span>
                   </button>
 
@@ -342,36 +334,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     aria-selected="false" 
                     role="tab"
                   >
-                    <div class="pillar-pill-info">
-                      <span class="pillar-pill-title">Matching Trims &amp; Laces</span>
-                      <span class="pillar-pill-sub">04 / CURATION</span>
-                    </div>
+                    <span class="pillar-pill-title">Matching Trims &amp; Laces</span>
                     <span class="pillar-pill-num">04</span>
                   </button>
                 </div>
               </div>
             </div>
 
-            <!-- Column 2: Active Detail Card -->
+            <!-- Column 2: Active Detail Card (Crisp & High-Fashion) -->
             <div class="pillar-detail-col">
               <div class="pillar-detail-box" id="pillarDetailBox" aria-live="polite">
                 <div class="pillar-detail-inner" id="pillarDetailInner">
-                  <div class="pillar-detail-header">
-                    <span class="pillar-detail-tag" id="activePillarTag">01 / HERITAGE</span>
-                    <span class="pillar-detail-badge">ATELIER STANDARD</span>
-                  </div>
                   <h3 class="pillar-detail-title" id="activePillarTitle">17+ Years Legacy</h3>
                   <p class="pillar-detail-desc" id="activePillarDesc">
                     Specialized in women's bespoke tailoring, bridal craft, and fine fabrics in Sahibganj since 2008. Handcrafted by master artisans with generational cutting expertise.
                   </p>
-                  <div class="pillar-detail-footer">
-                    <div class="pillar-feature-item">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span id="activePillarMeta">Generational Tailoring • Sahibganj Since 2008</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -531,31 +508,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const pillars = [
         {
           index: "01",
-          tag: "01 / HERITAGE",
           title: "17+ Years Legacy",
-          desc: "Specialized in women's bespoke tailoring, bridal craft, and fine fabrics in Sahibganj since 2008. Handcrafted by master artisans with generational cutting expertise.",
-          meta: "Generational Tailoring • Sahibganj Since 2008"
+          desc: "Specialized in women's bespoke tailoring, bridal craft, and fine fabrics in Sahibganj since 2008. Handcrafted by master artisans with generational cutting expertise."
         },
         {
           index: "02",
-          tag: "02 / PRECISION",
           title: "Perfect Fit Guarantee",
-          desc: "Every cut is customized to your exact posture and drape, with complimentary fit adjustments until your silhouette feels flawless.",
-          meta: "Posture Drape Analysis • Free Adjustments"
+          desc: "Every cut is customized to your exact posture and drape, with complimentary fit adjustments until your silhouette feels flawless."
         },
         {
           index: "03",
-          tag: "03 / PRIORITY",
           title: "Express Processing",
-          desc: "Urgent bridal, festive, and emergency stitching orders expedited upon request without compromising stitch precision or finish quality.",
-          meta: "Fast-Track Delivery • Dedicated Master Tailor"
+          desc: "Urgent bridal, festive, and emergency stitching orders expedited upon request without compromising stitch precision or finish quality."
         },
         {
           index: "04",
-          tag: "04 / CURATION",
           title: "Matching Trims & Laces",
-          desc: "Sahibganj's premier collection of designer borders, zari trims, and handcrafted latkans in-store, perfectly coordinated to match your custom garment.",
-          meta: "Designer Zari Borders • Handcrafted Latkans"
+          desc: "Sahibganj's premier collection of designer borders, zari trims, and handcrafted latkans in-store, perfectly coordinated to match your custom garment."
         }
       ];
 
@@ -563,12 +532,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const stickySection = document.getElementById('pillarStickySection');
       const track = document.getElementById('pillarTrack');
       const pills = document.querySelectorAll('.pillar-pill');
-      const tickerBox = document.getElementById('pillarTickerBox');
       const detailInner = document.getElementById('pillarDetailInner');
-      const activeTag = document.getElementById('activePillarTag');
       const activeTitle = document.getElementById('activePillarTitle');
       const activeDesc = document.getElementById('activePillarDesc');
-      const activeMeta = document.getElementById('activePillarMeta');
 
       if (!track || !pills.length || !detailInner || !scrollTrack || !stickySection) return;
 
@@ -576,7 +542,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       let isProgrammaticScroll = false;
 
       function getStep() {
-        return window.innerWidth < 860 ? 74 : 84;
+        return window.innerWidth < 860 ? 62 : 70;
       }
 
       function selectPillar(idx, animateDetail = true) {
@@ -608,17 +574,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         if (animateDetail) {
           detailInner.classList.add('is-switching');
           setTimeout(() => {
-            if (activeTag) activeTag.textContent = current.tag;
             if (activeTitle) activeTitle.textContent = current.title;
             if (activeDesc) activeDesc.textContent = current.desc;
-            if (activeMeta) activeMeta.textContent = current.meta;
             detailInner.classList.remove('is-switching');
           }, 140);
         } else {
-          if (activeTag) activeTag.textContent = current.tag;
           if (activeTitle) activeTitle.textContent = current.title;
           if (activeDesc) activeDesc.textContent = current.desc;
-          if (activeMeta) activeMeta.textContent = current.meta;
         }
       }
 
@@ -1313,12 +1275,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin: -8px 0 0 0;
   }
 
+  /* --- SECTION HEADER (NORMAL FLOW, NOT PINNED) --- */
+  .zara-trust-head {
+    border-top: 1px solid #111111;
+    padding-top: 48px;
+    margin-top: 48px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+
+  .zara-trust-title {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.85rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #111111;
+    margin: 4px 0 0 0;
+    line-height: 1.2;
+  }
+
   /* --- SCROLL-DRIVEN PINNING TRACK & THE SYSTEM SHOWCASE --- */
   .zara-trust-scroll-track {
     position: relative;
     width: 100%;
-    height: 280vh; /* Virtual scroll distance on mobile */
-    margin-top: 36px;
+    height: 240vh; /* Smooth virtual scroll distance */
+    margin-top: 16px;
   }
 
   .zara-trust-section {
@@ -1330,32 +1312,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     flex-direction: column;
     justify-content: center;
     background: #ffffff;
-    border-top: 1px solid #111111;
-    padding: 16px 0 24px 0;
+    padding: 16px 0;
     box-sizing: border-box;
     z-index: 10;
-  }
-
-  .zara-trust-head {
-    margin-bottom: 24px;
-  }
-
-  .zara-trust-title {
-    font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: 1.85rem;
-    font-weight: 400;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #111111;
-    margin: 4px 0 0 0;
-    line-height: 1.2;
   }
 
   /* 2-Column Responsive Layout */
   .pillar-system-grid {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
     align-items: center;
     width: 100%;
   }
@@ -1367,20 +1333,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   .pillar-ticker-box {
-    height: 236px;
+    height: 186px;
     overflow: hidden;
     position: relative;
     padding: 0 4px;
     user-select: none;
     outline: none;
-    border-radius: 12px;
+    border-radius: 9999px;
   }
 
   /* Top & Bottom Gradient Fades for Ticker Effect */
   .pillar-gradient-top {
     position: absolute;
     inset: 0 0 auto 0;
-    height: 3rem;
+    height: 2.5rem;
     background: linear-gradient(to bottom, #ffffff 25%, rgba(255, 255, 255, 0));
     z-index: 10;
     pointer-events: none;
@@ -1389,7 +1355,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .pillar-gradient-bottom {
     position: absolute;
     inset: auto 0 0 0;
-    height: 3rem;
+    height: 2.5rem;
     background: linear-gradient(to top, #ffffff 25%, rgba(255, 255, 255, 0));
     z-index: 10;
     pointer-events: none;
@@ -1400,16 +1366,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding-top: 86px;
-    padding-bottom: 86px;
+    padding-top: 67px;
+    padding-bottom: 67px;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
   }
 
-  /* Capsule Pill Button */
+  /* Capsule Pill Button — Slim & Elegant 52px */
   .pillar-pill {
     width: 100%;
-    min-height: 64px;
+    height: 52px;
+    min-height: 52px;
     padding: 0 1.25rem;
     border-radius: 9999px;
     display: flex;
@@ -1426,12 +1393,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Active Pill: Outline / Glow and Full Opacity */
+  /* Active Pill: Crisp Black Border & Full Opacity */
   .pillar-pill.is-active {
     opacity: 1;
     border: 2px solid #000000;
     background: #ffffff;
-    box-shadow: 0 0 0 1px #000000, 0 10px 28px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 0 1px #000000, 0 6px 20px rgba(0, 0, 0, 0.07);
     transform: scale(1.01);
   }
 
@@ -1448,18 +1415,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     border-color: rgba(0, 0, 0, 0.3);
   }
 
-  .pillar-pill-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
   .pillar-pill-title {
-    font-size: 0.95rem;
-    letter-spacing: -0.015em;
+    font-size: 0.88rem;
+    letter-spacing: -0.01em;
     color: #444444;
     transition: color 0.25s ease;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .pillar-pill.is-active .pillar-pill-title {
@@ -1467,21 +1431,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-weight: 600;
   }
 
-  .pillar-pill-sub {
-    font-size: 0.65rem;
-    color: #888888;
-    font-weight: 600;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-  }
-
-  .pillar-pill.is-active .pillar-pill-sub {
-    color: #000000;
-  }
-
   .pillar-pill-num {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     color: #888888;
     margin-left: 1rem;
@@ -1493,21 +1444,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-weight: 700;
   }
 
-  /* Column 2: Active Detail Card */
+  /* Column 2: Active Detail Card (Crisp & High-Fashion) */
   .pillar-detail-col {
     order: 1;
     width: 100%;
-  }
-
-  @media (min-width: 860px) {
-    .pillar-detail-col {
-      order: 2;
-      padding-left: 3rem;
-      border-left: 1px solid rgba(0, 0, 0, 0.12);
-      min-height: 290px;
-      display: flex;
-      align-items: center;
-    }
   }
 
   .pillar-detail-inner {
@@ -1515,87 +1455,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    transition: opacity 0.22s ease, transform 0.22s ease;
   }
 
   .pillar-detail-inner.is-switching {
     opacity: 0;
-    transform: translateY(8px);
-  }
-
-  .pillar-detail-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    gap: 12px;
-  }
-
-  .pillar-detail-tag {
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #777777;
-  }
-
-  .pillar-detail-badge {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #000000;
-    background: #f4f4f4;
-    padding: 3px 8px;
-    border-radius: 3px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    transform: translateY(6px);
   }
 
   .pillar-detail-title {
     font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: 2.2rem;
+    font-size: 1.65rem;
     font-weight: 400;
     color: #111111;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    margin: 0 0 16px 0;
-  }
-
-  @media (min-width: 640px) {
-    .pillar-detail-title {
-      font-size: 2.6rem;
-    }
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    margin: 0 0 10px 0;
   }
 
   .pillar-detail-desc {
     color: #555555;
-    font-size: 0.96rem;
+    font-size: 0.88rem;
     font-weight: 300;
-    line-height: 1.7;
-    margin: 0 0 24px 0;
-    max-width: 520px;
-  }
-
-  .pillar-detail-footer {
-    padding-top: 16px;
-    border-top: 1px dashed rgba(0, 0, 0, 0.12);
-  }
-
-  .pillar-feature-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #222222;
-  }
-
-  .pillar-feature-item svg {
-    color: #000000;
-    flex-shrink: 0;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 480px;
   }
 
   /* --- DESKTOP ENHANCEMENTS (>= 860px) --- */
@@ -1639,9 +1523,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     /* Pinned Showcase Desktop Overrides */
+    .zara-trust-head {
+      margin-top: 64px;
+      margin-bottom: 32px;
+    }
+
+    .zara-trust-title {
+      font-size: 2.2rem;
+    }
+
     .zara-trust-scroll-track {
-      height: 320vh;
-      margin-top: 56px;
+      height: 280vh;
+      margin-top: 24px;
     }
 
     .zara-trust-section {
@@ -1650,13 +1543,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       padding: 36px 0;
     }
 
-    .zara-trust-title {
-      font-size: 2.1rem;
-    }
-
     .pillar-system-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1.15fr;
       gap: 56px;
     }
 
@@ -1665,42 +1554,43 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     .pillar-ticker-box {
-      height: 290px;
+      height: 230px;
     }
 
     .pillar-track {
       gap: 12px;
-      padding-top: 109px;
-      padding-bottom: 109px;
+      padding-top: 86px;
+      padding-bottom: 86px;
     }
 
     .pillar-pill {
-      min-height: 72px;
-      padding: 0 1.6rem;
+      height: 58px;
+      min-height: 58px;
+      padding: 0 1.5rem;
     }
 
     .pillar-pill-title {
-      font-size: 0.98rem;
+      font-size: 0.95rem;
     }
 
     .pillar-detail-col {
       order: 2;
       padding-left: 3rem;
       border-left: 1px solid rgba(0, 0, 0, 0.12);
-      min-height: 290px;
+      min-height: 230px;
       display: flex;
       align-items: center;
     }
 
     .pillar-detail-title {
-      font-size: 2.6rem;
-      margin: 0 0 16px 0;
+      font-size: 2.4rem;
+      margin: 0 0 14px 0;
     }
 
     .pillar-detail-desc {
       font-size: 0.98rem;
       line-height: 1.7;
-      margin: 0 0 24px 0;
+      max-width: 520px;
     }
   }
 
