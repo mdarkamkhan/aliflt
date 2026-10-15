@@ -228,12 +228,12 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                         <div class="doodle-tooltip tooltip-mail">Mail</div>
                     </li>
                     <li class="doodle-icon-content">
-                        <a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" rel="noopener noreferrer" aria-label="Google Review" class="doodle-link link-review">
-                            <svg class="doodle-svg" viewBox="0 0 24 24" fill="#1e1e24">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="doodle-link link-facebook">
+                            <svg class="doodle-svg" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 30 30">
+                                <path class="doodle-path" d="M29.059 15.085C29.058 7.322 22.764 1.028 15 1.028S0.941 7.323 0.941 15.087c0 6.989 5.1 12.787 11.781 13.875l0.081 0.011V19.15H9.232v-4.065h3.57v-3.096a4.962 4.962 0 0 1 5.329 -5.469l-0.017 -0.001c1.124 0.016 2.212 0.115 3.273 0.292l-0.126 -0.018v3.459h-1.774a2.033 2.033 0 0 0 -2.291 2.204l-0.001 -0.008v2.636h3.899l-0.623 4.065h-3.276v9.823c6.762 -1.101 11.862 -6.899 11.863 -13.888" />
                             </svg>
                         </a>
-                        <div class="doodle-tooltip tooltip-review">Reviews</div>
+                        <div class="doodle-tooltip tooltip-facebook">Facebook</div>
                     </li>
                 </ul>
             </div>
@@ -309,12 +309,72 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
             }
         }
 
+        // Interactive Doodle Social Icons: 1st click wiggles, 2nd click opens link
+        function initDoodleSocial() {
+            const doodleLinks = document.querySelectorAll('.doodle-link');
+            if (!doodleLinks.length) return;
+
+            doodleLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const isWiggling = this.classList.contains('is-wiggling');
+                    const parent = this.closest('.doodle-icon-content');
+
+                    if (!isWiggling) {
+                        // 1st click: prevent opening link and activate wiggle + tooltip
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        // Reset any other icon
+                        doodleLinks.forEach(other => {
+                            other.classList.remove('is-wiggling');
+                            const otherParent = other.closest('.doodle-icon-content');
+                            if (otherParent) otherParent.classList.remove('is-wiggling');
+                        });
+
+                        // Start wiggling this icon
+                        this.classList.add('is-wiggling');
+                        if (parent) parent.classList.add('is-wiggling');
+                    } else {
+                        // 2nd click: already wiggling, so proceed to open link!
+                        const href = this.getAttribute('href');
+                        const target = this.getAttribute('target') || '_self';
+                        if (href && target === '_blank') {
+                            e.preventDefault();
+                            window.open(href, '_blank', 'noopener,noreferrer');
+                        }
+                        setTimeout(() => {
+                            this.classList.remove('is-wiggling');
+                            if (parent) parent.classList.remove('is-wiggling');
+                        }, 500);
+                    }
+                });
+            });
+
+            // Dismiss wiggling when clicking anywhere outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.doodle-container')) {
+                    doodleLinks.forEach(link => {
+                        link.classList.remove('is-wiggling');
+                        const parent = link.closest('.doodle-icon-content');
+                        if (parent) parent.classList.remove('is-wiggling');
+                    });
+                }
+            });
+        }
+
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initSidebar);
+            document.addEventListener('DOMContentLoaded', () => {
+                initSidebar();
+                initDoodleSocial();
+            });
         } else {
             initSidebar();
+            initDoodleSocial();
         }
-        document.addEventListener('astro:page-load', initSidebar);
+        document.addEventListener('astro:page-load', () => {
+            initSidebar();
+            initDoodleSocial();
+        });
 
         // Cart Count badge synchronization
         try {
