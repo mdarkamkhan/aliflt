@@ -189,92 +189,74 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         </div>
 
-        <!-- Column 2: Minimalist Bespoke Consultation Form (Zara / H&M Style) -->
+        <!-- Column 2: Form (Design from ELEMENTS/form) -->
         <div class="zara-col-form">
           
-          <div class="zara-section-head">
-            <span class="zara-col-eyebrow">DIRECT INQUIRY</span>
-            <h2 class="zara-col-title">Send a Message</h2>
-            <p class="zara-form-intro">
-              Inquire about custom stitching, bridal lehengas, suit cuts, or fabric collections. Submit below to connect directly with our store team on WhatsApp.
-            </p>
-          </div>
+          <div class="element-form-card">
+            <span class="login">ONLINE INQUIRY</span>
+            <p class="element-form-desc">Inquire about custom tailoring, bridal lehengas, or fine fabric collections.</p>
 
-          <form id="tailorInquiryForm" class="zara-form" novalidate>
-            
-            <!-- Minimal Underline Input: Full Name -->
-            <div class="zara-field">
-              <label for="inqName" class="zara-label">
-                YOUR FULL NAME <span class="zara-req">*</span>
-              </label>
-              <input 
-                type="text" 
-                id="inqName" 
-                class="zara-input" 
-                placeholder="e.g. Fatima Khan" 
-                required 
-                autocomplete="name"
-              />
-            </div>
-
-            <!-- Minimal Underline Input: Phone / WhatsApp -->
-            <div class="zara-field">
-              <label for="inqPhone" class="zara-label">
-                PHONE / WHATSAPP NUMBER <span class="zara-req">*</span>
-              </label>
-              <input 
-                type="tel" 
-                id="inqPhone" 
-                class="zara-input" 
-                placeholder="e.g. 72504 70009" 
-                required 
-                autocomplete="tel"
-              />
-            </div>
-
-            <!-- Minimal Category Tags (Flat, Architectural) -->
-            <div class="zara-field">
-              <label class="zara-label">
-                SELECT SERVICE / CATEGORY <span class="zara-req">*</span>
-              </label>
-              <div class="zara-chips-wrap" id="serviceChipsGrid">
-                <button type="button" class="service-chip is-selected" data-service="Designer Blouse">Designer Blouse</button>
-                <button type="button" class="service-chip" data-service="Bridal Lehenga">Bridal Lehenga</button>
-                <button type="button" class="service-chip" data-service="Salwar Suit">Salwar Suit</button>
-                <button type="button" class="service-chip" data-service="Fabrics &amp; Material">Fabrics &amp; Material</button>
-                <button type="button" class="service-chip" data-service="Laces &amp; Latkans">Laces &amp; Latkans</button>
-                <button type="button" class="service-chip" data-service="Saree Fall &amp; Pico">Saree Fall &amp; Pico</button>
-                <button type="button" class="service-chip" data-service="Gown / Western Dress">Gown &amp; Western</button>
-                <button type="button" class="service-chip" data-service="Other Inquiry">Other Inquiry</button>
+            <form id="tailorInquiryForm" class="element-form-body" novalidate>
+              
+              <!-- Full Name Input from ELEMENTS/form -->
+              <div class="inputBox">
+                <input 
+                  type="text" 
+                  id="inqName" 
+                  required="required" 
+                  autocomplete="name"
+                />
+                <span class="user">Full Name</span>
               </div>
-            </div>
 
-            <!-- Minimal Textarea: Requirements -->
-            <div class="zara-field">
-              <label for="inqMessage" class="zara-label">
-                REQUIREMENTS OR DESIGN NOTES <span class="zara-opt">(OPTIONAL)</span>
-              </label>
-              <textarea 
-                id="inqMessage" 
-                class="zara-input zara-textarea" 
-                rows="3" 
-                placeholder="Mention any specific neck design, sleeve style, fabric details, or target event date..."
-              ></textarea>
-            </div>
+              <!-- Phone / WhatsApp Input from ELEMENTS/form -->
+              <div class="inputBox">
+                <input 
+                  type="tel" 
+                  id="inqPhone" 
+                  required="required" 
+                  autocomplete="tel"
+                />
+                <span>Phone / WhatsApp</span>
+              </div>
 
-            <!-- Submit Button: Stark Flat Black Block (Zara Signature) -->
-            <div class="zara-submit-wrap">
-              <button type="submit" class="zara-btn-submit" id="btnSubmitInquiry">
-                <span>SEND INQUIRY VIA WHATSAPP →</span>
+              <!-- Category Chips Selector -->
+              <div class="element-category-group">
+                <span class="element-category-title">Select Category</span>
+                <div class="element-chips-grid" id="serviceChipsGrid">
+                  <button type="button" class="service-chip is-selected" data-service="Designer Blouse">Designer Blouse</button>
+                  <button type="button" class="service-chip" data-service="Bridal Lehenga">Bridal Lehenga</button>
+                  <button type="button" class="service-chip" data-service="Salwar Suit">Salwar Suit</button>
+                  <button type="button" class="service-chip" data-service="Fabrics &amp; Material">Fabrics &amp; Material</button>
+                  <button type="button" class="service-chip" data-service="Laces &amp; Latkans">Laces &amp; Latkans</button>
+                  <button type="button" class="service-chip" data-service="Saree Fall &amp; Pico">Saree Fall &amp; Pico</button>
+                  <button type="button" class="service-chip" data-service="Gown / Western Dress">Gown &amp; Western</button>
+                  <button type="button" class="service-chip" data-service="Other Inquiry">Other Inquiry</button>
+                </div>
+              </div>
+
+              <!-- Message / Notes Input from ELEMENTS/form -->
+              <div class="inputBox inputBox-textarea">
+                <textarea 
+                  id="inqMessage" 
+                  placeholder=" " 
+                  rows="3"
+                ></textarea>
+                <span>Requirements (Optional)</span>
+              </div>
+
+              <!-- Enter Submit Button from ELEMENTS/form -->
+              <button type="submit" class="enter" id="btnSubmitInquiry">
+                SEND VIA WHATSAPP →
               </button>
-            </div>
 
-            <!-- Minimal Trust Strip -->
-            <p class="zara-form-privacy">
-              DIRECT STORE ASSISTANCE • ZERO SPAM • STRICTLY CONFIDENTIAL
-            </p>
+              <!-- Confidential note -->
+              <p class="element-privacy-note">
+                DIRECT STORE ASSISTANCE • 100% PRIVATE • ZERO SPAM
+              </p>
 
-          </form>
+            </form>
+          </div>
 
         </div>
 
@@ -870,156 +852,213 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     opacity: 0.6;
   }
 
-  /* --- BESPOKE INQUIRY FORM (ZARA STYLE UNDERLINES & PURE WHITE) --- */
-  .zara-form-intro {
-    font-size: 0.84rem;
-    color: #666666;
-    line-height: 1.6;
-    margin: 6px 0 0 0;
-    font-weight: 300;
-  }
-
-  .zara-form {
+  /* --- BESPOKE INQUIRY FORM (EXACT DESIGN FROM ELEMENTS/form) --- */
+  .element-form-card {
     display: flex;
     flex-direction: column;
     gap: 22px;
-    margin-top: 26px;
-  }
-
-  .zara-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .zara-label {
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 1.8px;
-    text-transform: uppercase;
-    color: #111111;
-  }
-
-  .zara-req {
-    color: #111111;
-  }
-
-  .zara-opt {
-    font-size: 0.6rem;
-    color: #888888;
-    font-weight: 400;
-  }
-
-  /* Minimal Underline Inputs (Inspired by Zara & ELEMENTS/form) */
-  .zara-input {
-    width: 100%;
-    border: none;
-    border-bottom: 1.5px solid #111111;
-    background: transparent;
-    padding: 10px 0;
-    font-size: 0.95rem;
-    font-family: inherit;
-    color: #111111;
-    border-radius: 0;
-    outline: none;
-    transition: border-color 0.2s ease, padding 0.2s ease;
+    background: #ffffff;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    padding: 28px 22px;
     box-sizing: border-box;
+    width: 100%;
   }
 
-  .zara-input::placeholder {
-    color: #aaaaaa;
-    font-size: 0.85rem;
+  .login {
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: block;
+    font-weight: 700;
+    font-size: 1.35rem;
+    font-family: inherit;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .element-form-desc {
+    font-size: 0.82rem;
+    color: #666666;
+    margin: -12px 0 4px 0;
     font-weight: 300;
-  }
-
-  .zara-input:focus {
-    border-bottom: 2px solid #000000;
-    background: transparent;
-  }
-
-  .zara-textarea {
-    resize: vertical;
-    min-height: 70px;
     line-height: 1.5;
   }
 
-  /* Minimal Category Tags */
-  .zara-chips-wrap {
+  .element-form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    width: 100%;
+  }
+
+  /* .inputBox exact from ELEMENTS/form */
+  .inputBox {
+    position: relative;
+    width: 100%;
+  }
+
+  .inputBox input {
+    width: 100%;
+    padding: 12px 14px;
+    outline: none;
+    border: none;
+    color: #000000;
+    font-size: 0.95rem;
+    background: transparent;
+    border-left: 2px solid #000000;
+    border-bottom: 2px solid #000000;
+    transition: 0.15s ease;
+    border-bottom-left-radius: 8px;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+
+  .inputBox textarea {
+    width: 100%;
+    padding: 12px 14px;
+    outline: none;
+    border: none;
+    color: #000000;
+    font-size: 0.95rem;
+    background: transparent;
+    border-left: 2px solid #000000;
+    border-bottom: 2px solid #000000;
+    transition: 0.15s ease;
+    border-bottom-left-radius: 8px;
+    box-sizing: border-box;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 75px;
+    line-height: 1.5;
+  }
+
+  .inputBox span {
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 8px;
+    padding: 0 6px;
+    pointer-events: none;
+    font-size: 11px;
+    color: #444444;
+    text-transform: uppercase;
+    transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    letter-spacing: 2px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .inputBox-textarea span {
+    top: 22px;
+  }
+
+  /* Float animation state from ELEMENTS/form */
+  .inputBox input:valid ~ span,
+  .inputBox input:focus ~ span,
+  .inputBox textarea:focus ~ span,
+  .inputBox textarea:not(:placeholder-shown) ~ span {
+    top: -12px;
+    transform: translateY(0);
+    font-size: 9px;
+    padding: 3px 10px;
+    background: #000000;
+    letter-spacing: 0.2em;
+    color: #ffffff;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .inputBox input:valid,
+  .inputBox input:focus,
+  .inputBox textarea:focus,
+  .inputBox textarea:not(:placeholder-shown) {
+    border: 2px solid #000000;
+    border-radius: 8px;
+  }
+
+  /* Category selection chips matching ELEMENTS/form */
+  .element-category-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .element-category-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #000000;
+  }
+
+  .element-chips-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 4px;
+    gap: 7px;
   }
 
   .service-chip {
-    padding: 7px 13px;
-    border-radius: 0;
-    border: 1px solid #cccccc;
-    background: transparent;
-    color: #111111;
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
+    padding: 7px 12px;
+    border-radius: 5px;
+    border: 2px solid #000000;
     cursor: pointer;
+    background-color: transparent;
+    color: #000000;
+    transition: 0.25s ease;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    font-weight: 600;
     font-family: inherit;
-    transition: all 0.2s ease;
     -webkit-tap-highlight-color: transparent;
   }
 
-  .service-chip:hover {
-    border-color: #111111;
-  }
-
+  .service-chip:hover,
   .service-chip.is-selected {
-    background: #111111;
+    background-color: #000000;
     color: #ffffff;
-    border-color: #111111;
   }
 
-  /* Submit Button (Zara Signature Flat Block) */
-  .zara-submit-wrap {
-    margin-top: 10px;
-  }
-
-  .zara-btn-submit {
+  /* .enter submit button exact from ELEMENTS/form */
+  .enter {
+    height: 48px;
     width: 100%;
-    height: 50px;
-    background: #111111;
-    color: #ffffff;
-    border: 1px solid #111111;
-    border-radius: 0;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
+    border-radius: 5px;
+    border: 2px solid #000000;
     cursor: pointer;
+    background-color: transparent;
+    color: #000000;
+    transition: 0.4s ease;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-family: inherit;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
     -webkit-tap-highlight-color: transparent;
   }
 
-  .zara-btn-submit:hover {
-    background: #ffffff;
-    color: #111111;
-  }
-
-  .zara-btn-submit:active {
-    background: #222222;
+  .enter:hover {
+    background-color: #000000;
     color: #ffffff;
   }
 
-  .zara-form-privacy {
+  .enter:active {
+    transform: scale(0.99);
+  }
+
+  .element-privacy-note {
     font-size: 0.62rem;
     font-weight: 600;
-    letter-spacing: 1.8px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     color: #888888;
     text-align: center;
-    margin: 8px 0 0 0;
-    line-height: 1.5;
+    margin: -8px 0 0 0;
   }
 
   /* --- ZARA EDITORIAL TRUST SECTION --- */
