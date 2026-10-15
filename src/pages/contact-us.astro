@@ -678,7 +678,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .zara-contact-page {
     background-color: transparent;
-    padding: 30px 16px 36px 16px;
+    padding: 30px 16px 0 16px;
     font-family: var(--font-body, 'Poppins', sans-serif);
     color: #111111;
     overflow-x: clip;
@@ -731,9 +731,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: flex;
     flex-direction: column;
     gap: 0;
-    margin-bottom: 24px;
+    margin-bottom: 0;
     border-top: 1px solid #111111;
-    padding-top: 36px;
+    padding-top: 100px; /* Starting gap of Store Section below Line 2 */
   }
 
   .zara-col-store {
@@ -741,7 +741,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding-bottom: 134px; /* Exact 134px spacing to next separator line */
+    padding-bottom: 100px; /* Ending gap of Store Section above Line 3 */
   }
 
   .zara-atelier-card {
@@ -1184,13 +1184,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* Form Column (Dedicated Screen Section on Mobile) */
   .zara-col-form {
-    padding-top: 48px; /* Balanced spacing from top hairline divider */
+    padding-top: 100px; /* Starting gap of Form Section below Line 3 */
     border-top: 1px solid #111111;
-    min-height: auto; /* Remove huge empty void */
+    min-height: auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding-bottom: 24px; /* Clean, compact finish before footer */
+    padding-bottom: 100px; /* Ending gap of Form Section above Line 4 */
   }
 
   /* --- BESPOKE INQUIRY FORM (REFINED ARCHITECTURAL MINIMALISM) --- */
@@ -1398,7 +1398,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* --- SECTION HEADER (ANCHORED AT TOP OF LOCKED SCREEN) --- */
   .zara-trust-head {
     border-top: 1px solid #111111;
-    padding-top: 14px;
+    padding-top: 100px; /* Starting gap of Trust Section below Line 1 */
     margin-top: 0;
     margin-bottom: 24px;
     width: 100%;
@@ -1431,8 +1431,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     position: relative;
     width: 100%;
     height: 240vh; /* Smooth virtual scroll distance */
-    margin-top: 134px; /* Exact 134px from header to line */
-    margin-bottom: 134px; /* Exact 134px from trust track to line */
+    margin-top: 100px; /* Ending gap of Header Section above Line 1 */
+    margin-bottom: 100px; /* Ending gap of Trust Section above Line 2 */
   }
 
   .zara-trust-section {
@@ -1607,8 +1607,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     line-height: 1.55;
     margin: 0;
     max-width: 480px;
-  }#666666;
-    letter-spacing: 1px;
+  }
+
+  /* Global Footer Harmony: 100px starting gap below Line 4 */
+  :global(.site-footer) {
+    margin-top: 0 !important;
+    padding-top: 100px !important;
   }
 
   /* --- DESKTOP ENHANCEMENTS (>= 860px) --- */
@@ -1751,6 +1755,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       font-size: 0.98rem;
       line-height: 1.7;
       max-width: 520px;
+    }
+
+    :global(.site-footer) {
+      margin-top: 80px !important;
+      padding-top: 56px !important;
     }
   }
 
