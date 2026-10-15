@@ -39,27 +39,20 @@ const services = [...allServices].reverse();
             )}
           </div>
 
-          <div class="product-card-name" style="padding: 16px 14px; display: flex; flex-direction: column; flex-grow: 1;">
-            <div class="product-card-title" style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 500; color: #111;">
-              {item.data.title}
-            </div>
+          <div class="product-card-name">
+            <div class="product-card-title">{item.data.title}</div>
 
             {item.data.price && (
-              <div class="product-card-price" style="font-size: 0.95rem; font-weight: 500; color: #111; margin-top: 5px;">
-                Starting from ₹{item.data.price}
+              <div class="product-card-price-wrapper">
+                <div class="product-card-price">
+                  <span style="font-size: 0.72rem; font-weight: 400; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 2px;">From</span>₹{item.data.price}
+                </div>
               </div>
             )}
 
             {item.data.category && (
-              <div class="product-card-category" style="font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 1.2px; margin-top: 4px;">
-                {item.data.category}
-              </div>
+              <div class="product-card-category">{item.data.category}</div>
             )}
-
-            <div style="margin-top: auto; padding-top: 14px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 500; color: #000; display: inline-flex; align-items: center; gap: 4px;">
-              <span>Details &amp; Book</span>
-              <span>&rarr;</span>
-            </div>
           </div>
         </a>
       ))}
