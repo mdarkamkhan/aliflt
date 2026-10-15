@@ -1276,19 +1276,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin: -8px 0 0 0;
   }
 
-  /* --- SECTION HEADER (FIT INSIDE LOCKED PINNED SCREEN) --- */
+  /* --- SECTION HEADER (ANCHORED AT TOP OF LOCKED SCREEN) --- */
   .zara-trust-head {
     border-top: 1px solid #111111;
-    padding-top: 14px;
+    padding-top: 12px;
     margin-top: 0;
-    margin-bottom: 14px;
+    margin-bottom: 24px;
     width: 100%;
     text-align: left;
   }
 
   .zara-trust-title {
     font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: 1.45rem;
+    font-size: 1.35rem;
     font-weight: 400;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -1313,9 +1313,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     min-height: calc(100dvh - 110px);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     background: transparent;
-    padding: 12px 0 20px 0;
+    padding: 8px 0 20px 0;
     box-sizing: border-box;
     z-index: 10;
   }
@@ -1324,9 +1324,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .pillar-system-grid {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
     align-items: center;
     width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
   }
 
   /* Column 1: Vertical Capsule Ticker */
@@ -1375,54 +1377,52 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     align-items: center;
     justify-content: space-between;
     text-align: left;
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    background: transparent;
+    border: 1px solid transparent;
     cursor: pointer;
     color: inherit;
     font-family: inherit;
     box-sizing: border-box;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Active Pill: Crisp Black Border & Full Opacity */
+  /* Active Pill: Ultra-Minimal Zara Hairline Capsule */
   .pillar-pill.is-active {
     opacity: 1;
-    border: 2px solid #000000;
+    border: 1px solid #111111;
     background: #ffffff;
-    box-shadow: 0 0 0 1px #000000, 0 6px 20px rgba(0, 0, 0, 0.07);
-    transform: scale(1.01);
+    box-shadow: none;
+    transform: none;
   }
 
   .pillar-pill.is-near {
-    opacity: 0.45;
+    opacity: 0.35;
   }
 
   .pillar-pill.is-far {
-    opacity: 0.18;
+    opacity: 0.12;
   }
 
   .pillar-pill:hover:not(.is-active) {
-    opacity: 0.75;
-    border-color: rgba(0, 0, 0, 0.3);
+    opacity: 0.65;
+    border-color: rgba(0, 0, 0, 0.15);
   }
 
   .pillar-pill-title {
     font-size: 0.88rem;
     letter-spacing: -0.01em;
-    color: #444444;
+    color: #555555;
     transition: color 0.25s ease;
-    font-weight: 500;
+    font-weight: 400;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .pillar-pill.is-active .pillar-pill-title {
-    color: #000000;
-    font-weight: 600;
+    color: #111111;
+    font-weight: 500;
   }
 
   .pillar-pill-num {
@@ -1430,12 +1430,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     color: #888888;
     margin-left: 1rem;
-    font-weight: 500;
+    font-weight: 400;
+    transition: color 0.25s ease;
   }
 
   .pillar-pill.is-active .pillar-pill-num {
-    color: #000000;
-    font-weight: 700;
+    color: #111111;
+    font-weight: 500;
   }
 
   /* Column 2: Active Detail Card (Crisp & High-Fashion) */
@@ -1521,8 +1522,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     /* Pinned Showcase Desktop Overrides */
     .zara-trust-head {
       margin-top: 0;
-      padding-top: 24px;
-      margin-bottom: 24px;
+      padding-top: 20px;
+      margin-bottom: 28px;
     }
 
     .zara-trust-title {
@@ -1538,14 +1539,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     .zara-trust-section {
       top: 70px;
       min-height: calc(100vh - 100px);
-      padding: 24px 0;
-      justify-content: center;
+      padding: 20px 0 32px 0;
+      justify-content: flex-start;
     }
 
     .pillar-system-grid {
       display: grid;
       grid-template-columns: 1fr 1.15fr;
       gap: 56px;
+      margin-top: auto;
+      margin-bottom: auto;
     }
 
     .pillar-ticker-col {
