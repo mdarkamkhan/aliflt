@@ -118,76 +118,47 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <!-- Main Open Editorial Layout (No Box Containers) -->
       <div class="zara-main-grid">
 
-        <!-- Column 1: The Store & Visit -->
+        <!-- Column 1: The Store & Visit (Ultra-Clean Editorial Layout) -->
         <div class="zara-col-store">
           
-          <div class="zara-section-head">
+          <div class="zara-atelier-card">
             <span class="zara-col-eyebrow">FLAGSHIP ATELIER</span>
             <h2 class="zara-col-title">ALIF Ladies Tailor</h2>
-          </div>
 
-          <!-- Live Store Status (Monochrome, Subtle) -->
-          <div class="zara-status-line" id="liveStatusBadge">
-            <span class="zara-status-dot"></span>
-            <span class="zara-status-text" id="liveStatusText">Verifying Store Timings...</span>
-          </div>
+            <div class="zara-atelier-meta">
+              <p class="zara-atelier-address">
+                Daal Kuan, College Road<br />
+                <span class="zara-atelier-landmark">Opposite Joy Fast Food · Sahibganj 816109</span>
+              </p>
 
-          <!-- Editorial Address Block -->
-          <div class="zara-address-block">
-            <p class="zara-addr-street">Daal Kuan, College Road</p>
-            <p class="zara-addr-landmark">Opposite Joy Fast Food</p>
-            <p class="zara-addr-city">Sahibganj, Jharkhand — 816109</p>
-          </div>
+              <div class="zara-atelier-schedule">
+                <span class="zara-schedule-text">Sat — Thu: 10:00 — 21:00 &nbsp;•&nbsp; Fri: 14:00 — 21:00</span>
+                <div class="zara-status-line" id="liveStatusBadge">
+                  <span class="zara-status-dot"></span>
+                  <span class="zara-status-text" id="liveStatusText">Verifying Store Timings...</span>
+                </div>
+              </div>
+            </div>
 
-          <!-- Action Duo: Zara Quiet Action Links (No Emoji, Pure Monochrome) -->
-          <div class="zara-actions-row">
-            <a 
-              href="https://www.google.com/maps/dir/?api=1&destination=6JRP%2BRQ+Sahibganj,+Jharkhand" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              class="zara-action-chip"
-            >
-              <span>GET DIRECTIONS ↗</span>
-            </a>
-
-            <button 
-              type="button" 
-              class="zara-action-chip" 
-              id="btnAskAIAddress"
-              title="Ask AI Assistant for exact shop directions"
-            >
-              <span>ASK ALIF AI ↗</span>
-            </button>
-          </div>
-
-          <!-- Store Schedule: Single Editorial Line (No Dotted Restaurant Rows) -->
-          <div class="zara-schedule-compact">
-            <span class="zara-col-eyebrow">STORE TIMINGS</span>
-            <p class="zara-sched-line">
-              <span>Sat — Thu: 10:00 — 21:00</span>
-              <span class="sched-divider-slash">/</span>
-              <span>Fri: 14:00 — 21:00</span>
-            </p>
-          </div>
-
-          <!-- Minimal Framed Grayscale Map (No Color, Pure Monochrome) -->
-          <div class="zara-map-frame">
-            <iframe 
-              src="https://maps.google.com/maps?q=6JRP%2BRQ%20Sahibganj%2C%20Jharkhand&t=&z=16&ie=UTF8&iwloc=&output=embed" 
-              class="zara-map-iframe" 
-              title="ALIF Ladies Tailor Map Location" 
-              loading="lazy" 
-              allowfullscreen>
-            </iframe>
-            <div class="zara-map-bar">
+            <!-- Action Duo: Minimalist Editorial Action Chips -->
+            <div class="zara-actions-row">
               <a 
                 href="https://www.google.com/maps/dir/?api=1&destination=6JRP%2BRQ+Sahibganj,+Jharkhand" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                class="zara-map-link"
+                class="zara-action-chip"
               >
-                OPEN IN GOOGLE MAPS ↗
+                <span>GET DIRECTIONS ↗</span>
               </a>
+
+              <button 
+                type="button" 
+                class="zara-action-chip" 
+                id="btnAskAIAddress"
+                title="Ask AI Assistant for exact shop directions"
+              >
+                <span>ASK ALIF AI ↗</span>
+              </button>
             </div>
           </div>
 
@@ -629,14 +600,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .zara-main-grid {
     display: flex;
     flex-direction: column;
-    gap: 44px;
+    gap: 52px;
     margin-bottom: 60px;
     border-top: 1px solid #111111;
-    padding-top: 48px;
+    padding-top: 40px;
   }
 
-  .zara-section-head {
-    margin-bottom: 20px;
+  .zara-atelier-card {
+    display: flex;
+    flex-direction: column;
   }
 
   .zara-col-eyebrow {
@@ -651,74 +623,85 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .zara-col-title {
     font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: 1.65rem;
+    font-size: 1.55rem;
     font-weight: 400;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     color: #111111;
-    margin: 0;
+    margin: 0 0 16px 0;
     line-height: 1.25;
   }
 
-  /* --- STORE DETAILS COLUMN (NO CONTAINER) --- */
+  /* --- STORE DETAILS: STREAMLINED EDITORIAL CARD --- */
+  .zara-atelier-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+
+  .zara-atelier-address {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #111111;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .zara-atelier-landmark {
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: #666666;
+    display: inline-block;
+    margin-top: 2px;
+  }
+
+  .zara-atelier-schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .zara-schedule-text {
+    font-size: 0.82rem;
+    color: #555555;
+    font-weight: 400;
+  }
+
   .zara-status-line {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: 6px;
     font-size: 0.68rem;
     font-weight: 600;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
     text-transform: uppercase;
     color: #111111;
   }
 
   .zara-status-dot {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background: #111111;
     display: inline-block;
   }
 
-  .zara-status-line.is-open .zara-status-dot {
-    background: #111111;
-    box-shadow: none;
-  }
-
   .zara-status-line.is-closed .zara-status-dot {
     background: #888888;
-    box-shadow: none;
   }
 
-  .zara-address-block {
-    margin-bottom: 20px;
-    line-height: 1.6;
-  }
-
-  .zara-addr-street {
-    font-size: 1.05rem;
-    font-weight: 500;
+  .zara-status-text {
+    font-weight: 600;
     color: #111111;
-    margin: 0;
-  }
-
-  .zara-addr-landmark {
-    font-size: 0.88rem;
-    color: #555555;
-    margin: 2px 0 0 0;
-  }
-
-  .zara-addr-city {
-    font-size: 0.82rem;
-    color: #777777;
-    margin: 2px 0 0 0;
+    letter-spacing: 0.8px;
   }
 
   /* Zara Quiet Action Links (No Emoji, Pure Monochrome) */
   .zara-actions-row {
     display: flex;
-    gap: 8px;
-    margin-bottom: 22px;
+    gap: 10px;
+    margin-top: 4px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
   }
 
@@ -726,13 +709,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 38px;
+    height: 36px;
     padding: 0 16px;
     border-radius: 9999px;
     background: transparent;
     border: 1px solid #111111;
     color: #111111;
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: 500;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -748,75 +731,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: #ffffff;
   }
 
-  /* Store Schedule: Single Editorial Line (No Dotted Restaurant Rows) */
-  .zara-schedule-compact {
-    margin-bottom: 22px;
-  }
-
-  .zara-sched-line {
-    font-size: 0.82rem;
-    color: #444444;
-    font-weight: 400;
-    margin: 4px 0 0 0;
-    line-height: 1.5;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .sched-divider-slash {
-    color: #bbbbbb;
-    font-weight: 300;
-  }
-
-  /* Map Frame (Architectural, Monochrome, Sharp) */
-  .zara-map-frame {
-    border: 1px solid #111111;
-    background: #ffffff;
-    margin-top: 10px;
-  }
-
-  .zara-map-iframe {
-    width: 100%;
-    height: 160px;
-    border: 0;
-    display: block;
-    filter: grayscale(100%) contrast(1.05);
-    -webkit-filter: grayscale(100%) contrast(1.05);
-  }
-
-  .zara-map-bar {
-    padding: 8px 14px;
-    background: #ffffff;
-    border-top: 1px solid #111111;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .zara-map-link {
-    font-size: 0.65rem;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #111111;
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-
-  .zara-map-link:hover {
-    opacity: 0.6;
-  }
-
   /* --- BESPOKE INQUIRY FORM (EXACT DESIGN FROM ELEMENTS/form) --- */
   .element-form-card {
     display: flex;
     flex-direction: column;
     gap: 22px;
     background: #ffffff;
-    border: 2px solid #000000;
-    border-radius: 8px;
-    padding: 28px 22px;
+    border: 1px solid #111111;
+    border-radius: 4px;
+    padding: 26px 20px;
     box-sizing: border-box;
     width: 100%;
   }
