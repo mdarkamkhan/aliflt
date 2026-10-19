@@ -5,11 +5,14 @@
   publish = "dist"
   functions = "netlify/functions"
 
+[build.environment]
+  NODE_VERSION = "22"
+
 [context.production.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
 
 [context.deploy-preview.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
 
 # Caching and Performance Optimization Headers
 [[headers]]
