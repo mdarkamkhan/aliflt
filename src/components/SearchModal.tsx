@@ -13,6 +13,7 @@ interface SearchItem {
   fabric?: string;
   work?: string;
   pattern?: string;
+  code?: string;
 }
 
 const TYPEWRITER_WORDS = [
@@ -41,9 +42,10 @@ export default function SearchModal() {
         setCatalog(data);
         fuseRef.current = new Fuse(data, {
           keys: [
-            { name: 'title', weight: 0.4 },
-            { name: 'category', weight: 0.2 },
-            { name: 'colour', weight: 0.2 },
+            { name: 'code', weight: 0.5 },
+            { name: 'title', weight: 0.3 },
+            { name: 'category', weight: 0.15 },
+            { name: 'colour', weight: 0.15 },
             { name: 'fabric', weight: 0.1 },
             { name: 'ideal_for', weight: 0.05 },
             { name: 'work', weight: 0.05 },
@@ -181,7 +183,7 @@ export default function SearchModal() {
             />
             <div>
               <h4>{item.title}</h4>
-              <span>{item.category}</span>
+              <span>{item.code ? `${item.code} · ${item.category}` : item.category}</span>
             </div>
             <span className="s-arrow">&rarr;</span>
           </a>

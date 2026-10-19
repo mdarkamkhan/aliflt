@@ -7,6 +7,7 @@ image: "/uploads/1765017982157-main-1000026890.webp"
 gallery: []
 is_ad: false
 price: 90
+product_code: "ALIF-LK-2156"
 category: "latkan"
 description: "---"
 permalink: false

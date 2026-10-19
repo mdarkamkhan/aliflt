@@ -8,6 +8,7 @@ gallery:
   - "/uploads/1764952542112-0-1000026979.webp"
 is_ad: false
 price: 39
+product_code: "ALIF-LK-2103"
 category: "latkan"
 description: "---"
 permalink: false

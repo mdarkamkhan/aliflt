@@ -1,6 +1,6 @@
 {
-  "name": "ALiF Ladies Tailor",
-  "short_name": "ALiF",
+  "name": "alif. ladies tailor",
+  "short_name": "alif.",
   "description": "Custom bridal blouses, lehengas, and gowns — premium ladies tailoring in Sahibganj, Jharkhand.",
   "start_url": "/",
   "display": "standalone",
@@ -8,6 +8,16 @@
   "theme_color": "#FBF9F6",
   "scope": "/",
   "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
     {
       "src": "/icon-192x192.png",
       "type": "image/png",
@@ -17,17 +27,6 @@
       "src": "/icon-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
-    },
-    {
-      "src": "/icon-761x761.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    },
-    {
-      "src": "/icon-maskable-512x512.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "maskable"
     }
   ]
 }

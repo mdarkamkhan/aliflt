@@ -7,6 +7,7 @@ image: "/uploads/1765040601467-main-1000023653.webp"
 gallery: []
 is_ad: false
 price: 69
+product_code: "ALIF-LC-1466"
 offer_price: 35
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

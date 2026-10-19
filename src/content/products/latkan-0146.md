@@ -8,6 +8,7 @@ gallery:
   - "/uploads/1764952630147-0-1000026944.webp"
 is_ad: false
 price: 69
+product_code: "ALIF-LK-0146"
 category: "latkan"
 description: "---"
 permalink: false

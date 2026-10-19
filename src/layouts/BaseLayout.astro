@@ -3,15 +3,18 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  hideFooter?: boolean;
 }
 
+import { ClientRouter } from 'astro:transitions';
 import AIChatWidget from '../components/AIChatWidget';
 import SearchModal from '../components/SearchModal';
 
 const {
-  title = "ALiF Ladies Tailor",
+  title = "alif. ladies tailor",
   description = "Custom bridal blouses, lehengas, gowns — premium ladies tailoring in Sahibganj.",
   image = "/icons/icon-512x512.png",
+  hideFooter = false,
 } = Astro.props;
 
 const siteUrl = "https://aliflt.netlify.app";
@@ -26,7 +29,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>{title} | ALiF</title>
+    <title>{title} | alif.</title>
     <meta name="description" content={description}>
     <link rel="canonical" href={canonicalUrl}>
     <meta name="theme-color" content="#FBF9F6"/>
@@ -38,25 +41,66 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
     <meta property="og:image" content={ogImageUrl}>
 
     <link rel="manifest" href="/manifest.webmanifest">
-    <link rel="icon" href="/favicon.png" type="image/png">
-    <link rel="apple-touch-icon" href="/favicon.png">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Playfair+Display:wght@400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css?v=luxury2025">
+    <style is:global>
+      /* Ensure brand logo 'alif.' is always pristine, minimal, non-bold, and never underlined */
+      .nav-logo,
+      a.nav-logo,
+      a.nav-logo:visited,
+      a.nav-logo:hover,
+      a.nav-logo:active,
+      a.nav-logo:focus,
+      .footer-logo,
+      a.footer-logo,
+      a.footer-logo:visited,
+      a.footer-logo:hover,
+      a.footer-logo:active,
+      a.footer-logo:focus,
+      .drawer-brand-title {
+        color: #000000 !important;
+        text-decoration: none !important;
+        font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+        font-weight: 400 !important;
+        text-transform: lowercase !important;
+        letter-spacing: 2px !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+      }
+      .footer-logo,
+      a.footer-logo {
+        letter-spacing: 4px !important;
+      }
+      a.nav-logo:hover,
+      a.footer-logo:hover {
+        opacity: 0.75;
+      }
+    </style>
+    <ClientRouter />
 </head>
 
 <body>
     <!-- Fixed Background Canvas from ELEMENTS/BG -->
-    <div id="fixed-bg-pattern" aria-hidden="true"></div>
+    <div id="fixed-bg-pattern" aria-hidden="true" transition:persist></div>
 
     <!-- React Island: Search Overlay with Fuse.js & Typewriter -->
-    <SearchModal client:idle />
+    <SearchModal client:idle transition:persist />
 
     <!-- Fixed Top Nav -->
-    <nav class="fixed-top-nav">
-        <a href="/" class="nav-logo">ALiF</a>
+    <nav class="fixed-top-nav" transition:persist>
+        <a href="/" class="nav-logo">alif.</a>
 
         <div class="nav-actions">
             <button class="nav-search-btn" id="open-search" style="background:none; border:none; padding:5px; cursor:pointer;" aria-label="Search">
@@ -85,10 +129,39 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
         </div>
     </nav>
 
-    <!-- Marquee Banner -->
-    <div class="marquee-container">
-        <div class="marquee-content">
-            • ALiF LADIES TAILOR • NEW COLLECTION 2025 • CUSTOM BRIDAL WEAR • BOOK YOUR APPOINTMENT • ALiF LADIES TAILOR • LUXURY STITCHING •
+    <!-- Marquee Banner (Continuous Luxury Ticker) -->
+    <div class="marquee-container" aria-label="Store Announcements">
+        <div class="marquee-track">
+            <div class="marquee-group">
+                <span class="marquee-item">alif. · A CUSTOM CLOTHING STORE</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+                <span class="marquee-item">EXPLORE TRENDING REELS</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+                <span class="marquee-item">WHATSAPP BOOKING AVAILABLE</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+                <span class="marquee-item">DOORSTEP DELIVERY AVAILABLE</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+            </div>
+            <div class="marquee-group" aria-hidden="true">
+                <span class="marquee-item">alif. · A CUSTOM CLOTHING STORE</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+                <span class="marquee-item">EXPLORE TRENDING REELS</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+                <span class="marquee-item">WHATSAPP BOOKING AVAILABLE</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+                <span class="marquee-item">DOORSTEP DELIVERY AVAILABLE</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+            </div>
+            <div class="marquee-group" aria-hidden="true">
+                <span class="marquee-item">alif. · A CUSTOM CLOTHING STORE</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+                <span class="marquee-item">EXPLORE TRENDING REELS</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+                <span class="marquee-item">WHATSAPP BOOKING AVAILABLE</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+                <span class="marquee-item">DOORSTEP DELIVERY AVAILABLE</span>
+                <span class="marquee-sep" aria-hidden="true">·</span>
+            </div>
         </div>
     </div>
 
@@ -98,29 +171,57 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
     </main>
 
     <!-- Bottom Navigation Bar (Mobile) -->
-    <nav class="bottom-nav">
-        <a href="/" class={`b-nav-item ${currentPath === '/' ? 'active' : ''}`}>
-            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            Home
+    <nav class="bottom-nav" transition:persist>
+        <a href="/" class={`b-nav-item ${currentPath === '/' ? 'active' : ''}`} aria-label="Home">
+            <span class="b-nav-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+            </span>
+            <span class="b-nav-label">Home</span>
         </a>
-        <a href="/products/" class={`b-nav-item ${currentPath.startsWith('/products/') ? 'active' : ''}`}>
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            Products
+        <a href="/reels/" class={`b-nav-item ${currentPath.startsWith('/reels/') ? 'active' : ''}`} id="bNavReels" aria-label="Explore Reels">
+            <span class="b-nav-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2.5" y="2.5" width="19" height="19" rx="4.5" />
+                    <line x1="2.5" y1="8.5" x2="21.5" y2="8.5" />
+                    <line x1="8" y1="2.5" x2="10.5" y2="8.5" />
+                    <line x1="14" y1="2.5" x2="16.5" y2="8.5" />
+                    <polygon points="10 12 15 15 10 18 10 12" fill="currentColor" stroke="none" />
+                </svg>
+            </span>
+            <span class="b-nav-label">Reels</span>
         </a>
-        <a href="/services/" class={`b-nav-item ${currentPath.startsWith('/services/') ? 'active' : ''}`}>
-            <svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
-            Services
+        <a href="/products/" class={`b-nav-item ${currentPath.startsWith('/products/') ? 'active' : ''}`} aria-label="Products">
+            <span class="b-nav-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+            </span>
+            <span class="b-nav-label">Products</span>
         </a>
-        <a href="/cart/" class={`b-nav-item ${currentPath.startsWith('/cart/') ? 'active' : ''}`}>
-            <div style="position: relative;">
-                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                <span class="mobile-badge" id="cartCountMobile">0</span>
-            </div>
-            Cart
+        <a href="/services/" class={`b-nav-item ${currentPath.startsWith('/services/') ? 'active' : ''}`} aria-label="Services">
+            <span class="b-nav-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="6" cy="6" r="3"></circle>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+                    <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+                    <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+                </svg>
+            </span>
+            <span class="b-nav-label">Services</span>
         </a>
-        <a href="/contact-us/" class={`b-nav-item ${currentPath.startsWith('/contact-us/') ? 'active' : ''}`}>
-            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            Contact
+        <a href="/contact-us/" class={`b-nav-item ${currentPath.startsWith('/contact-us/') ? 'active' : ''}`} aria-label="Contact">
+            <span class="b-nav-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+            </span>
+            <span class="b-nav-label">Contact</span>
         </a>
     </nav>
 
@@ -158,21 +259,59 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
         <div class="drawer-inner">
             <!-- Brand Logo Area -->
             <div class="drawer-logo">
-                <h2 class="drawer-brand-title">ALiF</h2>
-                <span class="drawer-brand-sub">ATELIER &amp; STORE</span>
+                <h2 class="drawer-brand-title">alif.</h2>
+                <span class="drawer-brand-sub">A CUSTOM CLOTHING STORE</span>
             </div>
 
-            <!-- Navigation Links -->
-            <nav class="drawer-nav">
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/products/">Products</a></li>
-                    <li><a href="/services/">Services</a></li>
-                    <li><a href="/works/">Our Works</a></li>
-                    <li><a href="/designs/">Designs</a></li>
-                    <li><a href="/contact-us/">Contact</a></li>
+            <!-- Navigation Links with Luxury Hierarchy (Left-Aligned & Prominent) -->
+            <nav class="drawer-nav" aria-label="Main navigation">
+                <ul class="drawer-main-list">
+                    <li class="drawer-nav-item">
+                        <a href="/" class="drawer-top-link">Home</a>
+                    </li>
+
+                    <!-- Product Group Hierarchy -->
+                    <li class="drawer-nav-item drawer-nav-group" id="drawerGroupProduct">
+                        <button type="button" class="drawer-group-btn" aria-expanded="false" aria-controls="drawerSubmenuProduct">
+                            <span>PRODUCT</span>
+                        </button>
+                        <ul class="drawer-submenu" id="drawerSubmenuProduct">
+                            <li><a href="/products/" class="drawer-sub-link">All Products</a></li>
+                            <li><a href="/products/?category=curated-sets" class="drawer-sub-link">Curated Sets</a></li>
+                            <li><a href="/reels/" class="drawer-sub-link">Reels</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Services Group Hierarchy -->
+                    <li class="drawer-nav-item drawer-nav-group" id="drawerGroupServices">
+                        <button type="button" class="drawer-group-btn" aria-expanded="false" aria-controls="drawerSubmenuServices">
+                            <span>SERVICES</span>
+                        </button>
+                        <ul class="drawer-submenu" id="drawerSubmenuServices">
+                            <li><a href="/services/" class="drawer-sub-link">All Services</a></li>
+                            <li><a href="/works/" class="drawer-sub-link">Works</a></li>
+                            <li><a href="/designs/" class="drawer-sub-link">Designs</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Contact (No Hierarchy) -->
+                    <li class="drawer-nav-item">
+                        <a href="/contact-us/" class="drawer-top-link">Contact</a>
+                    </li>
+
+                    <!-- Cart (No Hierarchy) -->
+                    <li class="drawer-nav-item">
+                        <a href="/cart/" class="drawer-top-link">Cart</a>
+                    </li>
                 </ul>
             </nav>
+
+            <!-- PWA Install App Button (Prominent & Highlighted) -->
+            <div class="drawer-install-wrapper">
+                <button type="button" class="drawer-install-btn" id="drawerInstallPwaBtn" aria-label="Install alif. App">
+                    <span>INSTALL APP</span>
+                </button>
+            </div>
 
             <!-- Doodle Notebook Social Section (Same as Footer) -->
             <div class="drawer-doodle-social-wrapper">
@@ -231,11 +370,12 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
     </div>
 
     <!-- Editorial Monochrome Luxury Footer (Zara / Celine Style) -->
+    {!hideFooter && (
     <footer class="site-footer prada-mobile-footer" id="reviews">
         <div class="footer-container">
             <!-- Brand Atelier Header -->
             <div class="footer-brand">
-                <a href="/" class="footer-logo">ALiF</a>
+                <a href="/" class="footer-logo">alif.</a>
                 <p class="footer-tagline">ATELIER DE COUTURE • BESPOKE TAILORING</p>
             </div>
 
@@ -245,7 +385,9 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                 <div class="footer-col">
                     <h4 class="footer-col-title">COLLECTIONS</h4>
                     <ul class="footer-links-list">
-                        <li><a href="/products/">Products</a></li>
+                        <li><a href="/products/">All Products</a></li>
+                        <li><a href="/products/?category=curated-sets">Curated Sets</a></li>
+                        <li><a href="/reels/">Trending Reels</a></li>
                         <li><a href="/services/">Tailoring Services</a></li>
                         <li><a href="/works/">Our Works</a></li>
                         <li><a href="/designs/">Custom Designs</a></li>
@@ -257,6 +399,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                     <h4 class="footer-col-title">CLIENT CARE</h4>
                     <ul class="footer-links-list">
                         <li><a href="/contact-us/">Contact Atelier</a></li>
+                        <li><a href="/cart/">Shopping Cart</a></li>
                         <li><a href="/privacy-policy/">Privacy Policy</a></li>
                         <li><a href="/terms-of-service/">Terms of Service</a></li>
                         <li><a href="/return-policy/">Return & Exchange</a></li>
@@ -267,7 +410,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                 <div class="footer-col">
                     <h4 class="footer-col-title">EXPERIENCE</h4>
                     <ul class="footer-links-list">
-                        <li><a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" rel="noopener noreferrer">Google Reviews (4.9 ★) <span class="footer-arrow">↗</span></a></li>
+                        <li><a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" rel="noopener noreferrer">Google Reviews (4.9 Rating) <span class="footer-arrow">↗</span></a></li>
                         <li><a href="https://g.page/r/Cf2GRfVJZtFFEAE/review" target="_blank" rel="noopener noreferrer">Leave an Atelier Review <span class="footer-arrow">↗</span></a></li>
                     </ul>
                 </div>
@@ -331,11 +474,11 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
         <!-- Minimal Bottom Bar -->
         <div class="footer-bottom">
             <div class="footer-bottom-inner">
-                <p class="footer-copyright">© 2025 ALiF LADIES TAILOR. ALL RIGHTS RESERVED.</p>
-                <p class="footer-subtext">HANDCRAFTED IN SAHIBGANJ</p>
+                <p class="footer-copyright">© 2026 alif. ladies tailor. ALL RIGHTS RESERVED.</p>
             </div>
         </div>
     </footer>
+    )}
 
     <!-- React Island: ALiF AI Assistant Widget -->
     <AIChatWidget client:load />
@@ -391,12 +534,58 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                 navLinks.forEach((link) => {
                     link.addEventListener('click', () => closeSidebar());
                 });
+
+                // Accordion toggle for hierarchical groups (Product, Services)
+                const groupBtns = drawer.querySelectorAll('.drawer-group-btn');
+                groupBtns.forEach((btn) => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const group = btn.closest('.drawer-nav-group');
+                        if (group) {
+                            const isOpen = group.classList.toggle('is-open');
+                            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                        }
+                    });
+                });
+
                 const tooltipLinks = drawer.querySelectorAll('.doodle-tooltip');
                 tooltipLinks.forEach((link) => {
                     link.addEventListener('click', () => {
                         setTimeout(() => closeSidebar(), 200);
                     });
                 });
+
+                // PWA Install Button Handler
+                let deferredInstallPrompt = null;
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredInstallPrompt = e;
+                });
+
+                const pwaBtn = document.getElementById('drawerInstallPwaBtn');
+                if (pwaBtn) {
+                    pwaBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        if (deferredInstallPrompt) {
+                            deferredInstallPrompt.prompt();
+                            deferredInstallPrompt.userChoice.then((choiceResult) => {
+                                if (choiceResult.outcome === 'accepted') {
+                                    pwaBtn.style.opacity = '0.5';
+                                    pwaBtn.innerText = 'INSTALLED';
+                                }
+                                deferredInstallPrompt = null;
+                            });
+                        } else {
+                            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                            if (isIOS) {
+                                alert("To install alif. App:\n1. Tap the Share button in Safari\n2. Select 'Add to Home Screen'");
+                            } else {
+                                alert("To install alif. App:\nTap your browser menu (⋮) and select 'Install app' or 'Add to Home screen'.");
+                            }
+                        }
+                    });
+                }
             }
         }
 
@@ -452,29 +641,49 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
             });
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                initSidebar();
-                initDoodleSocial();
+        function updateBottomNavActive() {
+            const currentPath = window.location.pathname;
+            const bNavItems = document.querySelectorAll('.b-nav-item');
+            bNavItems.forEach(item => {
+                const href = item.getAttribute('href');
+                if (!href) return;
+                const isHome = href === '/' && (currentPath === '/' || currentPath === '');
+                const isSub = href !== '/' && currentPath.startsWith(href);
+                if (isHome || isSub) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
             });
-        } else {
-            initSidebar();
-            initDoodleSocial();
         }
+
+        function updateCartBadges() {
+            try {
+                const savedCart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+                const count = savedCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                const badge1 = document.getElementById('cartCount');
+                const badge2 = document.getElementById('cartCountMobile');
+                if (badge1) badge1.innerText = count;
+                if (badge2) badge2.innerText = count;
+            } catch(e) {}
+        }
+
         document.addEventListener('astro:page-load', () => {
             initSidebar();
             initDoodleSocial();
+            updateBottomNavActive();
+            updateCartBadges();
         });
 
-        // Cart Count badge synchronization
-        try {
-            const savedCart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
-            const count = savedCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-            const badge1 = document.getElementById('cartCount');
-            const badge2 = document.getElementById('cartCountMobile');
-            if (badge1) badge1.innerText = count;
-            if (badge2) badge2.innerText = count;
-        } catch(e) {}
+        document.addEventListener('astro:before-swap', () => {
+            const drawer = document.getElementById('minimalistSidebar');
+            if (drawer) {
+                drawer.classList.remove('is-open');
+                drawer.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('sidebar-open');
+                document.body.style.overflow = '';
+            }
+        });
 
         // Service Worker Registration & Cache Busting
         if ('serviceWorker' in navigator) {
@@ -500,6 +709,8 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.35s ease;
         }
 
@@ -511,13 +722,13 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
 
         /* Signature Arabica Dotted Box Close Button */
         .drawer-close-btn {
-            position: absolute;
-            top: 26px;
-            right: 26px;
+            position: fixed;
+            top: 22px;
+            right: 22px;
             width: 36px;
             height: 36px;
             border: 1px dotted rgba(0, 0, 0, 0.5);
-            background: transparent;
+            background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -525,7 +736,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
             color: #000000;
             padding: 0;
             transition: all 0.25s ease;
-            z-index: 10;
+            z-index: 1000000;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -535,90 +746,225 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
             transform: scale(1.08);
         }
 
-        /* Centered Inner Wrapper */
+        /* Left-Aligned Luxury Inner Wrapper */
         .drawer-inner {
+            margin: auto 0;
             width: 100%;
-            max-width: 480px;
+            max-width: 440px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 1.5rem;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 3.2rem 2.2rem 2.5rem 2.2rem;
             box-sizing: border-box;
-            text-align: center;
+            text-align: left;
         }
 
-        /* Brand Logo Area */
+        /* Brand Logo Area (Left-Aligned) */
         .drawer-logo {
-            margin-bottom: 38px;
+            margin-bottom: 34px;
+            text-align: left;
+            width: 100%;
         }
 
         .drawer-brand-title {
             font-family: var(--font-heading, 'Playfair Display', serif);
             font-size: 32px;
-            font-weight: 700;
+            font-weight: 400;
             letter-spacing: 4px;
-            text-transform: uppercase;
+            text-transform: lowercase;
             color: #000000;
-            margin: 0 0 6px 0;
+            margin: 0 0 5px 0;
             line-height: 1;
+            text-align: left;
         }
 
         .drawer-brand-sub {
-            font-family: var(--font-body, 'Poppins', sans-serif);
-            font-size: 10px;
-            font-weight: 600;
+            font-family: var(--font-body, 'Ubuntu', sans-serif);
+            font-size: 9.5px;
+            font-weight: 400;
             letter-spacing: 2.5px;
             text-transform: uppercase;
-            color: #888888;
+            color: #777777;
             display: block;
+            text-align: left;
         }
 
-        /* Navigation Links */
+        /* Navigation Links Hierarchy (Left-Aligned) */
         .drawer-nav {
             width: 100%;
         }
 
-        .drawer-nav ul {
+        .drawer-main-list {
             list-style: none;
             padding: 0;
             margin: 0;
             display: flex;
             flex-direction: column;
-            gap: 22px;
-            align-items: center;
+            gap: 16px;
+            align-items: flex-start;
+            width: 100%;
         }
 
-        .drawer-nav a {
-            font-family: var(--font-body, 'Poppins', sans-serif);
-            font-size: 20px;
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 2.5px;
-            color: #000000;
-            text-decoration: none;
-            display: inline-block;
-            line-height: 1.2;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-
-        .drawer-nav a:hover {
-            opacity: 0.5;
-            transform: translateY(-2px);
-        }
-
-        /* Doodle Social Section in Drawer */
-        .drawer-doodle-social-wrapper {
-            margin-top: 36px;
+        .drawer-nav-item {
+            width: 100%;
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .drawer-top-link,
+        button.drawer-group-btn {
+            all: unset !important;
+            box-sizing: border-box !important;
+            cursor: pointer !important;
+            font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+            font-size: 24px !important;
+            font-weight: 500 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 2.2px !important;
+            color: #000000 !important;
+            display: block !important;
+            width: 100% !important;
+            text-align: left !important;
+            line-height: 1.25 !important;
+            padding: 4px 0 !important;
+            margin: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            transition: opacity 0.2s ease, transform 0.2s ease !important;
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+
+        .drawer-top-link:hover,
+        button.drawer-group-btn:hover {
+            opacity: 0.55 !important;
+            transform: translateX(4px) !important;
+        }
+
+        button.drawer-group-btn:focus,
+        button.drawer-group-btn:active,
+        button.drawer-group-btn:focus-visible {
+            outline: none !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .drawer-nav-group.is-open button.drawer-group-btn {
+            font-weight: 500 !important;
+            color: #000000 !important;
+        }
+
+        /* Submenu container (Indented Left-Aligned Haute Couture Guide Line) */
+        .drawer-submenu {
+            display: none !important;
+            list-style: none !important;
+            padding: 4px 0 6px 16px !important;
+            margin: 10px 0 12px 4px !important;
+            border-left: 2px solid #111111 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .drawer-nav-group.is-open .drawer-submenu {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+            animation: drawerSubmenuSlide 0.22s ease-out forwards;
+        }
+
+        @keyframes drawerSubmenuSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .drawer-submenu li {
+            width: 100% !important;
+            list-style: none !important;
+            text-align: left !important;
+        }
+
+        .drawer-sub-link {
+            font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+            font-size: 16.5px !important;
+            font-weight: 500 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1.8px !important;
+            color: #444444 !important;
+            text-decoration: none !important;
+            display: inline-block !important;
+            line-height: 1.3 !important;
+            transition: all 0.2s ease !important;
+            text-align: left !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+
+        .drawer-sub-link:hover,
+        .drawer-sub-link:active {
+            color: #000000 !important;
+            transform: translateX(6px) !important;
+        }
+
+        /* Highlighted PWA Install App Button */
+        .drawer-install-wrapper {
+            margin-top: 28px;
+            width: 100%;
+        }
+
+        .drawer-install-btn {
+            width: 100%;
+            max-width: 320px;
+            padding: 13px 20px;
+            background: #111111;
+            color: #ffffff;
+            border: 1px solid #111111;
+            border-radius: 6px;
+            font-family: var(--font-body, 'Ubuntu', sans-serif);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2.2px;
+            text-transform: uppercase;
+            display: flex;
             align-items: center;
             justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+            transition: all 0.22s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .drawer-install-btn:hover,
+        .drawer-install-btn:active {
+            background: #2a2a2a;
+            border-color: #2a2a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Doodle Social Section in Drawer (Left-Aligned) */
+        .drawer-doodle-social-wrapper {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
             width: 100%;
         }
 
         .drawer-social-heading {
-            font-family: var(--font-body, 'Poppins', sans-serif);
+            font-family: var(--font-body, 'Ubuntu', sans-serif);
             font-size: 10px;
             font-weight: 600;
             letter-spacing: 2.5px;
@@ -626,10 +972,169 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
             color: #888888;
             margin-bottom: 14px;
             display: block;
+            text-align: left;
         }
 
         .drawer-doodle-container {
-            margin: 0 auto;
+            margin: 0 !important;
+        }
+
+        /* --- CONTINUOUS LUXURY MARQUEE TICKER STRIPE --- */
+        .marquee-container {
+            overflow: hidden !important;
+            white-space: nowrap !important;
+            background: #111111;
+            color: #ffffff;
+            font-family: var(--font-body, 'Ubuntu', sans-serif);
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0;
+            height: 36px;
+            display: flex !important;
+            align-items: center !important;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 100;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .marquee-track {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+            width: max-content !important;
+            height: 100% !important;
+            animation: continuousMarquee 32s linear infinite !important;
+            will-change: transform;
+        }
+
+        .marquee-container:hover .marquee-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes continuousMarquee {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-33.333%, 0, 0); }
+        }
+
+        .marquee-group {
+            display: inline-flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+            flex-shrink: 0 !important;
+            height: 100% !important;
+        }
+
+        .marquee-item {
+            display: inline-flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+            gap: 8px;
+            padding: 0 20px;
+            color: rgba(255, 255, 255, 0.92);
+            line-height: 1;
+        }
+
+        .marquee-sep {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.82rem;
+            line-height: 1;
+            user-select: none;
+            padding: 0 4px;
+        }
+
+        @media (max-width: 600px) {
+            .marquee-container {
+                font-size: 0.62rem;
+                letter-spacing: 1.6px;
+                height: 32px;
+            }
+            .marquee-item {
+                padding: 0 16px;
+                gap: 6px;
+            }
+        }
+
+        /* --- BOTTOM NAV CONTRAST & HIGHLIGHTED ACTIVE PILL (INSTA/MODERN STYLE) --- */
+        .b-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #000000 !important;
+            font-size: 10px !important;
+            font-weight: 500 !important;
+            opacity: 1 !important;
+            flex: 1;
+            height: 100%;
+            font-family: var(--font-body);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .b-nav-icon-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 28px;
+            border-radius: 14px;
+            background: transparent;
+            transition: background 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.2s ease;
+            margin-bottom: 2px;
+        }
+
+        .b-nav-item svg {
+            width: 20px;
+            height: 20px;
+            stroke: #000000 !important;
+            color: #000000 !important;
+            stroke-width: 1.9 !important;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.2s ease, color 0.2s ease;
+        }
+
+        .b-nav-label {
+            color: #000000 !important;
+            font-size: 9.5px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            line-height: 1;
+            transition: font-weight 0.2s ease;
+        }
+
+        /* Active Item: Black Capsule with White Icon (Instagram style) */
+        .b-nav-item.active .b-nav-icon-box {
+            background: #000000 !important;
+        }
+
+        .b-nav-item.active svg {
+            stroke: #ffffff !important;
+            color: #ffffff !important;
+            stroke-width: 2.1 !important;
+        }
+
+        .b-nav-item.active .b-nav-label {
+            font-weight: 500 !important;
+            color: #000000 !important;
+        }
+
+        @media (max-width: 768px) {
+            .footer-bottom {
+                padding-top: 16px !important;
+                padding-bottom: calc(85px + env(safe-area-inset-bottom, 0px)) !important;
+            }
         }
     </style>
 </body>

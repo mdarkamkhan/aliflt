@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/422d5849-3c23-44b6-b29c-0609ca6224aa.webp"
 is_ad: false
 price: 50
+product_code: "ALIF-LC-6999"
 offer_price: 25
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

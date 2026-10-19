@@ -7,6 +7,7 @@ image: "/uploads/1765017037202-main-1000026940.webp"
 gallery: []
 is_ad: false
 price: 79
+product_code: "ALIF-LK-7201"
 category: "latkan"
 description: "---"
 permalink: false

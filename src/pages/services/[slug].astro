@@ -14,127 +14,1147 @@ const { service } = Astro.props;
 const { title, price, category, image, description, service_information } = service.data;
 
 const allServices = await getCollection('services');
-const similarServices = allServices.filter((s) => s.id !== service.id && s.data.category === category);
-const otherServices = allServices.filter((s) => s.id !== service.id).slice(0, 8);
 
-const displaySimilar = similarServices.length > 0 ? similarServices : otherServices;
+// Similar services in the same category or relevant
+let similar = allServices.filter((s) => s.id !== service.id && s.data.category === category);
+if (similar.length === 0) {
+  similar = allServices.filter((s) => s.id !== service.id).slice(0, 8);
+} else if (similar.length < 4) {
+  const fillers = allServices.filter((s) => s.id !== service.id && s.data.category !== category);
+  similar = [...similar, ...fillers].slice(0, 8);
+}
 
-const wappText = `Hello ALiF, I would like to book the '${title}' service.`;
+// You may also like: other services
+const ymal = allServices.filter((s) => s.id !== service.id && !similar.some((sim) => sim.id === s.id)).slice(0, 8);
+
+const wappText = `Hello alif., I want to book custom tailoring for '${title}' (Starting Price: ₹${price || 'Inquire'}).`;
 const wappLink = `https://wa.me/7250470009?text=${encodeURIComponent(wappText)}`;
+
+// Parse service_information into clean structured sections without emojis
+interface ServiceSection {
+  heading: string;
+  items: string[];
+}
+
+function parseServiceInfo(infoText?: string): ServiceSection[] {
+  if (!infoText) return [];
+  const lines = infoText.split('\n');
+  const sections: ServiceSection[] = [];
+  let currentSection: ServiceSection | null = null;
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+
+    // Check if line is a section heading
+    if (line.startsWith('✔') || line.startsWith('✓') || line.startsWith('#') || (!line.startsWith('-') && !line.startsWith('•') && line.length < 35 && !line.includes(':'))) {
+      const heading = line.replace(/^[✔✓#\s*]+/, '').trim();
+      if (heading) {
+        currentSection = { heading, items: [] };
+        sections.push(currentSection);
+      }
+    } else if (currentSection) {
+      const item = line.replace(/^[-•*]\s*/, '').replace(/^[✔✓]\s*/, '').trim();
+      if (item) {
+        currentSection.items.push(item);
+      }
+    } else {
+      const item = line.replace(/^[-•*]\s*/, '').replace(/^[✔✓]\s*/, '').trim();
+      if (item) {
+        currentSection = { heading: 'Service Details', items: [item] };
+        sections.push(currentSection);
+      }
+    }
+  }
+  return sections;
+}
+
+const serviceSections = parseServiceInfo(service_information);
 ---
 
 <BaseLayout 
   title={`${title} Custom Stitching`} 
-  description={description || `Book custom boutique tailoring for ${title} at ALiF Ladies Tailor, Sahibganj.`}
+  description={description || `Book custom boutique tailoring for ${title} at alif. ladies tailor, Sahibganj.`}
   image={image}
 >
   <div class="container section">
     <div class="product-detail-grid">
 
+      <!-- Left Column: Main Image Card (Haute Couture Editorial) -->
       <div class="product-detail-image">
-        {image ? (
-          <div style="aspect-ratio: 4 / 5; overflow: hidden; border-radius: 10px; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.08), 0.3em 0.3em 1em rgba(0,0,0,0.18); background: #e9eaec;">
-            <img src={image} alt={title} style="width:100%; height:100%; object-fit:cover; object-position: top center; display:block; border-radius: 10px;" />
-          </div>
-        ) : (
-          <div style="width: 100%; aspect-ratio: 4 / 5; border-radius: 10px; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.08), 0.3em 0.3em 1em rgba(0,0,0,0.18); background: radial-gradient(circle at center, #1f1f1f 0%, #0a0a0a 100%); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; position: relative;">
-            <div style="position: absolute; inset: 16px; border: 1px solid rgba(255,255,255,0.08); pointer-events: none;"></div>
-            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.85; margin-bottom: 14px; color: #fff;">
-              <circle cx="6" cy="6" r="3"></circle>
-              <circle cx="6" cy="18" r="3"></circle>
-              <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
-              <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
-              <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
-            </svg>
-            <span style="font-family: var(--font-heading); font-size: 1.6rem; letter-spacing: 3px; text-transform: uppercase; color: #fff; font-weight: 500;">ALiF</span>
-            <span style="display: block; width: 30px; height: 1px; background: rgba(255,255,255,0.25); margin: 10px 0;"></span>
-            <span style="font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 2px; color: #aaa; text-transform: uppercase;">BOUTIQUE &amp; TAILORING</span>
-          </div>
-        )}
+        <div class="swapper-container product-swapper" id="mainMediaContainer">
+          {image ? (
+            <img class="active" src={image} alt={title} />
+          ) : (
+            <div class="luxury-fallback-media">
+              <span class="luxury-fallback-brand">alif.</span>
+              <span class="luxury-fallback-line"></span>
+              <span class="luxury-fallback-tag">ATELIER &amp; BESPOKE TAILORING</span>
+            </div>
+          )}
+        </div>
       </div>
 
-      <div class="product-detail-info" style="display: flex; flex-direction: column; justify-content: center;">
-        <h1 class="product-detail-title">{title}</h1>
+      <!-- Right Column: Service Details & Clean Action Buttons -->
+      <div class="product-detail-info">
+        <div class="product-header-block">
+          {category && (
+            <span class="preview-mode-pill">
+              {category}
+            </span>
+          )}
+          <h1 class="product-detail-title" id="displayTitle">{title}</h1>
+        </div>
 
-        {price && (
-          <p class="product-detail-price">
-            Starting from ₹{price}
-          </p>
-        )}
+        <!-- Dynamic Price Display -->
+        <div id="priceSectionWrapper" class="price-section-wrapper">
+          <div class="product-detail-price" id="displayStandardPrice">
+            <span class="price-prefix">Starting from</span>
+            <span class="standard-price">₹{price || '150'}</span>
+          </div>
+        </div>
 
-        {category && (
-          <p class="product-detail-category" style="color:#888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-top: 0;">
-            {category}
-          </p>
-        )}
+        <div class="product-delivery-promo">
+          Doorstep measurement &amp; custom fitting consult available in Sahibganj
+        </div>
 
-        <div class="product-detail-actions" style="display: flex; flex-direction: column; gap: 15px; margin-top: 30px;">
+        <!-- Clean Main Action Buttons matching Product Page -->
+        <div class="product-detail-actions" id="productDetailActions">
           <a 
             href={wappLink}
             target="_blank" 
             rel="noopener noreferrer"
-            style="display: block; width: 100%; background-color: #000; color: #fff; text-align: center; padding: 18px 0; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; font-weight: 500; border: 1px solid #000; transition: all 0.3s ease; cursor: pointer;"
-            onmouseover="this.style.backgroundColor='#fff'; this.style.color='#000';"
-            onmouseout="this.style.backgroundColor='#000'; this.style.color='#fff';"
+            class="btn-cart" 
+            id="bookServiceBtn"
           >
-            BOOK SERVICE VIA WHATSAPP
+            Book Service via WhatsApp
           </a>
-          
-          <p style="text-align: center; font-size: 0.75rem; color: #777; margin-top: 10px; font-style: italic;">
-            * Measurements &amp; custom detailing discussed directly with master tailor
-          </p>
+
+          <a 
+            href="tel:7250470009"
+            class="btn-buy"
+            id="callMasterTailorBtn"
+          >
+            Call Atelier (+91 72504 70009)
+          </a>
         </div>
       </div>
 
     </div>
   </div>
 
-  <div class="product-accordion-container" style="margin-top: 40px;">
-    {service_information && (
+  <!-- Accordions: Description & Specifications (Same design as Product Page) -->
+  <div class="product-accordion-container">
+    {description && (
       <details class="accordion-item" open>
         <summary class="accordion-summary">
-          <h3 class="accordion-heading">Service Details &amp; Customization</h3>
-          <span class="accordion-caret">^</span>
+          <h3 class="accordion-heading">Description &amp; Atelier Notes</h3>
+          <span class="accordion-toggle-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </span>
         </summary>
         <div class="accordion-content">
-          <pre style="font-family: var(--font-body); font-size: 0.88rem; line-height: 1.8; color: #444; white-space: pre-wrap; margin: 0; padding: 15px 0;">{service_information}</pre>
+          <p class="accordion-description-text" id="displayDescriptionText">{description}</p>
         </div>
       </details>
     )}
 
-    {description && (
+    <!-- Composition & Specifications (Standardized Key-Value Table) -->
+    <details class="accordion-item" open>
+      <summary class="accordion-summary">
+        <h3 class="accordion-heading">Composition &amp; Specifications</h3>
+        <span class="accordion-toggle-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </span>
+      </summary>
+      <div class="accordion-content">
+        <div class="spec-row-wrapper" id="displaySpecsWrapper">
+          <div class="spec-row"><span class="spec-label">Service Type</span><span class="spec-value">{category || 'Bespoke Tailoring'}</span></div>
+          <div class="spec-row"><span class="spec-label">Starting Price</span><span class="spec-value">₹{price || '150'}</span></div>
+          <div class="spec-row"><span class="spec-label">Craft &amp; Finish</span><span class="spec-value">Precision Boutique Stitching</span></div>
+          <div class="spec-row"><span class="spec-label">Timeline</span><span class="spec-value">3–7 Days (Urgent: 24h)</span></div>
+          <div class="spec-row"><span class="spec-label">Measurement</span><span class="spec-value">Doorstep / Atelier Visit</span></div>
+          <div class="spec-row"><span class="spec-label">Fitting Consultation</span><span class="spec-value">Direct Master Tailor</span></div>
+          <div class="spec-row"><span class="spec-label">Alterations</span><span class="spec-value">Complimentary First Adjustment</span></div>
+          <div class="spec-row"><span class="spec-label">Atelier Location</span><span class="spec-value">Sahibganj, Jharkhand</span></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Customization Details (Organized grid cards) -->
+    {serviceSections && serviceSections.length > 0 && (
       <details class="accordion-item">
         <summary class="accordion-summary">
-          <h3 class="accordion-heading">Overview</h3>
-          <span class="accordion-caret">^</span>
+          <h3 class="accordion-heading">Customization &amp; Tailoring Details</h3>
+          <span class="accordion-toggle-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </span>
         </summary>
         <div class="accordion-content">
-          <p class="accordion-description-text" style="padding: 15px 0; font-size: 0.9rem; line-height: 1.6; color: #555;">
-            {description}
-          </p>
+          <div class="service-details-grid">
+            {serviceSections.map((sec) => (
+              <div class="service-sec-card">
+                <h4 class="service-sec-heading">{sec.heading}</h4>
+                <ul class="service-sec-list">
+                  {sec.items.map((it) => (
+                    <li>{it}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       </details>
     )}
   </div>
 
-  <!-- Related Tailoring Services Carousel -->
-  <div class="section" style="padding: 40px 20px; background: #fcfcfc; border-top: 1px solid #eee; margin-top: 40px;">
-    <h3 style="text-align: center; margin-bottom: 25px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px;">Other Tailoring Services</h3>
-    
-    <div style="display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
-      {displaySimilar.map((item) => (
-        <a href={`/services/${item.id}/`} style="text-decoration: none; color: #000; min-width: 170px; flex-shrink: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.08), 0.3em 0.3em 1em rgba(0,0,0,0.18); display: flex; flex-direction: column; margin: 10px 4px 15px 4px; padding-bottom: 12px;">
-          <div style="aspect-ratio: 4 / 5; overflow: hidden; margin-bottom: 10px; background: #e9eaec; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-            {item.data.image ? (
-              <img src={item.data.image} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: top center;" loading="lazy" />
-            ) : (
-              <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #111; color: #fff; font-family: var(--font-heading); letter-spacing: 2px; font-size: 0.85rem;">ALiF</div>
-            )}
-          </div>
-          <p style="margin: 0; font-size: 0.9rem; text-align: center; font-weight: 500; padding: 0 8px;">{item.data.title}</p>
-          <p style="margin: 4px 0 0 0; font-size: 0.82rem; text-align: center; color: #666;">Starting ₹{item.data.price}</p>
+  <!-- Recommendations Section 1: Similar Services -->
+  {similar && similar.length > 0 && (
+    <section class="luxury-recommendations-section" id="similar-items-section">
+      <div class="luxury-section-header">
+        <h3 class="luxury-section-title">Similar Tailoring Services</h3>
+        <span class="luxury-section-divider"></span>
+      </div>
+
+      <div class="luxury-carousel-track" id="similar-items-container">
+        {similar.map((item) => (
+          <a href={`/services/${item.id}/`} class="luxury-product-card">
+            <div class="luxury-card-media">
+              {item.data.image ? (
+                <img src={item.data.image} alt={item.data.title} loading="lazy" />
+              ) : (
+                <div class="luxury-card-fallback">
+                  <span class="fallback-logo">alif.</span>
+                  <span class="fallback-sub">Atelier</span>
+                </div>
+              )}
+            </div>
+            <div class="luxury-card-body">
+              <span class="luxury-card-category">{item.data.category || 'Tailoring'}</span>
+              <h4 class="luxury-card-title" title={item.data.title}>{item.data.title}</h4>
+              <div class="luxury-card-pricing">
+                <span class="luxury-price-current">From ₹{item.data.price}</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Recommendations Section 2: You May Also Like -->
+  {ymal && ymal.length > 0 && (
+    <section class="luxury-recommendations-section ymal-variant" id="ymal-section">
+      <div class="luxury-section-header">
+        <h3 class="luxury-section-title">You May Also Like</h3>
+        <span class="luxury-section-divider"></span>
+      </div>
+
+      <div class="luxury-carousel-track" id="ymal-container">
+        {ymal.map((item) => (
+          <a href={`/services/${item.id}/`} class="luxury-product-card">
+            <div class="luxury-card-media">
+              {item.data.image ? (
+                <img src={item.data.image} alt={item.data.title} loading="lazy" />
+              ) : (
+                <div class="luxury-card-fallback">
+                  <span class="fallback-logo">alif.</span>
+                  <span class="fallback-sub">Atelier</span>
+                </div>
+              )}
+            </div>
+            <div class="luxury-card-body">
+              <span class="luxury-card-category">{item.data.category || 'Tailoring'}</span>
+              <h4 class="luxury-card-title" title={item.data.title}>{item.data.title}</h4>
+              <div class="luxury-card-pricing">
+                <span class="luxury-price-current">From ₹{item.data.price}</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Sticky Mobile Quick-Buy Bar (Matching Product Page Standard) -->
+  <aside class="sticky-mobile-buy-bar visible" id="stickyMobileBuyBar" aria-label="Quick Booking Bar">
+    <div class="sticky-bar-inner">
+      <div class="sticky-bar-product">
+        {image ? (
+          <img 
+            id="stickyThumb" 
+            src={image} 
+            alt={title} 
+            class="sticky-thumb-img" 
+          />
+        ) : (
+          <div class="sticky-thumb-fallback">alif.</div>
+        )}
+        <div class="sticky-product-meta">
+          <span class="sticky-product-title" id="stickyTitle">{title}</span>
+          <span class="sticky-product-price" id="stickyPrice">From ₹{price || '150'}</span>
+        </div>
+      </div>
+
+      <div class="sticky-bar-actions">
+        <a 
+          href={wappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="sticky-btn-buy" 
+          id="stickyBuyNowBtn"
+          aria-label="Book Now"
+        >
+          Book Now
         </a>
-      ))}
+      </div>
     </div>
-  </div>
+  </aside>
+
+  <script is:inline>
+    // Sticky Quick-Buy Bar Scroll Sync (Exact match to product page)
+    function initStickyBuyBar() {
+      const stickyBar = document.getElementById('stickyMobileBuyBar');
+      if (!stickyBar) return;
+
+      let lastScrollY = window.scrollY;
+      let ticking = false;
+
+      function onScroll() {
+        const currentScrollY = window.scrollY;
+
+        // At the very top, keep it visible
+        if (currentScrollY <= 20) {
+          stickyBar.classList.add('visible');
+          lastScrollY = currentScrollY;
+          ticking = false;
+          return;
+        }
+
+        const diff = currentScrollY - lastScrollY;
+        if (Math.abs(diff) > 5) {
+          if (diff > 0) {
+            stickyBar.classList.add('visible');
+          } else {
+            stickyBar.classList.remove('visible');
+          }
+          lastScrollY = currentScrollY;
+        }
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(onScroll);
+          ticking = true;
+        }
+      }, { passive: true });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initStickyBuyBar);
+    } else {
+      initStickyBuyBar();
+    }
+    document.addEventListener('astro:page-load', initStickyBuyBar);
+  </script>
+
+  <style>
+    /* =========================================================
+       CRITICAL LAYOUT RESET (Identical to Product Page)
+       ========================================================= */
+    .container.section {
+      width: 100% !important;
+      max-width: 1000px !important;
+      margin: 0 auto !important;
+      padding: 12px 14px 40px 14px !important;
+      box-sizing: border-box !important;
+      overflow-x: hidden !important;
+    }
+
+    @media (min-width: 768px) {
+      .container.section {
+        padding: 30px 20px 50px 20px !important;
+      }
+    }
+
+    .product-detail-grid {
+      display: grid !important;
+      grid-template-columns: 100% !important;
+      gap: 20px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    @media (min-width: 768px) {
+      .product-detail-grid {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr) !important;
+        gap: 40px !important;
+      }
+    }
+
+    .product-detail-image {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    .product-detail-info {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Main Media Container: perfectly aligned and centered */
+    #mainMediaContainer.product-swapper {
+      width: 100% !important;
+      max-width: 480px !important;
+      margin: 0 auto !important;
+      aspect-ratio: 4 / 5 !important;
+      min-height: unset !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
+      background: #f7f7f7 !important;
+      position: relative !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08) !important;
+      box-sizing: border-box !important;
+    }
+
+    #mainMediaContainer img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: top center !important;
+      display: block !important;
+    }
+
+    .luxury-fallback-media {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #121214;
+      color: #ffffff;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .luxury-fallback-brand {
+      font-family: var(--font-heading, 'Playfair Display', serif);
+      font-size: 2rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: #ffffff;
+    }
+
+    .luxury-fallback-line {
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.25);
+      margin: 14px 0;
+    }
+
+    .luxury-fallback-tag {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.72rem;
+      letter-spacing: 2.2px;
+      color: #bbbbbb;
+      text-transform: uppercase;
+    }
+
+    /* Refined, Luxury Title */
+    .product-header-block {
+      margin-bottom: 4px;
+    }
+
+    .preview-mode-pill {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #777777;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+
+    .product-detail-title {
+      font-family: var(--font-heading) !important;
+      font-size: var(--typo-h1-size) !important;
+      font-weight: var(--typo-h1-weight) !important;
+      line-height: 1.25 !important;
+      color: #111111;
+      margin: 0 0 10px 0;
+      letter-spacing: var(--typo-h1-spacing) !important;
+    }
+
+    @media (min-width: 768px) {
+      .product-detail-title {
+        font-size: var(--typo-h1-size-desktop) !important;
+      }
+    }
+
+    /* Price display */
+    .price-section-wrapper {
+      margin-bottom: 6px;
+    }
+
+    .product-detail-price {
+      font-family: var(--font-body) !important;
+      font-size: var(--typo-price-size) !important;
+      font-weight: var(--typo-price-weight) !important;
+      color: #111111 !important;
+      display: flex !important;
+      align-items: baseline !important;
+      gap: 8px !important;
+      margin-bottom: 10px !important;
+    }
+
+    .product-detail-price .price-prefix {
+      font-size: var(--typo-meta-size);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #777777;
+    }
+
+    .product-detail-price .standard-price {
+      font-size: var(--typo-price-size);
+      font-weight: var(--typo-price-weight);
+      color: #000000;
+    }
+
+    .product-delivery-promo {
+      font-family: var(--font-body);
+      font-size: var(--typo-body-size);
+      font-weight: 400;
+      color: #555555;
+      letter-spacing: 0.3px;
+      padding-top: 10px;
+      margin-top: 8px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    /* Standardized Action Buttons */
+    .product-detail-actions {
+      margin-top: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-cart {
+      display: block;
+      width: 100%;
+      padding: 16px 0;
+      background: #000000;
+      color: #ffffff;
+      border: 1px solid #000000;
+      text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      border-radius: 4px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-cart:hover {
+      background: #1a1a1a;
+      border-color: #1a1a1a;
+      transform: translateY(-1px);
+    }
+
+    .btn-buy {
+      display: block;
+      width: 100%;
+      padding: 16px 0;
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #000000;
+      text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      border-radius: 4px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-buy:hover {
+      background: #f7f7f7;
+      transform: translateY(-1px);
+    }
+
+    /* =========================================================
+       LUXURY MINIMALIST ACCORDIONS (ZARA LEVEL)
+       ========================================================= */
+    .product-accordion-container {
+      width: 100% !important;
+      max-width: 1000px !important;
+      margin: 35px auto 10px auto !important;
+      padding: 0 14px !important;
+      box-sizing: border-box !important;
+    }
+
+    @media (min-width: 768px) {
+      .product-accordion-container {
+        padding: 0 20px !important;
+        margin: 45px auto 25px auto !important;
+      }
+    }
+
+    .accordion-item {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+
+    .accordion-item:last-child {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .accordion-summary {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      padding: 18px 2px !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      list-style: none !important;
+      background: transparent !important;
+      transition: opacity 0.2s ease;
+    }
+
+    .accordion-summary::-webkit-details-marker,
+    .accordion-summary::marker {
+      display: none !important;
+    }
+
+    .accordion-summary:hover {
+      opacity: 0.75;
+    }
+
+    .accordion-heading {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.82rem !important;
+      font-weight: 500 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1.6px !important;
+      color: #111111 !important;
+      margin: 0 !important;
+    }
+
+    .accordion-toggle-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #111111;
+      width: 20px;
+      height: 20px;
+    }
+
+    .accordion-toggle-icon svg {
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    details[open] .accordion-toggle-icon svg {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      padding: 6px 2px 24px 2px;
+      box-sizing: border-box;
+      animation: accordionFade 0.25s ease-out;
+    }
+
+    @keyframes accordionFade {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .accordion-description-text {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: #444444;
+      margin: 0;
+      white-space: pre-line;
+    }
+
+    /* Haute Couture 2-column Atelier Specifications */
+    .spec-row-wrapper {
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 0 !important;
+      width: 100% !important;
+    }
+
+    @media (min-width: 768px) {
+      .spec-row-wrapper {
+        grid-template-columns: repeat(2, 1fr) !important;
+        column-gap: 50px !important;
+      }
+    }
+
+    .spec-row {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: baseline !important;
+      padding: 10px 0 !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+      box-sizing: border-box !important;
+    }
+
+    .spec-label {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.74rem !important;
+      font-weight: 500 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.8px !important;
+      color: #777777 !important;
+    }
+
+    .spec-value {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.82rem !important;
+      font-weight: 500 !important;
+      color: #111111 !important;
+      text-align: right !important;
+    }
+
+    /* Structured Customization Details Cards */
+    .service-details-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 6px;
+    }
+
+    @media (min-width: 768px) {
+      .service-details-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+    }
+
+    .service-sec-card {
+      background: #fafafa;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+
+    .service-sec-heading {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.76rem;
+      font-weight: 400;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #000000;
+      margin: 0 0 10px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .service-sec-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .service-sec-list li {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.82rem;
+      color: #444444;
+      line-height: 1.5;
+      position: relative;
+      padding-left: 14px;
+    }
+
+    .service-sec-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: #999999;
+      font-weight: 300;
+    }
+
+    /* =========================================================
+       LUXURY RECOMMENDATIONS CAROUSEL (SIMILAR & YMAL CARDS)
+       ========================================================= */
+    .luxury-recommendations-section {
+      width: 100% !important;
+      max-width: 1000px !important;
+      margin: 0 auto !important;
+      padding: 40px 14px 20px 14px !important;
+      box-sizing: border-box !important;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+    }
+
+    .luxury-recommendations-section.ymal-variant {
+      background: #fbfbfb;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      padding-top: 36px;
+    }
+
+    @media (min-width: 768px) {
+      .luxury-recommendations-section {
+        padding: 50px 20px 30px 20px !important;
+      }
+    }
+
+    .luxury-section-header {
+      text-align: center;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .luxury-section-title {
+      font-family: var(--font-heading, 'Playfair Display', serif) !important;
+      font-size: 1.15rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 2.5px !important;
+      text-transform: uppercase !important;
+      color: #111111 !important;
+      margin: 0 !important;
+    }
+
+    .luxury-section-divider {
+      width: 32px;
+      height: 1.5px;
+      background: #111111;
+      opacity: 0.2;
+    }
+
+    .luxury-carousel-track {
+      display: flex !important;
+      overflow-x: auto !important;
+      gap: 16px !important;
+      padding: 6px 4px 20px 4px !important;
+      box-sizing: border-box !important;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+    }
+
+    .luxury-carousel-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .luxury-product-card {
+      flex: 0 0 160px !important;
+      min-width: 160px !important;
+      max-width: 160px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      text-decoration: none !important;
+      color: inherit !important;
+      background: #ffffff !important;
+      border-radius: 6px !important;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+      scroll-snap-align: start;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (min-width: 768px) {
+      .luxury-product-card {
+        flex: 0 0 190px !important;
+        min-width: 190px !important;
+        max-width: 190px !important;
+      }
+    }
+
+    .luxury-product-card:hover {
+      transform: translateY(-4px) !important;
+      box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .luxury-card-media {
+      width: 100% !important;
+      aspect-ratio: 4 / 5 !important;
+      position: relative !important;
+      overflow: hidden !important;
+      background: #f7f7f7 !important;
+    }
+
+    .luxury-card-media img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: top center !important;
+      display: block !important;
+      transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .luxury-product-card:hover .luxury-card-media img {
+      transform: scale(1.05);
+    }
+
+    .luxury-card-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #121214;
+      color: #ffffff;
+    }
+
+    .fallback-logo {
+      font-family: var(--font-heading, 'Playfair Display', serif);
+      letter-spacing: 2px;
+      font-size: 0.85rem;
+    }
+
+    .fallback-sub {
+      font-size: 0.62rem;
+      letter-spacing: 1.5px;
+      opacity: 0.6;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .luxury-card-body {
+      padding: 10px 10px 12px 10px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 3px !important;
+      background: #ffffff !important;
+      box-sizing: border-box !important;
+      flex: 1 !important;
+      justify-content: space-between !important;
+    }
+
+    .luxury-card-category {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.62rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.8px !important;
+      text-transform: uppercase !important;
+      color: #888888 !important;
+      line-height: 1.2 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+
+    .luxury-card-title {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.78rem !important;
+      font-weight: 500 !important;
+      color: #111111 !important;
+      line-height: 1.3 !important;
+      margin: 0 !important;
+      display: -webkit-box !important;
+      -webkit-line-clamp: 1 !important;
+      -webkit-box-orient: vertical !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+
+    .luxury-card-pricing {
+      display: flex !important;
+      align-items: baseline !important;
+      gap: 6px !important;
+      margin-top: 4px !important;
+    }
+
+    .luxury-price-current {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.86rem !important;
+      font-weight: 500 !important;
+      color: #000000 !important;
+    }
+
+    /* =========================================================
+       STICKY MOBILE QUICK-BUY BAR (ZARA LUXURY APP)
+       ========================================================= */
+    .sticky-mobile-buy-bar {
+      display: none; /* Hidden on desktop */
+    }
+
+    @media (max-width: 768px) {
+      .sticky-mobile-buy-bar {
+        display: block !important;
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: calc(65px + env(safe-area-inset-bottom, 0px)) !important;
+        background: rgba(255, 255, 255, 0.96) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06) !important;
+        z-index: 9998 !important;
+        transform: translateY(125%) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.25s ease !important;
+        padding: 9px 14px !important;
+        box-sizing: border-box !important;
+      }
+
+      .sticky-mobile-buy-bar.visible {
+        transform: translateY(0) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+
+      .sticky-bar-inner {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+        width: 100% !important;
+        max-width: 500px !important;
+        margin: 0 auto !important;
+      }
+
+      .sticky-bar-product {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        min-width: 0 !important;
+        flex: 1 !important;
+      }
+
+      .sticky-thumb-img {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 6px !important;
+        object-fit: cover !important;
+        flex-shrink: 0 !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        background: #f7f7f7 !important;
+      }
+
+      .sticky-thumb-fallback {
+        width: 44px;
+        height: 44px;
+        border-radius: 6px;
+        background: #111111;
+        color: #ffffff;
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        flex-shrink: 0;
+      }
+
+      .sticky-product-meta {
+        display: flex !important;
+        flex-direction: column !important;
+        min-width: 0 !important;
+        gap: 2px !important;
+      }
+
+      .sticky-product-title {
+        font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+        font-size: 0.8rem !important;
+        font-weight: 500 !important;
+        color: #111111 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        line-height: 1.25 !important;
+      }
+
+      .sticky-product-price {
+        font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+        font-size: 0.92rem !important;
+        font-weight: 500 !important;
+        color: #000000 !important;
+        line-height: 1.2 !important;
+        letter-spacing: 0.2px !important;
+      }
+
+      .sticky-bar-actions {
+        display: flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+      }
+
+      .sticky-btn-buy {
+        background: #000000 !important;
+        color: #ffffff !important;
+        border: 1px solid #000000 !important;
+        padding: 12px 24px !important;
+        font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+        font-size: 0.78rem !important;
+        font-weight: 500 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 2px !important;
+        border-radius: 4px !important;
+        cursor: pointer !important;
+        white-space: nowrap !important;
+        text-decoration: none !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease !important;
+        -webkit-tap-highlight-color: transparent !important;
+      }
+
+      .sticky-btn-buy:active {
+        background: #1f1f1f !important;
+        transform: scale(0.975) !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+      }
+    }
+  </style>
 </BaseLayout>

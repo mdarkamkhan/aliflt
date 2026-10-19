@@ -7,6 +7,7 @@ image: "/uploads/1765454981174-main-1000028658.webp"
 gallery: []
 is_ad: false
 price: 45
+product_code: "ALIF-LK-1173"
 category: "latkan"
 description: "---"
 permalink: false

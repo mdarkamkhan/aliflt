@@ -1,14 +1,30 @@
 {
   "categories": [
     {
+      "name": "Curated Sets",
+      "icon": "all-categories.png",
+      "values": [
+        "curated sets",
+        "curated set",
+        "curated-sets",
+        "dress set",
+        "dress-set",
+        "dress"
+      ]
+    },
+    {
       "name": "Lace",
       "icon": "lace.png",
-      "values": ["lace"]
+      "values": [
+        "lace"
+      ]
     },
     {
       "name": "Latkan",
       "icon": "latkan.png",
-      "values": ["latkan"]
+      "values": [
+        "latkan"
+      ]
     },
     {
       "name": "Fabrics",
@@ -20,25 +36,76 @@
         "velvet",
         "jorget",
         "organza",
-        "net"
+        "net",
+        "fabric",
+        "fabrics",
+        "georgette",
+        "bottom",
+        "crush bottom",
+        "fandy bottom",
+        "top",
+        "crush top",
+        "fandy top",
+        "dupatta",
+        "dupattas",
+        "crush silk dupatta",
+        "fandy silk dupatta",
+        "crush dupatta",
+        "fandy dupatta",
+        "plain fabric",
+        "plain fabrics",
+        "plain crushed silk",
+        "plain fandy silk",
+        "tissue silk",
+        "tissue",
+        "sequence net",
+        "sequin net",
+        "heavy sequence net"
+      ]
+    },
+    {
+      "name": "Dupatta",
+      "icon": "fabrics.png",
+      "values": [
+        "dupatta",
+        "dupattas",
+        "crush silk dupatta",
+        "fandy silk dupatta",
+        "crush dupatta",
+        "fandy dupatta"
       ]
     },
     {
       "name": "Plain Fabrics",
       "icon": "plain-fabrics.png",
       "values": [
+        "fandy silk",
+        "crushed silk",
+        "plain fandy silk",
+        "plain crushed silk",
+        "plain fabrics",
+        "plain fabric",
         "plain reyon",
         "plain cotton",
         "plain saten",
         "plain crape",
         "aster",
-        "blouse piece"
+        "blouse piece",
+        "tissue silk",
+        "plain tissue silk"
       ]
     },
     {
       "name": "Tailoring Material",
       "icon": "tailoring-metrial.png",
-      "values": ["fall", "aster", "thread"]
+      "values": [
+        "tailoring matrial",
+        "tailoring material",
+        "tailoring-material",
+        "fall",
+        "aster",
+        "thread"
+      ]
     }
   ]
 }

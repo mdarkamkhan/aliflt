@@ -7,6 +7,7 @@ image: "/uploads/1765018081418-main-1000026883.webp"
 gallery: []
 is_ad: false
 price: 39
+product_code: "ALIF-LK-1417"
 category: "latkan"
 description: "---"
 permalink: false

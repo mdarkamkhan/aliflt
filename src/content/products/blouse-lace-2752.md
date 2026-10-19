@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/1763903002752-1000026096.webp"
 is_ad: false
 price: 20
+product_code: "ALIF-LC-2752"
 offer_price: 10
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

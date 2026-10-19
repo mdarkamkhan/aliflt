@@ -7,6 +7,7 @@ image: "/uploads/1765018091321-main-1000026942.webp"
 gallery: []
 is_ad: false
 price: 39
+product_code: "ALIF-LK-1321"
 category: "latkan"
 description: "---"
 permalink: false

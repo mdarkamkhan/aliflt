@@ -9,56 +9,112 @@ const products = [...allProducts].reverse();
 
 <BaseLayout 
   title="Our Products" 
-  description="Explore our exquisite collection of designer laces, borders, latkans, and boutique fabrics at ALiF Ladies Tailor."
+  description="Explore our exquisite collection of designer laces, borders, latkans, and boutique fabrics at alif. ladies tailor."
 >
-  <div class="container section fade-in-section">
+  <div class="container section fade-in-section products-page-container">
 
-    <!-- Category Filter Bar -->
-    <div class="filter-bar-scroll-container">
-      <button class="filter-btn active" data-filter-values="all">
-        <img src="/icons/all-categories.png" alt="All Categories" class="filter-icon" />
-        <span class="filter-name">All</span>
-      </button>
-      {categoryFilters.categories.map((category) => (
-        <button class="filter-btn" data-filter-values={category.values.join(',').toLowerCase()}>
-          <img src={`/icons/${category.icon}`} alt={category.name} class="filter-icon" />
-          <span class="filter-name">{category.name}</span>
+    <!-- Editorial Typography Category Tabs (Zara / Haute Couture Style) -->
+    <div class="editorial-tabs-wrapper">
+      <div class="editorial-tabs-track" role="tablist" aria-label="Product Categories">
+        <button 
+          type="button"
+          class="editorial-tab-btn active" 
+          data-filter-values="all" 
+          data-category-name="All Products"
+          role="tab"
+          aria-selected="true"
+        >
+          <span class="tab-label">All</span>
         </button>
-      ))}
+
+        {categoryFilters.categories.map((category) => (
+          <button 
+            type="button"
+            class="editorial-tab-btn" 
+            data-filter-values={category.values.join(',').toLowerCase()}
+            data-category-name={category.name}
+            role="tab"
+            aria-selected="false"
+          >
+            <span class="tab-label">{category.name}</span>
+          </button>
+        ))}
+
+        <button 
+          type="button"
+          class="editorial-tab-btn" 
+          data-filter-values="video,reel-outfits,reel outfits" 
+          data-category-name="Reel Outfits"
+          role="tab"
+          aria-selected="false"
+        >
+          <span class="tab-label">Reel Outfits</span>
+        </button>
+
+        <a 
+          href="/reels/" 
+          class="editorial-tab-btn reels-direct-link"
+          role="tab"
+          aria-selected="false"
+          title="Watch all 54 atelier video reels"
+        >
+          <span class="tab-label">Reels</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Product Status Bar (Live Count & Exclusive Designs) -->
+    <div class="product-status-bar" id="productStatusBar">
+      <div class="status-left">
+        <span class="status-count-label" id="productCountLabel">All Products ({products.length})</span>
+      </div>
+      <span class="status-brand-tag">EXCLUSIVE DESIGNS</span>
     </div>
 
     <!-- Product Grid -->
     <div class="product-grid" data-shuffle-type="product" id="productGrid">
       {products.map((item) => {
-        const { title, price, offer_price, image, category } = item.data;
-        const discountPercent = offer_price && price ? Math.round(((Number(price) - Number(offer_price)) * 100) / Number(price)) : null;
-
+        const { title, price, offer_price, image, category, combo_items } = item.data;
+        const catLower = (category || '').toLowerCase();
+        const isCuratedSet = catLower === 'curated sets' || catLower === 'curated set' || catLower === 'dress set' || (combo_items && combo_items.length > 0);
         return (
-          <a href={`/products/${item.id}/`} class="product-card" data-category={(category || '').toLowerCase()}>
-            <div class="product-card-image-wrapper" style="aspect-ratio: 4 / 5; overflow: hidden; position: relative; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-              {discountPercent && discountPercent > 0 && (
-                <div class="discount-badge">-{discountPercent}%</div>
+          <a href={`/products/${item.id}/`} class="product-card" data-category={(category || '').toLowerCase()} data-has-video={item.data.reel_video ? "true" : "false"}>
+            <div class="product-card-image-wrapper">
+              {item.data.reel_video ? (
+                <video 
+                  src={item.data.reel_video} 
+                  poster={image}
+                  autoplay 
+                  loop 
+                  muted 
+                  playsinline 
+                  webkit-playsinline
+                  preload="auto"
+                ></video>
+              ) : (
+                <img src={image || '/icons/icon-512x512.png'} alt={title} loading="lazy" />
               )}
-              <img src={image || '/icons/icon-512x512.png'} alt={title} style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;" loading="lazy" />
             </div>
 
             <div class="product-card-name">
               <div class="product-card-title">{title}</div>
 
-              <div class="product-card-price-wrapper">
-                {offer_price ? (
-                  <div class="product-card-price has-offer">
-                    <del class="original-price">₹{price}</del>
-                    <span class="offer-price">₹{offer_price}</span>
-                  </div>
-                ) : (
-                  <div class="product-card-price">₹{price}</div>
+              <div class="product-card-bottom-row">
+                {category && (
+                  <div class="product-card-category">{category}</div>
                 )}
-              </div>
 
-              {category && (
-                <div class="product-card-category">{category}</div>
-              )}
+                <div class="product-card-price-wrapper">
+                  {offer_price ? (
+                    <div class="product-card-price has-offer">
+                      <del class="original-price">₹{price}</del>
+                      <span class="offer-price">₹{offer_price}</span>
+                    </div>
+                  ) : (
+                    <div class="product-card-price">₹{price}</div>
+                  )}
+                </div>
+              </div>
             </div>
           </a>
         );
@@ -69,34 +125,281 @@ const products = [...allProducts].reverse();
           Products coming soon.
         </p>
       )}
+
+      <div id="categoryEmptyMessage" style="display: none; width: 100%; text-align: center; padding: 60px 20px; grid-column: 1 / -1;">
+        <p style="font-family: var(--font-body); font-size: 1rem; color: #555; margin: 0 0 8px 0; letter-spacing: 0.5px;">New collection arriving soon.</p>
+        <p style="font-size: 0.82rem; color: #999; margin: 0;">We are currently curating exclusive designs for this category.</p>
+      </div>
     </div>
 
   </div>
 
   <script is:inline>
-    // Category Filtering logic
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const cards = document.querySelectorAll('.product-card');
+    // Smooth Category Filtering logic with live counter
+    function initProductFilters() {
+      const tabs = document.querySelectorAll('.editorial-tab-btn');
+      const cards = document.querySelectorAll('.product-card');
+      const countLabel = document.getElementById('productCountLabel');
+      const emptyMsg = document.getElementById('categoryEmptyMessage');
 
-    filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+      function activateTab(tab) {
+        if (tab.tagName === 'A') return;
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
 
-        const filterVal = btn.getAttribute('data-filter-values') || 'all';
+        const filterVal = tab.getAttribute('data-filter-values') || 'all';
+        const catName = tab.getAttribute('data-category-name') || 'Products';
         const allowed = filterVal === 'all' ? null : filterVal.split(',').map(s => s.trim().toLowerCase());
 
+        let visibleCount = 0;
         cards.forEach(card => {
-          const cardCat = (card.getAttribute('data-category') || '').toLowerCase();
-          if (!allowed || allowed.includes(cardCat)) {
+          const cardCat = (card.getAttribute('data-category') || '').toLowerCase().trim();
+          const hasVideo = card.getAttribute('data-has-video') === 'true';
+          const match = filterVal === 'all' 
+            ? true 
+            : (filterVal === 'video' || filterVal.includes('video') || filterVal.includes('reel'))
+              ? hasVideo 
+              : (allowed && allowed.includes(cardCat));
+
+          if (match) {
             card.style.display = '';
             card.classList.remove('hidden');
+            visibleCount++;
           } else {
             card.style.display = 'none';
             card.classList.add('hidden');
           }
         });
+
+        if (emptyMsg) {
+          emptyMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        if (countLabel) {
+          countLabel.textContent = filterVal === 'all' ? `All Products (${visibleCount})` : `${catName} (${visibleCount})`;
+        }
+      }
+
+      tabs.forEach(tab => {
+        if (tab.tagName !== 'A') {
+          tab.addEventListener('click', () => activateTab(tab));
+        }
       });
-    });
+
+      // Handle ?category= query param from homepage Featured Categories
+      const urlParams = new URLSearchParams(window.location.search);
+      const catParam = (urlParams.get('category') || '').toLowerCase().trim();
+      if (catParam) {
+        const matchingTab = Array.from(tabs).find(t => {
+          const vals = (t.getAttribute('data-filter-values') || '').toLowerCase();
+          const name = (t.getAttribute('data-category-name') || '').toLowerCase().replace(/[\s_]+/g, '-');
+          return vals.split(',').map(v => v.trim()).includes(catParam) || name === catParam || vals.includes(catParam);
+        });
+        if (matchingTab) {
+          activateTab(matchingTab);
+        }
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initProductFilters);
+    } else {
+      initProductFilters();
+    }
+    document.addEventListener('astro:page-load', initProductFilters);
   </script>
 </BaseLayout>
+
+<style>
+  /* --- Editorial Typography Category Tabs (Minimal Luxury Haute Couture) --- */
+  .editorial-tabs-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin: 6px 0 16px 0;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+  }
+  .editorial-tabs-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+  .editorial-tabs-track {
+    display: inline-flex;
+    gap: 26px;
+    align-items: center;
+    padding: 0 4px;
+    min-width: 100%;
+  }
+  .editorial-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 4px 14px 4px;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+  }
+  .editorial-tab-btn .tab-label {
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #000000; /* ALL categories highlighted in solid black */
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+  .editorial-tab-btn:hover .tab-label {
+    color: #000000;
+  }
+  .editorial-tab-btn.active .tab-label {
+    font-weight: 400;
+    color: #000000;
+  }
+  /* Architectural Underline Indicator - ONLY on active tab */
+  .editorial-tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #000000;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .editorial-tab-btn.active::after {
+    transform: scaleX(1);
+  }
+
+  /* --- Product Status & Counter Bar --- */
+  .product-status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 4px 14px 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    margin-bottom: 18px;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+  }
+  .status-left {
+    display: flex;
+    align-items: center;
+  }
+  .status-count-label {
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #111111;
+  }
+  .status-brand-tag {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #777777;
+  }
+
+  /* --- Product Card Enhancements (Option 1: Category Left, Price Right) --- */
+  .product-card {
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                opacity 0.25s ease !important;
+  }
+  .product-card.hidden {
+    display: none !important;
+  }
+  .product-card-bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 5px;
+    width: 100%;
+  }
+  .product-card-category {
+    font-weight: 500;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.68rem;
+    color: #888888;
+    margin-top: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .product-card-price-wrapper {
+    margin-top: 0;
+    margin-left: auto;
+    flex-shrink: 0;
+    text-align: right;
+  }
+  .product-card-price {
+    font-weight: 400;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.95rem;
+    color: var(--text-color, #111111);
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 5px;
+  }
+  .product-card-price.has-offer .original-price {
+    font-size: 0.78rem;
+    color: #999999;
+    text-decoration: line-through;
+    font-weight: 400;
+  }
+  .product-card-price.has-offer .offer-price {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #111111;
+  }
+
+  @media (max-width: 600px) {
+    .editorial-tabs-track {
+      gap: 18px;
+    }
+    .editorial-tab-btn {
+      padding: 8px 3px 12px 3px;
+    }
+    .editorial-tab-btn .tab-label {
+      font-size: 0.96rem; /* Clean, bold, easily readable on mobile */
+      letter-spacing: 0.6px;
+    }
+    .product-status-bar {
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+    }
+    .status-count-label {
+      font-size: 0.74rem;
+    }
+    .product-card-bottom-row {
+      margin-top: 4px;
+    }
+    .product-card-category {
+      font-size: 0.65rem;
+    }
+    .product-card-price {
+      font-size: 0.88rem;
+    }
+    .product-card-price.has-offer .offer-price {
+      font-size: 0.88rem;
+    }
+    .product-card-price.has-offer .original-price {
+      font-size: 0.74rem;
+    }
+  }
+</style>

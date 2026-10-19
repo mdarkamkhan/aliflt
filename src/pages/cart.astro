@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Your Cart" description="Review selected items and place your order directly on WhatsApp with ALiF Ladies Tailor.">
+<BaseLayout title="Your Cart" description="Review selected items and place your order directly on WhatsApp with alif. ladies tailor.">
   <div class="container section fade-in-section" style="max-width: 800px; margin: 0 auto;">
     <h1 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; font-size: 1.8rem; text-align: center;">Your Cart</h1>
     
@@ -78,6 +78,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <img src="${item.image || '/icons/icon-512x512.png'}" style="width: 60px; height: 75px; object-fit: cover; border: 1px solid #f0f0f0;" alt="${item.title}" />
               <div>
                 <h4 style="margin: 0 0 5px 0; font-size: 0.95rem;">${item.title}</h4>
+                ${item.code ? `<div style="font-size: 0.72rem; color: #888; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px;">REF: ${item.code}</div>` : ''}
                 <p style="margin: 0; color: #666; font-size: 0.85rem;">₹${item.price} &times; ${item.quantity || 1} = <strong>₹${itemTotal}</strong></p>
               </div>
             </div>
@@ -97,7 +98,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       if (delivery && deliveryText) {
         delivery.style.display = 'block';
         if (total >= 199) {
-          deliveryText.innerText = '🎉 You unlocked Free Delivery in Sahibganj!';
+          deliveryText.innerText = 'You unlocked Free Delivery in Sahibganj!';
         } else {
           deliveryText.innerText = `Add ₹${199 - total} more for Free Delivery in Sahibganj!`;
         }
@@ -138,12 +139,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
       if (cart.length === 0) return;
 
-      let msg = 'Hello ALiF, I want to place an order from your website:\n\n';
+      let msg = 'Hello alif., I want to place an order from your website:\n\n';
       let total = 0;
       cart.forEach((item, idx) => {
         const itemTotal = Number(item.price) * (item.quantity || 1);
         total += itemTotal;
-        msg += `${idx + 1}. ${item.title} (Qty: ${item.quantity || 1}) - ₹${itemTotal}\n`;
+        const codeTag = item.code ? ` [Code: ${item.code}]` : '';
+        msg += `${idx + 1}. ${item.title}${codeTag} (Qty: ${item.quantity || 1}) - ₹${itemTotal}\n`;
       });
       msg += `\n*Total Amount:* ₹${total}\n\nPlease confirm availability and delivery.`;
 

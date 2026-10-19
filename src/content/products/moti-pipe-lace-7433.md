@@ -7,6 +7,7 @@ image: /uploads/1000028428.webp
 gallery: []
 category: lace
 price: 49
+product_code: "ALIF-LC-7433"
 offer_price: 25
 offer_end_date: "2026-10-12T23:59:00Z"
 description: Elegant antique gold lace featuring delicate white pearl hanging

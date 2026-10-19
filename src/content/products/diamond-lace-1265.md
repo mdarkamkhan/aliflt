@@ -7,6 +7,7 @@ image: "/uploads/1765040611265-main-1000023643.webp"
 gallery: []
 is_ad: false
 price: 49
+product_code: "ALIF-LC-1265"
 offer_price: 25
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

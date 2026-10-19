@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/fa69ae16-033d-468c-8408-06396fc4012c.webp"
 is_ad: false
 price: 60
+product_code: "ALIF-LC-7CC0"
 offer_price: 30
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

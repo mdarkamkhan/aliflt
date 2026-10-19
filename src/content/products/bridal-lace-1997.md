@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/1763911271998-1000023658.webp"
 is_ad: false
 price: 49
+product_code: "ALIF-LC-1997"
 offer_price: 25
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

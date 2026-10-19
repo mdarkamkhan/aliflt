@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/1b224ec8-940e-48d9-bcf5-e45bbf686f5a.webp"
 is_ad: false
 price: 45
+product_code: "ALIF-LC-32D5"
 offer_price: 23
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

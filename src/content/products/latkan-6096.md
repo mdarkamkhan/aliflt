@@ -7,6 +7,7 @@ image: "/uploads/1765017926111-main-1000026936.webp"
 gallery: []
 is_ad: false
 price: 45
+product_code: "ALIF-LK-6096"
 category: "latkan"
 description: "---"
 permalink: false

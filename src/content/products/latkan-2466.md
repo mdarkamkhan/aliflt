@@ -7,6 +7,7 @@ image: "/uploads/1765017992466-main-1000026895.webp"
 gallery: []
 is_ad: false
 price: 90
+product_code: "ALIF-LK-2466"
 category: "latkan"
 description: "---"
 permalink: false

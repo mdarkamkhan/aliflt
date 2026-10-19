@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/29a62911-57ed-4c70-b445-989926f0ccff.webp"
 is_ad: false
 price: 50
+product_code: "ALIF-LC-4650"
 offer_price: 25
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

@@ -8,51 +8,62 @@ const services = [...allServices].reverse();
 
 <BaseLayout 
   title="Tailoring Services" 
-  description="Custom blouse stitching, designer suits, bridal lehengas, and boutique tailoring services in Sahibganj by ALiF Ladies Tailor."
+  description="Custom blouse stitching, designer suits, bridal lehengas, and boutique tailoring services in Sahibganj by alif. ladies tailor."
 >
-  <div class="container section fade-in-section">
-    <div style="text-align: center; margin-bottom: 35px;">
-      <h1 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 2px;">Tailoring Services</h1>
-      <p style="color: #666; font-size: 0.9rem; margin: 0; font-family: var(--font-body); letter-spacing: 0.5px;">Custom boutique stitching, bridal wear, and designer tailoring crafted to perfection.</p>
+  <div class="container section fade-in-section services-page-wrapper">
+    <div class="services-hero-header">
+      <span class="services-eyebrow">BESPOKE ATELIER</span>
+      <h1 class="services-title">Tailoring Services</h1>
+      <p class="services-subtitle">Custom boutique stitching, bridal wear, and designer tailoring crafted to perfection.</p>
+      <div class="services-header-divider"></div>
     </div>
 
-    <div class="product-grid">
+    <div class="services-luxury-grid">
       {services.map((item) => (
-        <a href={`/services/${item.id}/`} class="product-card">
-          <div class="product-card-image-wrapper" style="aspect-ratio: 4 / 5; background: #e9eaec; overflow: hidden; position: relative; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+        <a href={`/services/${item.id}/`} class="service-luxury-card" aria-label={item.data.title}>
+          <div class="service-card-media">
             {item.data.image ? (
-              <img src={item.data.image} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;" loading="lazy" />
+              <img 
+                src={item.data.image} 
+                alt={item.data.title} 
+                loading="lazy" 
+              />
             ) : (
-              <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; background: radial-gradient(circle at center, #1c1c1c 0%, #0a0a0a 100%); color: #fff; box-sizing: border-box; position: relative;">
-                <div style="position: absolute; inset: 10px; border: 1px solid rgba(255, 255, 255, 0.08); pointer-events: none;"></div>
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8; margin-bottom: 12px; color: #fff;">
-                  <circle cx="6" cy="6" r="3"></circle>
-                  <circle cx="6" cy="18" r="3"></circle>
-                  <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
-                  <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
-                  <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
-                </svg>
-                <span style="font-family: var(--font-heading); font-size: 1.15rem; letter-spacing: 2.5px; text-transform: uppercase; color: #fff; font-weight: 500;">ALiF</span>
-                <span style="display: block; width: 24px; height: 1px; background: rgba(255,255,255,0.25); margin: 6px 0;"></span>
-                <span style="font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 2px; color: #aaa; text-transform: uppercase;">BOUTIQUE</span>
-              </div>
-            )}
-          </div>
-
-          <div class="product-card-name">
-            <div class="product-card-title">{item.data.title}</div>
-
-            {item.data.price && (
-              <div class="product-card-price-wrapper">
-                <div class="product-card-price">
-                  <span style="font-size: 0.72rem; font-weight: 400; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 2px;">From</span>₹{item.data.price}
+              <div class="service-fallback-art">
+                <div class="service-fallback-inner">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" class="service-fallback-icon">
+                    <circle cx="6" cy="6" r="3"></circle>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+                    <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+                    <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+                  </svg>
+                  <span class="service-fallback-brand">alif.</span>
+                  <span class="service-fallback-sub">ATELIER</span>
                 </div>
               </div>
             )}
-
             {item.data.category && (
-              <div class="product-card-category">{item.data.category}</div>
+              <span class="service-card-cat-badge">{item.data.category}</span>
             )}
+          </div>
+
+          <div class="service-card-content">
+            <h3 class="service-card-heading">{item.data.title}</h3>
+            
+            <div class="service-card-meta-row">
+              {item.data.price ? (
+                <div class="service-card-price">
+                  <span class="service-price-prefix">From</span>
+                  <span class="service-price-amount">₹{item.data.price}</span>
+                </div>
+              ) : (
+                <div class="service-card-price">
+                  <span class="service-price-amount">Custom Fit</span>
+                </div>
+              )}
+              <span class="service-card-arrow">View &rarr;</span>
+            </div>
           </div>
         </a>
       ))}
@@ -64,4 +75,264 @@ const services = [...allServices].reverse();
       )}
     </div>
   </div>
+
+  <style>
+    .services-page-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 14px 60px 14px;
+      box-sizing: border-box;
+    }
+
+    @media (min-width: 768px) {
+      .services-page-wrapper {
+        padding: 45px 20px 80px 20px;
+      }
+    }
+
+    .services-hero-header {
+      text-align: center;
+      margin-bottom: 35px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .services-eyebrow {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #888888;
+    }
+
+    .services-title {
+      font-family: var(--font-heading, 'Playfair Display', serif);
+      font-size: 2.1rem;
+      font-weight: 500;
+      color: #111111;
+      letter-spacing: 1px;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .services-subtitle {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.88rem;
+      color: #666666;
+      max-width: 540px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .services-header-divider {
+      width: 36px;
+      height: 1.5px;
+      background: #111111;
+      opacity: 0.2;
+      margin-top: 6px;
+    }
+
+    /* Grid Layout: Crisp 2-column on mobile, 3/4-column on desktop */
+    .services-luxury-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    @media (min-width: 768px) {
+      .services-luxury-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .services-luxury-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 26px;
+      }
+    }
+
+    /* High-Fashion Service Card */
+    .service-luxury-card {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      background: #ffffff;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      overflow: hidden;
+      box-sizing: border-box;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .service-luxury-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.1);
+    }
+
+    .service-card-media {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      position: relative;
+      overflow: hidden;
+      background: #f7f7f7;
+    }
+
+    .service-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .service-luxury-card:hover .service-card-media img {
+      transform: scale(1.05);
+    }
+
+    /* Category Tag Badge */
+    .service-card-cat-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      color: #ffffff;
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.58rem;
+      font-weight: 400;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      z-index: 2;
+    }
+
+    /* Fallback Art for Items without Photo */
+    .service-fallback-art {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(145deg, #181818 0%, #0d0d0d 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .service-fallback-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .service-fallback-icon {
+      color: #ffffff;
+      opacity: 0.75;
+      margin-bottom: 4px;
+    }
+
+    .service-fallback-brand {
+      font-family: var(--font-heading, 'Playfair Display', serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .service-fallback-sub {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 1.8px;
+      color: #888888;
+      text-transform: uppercase;
+    }
+
+    /* Card Bottom Info */
+    .service-card-content {
+      padding: 10px 10px 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: #ffffff;
+      box-sizing: border-box;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .service-card-heading {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.84rem;
+      font-weight: 400;
+      color: #111111;
+      line-height: 1.25;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .service-card-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 4px;
+    }
+
+    .service-card-price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .service-price-prefix {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.68rem;
+      font-weight: 400;
+      color: #888888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .service-price-amount {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: #000000;
+    }
+
+    .service-card-arrow {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: #888888;
+      letter-spacing: 0.5px;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .service-luxury-card:hover .service-card-arrow {
+      color: #000000;
+      transform: translateX(2px);
+    }
+  </style>
 </BaseLayout>

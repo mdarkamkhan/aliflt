@@ -8,6 +8,7 @@ gallery:
   - "/uploads/1764952717910-0-1000026921.webp"
 is_ad: false
 price: 99
+product_code: "ALIF-LK-7909"
 category: "latkan"
 description: "---"
 permalink: false

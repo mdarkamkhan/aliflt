@@ -8,6 +8,7 @@ gallery:
   - "/uploads/1764952551349-0-1000026977.webp"
 is_ad: false
 price: 49
+product_code: "ALIF-LK-N348"
 category: "latkan"
 description: "---"
 permalink: false

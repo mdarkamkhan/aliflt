@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/9540c55e-5200-4cea-a252-f487244a5182.webp"
 is_ad: false
 price: 50
+product_code: "ALIF-LC-2426"
 offer_price: 25
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

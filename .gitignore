@@ -5,3 +5,11 @@ dist/
 .env
 .DS_Store
 Thumbs.db
+scratch/
+ELEMENTS/
+fabric/
+lace/
+tailoring metrial/
+banner/
+.gemini/
+*.log

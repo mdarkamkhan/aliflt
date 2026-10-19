@@ -8,6 +8,7 @@ gallery:
   - "/uploads/1764952656708-0-1000026930.webp"
 is_ad: false
 price: 40
+product_code: "ALIF-LK-6707"
 category: "latkan"
 description: "---"
 permalink: false

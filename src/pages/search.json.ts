@@ -27,6 +27,7 @@ export async function GET() {
       fabric: p.data.fabric || '',
       work: p.data.work || '',
       pattern: p.data.pattern || '',
+      code: p.data.product_code || '',
     })),
     ...works.map((w) => ({
       title: w.data.title || 'Our Work',

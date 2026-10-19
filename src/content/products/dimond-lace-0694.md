@@ -7,6 +7,7 @@ image: "/uploads/1765040240705-main-1000023642.webp"
 gallery: []
 is_ad: false
 price: 99
+product_code: "ALIF-LC-0694"
 offer_price: 50
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

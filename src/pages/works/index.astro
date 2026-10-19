@@ -8,34 +8,34 @@ const works = [...allWorks].reverse();
 
 <BaseLayout 
   title="Our Work Portfolio" 
-  description="Explore finished custom outfits, bridal blouses, suits, and hand-stitched garments crafted by master tailors at ALiF."
+  description="Explore finished custom outfits, bridal blouses, suits, and hand-stitched garments crafted by master tailors at alif.."
 >
   <div class="container section fade-in-section">
     <div style="text-align: center; margin-bottom: 30px;">
       <h1 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 2px;">Our Work Portfolio</h1>
-      <p style="color: #666; font-size: 0.9rem; margin: 0; font-family: var(--font-body); letter-spacing: 0.5px;">Real customer orders and finished outfits handcrafted by ALiF experienced tailors.</p>
+      <p style="color: #666; font-size: 0.9rem; margin: 0; font-family: var(--font-body); letter-spacing: 0.5px;">Real customer orders and finished outfits handcrafted by alif. experienced tailors.</p>
     </div>
 
     <div class="product-grid">
       {works.map((item) => (
         <div class="product-card">
-          <div class="product-card-image-wrapper" style="aspect-ratio: 4 / 5; overflow: hidden; position: relative; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-            <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Our Work'} style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;" loading="lazy" />
+          <div class="product-card-image-wrapper" style="aspect-ratio: 4 / 5; overflow: hidden; position: relative; background: #f8f8f8;">
+            <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Our Work'} style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; transition: transform 0.5s ease;" loading="lazy" />
           </div>
 
-          <div class="product-card-name">
-            <div class="product-card-title">
-              {item.data.title || 'Our Work'}
-            </div>
-
+          <div class="product-card-name" style="padding: 12px 14px 16px;">
             {item.data.category && (
-              <div class="product-card-category" style="font-size: 0.8rem; color: #777; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
+              <div class="product-card-category" style="font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; font-weight: 500;">
                 {item.data.category}
               </div>
             )}
 
+            <div class="product-card-title" style="font-weight: 500; font-size: 0.92rem; color: #111; letter-spacing: 0.2px;">
+              {item.data.title || 'Our Work'}
+            </div>
+
             {item.data.description && (
-              <p style="font-size: 0.82rem; color: #555; margin: 8px 0 0 0; line-height: 1.4;">
+              <p style="font-size: 0.8rem; color: #666; margin: 6px 0 0 0; line-height: 1.5;">
                 {item.data.description}
               </p>
             )}

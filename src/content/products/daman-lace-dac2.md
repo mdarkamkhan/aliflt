@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/20b0a920-e032-49aa-94a9-0cd0eaa2fdab.webp"
 is_ad: false
 price: 50
+product_code: "ALIF-LC-DAC2"
 offer_price: 25
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

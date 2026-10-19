@@ -7,14 +7,67 @@
     --bg-color: #f8fafc;
     --text-color: #111111;
     --border-color: #e0e0e0;
-    --font-heading: 'Playfair Display', serif;
-    --font-body: 'Poppins', sans-serif;
+
+    /* --- TYPOGRAPHY DESIGN SYSTEM TOKENS --- */
+    --font-heading: 'Ubuntu', sans-serif;
+    --font-editorial: 'Playfair Display', Georgia, serif;
+    --font-body: 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    /* Display & Brand */
+    --typo-brand-size: 2rem;
+    --typo-brand-spacing: 4px;
+    --typo-brand-weight: 400;
+    
+    /* Page Main Heading (H1) */
+    --typo-h1-size: 1.65rem;
+    --typo-h1-size-desktop: 1.95rem;
+    --typo-h1-spacing: 1.2px;
+    --typo-h1-weight: 400;
+    
+    /* Section Heading (H2) */
+    --typo-h2-size: 1.15rem;
+    --typo-h2-size-desktop: 1.35rem;
+    --typo-h2-spacing: 2.2px;
+    --typo-h2-weight: 400;
+    
+    /* Block & Sub-Section Heading (H3, H4) */
+    --typo-h3-size: 0.82rem;
+    --typo-h3-spacing: 1.8px;
+    --typo-h3-weight: 400;
+
+    /* Card Titles */
+    --typo-card-size: 0.82rem;
+    --typo-card-weight: 400;
+    --typo-card-spacing: 0.2px;
+
+    /* Micro-labels, Badges & Category Metadata */
+    --typo-meta-size: 0.64rem;
+    --typo-meta-spacing: 1.8px;
+    --typo-meta-weight: 400;
+    --typo-meta-color: #666666;
+
+    /* Pricing */
+    --typo-price-size: 1.35rem;
+    --typo-price-weight: 500;
+    --typo-price-del-size: 0.88rem;
+    --typo-price-del-color: #888888;
+
+    /* Action Buttons & Navigation CTAs */
+    --typo-btn-size: 0.82rem;
+    --typo-btn-spacing: 2px;
+    --typo-btn-weight: 400;
+
+    /* Paragraphs & Editorial Body */
+    --typo-body-size: 0.88rem;
+    --typo-body-line: 1.75;
+    --typo-body-color: #333333;
 }
 
 body {
     font-family: var(--font-body);
-    font-weight: 300; /* Poppins Light */
-    line-height: 1.7;
+    font-weight: 400;
+    font-size: var(--typo-body-size);
+    line-height: var(--typo-body-line);
     margin: 0;
     padding: 0;
     color: var(--text-color);
@@ -23,6 +76,134 @@ body {
     padding-top: 70px; 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+
+    font-weight: 400;
+}
+b, strong {
+    font-weight: 500;
+}
+
+h1 {
+    font-family: var(--font-heading);
+    font-size: var(--typo-h1-size);
+    font-weight: var(--typo-h1-weight);
+    letter-spacing: var(--typo-h1-spacing);
+    line-height: 1.25;
+}
+
+@media (min-width: 768px) {
+    h1 {
+        font-size: var(--typo-h1-size-desktop);
+    }
+}
+
+h2 {
+    font-family: var(--font-heading);
+    font-size: var(--typo-h2-size);
+    font-weight: var(--typo-h2-weight);
+    letter-spacing: var(--typo-h2-spacing);
+    text-transform: uppercase;
+    line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+    h2 {
+        font-size: var(--typo-h2-size-desktop);
+    }
+}
+
+h3 {
+    font-family: var(--font-body);
+    font-size: var(--typo-h3-size);
+    font-weight: var(--typo-h3-weight);
+    letter-spacing: var(--typo-h3-spacing);
+    text-transform: uppercase;
+    line-height: 1.35;
+}
+
+/* Typography Utility Classes */
+ !important;
+    line-height: 1.1 !important;
+}
+
+.text-h1 {
+    font-family: var(--font-heading) !important;
+    font-size: var(--typo-h1-size) !important;
+    font-weight: var(--typo-h1-weight) !important;
+    letter-spacing: var(--typo-h1-spacing) !important;
+    line-height: 1.25 !important;
+    color: #111111 !important;
+}
+
+.text-h2 {
+    font-family: var(--font-heading) !important;
+    font-size: var(--typo-h2-size) !important;
+    font-weight: var(--typo-h2-weight) !important;
+    letter-spacing: var(--typo-h2-spacing) !important;
+    text-transform: uppercase !important;
+    line-height: 1.3 !important;
+    color: #111111 !important;
+}
+
+.text-h3 {
+    font-family: var(--font-body) !important;
+    font-size: var(--typo-h3-size) !important;
+    font-weight: var(--typo-h3-weight) !important;
+    letter-spacing: var(--typo-h3-spacing) !important;
+    text-transform: uppercase !important;
+    line-height: 1.35 !important;
+    color: #111111 !important;
+}
+
+.text-card-title {
+    font-family: var(--font-body) !important;
+    font-size: var(--typo-card-size) !important;
+    font-weight: var(--typo-card-weight) !important;
+    letter-spacing: var(--typo-card-spacing) !important;
+    color: #111111 !important;
+    line-height: 1.3 !important;
+}
+
+.text-meta {
+    font-family: var(--font-body) !important;
+    font-size: var(--typo-meta-size) !important;
+    font-weight: var(--typo-meta-weight) !important;
+    letter-spacing: var(--typo-meta-spacing) !important;
+    text-transform: uppercase !important;
+    color: var(--typo-meta-color) !important;
+    line-height: 1.2 !important;
+}
+
+.text-btn {
+    font-family: var(--font-body) !important;
+    font-size: var(--typo-btn-size) !important;
+    font-weight: var(--typo-btn-weight) !important;
+    letter-spacing: var(--typo-btn-spacing) !important;
+    text-transform: uppercase !important;
+}
+
+.text-price {
+    font-family: var(--font-body) !important;
+    font-size: var(--typo-price-size) !important;
+    font-weight: var(--typo-price-weight) !important;
+    color: #000000 !important;
+}
+
+.text-price-del {
+    font-family: var(--font-body) !important;
+    font-size: var(--typo-price-del-size) !important;
+    font-weight: 400 !important;
+    color: var(--typo-price-del-color) !important;
+    text-decoration: line-through !important;
+}
+
+.text-body {
+    font-family: var(--font-body) !important;
+    font-size: var(--typo-body-size) !important;
+    line-height: var(--typo-body-line) !important;
+    color: var(--typo-body-color) !important;
 }
 
 /* =========================================
@@ -734,23 +915,20 @@ footer {
     display: flex;
     flex-direction: column;
     background: white;
-    border-radius: 10px;
+    border-radius: 6px;
     overflow: hidden;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     outline: none;
-    box-shadow: inset 0 -3em 3em rgba(0,0,0,0.08),
-                0.3em 0.3em 1em rgba(0,0,0,0.18);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
     opacity: 1; 
     transform: translateY(0);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                border-radius 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
                 opacity 0.3s ease-out;
 }
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1),
-                0.5em 0.5em 1.4em rgba(0,0,0,0.26);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.1);
 }
 .product-card.is-visible {
     opacity: 1;
@@ -765,6 +943,7 @@ footer {
 
 /* 💡 LUXURY COMPACT 4:5 ASPECT RATIO & CLEAN E-COMMERCE SPACING */
 .product-card-image-wrapper {
+    width: 100%;
     aspect-ratio: 4 / 5;
     overflow: hidden;
     border-top-left-radius: 10px;
@@ -776,7 +955,12 @@ footer {
 }
 
 .product-card img,
-.product-card-image-wrapper img {
+.product-card video,
+.product-card-image-wrapper img,
+.product-card-image-wrapper video {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     display: block;
@@ -789,7 +973,8 @@ footer {
     will-change: transform;
 }
 
-.product-card:hover img { 
+.product-card:hover img,
+.product-card:hover video { 
     transform: scale(1.08); /* Slow, subtle zoom luxury feel deta hai */
 }
 .product-card-name {
@@ -809,47 +994,63 @@ footer {
     text-overflow: ellipsis;
     line-height: 1.3;
 }
+.product-card-bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 5px;
+    width: 100%;
+}
 .product-card-price-wrapper {
-    margin-top: 4px;
+    margin-top: 0;
+    margin-left: auto;
+    flex-shrink: 0;
+    text-align: right;
 }
 .product-card-price {
-    font-weight: 600;
+    font-weight: 400;
     font-family: var(--font-body);
     font-size: 0.95rem;
     color: var(--text-color);
     display: flex;
     align-items: baseline;
-    gap: 6px;
+    justify-content: flex-end;
+    gap: 5px;
 }
 .product-card-price.has-offer .original-price {
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     color: #999;
     text-decoration: line-through;
     font-weight: 400;
 }
 .product-card-price.has-offer .offer-price {
     font-size: 0.95rem;
-    font-weight: 700;
+    font-weight: 500;
     color: #111;
 }
 .product-card-category {
-    font-weight: 400;
+    font-weight: 500;
     font-family: var(--font-body);
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     color: #888;
-    margin-top: 3px;
+    margin-top: 0;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 @media (max-width: 600px) {
     .section { padding: 16px 12px; }
     .container .section { margin: 8px 0; }
-    .product-card-name { padding: 8px 10px 12px 10px; }
+    .product-card-name { padding: 8px 10px 10px 10px; }
     .product-card-title { font-size: 0.86rem; }
-    .product-card-price { font-size: 0.9rem; }
-    .product-card-price.has-offer .offer-price { font-size: 0.9rem; }
-    .product-card-price.has-offer .original-price { font-size: 0.78rem; }
-    .product-card-category { font-size: 0.7rem; margin-top: 2px; }
+    .product-card-bottom-row { margin-top: 4px; }
+    .product-card-category { font-size: 0.65rem; }
+    .product-card-price { font-size: 0.88rem; }
+    .product-card-price.has-offer .offer-price { font-size: 0.88rem; }
+    .product-card-price.has-offer .original-price { font-size: 0.74rem; }
 }
 
 
@@ -932,17 +1133,16 @@ details[open] .collapsible-content {
     body { padding-top: 60px; } /* Ye line zaroori hai content ko adjust karne ke liye */
 }
 
-/* ⚠️ ISKO DELETE MAT KARNA (Ye same rahega) */
+/* Logo Styles */
 .nav-logo {
     font-size: 1.6rem;
-    font-weight: 500;
-    color: var(--text-color);
+    font-weight: 400;
+    color: #000000;
     text-decoration: none;
-    font-family: var(--font-heading);
-    text-transform: uppercase;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    text-transform: lowercase;
     letter-spacing: 2px;
-}
-
+    display: inline-block;
 }
 
 /* 💡 USER REQUESTED CHANGES APPLIED HERE 💡 */
@@ -1167,28 +1367,43 @@ details[open] .collapsible-content {
     border: 1px solid var(--border-color);
 }
 .product-detail-title { 
-    font-size: 2.8rem; 
+    font-size: 1.75rem; 
     margin-top: 0; 
     margin-bottom: 10px; 
     font-weight: 400; 
-    line-height: 1.2;
+    line-height: 1.25;
 }
 .product-detail-price { 
-    font-size: 1.8rem; 
-    font-weight: 300; 
-    color: #000; 
-    display: block; 
-    margin-bottom: 15px; 
+    font-size: 1.55rem; 
+    font-weight: 400; 
+    color: #111111; 
+    display: flex; 
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 12px; 
     font-family: var(--font-body);
 }
+.product-detail-price .offer-price {
+    font-size: 1.55rem;
+    font-weight: 400;
+    color: #000000;
+}
+.product-detail-price .original-price,
+.product-detail-price del {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #888888;
+    text-decoration: line-through;
+}
 .product-detail-category { 
-    font-size: 1.1rem; 
-    color: #555; 
+    font-size: 0.72rem; 
+    color: #777; 
     text-transform: uppercase; 
     display: block; 
-    margin-bottom: 5px; 
-    font-family: var(--font-accent);
-    letter-spacing: 1.5px;
+    margin-bottom: 6px; 
+    font-family: var(--font-body);
+    font-weight: 400;
+    letter-spacing: 2px;
 }
 .product-detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
 
@@ -1373,11 +1588,11 @@ details[open] .collapsible-content {
 
 .accordion-heading {
     margin: 0;
-    font-family: var(--font-accent); /* Cormorant Garamond */
-    font-weight: 500;
+    font-family: var(--font-body);
+    font-weight: var(--typo-h3-weight);
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-size: 1.2rem;
+    letter-spacing: var(--typo-h3-spacing);
+    font-size: var(--typo-h3-size);
 }
 
 .accordion-caret {
@@ -1429,7 +1644,7 @@ details[open] > .accordion-content {
     align-items: flex-start;
     padding: 12px 0;
     border-bottom: 1px solid var(--border-color);
-    font-family: var(--font-body); /* Poppins */
+    font-family: var(--font-body); /* Ubuntu */
     font-size: 1rem;
 }
 .spec-row:first-child {
@@ -1439,12 +1654,12 @@ details[open] > .accordion-content {
     border-bottom: none;
 }
 .spec-label {
-    font-weight: 400; /* Poppins Regular */
+    font-weight: 400; /* Ubuntu Regular */
     color: #333;
     padding-right: 15px;
 }
 .spec-value {
-    font-weight: 300; /* Poppins Light */
+    font-weight: 300; /* Ubuntu Light */
     color: #000;
     text-align: right;
     text-transform: capitalize;
@@ -1515,7 +1730,7 @@ details[open] > .accordion-content {
     border-bottom: 2px solid var(--accent-color);
 }
 .filter-btn.active .filter-name {
-    font-weight: 600; /* Make active text slightly bolder */
+    font-weight: 400; /* Make active text slightly bolder */
     }
 /* =========================================
    EDITORIAL MONOCHROME LUXURY FOOTER (ZARA / CELINE STYLE)
@@ -1554,9 +1769,9 @@ details[open] > .accordion-content {
 }
 
 .footer-logo {
-    font-family: var(--font-heading);
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
     font-size: 2rem;
-    font-weight: 500;
+    font-weight: 400;
     letter-spacing: 5px;
     color: #111111;
     text-decoration: none;
@@ -1589,7 +1804,7 @@ details[open] > .accordion-content {
 .footer-col-title {
     font-family: var(--font-body);
     font-size: 0.65rem;
-    font-weight: 600;
+    font-weight: 400;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #999999;
@@ -1793,7 +2008,7 @@ details[open] > .accordion-content {
     opacity: 0;
     visibility: hidden;
     font-size: 13.5px;
-    font-weight: 700;
+    font-weight: 500;
     letter-spacing: 0.3px;
     line-height: 1.2;
     transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -1877,7 +2092,7 @@ details[open] > .accordion-content {
 .doodle-tooltip-arrow {
     display: inline-block;
     font-size: 13px;
-    font-weight: 900;
+    font-weight: 500;
     transition: transform 0.2s ease;
 }
 
@@ -1896,8 +2111,9 @@ details[open] > .accordion-content {
     max-width: 1240px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .footer-copyright,
@@ -1945,6 +2161,7 @@ details[open] > .accordion-content {
     }
 
     .footer-logo {
+    text-transform: lowercase;
         font-size: 1.7rem;
         letter-spacing: 4px;
     }
@@ -1989,7 +2206,7 @@ details[open] > .accordion-content {
     }
 
     .footer-bottom {
-        padding: 12px 16px;
+        padding: 14px 16px calc(85px + env(safe-area-inset-bottom, 0px)) 16px !important;
     }
 
     .footer-bottom-inner {
@@ -2036,13 +2253,13 @@ details[open] > .accordion-content {
 }
 
 .sidebar-heading {
-    font-family: var(--font-accent); /* Cormorant/Fancy Font */
-    font-size: 0.9rem;
+    font-family: var(--font-heading);
+    font-size: var(--typo-h3-size);
     color: #666;
     margin-bottom: 20px;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 400;
+    letter-spacing: var(--typo-h3-spacing);
+    font-weight: var(--typo-h3-weight);
 }
 
 /* Icons Row */
@@ -2104,7 +2321,7 @@ details[open] > .accordion-content {
 /* 2. Professional Typography for Description */
 .product-description p, 
 .accordion-description-text {
-    font-family: var(--font-body); /* Clean Poppins font */
+    font-family: var(--font-body); /* Clean Ubuntu font */
     font-size: 0.95rem;
     line-height: 1.8; /* Lines ke beech space */
     color: #444; /* Soft Black */
@@ -2166,7 +2383,7 @@ details[open] > .accordion-content {
 }
 
 .cart-info .price {
-    font-weight: 600;
+    font-weight: 400;
     color: #333;
     margin-bottom: 10px;
 }
@@ -2315,7 +2532,7 @@ details[open] > .accordion-content {
     box-shadow: none !important;
     
     /* Updated Typography */
-    font-family: 'Poppins', sans-serif; /* Sidebar wala font */
+    font-family: 'Ubuntu', sans-serif; /* Sidebar wala font */
     font-size: 1.3rem;  /* Size chhota kiya (Pehle 1.8rem tha) */
     font-weight: 300;   /* Bilkul Patla (Slim) text */
     color: #000;
@@ -2378,7 +2595,7 @@ details[open] > .accordion-content {
 
 .search-item h4 {
     margin: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 1rem;
     font-weight: 500;
     text-transform: capitalize;
@@ -2403,7 +2620,7 @@ details[open] > .accordion-content {
 .search-hint {
     text-align: center;
     color: #aaa;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 0.85rem;
     margin-top: 10px;
 }
@@ -2422,24 +2639,54 @@ details[open] > .accordion-content {
 
 .b-nav-item {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-decoration: none; color: #999; font-size: 10px;
-    flex: 1; height: 100%; transition: 0.3s;
-    font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.5px;
-    position: relative;
+    text-decoration: none; color: #000000 !important; font-size: 10px; font-weight: 500;
+    flex: 1; height: 100%; transition: color 0.2s ease, transform 0.15s ease;
+    font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.6px;
+    position: relative; opacity: 1 !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.b-nav-icon-box {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 28px; border-radius: 14px;
+    background: transparent;
+    transition: background 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.2s ease;
+    margin-bottom: 2px;
 }
 
 .b-nav-item svg {
-    width: 22px; height: 22px; margin-bottom: 4px;
-    stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    width: 20px; height: 20px;
+    stroke: #000000 !important; fill: none; color: #000000 !important;
+    stroke-width: 1.9 !important; stroke-linecap: round; stroke-linejoin: round;
+    transition: stroke 0.2s ease, color 0.2s ease;
 }
 
-/* Active State (Black) */
-.b-nav-item.active { color: #000; font-weight: 600; }
+.b-nav-label {
+    color: #000000 !important;
+    font-size: 9.5px; font-weight: 500; letter-spacing: 0.5px; line-height: 1;
+    transition: font-weight 0.2s ease;
+}
+
+/* Active State (Black Capsule, Pure White Icon) */
+.b-nav-item.active .b-nav-icon-box { 
+    background: #000000 !important;
+}
+
+.b-nav-item.active svg {
+    stroke: #ffffff !important;
+    color: #ffffff !important;
+    stroke-width: 2.1 !important;
+}
+
+.b-nav-item.active .b-nav-label {
+    font-weight: 500 !important;
+    color: #000000 !important;
+}
 
 /* Cart Badge in Bottom Nav */
 .mobile-badge {
     position: absolute; top: 5px; right: 25%;
-    background: #000; color: #fff; font-size: 9px; font-weight: bold;
+    background: #000; color: #fff; font-size: 9px; font-weight: 500;
     padding: 2px 5px; border-radius: 50%; min-width: 14px; text-align: center;
     display: none; /* JS will show this */
 }
@@ -2448,14 +2695,18 @@ details[open] > .accordion-content {
 @media (max-width: 768px) {
     .bottom-nav { display: flex; }
     
-    /* Hide Top Cart on Mobile */
-    .nav-actions #cartIcon { display: none !important; }
+    /* Keep Top Cart visible on Mobile (since Bottom Nav now features Reels) */
+    .nav-actions #cartIcon { display: flex !important; }
     
-    /* Body padding reset - eliminates unwanted gap at the bottom */
+    /* Body padding reset */
     body { padding-bottom: 0 !important; }
     
-    /* Footer margin reset - eliminates negative space below all rights reserved */
+    /* Footer bottom padding ensures All Rights Reserved is 100% visible above bottom nav */
     .prada-mobile-footer { padding-bottom: 0 !important; }
+    .footer-bottom { 
+        padding-top: 16px !important;
+        padding-bottom: calc(85px + env(safe-area-inset-bottom, 0px)) !important; 
+    }
 }
 /* =========================================
    SIDEBAR FIX FOR BOTTOM NAV
@@ -2509,46 +2760,85 @@ details[open] > .accordion-content {
 }
 
 .marquee-container {
-  overflow: hidden;
-  white-space: nowrap;
-  background: #000; /* Optional: black strip look */
-  color: #fff;
-  font-family: var(--font-accent);
-  font-size: 0.95rem;
-  letter-spacing: 1.5px;
-  padding: 10px 0;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  background: #111111;
+  color: #ffffff;
+  font-family: var(--font-body, 'Ubuntu', sans-serif);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0;
+  height: 36px;
+  display: flex !important;
+  align-items: center !important;
   position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 100;
+  box-sizing: border-box;
+  width: 100%;
 }
 
-.marquee-content {
-  display: inline-block;
-  animation: marquee 18s linear infinite;
-  padding-left: 100%; /* starting outside view */
+.marquee-track {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  width: max-content !important;
+  height: 100% !important;
+  animation: continuousMarquee 32s linear infinite !important;
+  will-change: transform;
 }
 
-@keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
 }
-.marquee-container {
-  overflow: hidden;
-  white-space: nowrap;
-  background: #000;
-  color: #fff;
-  font-family: var(--font-accent);
-  font-size: 0.95rem;
-  letter-spacing: 1.5px;
-  padding: 10px 0;
-  position: relative;
+
+@keyframes continuousMarquee {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-33.333%, 0, 0); }
 }
-.marquee-content {
-  display: inline-block;
-  animation: marquee 18s linear infinite;
-  padding-left: 100%;
+
+.marquee-group {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  height: 100% !important;
 }
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+
+.marquee-item {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  gap: 8px;
+  padding: 0 20px;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1;
+}
+
+.marquee-sep {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.82rem;
+  line-height: 1;
+  user-select: none;
+  padding: 0 4px;
+}
+
+@media (max-width: 600px) {
+  .marquee-container {
+    font-size: 0.62rem;
+    letter-spacing: 1.6px;
+    height: 32px;
+  }
+  .marquee-item {
+    padding: 0 16px;
+    gap: 6px;
+  }
 }
 #app-splash {
   position: fixed;
@@ -2687,7 +2977,7 @@ body.chat-active {
     bottom: 90px; /* Bottom Nav ke upar */
     right: 20px;
     z-index: 10001;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 /* Minimal Floating Round Button */
@@ -2760,14 +3050,14 @@ body.chat-active {
 
 .brand-title {
     font-family: 'Playfair Display', serif;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 1.15rem;
     letter-spacing: 1px;
     color: #000000;
 }
 
 .brand-sub {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-weight: 500;
     font-size: 0.7rem;
     letter-spacing: 1.5px;
@@ -2808,7 +3098,7 @@ body.chat-active {
     padding: 12px 16px;
     font-size: 0.88rem;
     line-height: 1.5;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     max-width: 84%;
     border-radius: 0px; /* Sharp Corner */
     animation: msgFade 0.25s ease-out forwards;
@@ -2936,7 +3226,7 @@ body.chat-active {
 
 .chat-catalog-price {
     font-size: 0.72rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #111111;
 }
 
@@ -2983,7 +3273,7 @@ body.chat-active {
     border-radius: 24px;
     outline: none;
     font-size: 0.88rem;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     background: #FAFAFA;
     transition: border-color 0.2s ease, background 0.2s ease;
 }
@@ -3138,4 +3428,285 @@ body.chat-active {
     vertical-align: middle;
     letter-spacing: 1px;
 }
+
+/* === ALIF LUXURY SIDEBAR DRAWER NAVIGATION HIERARCHY === */
+.drawer-inner {
+    margin: auto 0;
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 3.2rem 2.2rem 2.5rem 2.2rem;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.drawer-logo {
+    margin-bottom: 34px;
+    text-align: left;
+    width: 100%;
+}
+
+.drawer-brand-title {
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #000000;
+    margin: 0 0 5px 0;
+    line-height: 1;
+    text-align: left;
+}
+
+.drawer-brand-sub {
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 9.5px;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #777777;
+    display: block;
+    text-align: left;
+}
+
+.drawer-nav {
+    width: 100%;
+}
+
+.drawer-main-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.drawer-nav-item {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.drawer-top-link,
+button.drawer-group-btn {
+    all: unset !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+    font-size: 24px !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2.2px !important;
+    color: #000000 !important;
+    display: block !important;
+    width: 100% !important;
+    text-align: left !important;
+    line-height: 1.25 !important;
+    padding: 4px 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    transition: opacity 0.2s ease, transform 0.2s ease !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.drawer-top-link:hover,
+button.drawer-group-btn:hover {
+    opacity: 0.55 !important;
+    transform: translateX(4px) !important;
+}
+
+button.drawer-group-btn:focus,
+button.drawer-group-btn:active,
+button.drawer-group-btn:focus-visible {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.drawer-nav-group.is-open button.drawer-group-btn {
+    font-weight: 500 !important;
+    color: #000000 !important;
+}
+
+.drawer-submenu {
+    display: none !important;
+    list-style: none !important;
+    padding: 4px 0 6px 16px !important;
+    margin: 10px 0 12px 4px !important;
+    border-left: 2px solid #111111 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.drawer-nav-group.is-open .drawer-submenu {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    animation: drawerSubmenuSlide 0.22s ease-out forwards;
+}
+
+@keyframes drawerSubmenuSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.drawer-submenu li {
+    width: 100% !important;
+    list-style: none !important;
+    text-align: left !important;
+}
+
+.drawer-sub-link {
+    font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+    font-size: 16.5px !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.8px !important;
+    color: #444444 !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    line-height: 1.3 !important;
+    transition: all 0.2s ease !important;
+    text-align: left !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.drawer-sub-link:hover,
+.drawer-sub-link:active {
+    color: #000000 !important;
+    transform: translateX(6px) !important;
+}
+
+/* Highlighted PWA Install App Button */
+.drawer-install-wrapper {
+    margin-top: 28px;
+    width: 100%;
+}
+
+.drawer-install-btn {
+    width: 100%;
+    max-width: 320px;
+    padding: 13px 20px;
+    background: #111111;
+    color: #ffffff;
+    border: 1px solid #111111;
+    border-radius: 6px;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    transition: all 0.22s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.drawer-install-btn:hover,
+.drawer-install-btn:active {
+    background: #2a2a2a;
+    border-color: #2a2a2a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.drawer-doodle-social-wrapper {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.drawer-social-heading {
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #888888;
+    margin-bottom: 14px;
+    display: block;
+    text-align: left;
+}
+
+.drawer-doodle-container {
+    margin: 0 !important;
+}
+
+/* =========================================
+   LUXURY SMOOTH PAGE VIEW TRANSITIONS
+========================================= */
+html {
+    scroll-behavior: smooth;
+}
+
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root) {
+    animation: 0.22s cubic-bezier(0.4, 0, 1, 1) both luxuryPageFadeOut;
+}
+
+::view-transition-new(root) {
+    animation: 0.28s cubic-bezier(0, 0, 0.2, 1) both luxuryPageFadeIn;
+}
+
+@keyframes luxuryPageFadeOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes luxuryPageFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none !important;
+    }
+}
+
 

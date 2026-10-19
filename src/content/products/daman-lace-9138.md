@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/dcbc2dfb-1d01-4e18-8466-25615ff2b9d6.webp"
 is_ad: false
 price: 50
+product_code: "ALIF-LC-9138"
 offer_price: 25
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

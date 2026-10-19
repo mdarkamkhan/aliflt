@@ -8,6 +8,7 @@ gallery:
   - "/uploads/1764952639038-0-1000026943.webp"
 is_ad: false
 price: 69
+product_code: "ALIF-LK-9037"
 category: "latkan"
 description: "---"
 permalink: false

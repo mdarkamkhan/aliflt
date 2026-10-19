@@ -38,6 +38,7 @@ const products = defineCollection({
     ideal_for: z.string().optional(),
     delivery_charges: z.string().optional(),
     return_policy: z.string().optional(),
+    product_code: z.string().optional(),
   }).passthrough(),
 });
 

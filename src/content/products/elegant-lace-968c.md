@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/08f12457-453e-4337-9df7-8f152869028e.webp"
 is_ad: false
 price: 45
+product_code: "ALIF-LC-968C"
 offer_price: 23
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

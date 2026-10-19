@@ -5,6 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/1763829375473-1000026105.webp"
 price: 30
+product_code: "ALIF-LC-5472"
 offer_price: 15
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

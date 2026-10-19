@@ -8,6 +8,7 @@ gallery:
   - "/uploads/1764952665190-0-1000026928.webp"
 is_ad: false
 price: 40
+product_code: "ALIF-LK-5189"
 category: "latkan"
 description: "---"
 permalink: false

@@ -7,6 +7,7 @@ image: /uploads/1000028433.webp
 gallery: []
 category: lace
 price: 109
+product_code: "ALIF-LC-9548"
 offer_price: 55
 offer_end_date: "2026-10-12T23:59:00Z"
 description: Beautiful golden moti lace for blouse lehanga chundari etc...

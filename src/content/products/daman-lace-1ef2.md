@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/73f65821-f575-4269-b00a-6ebe27129e08.webp"
 is_ad: false
 price: 50
+product_code: "ALIF-LC-1EF2"
 offer_price: 25
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

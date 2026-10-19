@@ -7,6 +7,7 @@ image: /uploads/1000026888.webp
 gallery: []
 category: latkan
 price: 89
+product_code: "ALIF-LK-5924"
 description: ---
 size: "Large "
 colour: "Sky blue "

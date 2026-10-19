@@ -1,14 +1,32 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import reelsData from '../data/reels.json';
 
-const offers = await getCollection('offers');
 const products = await getCollection('products');
 const services = await getCollection('services');
 const works = await getCollection('works');
 const designs = await getCollection('designs');
 
-const recentOffers = [...offers].reverse();
+// Top Editorial Banners from banner folder
+const topBanners = [
+  {
+    image: '/banner/banner-1.webp',
+    title: 'Contemporary Fashion Promotion'
+  },
+  {
+    image: '/banner/banner-2.webp',
+    title: 'Winter Atelier Fashion Collection'
+  },
+  {
+    image: '/banner/banner-3.webp',
+    title: 'Modern Fashion Coming Soon'
+  },
+  {
+    image: '/banner/banner-4.webp',
+    title: 'Modern Fashion Sale'
+  }
+];
 const recentServices = [...services].reverse().slice(0, 5);
 const recentWorks = [...works].reverse().slice(0, 5);
 const recentDesigns = [...designs].reverse().slice(0, 5);
@@ -23,169 +41,772 @@ for (const p of [...products].reverse()) {
     highlightedProducts.push(p);
   }
 }
+
+// 5 latest products for scroll-to-slide showcase
+const latestProducts = [...products].reverse().slice(0, 5);
+
+// 9 preview images for the 9-frame collection end card
+const collectionPreviewImages = products
+  .map((p) => p.data.image)
+  .filter(Boolean)
+  .slice(0, 9);
+while (collectionPreviewImages.length < 9 && collectionPreviewImages.length > 0) {
+  collectionPreviewImages.push(collectionPreviewImages[collectionPreviewImages.length % collectionPreviewImages.length]);
+}
+if (collectionPreviewImages.length === 0) {
+  for (let i = 0; i < 9; i++) {
+    collectionPreviewImages.push('/icons/icon-512x512.png');
+  }
+}
+
+// 4 Store Routes Guide (Images & Videos support)
+const storeRoutes = [
+  {
+    id: 'railway-station',
+    title: 'Railway Station to alif.',
+    type: 'image', // 'video' or 'image'
+    video: null,
+    image: '/uploads/categories/dress-set.jpg',
+  },
+  {
+    id: 'sahibganj-college',
+    title: 'Sahibganj College to alif.',
+    type: 'image', // 'video' or 'image'
+    video: null,
+    image: '/uploads/services/lehenga.webp',
+  },
+  {
+    id: 'daal-kuan',
+    title: 'Daal Kuan to alif.',
+    type: 'image', // 'video' or 'image'
+    video: null,
+    image: '/uploads/services/anarkali.webp',
+  },
+  {
+    id: 'ghaat-road',
+    title: 'Ghaat Road to alif.',
+    type: 'image', // 'video' or 'image'
+    video: null,
+    image: '/uploads/services/sharara.webp',
+  },
+];
+
+// 6 Atelier Directory Cards (Products, Services, Reels, Contact, Works, Dress Set)
+const atelierDirectoryCards = [
+  { title: 'Products', url: '/products/', image: '/uploads/categories/plain-fabrics.jpg' },
+  { title: 'Services', url: '/services/', image: '/uploads/services/lehenga.webp' },
+  { title: 'Reels', url: '/reels/', id: 'dirCardReels', image: '/uploads/services/anarkali.webp' },
+  { title: 'Contact', url: '/contact-us/', image: '/uploads/alif-poster.webp' },
+  { title: 'Works', url: '/works/', image: '/uploads/1000019607.webp' },
+  { title: 'Curated Sets', url: '/products/?category=curated-sets', image: '/uploads/categories/dress-set.jpg' },
+];
+
+// Curated editorial services for the showcase (Hero poster + 2 sub cards)
+const lehengaService = services.find((s) => s.id === 'lehenga') || services[0];
+const anarkaliService = services.find((s) => s.id === 'anarkali') || services[1];
+const shararaService = services.find((s) => s.id === 'sharara') || services[2];
+
+// Curated trending reels: Mix of featured product sets (Curated Sets) & bespoke tailoring services
+const trendingProductReels = products
+  .filter((p) => {
+    const cat = (p.data.category || '').toLowerCase();
+    const hasCombo = p.data.combo_items && p.data.combo_items.length > 0;
+    return cat === 'curated sets' || cat === 'curated set' || cat === 'dress set' || hasCombo || p.data.reel_video;
+  })
+  .slice(0, 4)
+  .map((p) => {
+    const finalPrice = p.data.offer_price || p.data.price;
+    const comboPieces = p.data.combo_items || [];
+
+    // Pure product images for the left side (NO info/details)
+    let productImages = [];
+    if (comboPieces.length > 0) {
+      if (p.data.image) {
+        productImages.push({ image: p.data.image, name: p.data.title });
+      }
+      comboPieces.forEach((piece) => {
+        if (piece.image && (!p.data.image || piece.image !== p.data.image)) {
+          productImages.push({ image: piece.image, name: piece.name });
+        }
+      });
+    } else {
+      productImages.push({
+        image: p.data.image || '/icons/icon-512x512.png',
+        name: p.data.title
+      });
+    }
+
+    return {
+      id: p.id,
+      type: 'product',
+      title: p.data.title,
+      category: p.data.category || 'Curated Sets',
+      image: p.data.image,
+      video: p.data.reel_video || null,
+      priceText: `₹${finalPrice}`,
+      url: `/products/${p.id}/`,
+      badge: 'PRODUCT',
+      cta: 'Shop Now',
+      productImages: productImages
+    };
+  });
+
+const trendingServiceReels = services
+  .filter((s) => s.data.reel_video)
+  .slice(0, 4)
+  .map((s) => ({
+    id: s.id,
+    type: 'service',
+    title: s.data.title,
+    category: s.data.category || 'Tailoring',
+    image: s.data.image,
+    video: s.data.reel_video,
+    priceText: s.data.price ? `From ₹${s.data.price}` : 'Custom Fit',
+    url: `/services/${s.id}/`,
+    badge: 'STITCHING',
+    cta: 'Book Stitching',
+    taggedProduct: null
+  }));
+
+// Cloudinary / Uploaded Reels Priority for Homepage
+const uploadedReelsList = (reelsData || []).map((r, idx) => ({
+  id: r.id || `reel-${idx + 1}`,
+  type: 'reel',
+  title: r.title || `Reel #${idx + 1}`,
+  category: 'Atelier Reel',
+  image: r.poster || r.image || '/icons/icon-512x512.png',
+  video: r.video,
+  priceText: null,
+  url: `/reels/#reel-${r.id || idx + 1}`,
+  badge: 'REEL',
+  cta: 'Watch Reel',
+  productImages: []
+}));
+
+const fallbackReels = [];
+const homeMax = Math.max(trendingProductReels.length, trendingServiceReels.length);
+for (let i = 0; i < homeMax; i++) {
+  if (i < trendingProductReels.length) fallbackReels.push(trendingProductReels[i]);
+  if (i < trendingServiceReels.length) fallbackReels.push(trendingServiceReels[i]);
+}
+
+const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice(0, 8) : fallbackReels;
+
+
 ---
 
 <BaseLayout title="Home" description="Custom bridal blouses, lehengas, gowns — premium ladies tailoring in Sahibganj.">
-    <!-- Top Offers Banner -->
-    <div id="top-banner">
-        <div class="swapper-container banner-swapper">
-            {recentOffers.map((item, index) => (
-                <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                    <img src={item.data.image} alt={item.data.title || 'Advertisement'} />
+    <!-- Top Editorial Banners with Thin Navigation (< >) & No Auto Slide -->
+    <div id="top-banner" class="top-banner-wrapper">
+        <div class="banner-carousel" id="mainBannerCarousel">
+            {topBanners.map((item, index) => (
+                <div class={`banner-slide-item ${index === 0 ? 'active' : ''}`} data-index={index}>
+                    <picture>
+                      <source srcset={item.image} type="image/webp" />
+                      <img 
+                        src={item.image} 
+                        alt={item.title} 
+                        loading={index === 0 ? "eager" : "lazy"} 
+                        fetchpriority={index === 0 ? "high" : "auto"}
+                      />
+                    </picture>
                 </div>
             ))}
-            {recentOffers.length === 0 && (
-                <p class="empty-gallery-message">Welcome to ALiF Ladies Tailor.</p>
-            )}
+        </div>
+
+        <!-- Thin Slide Navigation Buttons (< >) -->
+        <button 
+          type="button" 
+          class="banner-thin-nav-btn banner-btn-prev" 
+          id="bannerSlidePrev" 
+          aria-label="Previous Banner"
+          title="Previous Banner"
+        >
+          <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <button 
+          type="button" 
+          class="banner-thin-nav-btn banner-btn-next" 
+          id="bannerSlideNext" 
+          aria-label="Next Banner"
+          title="Next Banner"
+        >
+          <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+
+        <!-- Minimalist Slide Counter (e.g. 01 / 04) -->
+        <div class="banner-slide-indicator" id="bannerSlideIndicator">
+          <span class="indicator-current" id="bannerCurrentIdx">01</span>
+          <span class="indicator-sep">/</span>
+          <span class="indicator-total">0{topBanners.length}</span>
         </div>
     </div>
 
-    <!-- Scroll-Driven 3D Laptop Welcome Showcase (from ELEMENTS/welcome) -->
+    <!-- Scroll-Driven 3D Laptop Welcome Showcase (Zara/H&M Editorial Showcase) -->
     <div class="laptop-scroll-track" id="welcomeScrollTrack">
         <div class="laptop-sticky-stage" id="welcomeStickyStage">
             <div class="laptop-stage-header">
-                <span class="laptop-eyebrow">ALIF ATELIER EXPERIENCE</span>
-                <span class="laptop-status-hint" id="laptopStatusHint">SCROLL TO OPEN</span>
+                <h1 class="laptop-brand-title">alif.</h1>
+                <p class="laptop-brand-slogan">A CUSTOM CLOTHING STORE</p>
+                <div class="laptop-scroll-cue" id="laptopScrollCue">
+                    <span class="cue-text" id="laptopStatusHint">SCROLL TO OPEN</span>
+                </div>
             </div>
 
             <div class="laptop-viewport-wrap">
                 <div class="laptop" id="laptopBody">
                     <div class="screen" id="laptopScreen">
+                        <!-- Video wallpaper — background layer, screen ke sath ghoomega -->
+                        <video
+                            class="screen-video"
+                            src="/videos/laptop-screen.mp4"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            aria-hidden="true"
+                        ></video>
+                        <!-- Bezel overlay — video ke UPAR, inner black border banata hai -->
+                        <div class="screen-bezel-frame" aria-hidden="true"></div>
+                        <!-- Notch / Camera bump -->
                         <div class="header"></div>
-                        <div class="screen-content">
-                            <span class="screen-brand">ALiF</span>
-                            <div class="text">Welcome to ALiF</div>
-                            <span class="screen-sub">Bespoke Ladies Tailor • Sahibganj</span>
+                        <div class="screen-content" id="screenContent">
+                            <span class="screen-corner-brand">alif. · SAHIBGANJ</span>
                         </div>
                     </div>
-                    <div class="keyboard"></div>
+
+                    <!-- Laptop Keyboard Base -->
+                    <div class="keyboard" id="laptopKeyboard"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Products Showcase Panel -->
-    <a href="/products/" class="prada-panel">
-        <div class="blob blob-products" aria-hidden="true"></div>
-        <div class="panel-inner-bg">
-            <div class="prada-panel-label">ALiF Products</div>
-            <div class="swapper-container products-panel-gallery">
-                {highlightedProducts.map((item, index) => (
-                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                        <img src={item.data.image} alt={item.data.title} />
-                    </div>
-                ))}
-                {highlightedProducts.length === 0 && (
-                    <p class="empty-gallery-message">Products coming soon.</p>
-                )}
+    <!-- Trending Reels Section (Horizontal Scroll-to-Slide Showcase) -->
+    <section class="reels-scroll-track" id="reelsScrollTrack">
+        <div class="reels-sticky-stage" id="reelsStickyStage">
+            <div class="reels-header">
+                <div class="reels-title-row">
+                    <h2 class="reels-title">TRENDING REELS</h2>
+                    <a href="/reels/" class="reels-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
+                </div>
             </div>
-            <div class="panel-explore-btn cta" aria-label="Explore Products">
-                <span class="hover-underline-animation">Shop Now</span>
-                <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 16">
-                    <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
-                </svg>
-            </div>
-        </div>
-    </a>
 
-    <!-- Tailoring Services Showcase Panel -->
-    <a href="/services/" class="prada-panel">
-        <div class="blob blob-services" aria-hidden="true"></div>
-        <div class="panel-inner-bg">
-            <div class="prada-panel-label">ALiF Services</div>
-            <div class="swapper-container services-panel-gallery">
-                {recentServices.map((item, index) => (
-                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                        <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} />
-                    </div>
-                ))}
-                {recentServices.length === 0 && (
-                    <p class="empty-gallery-message">Services coming soon.</p>
-                )}
-            </div>
-            <div class="panel-explore-btn cta" aria-label="Explore Services">
-                <span class="hover-underline-animation">Explore</span>
-                <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 16">
-                    <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
-                </svg>
-            </div>
-        </div>
-    </a>
+            <div class="reels-cards-viewport" id="reelsCardsViewport">
+                <div class="reels-cards-track" id="reelsCardsTrack">
+                    {homepageReelItems.map((item) => (
+                        <div class="reel-card" data-reel-id={item.id} data-reel-type={item.type}>
+                            <div class="reel-media-inner">
+                                <video 
+                                    src={item.video} 
+                                    poster={item.image}
+                                    loop 
+                                    muted 
+                                    playsinline 
+                                    webkit-playsinline
+                                    preload="metadata"
+                                    class="reel-video"
+                                ></video>
 
-    <!-- Our Works Showcase Panel -->
-    <a href="/works/" class="prada-panel">
-        <div class="blob blob-works" aria-hidden="true"></div>
-        <div class="panel-inner-bg">
-            <div class="prada-panel-label">ALiF Works</div>
-            <div class="swapper-container works-panel-gallery">
-                {recentWorks.map((item, index) => (
-                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                        <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Our Work'} />
-                    </div>
-                ))}
-                {recentWorks.length === 0 && (
-                    <p class="empty-gallery-message">Our work coming soon.</p>
-                )}
-            </div>
-            <div class="panel-explore-btn cta" aria-label="Explore Works">
-                <span class="hover-underline-animation">Explore</span>
-                <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 16">
-                    <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
-                </svg>
-            </div>
-        </div>
-    </a>
+                                <!-- Top Header: Title on Left, Persistent Audio Pill on Right -->
+                                <div class="reel-top-bar">
+                                    <div class="reel-top-row">
+                                        <h3 class="reel-top-title">{item.title}</h3>
+                                        <button type="button" class="reel-audio-pill sound-muted" aria-label="Toggle Sound" onclick="event.stopPropagation();" title="Toggle Sound">
+                                            <!-- Sound ON Icon -->
+                                            <svg class="audio-icon icon-vol-on" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                            </svg>
+                                            <!-- Sound OFF (Muted) Icon -->
+                                            <svg class="audio-icon icon-vol-mute" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="reel-title-divider" aria-hidden="true"></div>
+                                </div>
 
-    <!-- Designs Showcase Panel -->
-    <a href="/designs/" class="prada-panel">
-        <div class="blob blob-designs" aria-hidden="true"></div>
-        <div class="panel-inner-bg">
-            <div class="prada-panel-label">ALiF Designs</div>
-            <div class="swapper-container designs-panel-gallery">
-                {recentDesigns.map((item, index) => (
-                    <div class={`swapper-item ${index === 0 ? 'active' : ''}`}>
-                        <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Design'} />
-                    </div>
-                ))}
-                {recentDesigns.length === 0 && (
-                    <p class="empty-gallery-message">Designs coming soon.</p>
-                )}
-            </div>
-            <div class="panel-explore-btn cta" aria-label="Explore Designs">
-                <span class="hover-underline-animation">Explore</span>
-                <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 16">
-                    <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)" />
-                </svg>
+                                <!-- Center Audio & Play/Pause Controller (Ultra-thin Frosted Glass Ring) -->
+                                <button type="button" class="reel-center-ctrl state-mute" aria-label="Audio and Playback Control">
+                                    <svg class="center-icon icon-mute" viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+                                        <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                                    </svg>
+                                    <svg class="center-icon icon-pause" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                                        <rect x="7" y="5" width="2.5" height="14" rx="1.2" />
+                                        <rect x="14.5" y="5" width="2.5" height="14" rx="1.2" />
+                                    </svg>
+                                    <svg class="center-icon icon-play" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86a1 1 0 0 0-1.5.86z"/>
+                                    </svg>
+                                </button>
+
+                                <!-- Minimal Floating Action: Watch All -->
+                                <div class="reel-bottom-bar">
+                                    <a 
+                                        href={`/reels/#reel-${item.id}`} 
+                                        class="reel-minimal-cta" 
+                                        onclick="event.stopPropagation();"
+                                        aria-label={`Watch All Reels - ${item.title}`}
+                                    >
+                                        <span>WATCH ALL</span>
+                                        <svg class="reel-minimal-arrow" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            <polyline points="12 5 19 12 12 19"></polyline>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    <!-- 9-Grid Blurred Reel Watch All Card -->
+                    <a href="/reels/" class="reel-card reel-watch-all-card" aria-label="Watch All Reels">
+                        <div class="reel-media-inner">
+                            <div class="reel-grid-9">
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n, i) => {
+                                    const gridReel = reelsData && reelsData[i];
+                                    return (
+                                        <div class="mini-reel-cell">
+                                            {gridReel ? (
+                                                <video 
+                                                    src={gridReel.video} 
+                                                    loop 
+                                                    muted 
+                                                    autoplay
+                                                    playsinline 
+                                                    webkit-playsinline
+                                                    preload="metadata"
+                                                ></video>
+                                            ) : (
+                                                <div class="mini-reel-placeholder"></div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <div class="watch-all-overlay">
+                                <div class="watch-all-btn-content">
+                                    <div class="watch-all-icon-circle">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                            <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                                        </svg>
+                                    </div>
+                                    <span class="watch-all-title">Watch All</span>
+                                    <span class="watch-all-sub">
+                                        EXPLORE REELS
+                                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            <polyline points="12 5 19 12 12 19"></polyline>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </a>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         FEATURED CATEGORIES — 3×2 Product Categories Grid
+    ═══════════════════════════════════════════════════════ -->
+    <section class="featured-categories-section" id="featuredCategories" aria-label="Featured Categories">
+        <div class="fc-header">
+            <div class="fc-title-row">
+                <h2 class="fc-title">FEATURED CATEGORIES</h2>
+                <a href="/products/" class="fc-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
+            </div>
+        </div>
+
+        <div class="fc-grid">
+            <a href="/products/?category=curated-sets" class="fc-card" aria-label="Curated Sets">
+                <div class="fc-img-wrap">
+                    <img src="/uploads/categories/dress-set.jpg" alt="Curated Sets" loading="lazy" />
+                </div>
+                <div class="fc-label">
+                    <span>Curated Sets</span>
+                </div>
+            </a>
+
+            <a href="/products/?category=lace" class="fc-card" aria-label="Lace">
+                <div class="fc-img-wrap">
+                    <img src="/uploads/1763829381470-1000026101.webp" alt="Lace" loading="lazy" />
+                </div>
+                <div class="fc-label">
+                    <span>Lace</span>
+                </div>
+            </a>
+
+            <a href="/products/?category=latkan" class="fc-card" aria-label="Latkan">
+                <div class="fc-img-wrap">
+                    <img src="/uploads/1764952750414-0-1000026916.webp" alt="Latkan" loading="lazy" />
+                </div>
+                <div class="fc-label">
+                    <span>Latkan</span>
+                </div>
+            </a>
+
+            <a href="/products/?category=fabrics" class="fc-card" aria-label="Fabrics">
+                <div class="fc-img-wrap">
+                    <img src="/uploads/1765191764673-gal-1-1000027645.webp" alt="Fabrics" loading="lazy" />
+                </div>
+                <div class="fc-label">
+                    <span>Fabrics</span>
+                </div>
+            </a>
+
+            <a href="/products/?category=plain-fabrics" class="fc-card" aria-label="Plain Fabrics">
+                <div class="fc-img-wrap">
+                    <img src="/uploads/categories/plain-fabrics.jpg" alt="Plain Fabrics" loading="lazy" />
+                </div>
+                <div class="fc-label">
+                    <span>Plain Fabrics</span>
+                </div>
+            </a>
+
+            <a href="/products/?category=tailoring-material" class="fc-card" aria-label="Tailoring Material">
+                <div class="fc-img-wrap">
+                    <img src="/uploads/categories/tailoring-material.jpg" alt="Tailoring Material" loading="lazy" />
+                </div>
+                <div class="fc-label">
+                    <span>Tailoring Material</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Latest Collection Horizontal Scroll-to-Slide Showcase -->
+    <section class="latest-collection-scroll-track" id="collectionScrollTrack">
+        <div class="latest-collection-sticky-stage" id="collectionStickyStage">
+            <div class="collection-header">
+                <div class="collection-title-row">
+                    <h2 class="collection-title">LATEST COLLECTION</h2>
+                    <a href="/products/" class="collection-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
+                </div>
+            </div>
+
+            <div class="collection-cards-viewport" id="collectionCardsViewport">
+                <div class="collection-cards-track" id="collectionCardsTrack">
+                    {latestProducts.map((item, index) => {
+                        const origPrice = item.data.price;
+                        const offerPrice = item.data.offer_price;
+                        const hasDiscount = origPrice && offerPrice && offerPrice < origPrice;
+                        const discountPercent = hasDiscount ? Math.round(((origPrice - offerPrice) / origPrice) * 100) : null;
+                        const displayPrice = offerPrice || origPrice;
+
+                        return (
+                            <a href={`/products/${item.id}/`} class="collection-card" aria-label={item.data.title}>
+                                <div class="card-media-wrapper">
+                                    {hasDiscount && (
+                                        <span class="collection-discount-badge">-{discountPercent}%</span>
+                                    )}
+                                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} loading={index < 2 ? "eager" : "lazy"} />
+                                </div>
+                                <div class="card-meta">
+                                    {item.data.category && (
+                                        <span class="card-cat-label">{item.data.category}</span>
+                                    )}
+                                    <h3 class="card-title">{item.data.title}</h3>
+                                    <div class="card-price-row">
+                                        {displayPrice && (
+                                            <span class="card-curr-price">₹{Number(displayPrice).toLocaleString('en-IN')}</span>
+                                        )}
+                                        {hasDiscount && (
+                                            <span class="card-orig-price">₹{Number(origPrice).toLocaleString('en-IN')}</span>
+                                        )}
+                                    </div>
+                                </div>
+                            </a>
+                        );
+                    })}
+
+                    <!-- 9-Grid Blurred Products View All Card -->
+                    <a href="/products/" class="collection-card collection-view-all-card" aria-label="View All Products">
+                        <div class="card-media-wrapper collection-view-all-media">
+                            <div class="product-grid-9">
+                                {collectionPreviewImages.map((imgSrc, i) => (
+                                    <div class="mini-prod-cell">
+                                        <img src={imgSrc} alt={`Collection item ${i + 1}`} loading="lazy" />
+                                    </div>
+                                ))}
+                            </div>
+                            <div class="watch-all-overlay">
+                                <div class="watch-all-btn-content">
+                                    <div class="watch-all-icon-circle">
+                                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                                            <path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z"/>
+                                        </svg>
+                                    </div>
+                                    <span class="watch-all-title">View All</span>
+                                    <span class="watch-all-sub">EXPLORE STORE &rarr;</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-meta">
+                            <span class="card-cat-label">COLLECTION</span>
+                            <h3 class="card-title">All Products & Fabrics</h3>
+                            <div class="card-price-row">
+                                <span class="card-curr-price">Explore 24+ Items →</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         ATELIER DIRECTORY — 3×2 Sections Grid (Products, Services, Reels, Contact, Works, Dress Set)
+    ═══════════════════════════════════════════════════════ -->
+    <section class="featured-categories-section atelier-directory-section" id="atelierDirectory" aria-label="Explore Atelier">
+        <div class="fc-header">
+            <div class="fc-title-row">
+                <h2 class="fc-title">EXPLORE alif.</h2>
+                <a href="/products/" class="fc-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
+            </div>
+        </div>
+
+        <div class="fc-grid">
+            {atelierDirectoryCards.map((card) => (
+                <a href={card.url} class="fc-card" id={card.id || undefined} aria-label={card.title}>
+                    <div class="fc-img-wrap">
+                        <img src={card.image} alt={card.title} loading="lazy" />
+                    </div>
+                    <div class="fc-label">
+                        <span>{card.title}</span>
+                    </div>
+                </a>
+            ))}
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SERVICES EDITORIAL SHOWCASE (Full-Bleed Banner + 2 Cards)
+    ═══════════════════════════════════════════════════════ -->
+    <section class="services-editorial-section" id="servicesEdit" aria-label="Bespoke Services">
+        <div class="se-header">
+            <div class="se-title-row">
+                <h2 class="se-title">CUSTOM STITCHING</h2>
+                <a href="/services/" class="se-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
+            </div>
+        </div>
+
+        <div class="se-container">
+            <!-- Big Hero Poster (Full Bleed) -->
+            <a href={`/services/${lehengaService.id}/`} class="se-poster" aria-label={lehengaService.data.title}>
+                <div class="se-poster-img-wrap">
+                    <img 
+                        src={lehengaService.data.image || '/uploads/services/lehenga.webp'} 
+                        alt={lehengaService.data.title} 
+                        loading="lazy" 
+                    />
+                </div>
+                <div class="se-poster-overlay">
+                    <h3 class="se-poster-title">{lehengaService.data.title}</h3>
+                    <p class="se-poster-sub">ft. Royal Bridal Flare</p>
+                    <span class="se-poster-cta">BOOK NOW</span>
+                </div>
+            </a>
+
+            <!-- 2 Cards Grid Below (3:4 ratio, Full Bleed, Clean with No Buttons) -->
+            <div class="se-grid-sub">
+                <a href={`/services/${anarkaliService.id}/`} class="se-card" aria-label={anarkaliService.data.title}>
+                    <div class="se-card-img-wrap">
+                        <img 
+                            src={anarkaliService.data.image || '/uploads/services/anarkali.webp'} 
+                            alt={anarkaliService.data.title} 
+                            loading="lazy" 
+                        />
+                    </div>
+                    <div class="se-card-overlay">
+                        <span class="se-card-title">{anarkaliService.data.title}</span>
+                    </div>
+                </a>
+
+                <a href={`/services/${shararaService.id}/`} class="se-card" aria-label={shararaService.data.title}>
+                    <div class="se-card-img-wrap">
+                        <img 
+                            src={shararaService.data.image || '/uploads/services/sharara.webp'} 
+                            alt={shararaService.data.title} 
+                            loading="lazy" 
+                        />
+                    </div>
+                    <div class="se-card-overlay">
+                        <span class="se-card-title">{shararaService.data.title}</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         STORE SECTION — 2×2 Route Guides + Single Direct Direction CTA
+    ═══════════════════════════════════════════════════════ -->
+    <section class="store-directions-section" id="storeSection" aria-label="Visit Our Store">
+        <div class="store-header">
+            <div class="store-title-row">
+                <h2 class="store-title">VISIT OUR STORE</h2>
+                <a href="/contact-us/" class="store-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
+            </div>
+        </div>
+
+        <div class="store-routes-grid">
+            {storeRoutes.map((route) => (
+                <div class="store-route-card">
+                    <div class="store-media-wrap">
+                        {route.type === 'video' && route.video ? (
+                            <video 
+                                src={route.video} 
+                                autoplay 
+                                muted 
+                                loop 
+                                playsinline 
+                                webkit-playsinline 
+                                preload="metadata"
+                                class="store-card-video"
+                            ></video>
+                        ) : (
+                            <img 
+                                src={route.image} 
+                                alt={route.title} 
+                                loading="lazy" 
+                                class="store-card-img"
+                            />
+                        )}
+                        {route.type === 'video' && (
+                            <span class="store-video-tag">
+                                <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                                VIDEO
+                            </span>
+                        )}
+                    </div>
+                    <div class="store-meta-wrap">
+                        <h3 class="store-route-title">{route.title}</h3>
+                    </div>
+                </div>
+            ))}
+        </div>
+
+        <!-- Minimal Luxury Direct Direction CTA Button -->
+        <div class="store-cta-container">
+            <a 
+                href="https://www.google.com/maps/dir/?api=1&destination=6JRP%2BRQ+Sahibganj,+Jharkhand" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="store-direct-direction-btn"
+                id="directDirectionBtn"
+                aria-label="Direct Directions to alif. on Google Maps"
+            >
+                <svg class="direct-btn-compass" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+                </svg>
+                <span class="direct-btn-label">GET DIRECTIONS</span>
+            </a>
+        </div>
+    </section>
+
+
 
     <script is:inline>
-        // Swapper slideshow logic synchronized with 5s blob-bounce orbit
-        function initSwappers() {
-            if (window._swappersInitialized) return;
-            window._swappersInitialized = true;
+        // Manual Top Banner Carousel (Auto-slide removed, thin navigation buttons < >)
+        function initBannerSlider() {
+            const banner = document.getElementById('top-banner');
+            if (!banner) return;
+            const slides = banner.querySelectorAll('.banner-slide-item');
+            const btnPrev = document.getElementById('bannerSlidePrev');
+            const btnNext = document.getElementById('bannerSlideNext');
+            const countEl = document.getElementById('bannerCurrentIdx');
+            if (slides.length <= 1) return;
 
-            const containers = document.querySelectorAll('.swapper-container');
-            containers.forEach(container => {
-                const items = container.querySelectorAll('.swapper-item');
-                if (items.length <= 1) return;
-                let current = 0;
-                setInterval(() => {
-                    items[current].classList.remove('active');
-                    current = (current + 1) % items.length;
-                    items[current].classList.add('active');
-                }, 5000); // Exactly 5000ms = 1 full round of blob orbit (5s)
-            });
+            let currentIndex = 0;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.classList.add('active');
+                    } else {
+                        slide.classList.remove('active');
+                    }
+                });
+                currentIndex = index;
+                if (countEl) {
+                    countEl.textContent = String(index + 1).padStart(2, '0');
+                }
+            }
+
+            if (btnPrev && !btnPrev._bound) {
+                btnPrev._bound = true;
+                btnPrev.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+                    showSlide(prevIndex);
+                });
+            }
+
+            if (btnNext && !btnNext._bound) {
+                btnNext._bound = true;
+                btnNext.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const nextIndex = (currentIndex + 1) % slides.length;
+                    showSlide(nextIndex);
+                });
+            }
+
+            // Mobile touch swipe gestures
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            if (!banner._touchBound) {
+                banner._touchBound = true;
+                banner.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+
+                banner.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    const diffX = touchEndX - touchStartX;
+                    if (Math.abs(diffX) > 40) {
+                        if (diffX < 0) {
+                            showSlide((currentIndex + 1) % slides.length);
+                        } else {
+                            showSlide((currentIndex - 1 + slides.length) % slides.length);
+                        }
+                    }
+                }, { passive: true });
+            }
         }
-        // Scroll-driven 3D laptop opening with screen-locking
+        // Scroll-driven 3D laptop opening
         function initLaptopScroll() {
             const track = document.getElementById('welcomeScrollTrack');
             const screen = document.getElementById('laptopScreen');
+            const body = document.getElementById('laptopBody');
             const statusHint = document.getElementById('laptopStatusHint');
-            if (!track || !screen) return;
+            const screenContent = document.getElementById('screenContent');
+
+            if (!track || !screen || !body) return;
+            if (track._laptopScrollInitialized) return;
+            track._laptopScrollInitialized = true;
 
             let ticking = false;
+
+            function getBaseScale() {
+                const w = window.innerWidth;
+                if (w < 375) return 0.46;
+                if (w <= 440) return 0.54;
+                if (w <= 650) return 0.62;
+                if (w <= 860) return 0.74;
+                return 0.85;
+            }
 
             function updateLaptop() {
                 const rect = track.getBoundingClientRect();
@@ -197,30 +818,68 @@ for (const p of [...products].reverse()) {
                     return;
                 }
 
-                // Calculate progress from 0 (when track top reaches 60px sticky top) to 1 (when track ends)
+                // Calculate overall scroll progress (0 to 1)
                 const stickyTop = 60;
                 const scrolledPast = -(rect.top - stickyTop);
                 const progress = Math.min(Math.max(scrolledPast / (totalScrollable - stickyTop), 0), 1);
 
-                // Smooth angle from -88.5deg (closed) to 0deg (open)
-                const angle = -88.5 * (1 - progress);
-                const perspective = 1900 - 900 * progress;
+                const baseScale = getBaseScale();
 
-                screen.style.transform = `perspective(${perspective}px) rotateX(${angle}deg)`;
+                // -------------------------------------------------------------
+                // Scroll-to-open hinge physics:
+                // progress <= 0.08: Perfectly closed silver MacBook clamshell
+                // progress 0.08 - 0.85: Smooth hinge rotation (-88.5deg -> 0deg)
+                // progress 0.85 - 1.0: Gentle camera push-in zoom (1.0 -> 1.10x)
+                // -------------------------------------------------------------
 
-                // Screen backlight illumination
-                const backlight = Math.min(Math.max((progress - 0.05) / 0.4, 0), 1);
-                screen.style.filter = `brightness(${0.25 + 0.75 * backlight})`;
+                let screenAngle = -88.5;
+                let perspective = 1900;
+                let scaleMultiplier = 1.0;
+                let bodyTranslateY = 0;
 
+                if (progress <= 0.08) {
+                    screenAngle = -88.5;
+                    perspective = 1900;
+                    scaleMultiplier = 1.0;
+                    bodyTranslateY = 0;
+                    if (screenContent) screenContent.style.opacity = '0';
+                } else if (progress <= 0.85) {
+                    const p = (progress - 0.08) / 0.77; // 0 to 1
+                    screenAngle = -88.5 * (1 - p); // -88.5deg to 0deg
+                    perspective = 1900 - 900 * p;  // 1900px to 1000px
+                    scaleMultiplier = 1.0;
+                    bodyTranslateY = 0;
+                    if (screenContent) {
+                        const contentP = Math.max(0, (p - 0.15) / 0.85);
+                        screenContent.style.opacity = `${contentP}`;
+                    }
+                } else {
+                    const p3 = (progress - 0.85) / 0.15; // 0 to 1
+                    screenAngle = 0;
+                    perspective = 1000;
+                    scaleMultiplier = 1.0 + 0.10 * p3;
+                    bodyTranslateY = -10 * p3;
+                    if (screenContent) screenContent.style.opacity = '1';
+                }
+
+                // Apply body scale without tilt
+                const currentScale = baseScale * scaleMultiplier;
+                body.style.transform = `scale(${currentScale}) translateY(${bodyTranslateY}px)`;
+
+                // Apply screen hinge angle
+                screen.style.transform = `perspective(${perspective}px) rotateX(${screenAngle}deg)`;
+
+                // Status cue text update (pure editorial typography, NO pills)
                 if (statusHint) {
-                    if (progress <= 0.02) {
+                    if (progress <= 0.08) {
                         statusHint.textContent = "SCROLL TO OPEN";
-                        statusHint.style.color = "#888888";
-                    } else if (progress < 0.95) {
-                        statusHint.textContent = `OPENING • ${Math.round(progress * 100)}%`;
-                        statusHint.style.color = "#111111";
+                        statusHint.style.color = "#999999";
+                    } else if (progress < 0.85) {
+                        const pct = Math.round(((progress - 0.08) / 0.77) * 100);
+                        statusHint.textContent = `OPENING • ${pct}%`;
+                        statusHint.style.color = "#222222";
                     } else {
-                        statusHint.textContent = "WELCOME TO ALIF ATELIER";
+                        statusHint.textContent = "alif. • CRAFTSMANSHIP";
                         statusHint.style.color = "#111111";
                     }
                 }
@@ -240,24 +899,524 @@ for (const p of [...products].reverse()) {
             updateLaptop();
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                initSwappers();
-                initLaptopScroll();
-            });
-        } else {
-            initSwappers();
-            initLaptopScroll();
+        // Horizontal Scroll-to-Slide for Trending Reels
+        function initReelsScroll() {
+            const track = document.getElementById('reelsScrollTrack');
+            const cardsTrack = document.getElementById('reelsCardsTrack');
+            const viewport = document.getElementById('reelsCardsViewport');
+            if (!track || !cardsTrack || !viewport) return;
+            if (track._reelsScrollInitialized) return;
+            track._reelsScrollInitialized = true;
+
+            let ticking = false;
+
+            function updateSlide() {
+                const rect = track.getBoundingClientRect();
+                const windowH = window.innerHeight;
+                const totalScrollable = track.offsetHeight - windowH;
+
+                if (totalScrollable <= 0) {
+                    ticking = false;
+                    return;
+                }
+
+                const stickyTop = window.innerWidth > 600 ? 70 : 60;
+                const scrolledPast = -(rect.top - stickyTop);
+                const progress = Math.min(Math.max(scrolledPast / (totalScrollable - stickyTop), 0), 1);
+
+                const maxTranslate = Math.max(cardsTrack.scrollWidth - viewport.clientWidth + 40, 0);
+                cardsTrack.style.transform = `translateX(-${progress * maxTranslate}px)`;
+
+                if (window._updateActiveReelByProgress) {
+                    window._updateActiveReelByProgress();
+                }
+
+                ticking = false;
+            }
+
+            function onScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(updateSlide);
+                    ticking = true;
+                }
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', onScroll, { passive: true });
+            updateSlide();
         }
+
+        // Horizontal Scroll-to-Slide for Latest Collection
+        function initCollectionScroll() {
+            const track = document.getElementById('collectionScrollTrack');
+            const cardsTrack = document.getElementById('collectionCardsTrack');
+            const viewport = document.getElementById('collectionCardsViewport');
+            if (!track || !cardsTrack || !viewport) return;
+            if (track._collectionScrollInitialized) return;
+            track._collectionScrollInitialized = true;
+
+            let ticking = false;
+
+            function updateSlide() {
+                const rect = track.getBoundingClientRect();
+                const windowH = window.innerHeight;
+                const totalScrollable = track.offsetHeight - windowH;
+
+                if (totalScrollable <= 0) {
+                    ticking = false;
+                    return;
+                }
+
+                const stickyTop = window.innerWidth > 600 ? 70 : 60;
+                const scrolledPast = -(rect.top - stickyTop);
+                const progress = Math.min(Math.max(scrolledPast / (totalScrollable - stickyTop), 0), 1);
+
+                const maxTranslate = Math.max(cardsTrack.scrollWidth - viewport.clientWidth + 40, 0);
+                cardsTrack.style.transform = `translateX(-${progress * maxTranslate}px)`;
+
+                ticking = false;
+            }
+
+            function onScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(updateSlide);
+                    ticking = true;
+                }
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', onScroll, { passive: true });
+            updateSlide();
+        }
+
+        // Homepage Trending Reels Interaction & Audio Persistence
+        function initHomeReelsInteractions() {
+            const viewport = document.getElementById('reelsCardsViewport');
+            const track = document.getElementById('reelsCardsTrack');
+            const cards = Array.from(document.querySelectorAll('.reels-cards-track .reel-card:not(.reel-watch-all-card)'));
+
+            if (!track || !viewport || cards.length === 0) return;
+
+            let isAudioGloballyActive = false;
+            let activeCard = null;
+
+            function updateSoundUI() {
+                cards.forEach(card => {
+                    const video = card.querySelector('video');
+                    const centerBtn = card.querySelector('.reel-center-ctrl');
+                    const soundPill = card.querySelector('.reel-audio-pill');
+
+                    if (soundPill) {
+                        if (isAudioGloballyActive) {
+                            soundPill.classList.add('sound-active');
+                            soundPill.classList.remove('sound-muted');
+                        } else {
+                            soundPill.classList.add('sound-muted');
+                            soundPill.classList.remove('sound-active');
+                        }
+                    }
+
+                    if (video) {
+                        video.muted = !isAudioGloballyActive;
+                    }
+
+                    if (centerBtn && card === activeCard) {
+                        if (isAudioGloballyActive) {
+                            centerBtn.classList.remove('state-mute');
+                            if (video && !video.paused) {
+                                centerBtn.classList.add('fade-hidden');
+                            }
+                        } else {
+                            centerBtn.classList.add('state-mute');
+                            centerBtn.classList.remove('fade-hidden', 'state-paused');
+                        }
+                    }
+                });
+            }
+
+            function activateCard(targetCard, forcePlay = false) {
+                if (!targetCard) return;
+                if (targetCard === activeCard && !forcePlay) return;
+
+                if (activeCard && activeCard !== targetCard) {
+                    const prevVideo = activeCard.querySelector('video');
+                    const prevCenterBtn = activeCard.querySelector('.reel-center-ctrl');
+                    if (prevVideo) {
+                        prevVideo.pause();
+                        prevVideo.currentTime = 0;
+                    }
+                    if (prevCenterBtn) {
+                        prevCenterBtn.classList.remove('state-paused');
+                    }
+                }
+
+                activeCard = targetCard;
+                const video = targetCard.querySelector('video');
+                const centerBtn = targetCard.querySelector('.reel-center-ctrl');
+
+                if (!video) return;
+
+                video.muted = !isAudioGloballyActive;
+
+                if (centerBtn) {
+                    centerBtn.classList.remove('state-paused');
+                    if (isAudioGloballyActive) {
+                        centerBtn.classList.remove('state-mute');
+                        centerBtn.classList.add('fade-hidden');
+                    } else {
+                        centerBtn.classList.add('state-mute');
+                        centerBtn.classList.remove('fade-hidden');
+                    }
+                }
+
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {
+                        if (!video.muted) {
+                            video.muted = true;
+                            video.play().catch(() => {});
+                            if (centerBtn) {
+                                centerBtn.classList.add('state-mute');
+                                centerBtn.classList.remove('fade-hidden');
+                            }
+                        }
+                    });
+                }
+            }
+
+            if (track._homeReelsInitialized) {
+                if (cards.length > 0) {
+                    activateCard(cards[0], true);
+                }
+                return;
+            }
+            track._homeReelsInitialized = true;
+
+            function getMostVisibleCard() {
+                if (!viewport) return null;
+                const viewportRect = viewport.getBoundingClientRect();
+                const viewportCenterX = viewportRect.left + viewportRect.width / 2;
+
+                let closestCard = null;
+                let minDistance = Infinity;
+
+                cards.forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const cardCenterX = rect.left + rect.width / 2;
+                    const dist = Math.abs(viewportCenterX - cardCenterX);
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                        closestCard = card;
+                    }
+                });
+
+                return closestCard;
+            }
+
+            window._updateActiveReelByProgress = function() {
+                const best = getMostVisibleCard();
+                if (best && best !== activeCard) {
+                    activateCard(best);
+                }
+            };
+
+            // IntersectionObserver: Pause when reels section is offscreen
+            const section = document.getElementById('reelsScrollTrack');
+            if (section) {
+                const sectionObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) {
+                            if (activeCard) {
+                                const v = activeCard.querySelector('video');
+                                if (v) v.pause();
+                            }
+                        } else {
+                            if (activeCard) {
+                                const v = activeCard.querySelector('video');
+                                if (v && v.paused) v.play().catch(() => {});
+                            } else if (cards.length > 0) {
+                                activateCard(cards[0]);
+                            }
+                        }
+                    });
+                }, { threshold: 0.1 });
+                sectionObserver.observe(section);
+            }
+
+            function toggleAudioGlobal() {
+                isAudioGloballyActive = !isAudioGloballyActive;
+                updateSoundUI();
+                if (activeCard) {
+                    const video = activeCard.querySelector('video');
+                    if (video && video.paused) {
+                        video.play().catch(() => {});
+                    }
+                }
+            }
+
+            cards.forEach(card => {
+                const video = card.querySelector('video');
+                const centerBtn = card.querySelector('.reel-center-ctrl');
+                const soundPill = card.querySelector('.reel-audio-pill');
+
+                if (!video) return;
+
+                if (soundPill) {
+                    soundPill.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleAudioGlobal();
+                    });
+                }
+
+                if (centerBtn) {
+                    centerBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        if (video.paused) {
+                            isAudioGloballyActive = true;
+                            updateSoundUI();
+                            video.muted = false;
+                            video.play().catch(() => {});
+                            centerBtn.classList.remove('state-paused', 'state-mute');
+                            centerBtn.classList.add('fade-hidden');
+                        } else if (video.muted) {
+                            isAudioGloballyActive = true;
+                            updateSoundUI();
+                            video.muted = false;
+                            centerBtn.classList.remove('state-mute');
+                            centerBtn.classList.add('fade-hidden');
+                        } else {
+                            video.pause();
+                            centerBtn.classList.remove('fade-hidden');
+                            centerBtn.classList.add('state-paused');
+                        }
+                    });
+                }
+
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('a') || e.target.closest('button')) return;
+
+                    if (video.paused) {
+                        isAudioGloballyActive = true;
+                        updateSoundUI();
+                        video.muted = false;
+                        video.play().catch(() => {
+                            video.muted = true;
+                            video.play().catch(() => {});
+                        });
+                        if (centerBtn) {
+                            centerBtn.classList.remove('state-paused', 'state-mute');
+                            centerBtn.classList.add('fade-hidden');
+                        }
+                    } else if (video.muted) {
+                        isAudioGloballyActive = true;
+                        updateSoundUI();
+                        video.muted = false;
+                        if (centerBtn) {
+                            centerBtn.classList.remove('state-mute');
+                            centerBtn.classList.add('fade-hidden');
+                        }
+                    } else {
+                        video.pause();
+                        if (centerBtn) {
+                            centerBtn.classList.remove('fade-hidden');
+                            centerBtn.classList.add('state-paused');
+                        }
+                    }
+                });
+            });
+
+            // Pause all videos initially
+            cards.forEach(c => {
+                const v = c.querySelector('video');
+                if (v) {
+                    v.pause();
+                    v.currentTime = 0;
+                }
+            });
+            if (cards.length > 0) {
+                activateCard(cards[0]);
+            }
+        }
+
+        function initHomePage() {
+            initBannerSlider();
+            initLaptopScroll();
+            initReelsScroll();
+            initCollectionScroll();
+            initHomeReelsInteractions();
+        }
+
+        document.addEventListener('astro:page-load', initHomePage);
     </script>
 
     <style>
-      /* --- SCROLL-DRIVEN 3D LAPTOP SHOWCASE (from ELEMENTS/welcome) --- */
+      /* --- TOP EDITORIAL BANNER SHOWCASE (Edge-to-Edge Full-Bleed) --- */
+      #top-banner {
+        position: relative;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      .banner-carousel {
+        position: relative;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        display: grid;
+        background: transparent;
+      }
+
+      .banner-slide-item {
+        grid-area: 1 / 1;
+        width: 100%;
+        height: auto;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.4s ease;
+        pointer-events: none;
+      }
+
+      .banner-slide-item.active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 2;
+        pointer-events: auto;
+      }
+
+      .banner-slide-item picture,
+      .banner-slide-item img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: unset;
+        border-radius: 0;
+      }
+
+      /* Thin Slide Navigation Buttons (< >) */
+      .banner-thin-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        color: #111111;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.22s ease;
+        padding: 0;
+        outline: none;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .banner-thin-nav-btn:hover {
+        background: rgba(255, 255, 255, 0.95);
+        border-color: rgba(0, 0, 0, 0.2);
+        transform: translateY(-50%) scale(1.06);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+      }
+
+      .banner-thin-nav-btn:active {
+        transform: translateY(-50%) scale(0.96);
+      }
+
+      .banner-btn-prev {
+        left: 16px;
+      }
+
+      .banner-btn-next {
+        right: 16px;
+      }
+
+      @media (max-width: 600px) {
+        .banner-thin-nav-btn {
+          width: 36px;
+          height: 36px;
+        }
+        .banner-btn-prev {
+          left: 10px;
+        }
+        .banner-btn-next {
+          right: 10px;
+        }
+      }
+
+      /* Minimalist Slide Indicator Counter (01 / 04) */
+      .banner-slide-indicator {
+        position: absolute;
+        bottom: 14px;
+        right: 16px;
+        z-index: 10;
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        background: rgba(0, 0, 0, 0.52);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        color: #ffffff;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.72rem;
+        font-weight: 400;
+        letter-spacing: 1.2px;
+        pointer-events: none;
+      }
+
+      .banner-slide-indicator .indicator-sep {
+        opacity: 0.6;
+      }
+
+      .banner-slide-indicator .indicator-total {
+        opacity: 0.75;
+      }
+
+      @media (max-width: 600px) {
+        .banner-slide-indicator {
+          right: 10px;
+          bottom: 10px;
+          font-size: 0.68rem;
+          padding: 3px 8px;
+        }
+      }
+
+      /* --- SCROLL-DRIVEN 3D LAPTOP SHOWCASE (Elevated Editorial Atelier) --- */
       .laptop-scroll-track {
         position: relative;
         width: 100%;
-        height: 190vh; /* Smooth virtual scroll distance */
-        margin: 10px 0 20px 0;
+        height: 170vh; /* Snappy, responsive virtual scroll */
+        margin: 0 0 64px 0; /* Consistent spacing above Line 01 */
+        background: transparent;
+      }
+
+      @media (min-width: 860px) {
+        .laptop-scroll-track {
+          height: 180vh;
+          margin-bottom: 96px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .laptop-scroll-track {
+          margin-bottom: 64px;
+        }
       }
 
       .laptop-sticky-stage {
@@ -271,7 +1430,7 @@ for (const p of [...products].reverse()) {
         justify-content: center;
         overflow: hidden;
         box-sizing: border-box;
-        padding: 16px;
+        padding: 14px 16px;
         z-index: 10;
       }
 
@@ -279,31 +1438,50 @@ for (const p of [...products].reverse()) {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 6px;
-        margin-bottom: 24px;
         text-align: center;
+        margin-bottom: 24px;
+        z-index: 15;
+        padding: 24px 16px 0 16px;
+        max-width: 580px;
       }
 
-      .laptop-eyebrow {
-        font-size: 0.65rem;
-        font-weight: 600;
+      .laptop-brand-title {
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        font-size: clamp(2.2rem, 5vw, 3rem);
+        font-weight: 400;
+        letter-spacing: 4px;
+        color: #111111;
+        margin: 0 0 6px 0;
+        line-height: 1.1;
+        text-transform: lowercase;
+      }
+
+      .laptop-brand-slogan {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.82rem;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        color: #666666;
+        margin: 0 0 16px 0;
+        max-width: 480px;
+        line-height: 1.5;
+      }
+
+      .laptop-scroll-cue {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2px;
+      }
+
+      .cue-text {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.60rem;
+        font-weight: 400;
         letter-spacing: 2.5px;
         text-transform: uppercase;
-        color: #888888;
-      }
-
-      .laptop-status-hint {
-        font-family: var(--font-body, 'Poppins', sans-serif);
-        font-size: 0.72rem;
-        font-weight: 500;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        color: #111111;
-        background: rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        padding: 4px 14px;
-        border-radius: 100px;
-        transition: all 0.25s ease;
+        color: #999999;
+        transition: color 0.25s ease;
       }
 
       .laptop-viewport-wrap {
@@ -311,9 +1489,12 @@ for (const p of [...products].reverse()) {
         display: flex;
         justify-content: center;
         align-items: center;
-        perspective: 2000px;
+        perspective: 2400px;
         padding: 10px 0;
+        position: relative;
       }
+
+
 
       /* Mobile First Responsive Scaling */
       .laptop {
@@ -323,8 +1504,9 @@ for (const p of [...products].reverse()) {
         flex-direction: column;
         align-items: center;
         transform-origin: center center;
-        transform: scale(var(--laptop-scale, 0.52));
-        transition: transform 0.2s ease;
+        transform: scale(var(--laptop-scale, 0.54));
+        will-change: transform;
+        z-index: 5;
       }
 
       @media (max-width: 374px) {
@@ -353,7 +1535,7 @@ for (const p of [...products].reverse()) {
 
       @media (min-width: 860px) {
         .laptop-scroll-track {
-          height: 220vh;
+          height: 180vh;
         }
 
         .laptop {
@@ -361,10 +1543,10 @@ for (const p of [...products].reverse()) {
         }
       }
 
-      /* --- SCREEN (from ELEMENTS/welcome) --- */
+      /* --- SCREEN --- */
       .screen {
         border-radius: 20px;
-        box-shadow: inset 0 0 0 2px #c8cacb, inset 0 0 0 10px #000;
+        /* box-shadow hata diya — bezel overlay par move kiya (video ke UPAR render hoga) */
         height: 318px;
         width: 518px;
         margin: 0 auto;
@@ -374,22 +1556,41 @@ for (const p of [...products].reverse()) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-image: linear-gradient(15deg,
-                #3f51b1 0%,
-                #5a55ae 13%,
-                #7b5fac 25%,
-                #8f6aae 38%,
-                #a86aa4 50%,
-                #cc6b8e 62%,
-                #f18271 75%,
-                #f3a469 87%,
-                #f7c978 100%);
+        background: #000;
         transform-style: preserve-3d;
         transform: perspective(1900px) rotateX(-88.5deg);
         transform-origin: 50% 100%;
         box-sizing: border-box;
         overflow: hidden;
-        will-change: transform, filter;
+        will-change: transform;
+      }
+
+      /* Video wallpaper — lowest layer inside screen */
+      .screen-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+        z-index: 1;
+        pointer-events: none;
+        display: block;
+      }
+
+      /* Bezel overlay — video ke UPAR render hota hai, black inner border + silver edge --
+         Yahi trick hai: inset box-shadow child elements ke peeche hota hai,
+         isliye isko alag div me daala jahan z-index control ho sake */
+      .screen-bezel-frame {
+        position: absolute;
+        inset: 0;
+        border-radius: 20px;
+        box-shadow:
+          inset 0 0 0 2px rgba(200, 202, 203, 0.7),  /* silver edge */
+          inset 0 0 0 10px rgba(0, 0, 0, 0.95);       /* black inner bezel */
+        z-index: 7;
+        pointer-events: none;
       }
 
       .screen::before {
@@ -401,6 +1602,7 @@ for (const p of [...products].reverse()) {
         top: -3px;
         transform: rotateX(90deg);
         border-radius: 5px 5px;
+        z-index: 5;
       }
 
       .screen::after {
@@ -412,6 +1614,7 @@ for (const p of [...products].reverse()) {
         left: 2px;
         position: absolute;
         width: 514px;
+        z-index: 5;
       }
 
       .header {
@@ -423,51 +1626,34 @@ for (const p of [...products].reverse()) {
         left: 50%;
         transform: translate(-50%, 0);
         border-radius: 0 0 6px 6px;
-        z-index: 5;
+        z-index: 8;
       }
 
       .screen-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        z-index: 4;
-        padding: 0 20px;
-      }
-
-      .screen-brand {
-        font-family: var(--font-heading, 'Playfair Display', serif);
-        font-size: 2.2rem;
-        font-weight: 400;
-        letter-spacing: 5px;
-        color: #ffffff;
-        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
-        margin-bottom: 6px;
+        position: absolute;
+        top: 20px;
+        left: 22px;
+        z-index: 8;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        pointer-events: none;
         line-height: 1;
       }
 
-      .text {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-            Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-        color: #fff;
-        font-size: 1.15rem;
-        font-weight: 600;
-        letter-spacing: 1.5px;
-        text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
-        margin-bottom: 6px;
-      }
-
-      .screen-sub {
-        font-size: 0.72rem;
-        letter-spacing: 1.2px;
+      .screen-corner-brand {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.58rem;
+        font-weight: 400;
+        letter-spacing: 2.2px;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.9);
-        font-weight: 500;
-        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+        color: rgba(255, 255, 255, 0.92);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+        display: inline-block;
+        white-space: nowrap;
+        line-height: 1;
       }
 
-      /* --- KEYBOARD (from ELEMENTS/welcome) --- */
+      /* --- KEYBOARD BASE (from ELEMENTS/welcome) --- */
       .keyboard {
         background: radial-gradient(circle at center, #e2e3e4 85%, #a9abac 100%);
         border: solid #a0a3a7;
@@ -505,6 +1691,1684 @@ for (const p of [...products].reverse()) {
         margin-left: -10px;
         position: absolute;
         width: 40px;
+      }
+
+      /* ═══════════════════════════════════════════════
+         FEATURED CATEGORIES SECTION & DIRECTORY GRID
+      ═══════════════════════════════════════════════ */
+      .featured-categories-section {
+        width: 100%;
+        padding: 0 0 96px 0;
+        background: transparent;
+      }
+
+      @media (max-width: 600px) {
+        .featured-categories-section {
+          padding: 0 0 64px 0;
+        }
+      }
+
+      /* Line 02 & 04 (above Featured Categories and Explore Alif) */
+      .fc-header {
+        border-top: 1px solid #111111;
+        padding-top: 30px;
+        text-align: left;
+        margin-bottom: 22px;
+        padding-left: 0;
+        padding-right: 0;
+        width: calc(100% - 32px);
+        max-width: 1080px;
+        margin-left: auto;
+        margin-right: auto;
+        box-sizing: border-box;
+      }
+
+      @media (min-width: 768px) {
+        .fc-header {
+          width: calc(100% - 40px);
+          padding-top: 36px;
+          margin-bottom: 26px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .fc-header {
+          width: calc(100% - 32px);
+          padding-top: 24px;
+          margin-bottom: 18px;
+        }
+      }
+
+      .fc-title-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .fc-title {
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        font-size: clamp(1.8rem, 3.6vw, 2.3rem);
+        font-weight: 500;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #111111;
+        margin: 0;
+        line-height: 1.2;
+        text-align: left;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      /* 3-column grid — 2 rows = 6 cards */
+      .fc-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding: 0 16px;
+        max-width: 1080px;
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
+
+      @media (min-width: 768px) {
+        .fc-grid {
+          gap: 16px;
+          padding: 0 20px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .fc-grid {
+          gap: 10px;
+          padding: 0 16px;
+        }
+      }
+
+      .fc-card {
+        position: relative;
+        display: block;
+        aspect-ratio: 3 / 4;
+        overflow: hidden;
+        text-decoration: none;
+        background: #111111;
+        border-radius: 4px;
+        box-shadow: none;
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .fc-card:hover {
+        transform: translateY(-2px);
+      }
+
+      .fc-img-wrap {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .fc-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+        display: block;
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      /* Hover — subtle zoom */
+      .fc-card:hover .fc-img-wrap img {
+        transform: scale(1.06);
+      }
+
+      /* Bottom label — dark gradient fade */
+      .fc-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 32px 10px 12px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        pointer-events: none;
+      }
+
+      .fc-label span {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: clamp(0.70rem, 1.8vw, 0.80rem);
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #ffffff;
+        text-align: center;
+      }
+
+      /* Footer — View All link */
+      .fc-footer {
+        text-align: center;
+        margin-top: 24px;
+        padding: 0 20px;
+      }
+
+      .fc-view-all {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.72rem;
+        font-weight: 400;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #111111;
+        text-decoration: none;
+        border-bottom: 1px solid #111111;
+        padding-bottom: 2px;
+        margin-bottom: 3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        line-height: 1;
+        transition: all 0.2s ease;
+      }
+
+      .fc-view-all:hover {
+        color: #666666;
+        border-color: #666666;
+        transform: translateX(2px);
+      }
+
+      .fc-view-all:hover .view-all-arrow {
+        transform: translateX(3px);
+      }
+
+      /* ═══════════════════════════════════════════════
+         SERVICES EDITORIAL SHOWCASE (Unified Luxury Layout)
+      ═══════════════════════════════════════════════ */
+      .services-editorial-section {
+        width: 100%;
+        padding: 0 0 96px 0;
+        background: transparent;
+        margin: 0;
+      }
+
+      @media (max-width: 600px) {
+        .services-editorial-section {
+          padding: 0 0 64px 0;
+        }
+      }
+
+      /* Line 05 (above Custom Stitching) */
+      .se-header {
+        border-top: 1px solid #111111;
+        padding-top: 30px;
+        text-align: left;
+        margin-bottom: 22px;
+        padding-left: 0;
+        padding-right: 0;
+        width: calc(100% - 32px);
+        max-width: 1080px;
+        margin-left: auto;
+        margin-right: auto;
+        box-sizing: border-box;
+      }
+
+      @media (min-width: 768px) {
+        .se-header {
+          width: calc(100% - 40px);
+          padding-top: 36px;
+          margin-bottom: 26px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .se-header {
+          width: calc(100% - 32px);
+          padding-top: 24px;
+          margin-bottom: 18px;
+        }
+      }
+
+      .se-title-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .se-title {
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        font-size: clamp(1.8rem, 3.6vw, 2.3rem);
+        font-weight: 500;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #111111;
+        margin: 0;
+        line-height: 1.2;
+        text-align: left;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .se-view-all {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.72rem;
+        font-weight: 400;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #111111;
+        text-decoration: none;
+        border-bottom: 1px solid #111111;
+        padding-bottom: 2px;
+        margin-bottom: 3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        line-height: 1;
+        transition: all 0.2s ease;
+      }
+
+      .se-view-all:hover {
+        color: #666666;
+        border-color: #666666;
+        transform: translateX(2px);
+      }
+
+      .se-view-all:hover .view-all-arrow {
+        transform: translateX(3px);
+      }
+
+      .se-container {
+        width: 100%;
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 16px;
+        box-sizing: border-box;
+      }
+
+      @media (min-width: 768px) {
+        .se-container {
+          padding: 0 20px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .se-container {
+          padding: 0 16px;
+        }
+      }
+
+      /* --- Big Hero Poster (Aligned with Grid Container) --- */
+      .se-poster {
+        position: relative;
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        text-decoration: none;
+        background: #111111;
+        margin: 0 0 12px 0;
+        border-radius: 4px;
+        box-shadow: none;
+      }
+
+      @media (min-width: 768px) {
+        .se-poster {
+          aspect-ratio: 21 / 9;
+          margin-bottom: 16px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .se-poster {
+          aspect-ratio: 4 / 5;
+          margin-bottom: 8px;
+        }
+      }
+
+      .se-poster-img-wrap {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .se-poster-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 20%;
+        display: block;
+        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .se-poster:hover .se-poster-img-wrap img {
+        transform: scale(1.04);
+      }
+
+      /* Clean Vignette & Minimal Typography (matching reference image) */
+      .se-poster-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          transparent 35%,
+          rgba(0, 0, 0, 0.3) 65%,
+          rgba(0, 0, 0, 0.82) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        text-align: center;
+        padding: 0 16px 28px;
+      }
+
+      .se-poster-title {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: clamp(2rem, 6vw, 3.2rem);
+        font-weight: 500;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: #ffffff;
+        margin: 0 0 4px;
+        line-height: 1.1;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+      }
+
+      .se-poster-sub {
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        font-size: clamp(0.90rem, 2.4vw, 1.15rem);
+        font-style: italic;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.92);
+        margin: 0 0 12px;
+        letter-spacing: 0.5px;
+      }
+
+      .se-poster-cta {
+        display: inline-block;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.72rem;
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #ffffff;
+        text-decoration: underline;
+        text-underline-offset: 5px;
+        transition: opacity 0.2s ease;
+      }
+
+      .se-poster:hover .se-poster-cta {
+        opacity: 0.85;
+      }
+
+      /* --- 2 Sub Cards Grid (3:4 ratio, Aligned Gaps) --- */
+      .se-grid-sub {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin: 0;
+        padding: 0;
+      }
+
+      @media (min-width: 768px) {
+        .se-grid-sub {
+          gap: 16px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .se-grid-sub {
+          gap: 10px;
+        }
+      }
+
+      .se-card {
+        position: relative;
+        display: block;
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        overflow: hidden;
+        text-decoration: none;
+        background: #111111;
+        margin: 0;
+        border-radius: 4px;
+        box-shadow: none;
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .se-card:hover {
+        transform: translateY(-2px);
+      }
+
+      .se-card-img-wrap {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .se-card-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 20%;
+        display: block;
+        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .se-card:hover .se-card-img-wrap img {
+        transform: scale(1.05);
+      }
+
+      /* Minimal Bottom Fade with Just Card Title */
+      .se-card-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 32px 10px 14px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        pointer-events: none;
+      }
+
+      .se-card-title {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: clamp(0.72rem, 1.8vw, 0.85rem);
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #ffffff;
+        text-align: center;
+        margin: 0;
+      }
+
+      /* ═══════════════════════════════════════════════
+         VISIT OUR STORE (2x2 ROUTE CARDS + DIRECT DIRECTION CTA)
+      ═══════════════════════════════════════════════ */
+      .store-directions-section {
+        width: 100%;
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 16px 96px 16px;
+        box-sizing: border-box;
+      }
+
+      @media (min-width: 768px) {
+        .store-directions-section {
+          padding: 0 20px 110px 20px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .store-directions-section {
+          padding: 0 16px 64px 16px;
+        }
+      }
+
+      /* Line 06 (above Visit Our Store) */
+      .store-header {
+        border-top: 1px solid #111111;
+        padding-top: 30px;
+        text-align: left;
+        margin-bottom: 22px;
+      }
+
+      @media (min-width: 768px) {
+        .store-header {
+          padding-top: 36px;
+          margin-bottom: 26px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .store-header {
+          padding-top: 24px;
+          margin-bottom: 18px;
+        }
+      }
+
+      .store-title-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .store-title {
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        font-size: clamp(1.8rem, 3.6vw, 2.3rem);
+        font-weight: 500;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #111111;
+        margin: 0;
+        line-height: 1.2;
+        text-align: left;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .store-view-all {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.72rem;
+        font-weight: 400;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #111111;
+        text-decoration: none;
+        border-bottom: 1px solid #111111;
+        padding-bottom: 2px;
+        margin-bottom: 3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        line-height: 1;
+        transition: all 0.2s ease;
+      }
+
+      .store-view-all:hover {
+        color: #666666;
+        border-color: #666666;
+        transform: translateX(2px);
+      }
+
+      .store-view-all:hover .view-all-arrow {
+        transform: translateX(3px);
+      }
+
+      /* 2x2 Grid aligned with global container */
+      .store-routes-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        width: 100%;
+        margin-bottom: 32px;
+      }
+
+      @media (min-width: 768px) {
+        .store-routes-grid {
+          gap: 16px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .store-routes-grid {
+          gap: 10px;
+          margin-bottom: 24px;
+        }
+      }
+
+      .store-route-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        box-sizing: border-box;
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .store-route-card:hover {
+        transform: translateY(-2px);
+      }
+
+      .store-media-wrap {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        overflow: hidden;
+        border-radius: 4px;
+        background: #111111;
+        box-shadow: none;
+      }
+
+      .store-card-img,
+      .store-card-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .store-route-card:hover .store-card-img,
+      .store-route-card:hover .store-card-video {
+        transform: scale(1.04);
+      }
+
+      .store-video-tag {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 2;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(8px);
+        color: #ffffff;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.55rem;
+        font-weight: 400;
+        letter-spacing: 1px;
+        padding: 3px 8px;
+        border-radius: 100px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .store-meta-wrap {
+        padding-top: 12px;
+        width: 100%;
+      }
+
+      .store-route-title {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: clamp(0.72rem, 1.8vw, 0.88rem);
+        font-weight: 400;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: #111111;
+        margin: 0;
+        line-height: 1.3;
+      }
+
+      /* Minimal Luxury Direct Direction CTA Button */
+      .store-cta-container {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 24px;
+      }
+
+      .store-direct-direction-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: #111111;
+        color: #ffffff;
+        padding: 13px 32px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.74rem;
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border: 1px solid #111111;
+        transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+        box-sizing: border-box;
+      }
+
+      .store-direct-direction-btn:hover {
+        background: #ffffff;
+        color: #111111;
+        border-color: #111111;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+      }
+
+      .direct-btn-compass {
+        flex-shrink: 0;
+        transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .store-direct-direction-btn:hover .direct-btn-compass {
+        transform: translate(2px, -2px) rotate(10deg) scale(1.1);
+      }
+
+      .direct-btn-label {
+        line-height: 1;
+      }
+
+      @media (max-width: 600px) {
+        .store-direct-direction-btn {
+          padding: 11px 26px;
+          font-size: 0.70rem;
+          letter-spacing: 1.6px;
+          gap: 8px;
+        }
+      }
+
+      /* --- LATEST COLLECTION SCROLL-TO-SLIDE --- */
+
+      .latest-collection-scroll-track {
+        position: relative;
+        width: 100%;
+        height: 240vh; /* Smooth, snappy virtual scroll without dead space */
+        margin: 0 0 64px 0; /* Consistent spacing above Line 04 */
+      }
+
+      @media (min-width: 860px) {
+        .latest-collection-scroll-track {
+          height: 260vh;
+          margin-bottom: 96px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .latest-collection-scroll-track {
+          margin-bottom: 64px;
+        }
+      }
+
+      .latest-collection-sticky-stage {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 60px;
+        height: calc(100dvh - 124px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: hidden;
+        box-sizing: border-box;
+        padding: 0;
+        z-index: 9;
+      }
+
+      @media (min-width: 601px) {
+        .latest-collection-sticky-stage {
+          top: 70px;
+          height: calc(100dvh - 85px);
+        }
+      }
+
+      /* Line 03 (above Latest Collection) */
+      .collection-header {
+        border-top: 1px solid #111111;
+        padding-top: 30px;
+        padding-left: 0;
+        padding-right: 0;
+        width: calc(100% - 32px);
+        max-width: 1080px;
+        margin: 0 auto 22px auto;
+        box-sizing: border-box;
+      }
+
+      @media (min-width: 768px) {
+        .collection-header {
+          width: calc(100% - 40px);
+          padding-top: 36px;
+          margin-bottom: 26px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .collection-header {
+          width: calc(100% - 32px);
+          padding-top: 24px;
+          margin-bottom: 18px;
+        }
+      }
+
+      .collection-title-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .collection-title {
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        font-size: clamp(1.8rem, 3.6vw, 2.3rem);
+        font-weight: 500;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #111111;
+        margin: 0;
+        line-height: 1.2;
+        text-align: left;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .collection-view-all {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.72rem;
+        font-weight: 400;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #111111;
+        text-decoration: none;
+        border-bottom: 1px solid #111111;
+        padding-bottom: 2px;
+        margin-bottom: 3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        line-height: 1;
+        transition: all 0.2s ease;
+      }
+
+      .collection-view-all:hover {
+        color: #666666;
+        border-color: #666666;
+        transform: translateX(2px);
+      }
+
+      .collection-view-all:hover .view-all-arrow {
+        transform: translateX(3px);
+      }
+
+      .collection-cards-viewport {
+        width: 100%;
+        overflow: hidden;
+        padding: 6px 0;
+      }
+
+      .collection-cards-track {
+        display: flex;
+        gap: 20px;
+        padding: 0 20px;
+        will-change: transform;
+        transition: transform 0.05s linear;
+      }
+
+      @media (max-width: 600px) {
+        .collection-cards-track {
+          gap: 16px;
+          padding: 0 16px;
+        }
+      }
+
+      /* 3:4 Aspect Ratio, Minimal Luxury Editorial Card */
+      .collection-card {
+        flex: 0 0 auto;
+        width: 68vw;
+        max-width: 260px;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        outline: none;
+      }
+
+      @media (min-width: 768px) {
+        .collection-card {
+          width: 280px;
+          max-width: 280px;
+        }
+      }
+
+      .card-media-wrapper {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        overflow: hidden;
+        border-radius: 4px;
+        background: #f5f4f0 !important;
+        border: none !important;
+        box-shadow: none;
+        max-height: min(340px, calc(100dvh - 290px));
+      }
+
+      @media (max-width: 600px) {
+        .card-media-wrapper {
+          max-height: min(280px, calc(100dvh - 275px));
+        }
+      }
+
+      .collection-discount-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 2;
+        background: #111111;
+        color: #ffffff;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.62rem;
+        font-weight: 400;
+        letter-spacing: 0.8px;
+        padding: 4px 8px;
+        border-radius: 3px;
+        line-height: 1;
+      }
+
+      .card-media-wrapper img {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 3 / 4;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .collection-card:hover .card-media-wrapper img {
+        transform: scale(1.04);
+      }
+
+      .card-meta {
+        padding-top: 12px;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .card-cat-label {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.62rem;
+        font-weight: 500;
+        letter-spacing: 1.8px;
+        text-transform: uppercase;
+        color: #888888;
+        margin-bottom: 4px;
+        display: block;
+      }
+
+      .card-title {
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        font-size: 1.15rem;
+        font-weight: 500;
+        line-height: 1.35;
+        color: #111111;
+        margin: 0 0 6px 0;
+        letter-spacing: 0.2px;
+        text-align: left;
+        text-decoration: none;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .card-price-row {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin-top: 2px;
+      }
+
+      .card-curr-price {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.95rem;
+        font-weight: 400;
+        color: #111111;
+        letter-spacing: 0.2px;
+      }
+
+      .card-orig-price {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.82rem;
+        font-weight: 400;
+        color: #999999;
+        text-decoration: line-through;
+      }
+
+      /* View All / Show All Products End Card */
+      .collection-view-all-card {
+        cursor: pointer;
+      }
+
+      .collection-view-all-media {
+        position: relative;
+        background: #111111 !important;
+        overflow: hidden;
+      }
+
+      @media (min-width: 768px) {
+        .collection-card {
+          width: 310px;
+          max-width: 310px;
+        }
+
+        .latest-collection-scroll-track {
+          height: 260vh;
+        }
+      }
+
+      /* --- TRENDING REELS SCROLL-TO-SLIDE --- */
+      .reels-scroll-track {
+        position: relative;
+        width: 100%;
+        height: 240vh; /* Smooth, snappy virtual scroll without dead space */
+        margin: 0 0 64px 0; /* Consistent spacing above Line 02 */
+      }
+
+      @media (min-width: 860px) {
+        .reels-scroll-track {
+          height: 260vh;
+          margin-bottom: 96px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .reels-scroll-track {
+          margin-bottom: 64px;
+        }
+      }
+
+      .reels-sticky-stage {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 60px;
+        height: calc(100dvh - 124px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: hidden;
+        box-sizing: border-box;
+        padding: 0;
+        z-index: 9;
+      }
+
+      @media (min-width: 601px) {
+        .reels-sticky-stage {
+          top: 70px;
+          height: calc(100dvh - 85px);
+        }
+      }
+
+      /* Line 01 (above Trending Reels) */
+      .reels-header {
+        border-top: 1px solid #111111;
+        padding-top: 30px;
+        padding-left: 0;
+        padding-right: 0;
+        width: calc(100% - 32px);
+        max-width: 1080px;
+        margin: 0 auto 22px auto;
+        box-sizing: border-box;
+      }
+
+      @media (min-width: 768px) {
+        .reels-header {
+          width: calc(100% - 40px);
+          padding-top: 36px;
+          margin-bottom: 26px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .reels-header {
+          width: calc(100% - 32px);
+          padding-top: 24px;
+          margin-bottom: 18px;
+        }
+      }
+
+      .reels-title-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .reels-title {
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        font-size: clamp(1.8rem, 3.6vw, 2.3rem);
+        font-weight: 500;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #111111;
+        margin: 0;
+        line-height: 1.2;
+        text-align: left;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .reels-view-all {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.72rem;
+        font-weight: 400;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #111111;
+        text-decoration: none;
+        border-bottom: 1px solid #111111;
+        padding-bottom: 2px;
+        margin-bottom: 3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        line-height: 1;
+        transition: all 0.2s ease;
+      }
+
+      .reels-view-all:hover {
+        color: #666666;
+        border-color: #666666;
+        transform: translateX(2px);
+      }
+
+      .view-all-arrow {
+        display: inline-block;
+        font-size: 0.88rem;
+        line-height: 1;
+        transition: transform 0.2s ease;
+      }
+
+      .reels-view-all:hover .view-all-arrow {
+        transform: translateX(3px);
+      }
+
+      .reels-cards-viewport {
+        width: 100%;
+        overflow: hidden;
+        padding: 6px 0;
+      }
+
+      .reels-cards-track {
+        display: flex;
+        gap: 20px;
+        padding: 0 20px;
+        will-change: transform;
+        transition: transform 0.05s linear;
+        width: max-content;
+      }
+
+      @media (max-width: 600px) {
+        .reels-cards-track {
+          gap: 16px;
+          padding: 0 16px;
+        }
+      }
+
+      /* Luxury Haute-Couture Reel Cards */
+      .reel-card {
+        width: 290px;
+        height: min(480px, calc(100dvh - 190px));
+        flex: 0 0 290px;
+        border-radius: 12px;
+        background: #000000;
+        border: none !important;
+        outline: none !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.22);
+        display: block;
+        padding: 0 !important;
+        box-sizing: border-box;
+        text-decoration: none;
+        cursor: pointer;
+        overflow: hidden;
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        position: relative;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      @media (min-width: 768px) {
+        .reel-card {
+          width: 300px;
+          flex: 0 0 300px;
+          height: min(510px, calc(100dvh - 210px));
+        }
+
+        .reels-scroll-track {
+          height: 260vh;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .reel-card {
+          width: 70vw;
+          max-width: 260px;
+          flex: 0 0 70vw;
+          height: min(420px, calc(100dvh - 205px));
+        }
+      }
+
+      .reel-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
+      }
+
+      .reel-media-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #000000;
+      }
+
+      .reel-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover !important;
+        object-position: center center;
+        display: block;
+        transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .reel-card:hover .reel-video {
+        transform: scale(1.03);
+      }
+
+      /* Top Header: Title & Instagram-style Audio Pill */
+      .reel-top-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 16px 14px 34px 14px;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.3) 65%, transparent 100%);
+        z-index: 3;
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        box-sizing: border-box;
+      }
+
+      .reel-top-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 10px;
+        pointer-events: auto;
+      }
+
+      .reel-top-title {
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        font-size: 0.94rem;
+        font-weight: 500;
+        color: #ffffff;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 1.8px;
+        line-height: 1.3;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+        border: none !important;
+        border-bottom: none !important;
+        text-align: left !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .reel-audio-pill {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .reel-audio-pill:hover {
+        background: rgba(255, 255, 255, 0.22);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: scale(1.08);
+      }
+
+      .reel-audio-pill .audio-icon {
+        display: none;
+      }
+
+      .reel-audio-pill.sound-muted .icon-vol-mute {
+        display: block;
+      }
+
+      .reel-audio-pill.sound-active .icon-vol-on {
+        display: block;
+      }
+
+      .reel-title-divider {
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.18) 75%, transparent 100%);
+        margin-top: 2px;
+      }
+
+      /* Center Audio & Play/Pause Controller (Minimalist Frosted Glass Ring) */
+      .reel-center-ctrl {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.28) !important;
+        outline: none !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+        color: rgba(255, 255, 255, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 5;
+        transition: opacity 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    background 0.2s ease,
+                    border-color 0.2s ease;
+        pointer-events: auto;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .reel-center-ctrl:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5) !important;
+        transform: translate(-50%, -50%) scale(1.08);
+      }
+
+      .reel-center-ctrl.fade-hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, -50%) scale(0.75);
+      }
+
+      .reel-center-ctrl .center-icon {
+        display: none;
+      }
+
+      .reel-center-ctrl.state-mute .icon-mute {
+        display: block;
+      }
+
+      .reel-center-ctrl.state-paused .icon-pause {
+        display: block;
+      }
+
+      /* --- Bottom Minimal Action: WATCH ALL --- */
+      .reel-bottom-bar {
+        position: absolute;
+        bottom: 14px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 4;
+        pointer-events: auto;
+        padding: 0 16px;
+        box-sizing: border-box;
+      }
+
+      .reel-minimal-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 7px 18px;
+        background: rgba(0, 0, 0, 0.42);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        border-radius: 999px;
+        color: #ffffff;
+        text-decoration: none;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.64rem;
+        font-weight: 500;
+        letter-spacing: 1.8px;
+        text-transform: uppercase;
+        transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      }
+
+      .reel-minimal-cta:hover {
+        background: rgba(255, 255, 255, 0.95);
+        border-color: rgba(255, 255, 255, 0.95);
+        color: #111111;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+      }
+
+      .reel-minimal-cta .reel-minimal-arrow {
+        transition: transform 0.2s ease;
+      }
+
+      .reel-minimal-cta:hover .reel-minimal-arrow {
+        transform: translateX(3px);
+      }
+
+      @media (max-width: 600px) {
+        .reels-scroll-track {
+          margin: 0 0 80px 0;
+        }
+        .reel-minimal-cta {
+          padding: 6px 15px;
+          font-size: 0.60rem;
+          letter-spacing: 1.5px;
+        }
+      }
+
+      .reel-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0) 75%);
+        pointer-events: none;
+      }
+
+      .reel-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(8px);
+        color: #ffffff;
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.6rem;
+        font-weight: 400;
+        letter-spacing: 1px;
+      }
+
+      .reel-meta {
+        position: absolute;
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
+        z-index: 2;
+        color: #ffffff;
+      }
+
+      .reel-category {
+        display: block;
+        font-size: 0.62rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.75);
+        font-weight: 500;
+        margin-bottom: 2px;
+      }
+
+      .reel-item-title {
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #ffffff;
+        margin: 0;
+        line-height: 1.25;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* --- WATCH ALL REELS END CARD (Minimal & Premium) --- */
+      /* --- 9-GRID WATCH ALL CARDS (REELS & COLLECTION) --- */
+      .reel-watch-all-card {
+        position: relative;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .reel-grid-9,
+      .product-grid-9 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        width: 100%;
+        height: 100%;
+        gap: 3px;
+        filter: blur(4px) brightness(0.68);
+        transform: scale(1.08); /* Prevents blur bleed on the edges */
+        transition: filter 0.4s ease, transform 0.4s ease;
+      }
+
+      .reel-watch-all-card:hover .reel-grid-9,
+      .collection-view-all-card:hover .product-grid-9 {
+        filter: blur(2px) brightness(0.82);
+        transform: scale(1.12);
+      }
+
+      .mini-reel-cell,
+      .mini-prod-cell {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #111111;
+      }
+
+      .mini-reel-cell video,
+      .mini-prod-cell img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .watch-all-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at center, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.82) 100%);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 3;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .watch-all-btn-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 12px;
+      }
+
+      .watch-all-icon-circle {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        transition: all 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .watch-all-icon-circle svg {
+        margin-left: 2px;
+      }
+
+      .reel-watch-all-card:hover .watch-all-icon-circle,
+      .collection-view-all-card:hover .watch-all-icon-circle {
+        transform: scale(1.08);
+        background: rgba(255, 255, 255, 0.22);
+        border-color: rgba(255, 255, 255, 0.85);
+      }
+
+      .watch-all-title {
+        font-family: var(--font-heading, 'Playfair Display', serif);
+        font-size: 1.22rem;
+        font-weight: 400;
+        color: #ffffff;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin: 0;
+        line-height: 1.2;
+      }
+
+      .watch-all-sub {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.62rem;
+        font-weight: 500;
+        letter-spacing: 2.2px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.82);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding-bottom: 3px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.32);
+        background: transparent;
+        border-radius: 0;
+        backdrop-filter: none;
+        transition: all 0.25s ease;
+      }
+
+      .watch-all-sub svg {
+        transition: transform 0.2s ease;
+      }
+
+      .reel-watch-all-card:hover .watch-all-sub,
+      .collection-view-all-card:hover .watch-all-sub {
+        color: #ffffff;
+        border-color: #ffffff;
+      }
+
+      .reel-watch-all-card:hover .watch-all-sub svg,
+      .collection-view-all-card:hover .watch-all-sub svg {
+        transform: translateX(3px);
+      }
+
+      /* Line 07: Global Footer Harmony (matching contact-us.astro) */
+      :global(.site-footer) {
+        border-top: 1px solid #111111 !important;
+        margin-top: 0 !important;
+        padding-top: 60px !important;
       }
     </style>
 </BaseLayout>

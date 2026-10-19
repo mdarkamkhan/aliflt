@@ -7,6 +7,7 @@ image: "/uploads/1765018078009-main-1000026980.webp"
 gallery: []
 is_ad: false
 price: 33
+product_code: "ALIF-LK-8008"
 category: "latkan"
 description: "---"
 permalink: false

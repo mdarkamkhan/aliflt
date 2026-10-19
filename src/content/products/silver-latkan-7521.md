@@ -7,6 +7,7 @@ image: ""
 gallery: []
 is_ad: false
 price: 33
+product_code: "ALIF-LK-7521"
 category: "latkan"
 description: "---"
 permalink: false

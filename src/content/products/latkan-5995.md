@@ -7,6 +7,7 @@ image: /uploads/1000026889.webp
 gallery: []
 category: latkan
 price: 89
+product_code: "ALIF-LK-5995"
 description: ---
 size: "Large "
 colour: Green

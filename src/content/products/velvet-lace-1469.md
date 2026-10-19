@@ -5,6 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/1763829381470-1000026101.webp"
 price: 30
+product_code: "ALIF-LC-1469"
 offer_price: 15
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

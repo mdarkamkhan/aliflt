@@ -6,16 +6,16 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "build:11ty": "npx @11ty/eleventy"
+    "preview": "astro preview"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "cloudinary": "^2.11.0",
+    "potrace": "^2.1.8",
     "sharp": "^0.35.5"
   },
   "dependencies": {

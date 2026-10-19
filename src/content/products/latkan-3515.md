@@ -8,6 +8,7 @@ gallery:
   - "/uploads/1764952613516-0-1000026945.webp"
 is_ad: false
 price: 40
+product_code: "ALIF-LK-3515"
 category: "latkan"
 description: "---"
 permalink: false

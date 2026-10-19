@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/737fb06b-eae2-44d3-b9f1-398333c2dc2e.webp"
 is_ad: false
 price: 50
+product_code: "ALIF-LC-67DC"
 offer_price: 25
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

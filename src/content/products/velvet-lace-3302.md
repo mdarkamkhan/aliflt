@@ -5,6 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/1763831173302-1000026098.webp"
 price: 30
+product_code: "ALIF-LC-3302"
 offer_price: 15
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

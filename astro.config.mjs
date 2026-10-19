@@ -5,7 +5,9 @@ import react from '@astrojs/react';
 export default defineConfig({
   integrations: [react()],
   output: 'static',
+  prefetch: true,
   build: {
     format: 'directory' // outputs /services/blouse/index.html to match existing Eleventy URLs exactly
   }
 });
+

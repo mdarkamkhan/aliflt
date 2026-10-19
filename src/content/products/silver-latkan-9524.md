@@ -7,6 +7,7 @@ image: "/uploads/1765017029525-main-1000026938.webp"
 gallery: []
 is_ad: false
 price: 59
+product_code: "ALIF-LK-9524"
 category: "latkan"
 description: "---"
 permalink: false

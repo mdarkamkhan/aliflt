@@ -23,7 +23,7 @@ export interface MinimalistSidebarProps {
 export const MinimalistSidebar: React.FC<MinimalistSidebarProps> = ({
   isOpen = false,
   onClose = () => {},
-  brandTitle = "ALiF",
+  brandTitle = "alif.",
   brandSub = "ATELIER & STORE",
   brandLogoUrl = "",
   navLinks = [
@@ -136,18 +136,18 @@ export const MinimalistSidebar: React.FC<MinimalistSidebarProps> = ({
         .drawer-brand-title {
           font-family: var(--font-heading, 'Playfair Display', serif);
           font-size: 32px;
-          font-weight: 700;
+          font-weight: 400;
           letter-spacing: 4px;
-          text-transform: uppercase;
+          text-transform: lowercase;
           color: #000000;
           margin: 0 0 6px 0;
           line-height: 1;
         }
 
         .drawer-brand-sub {
-          font-family: var(--font-body, 'Poppins', sans-serif);
+          font-family: var(--font-body, 'Ubuntu', sans-serif);
           font-size: 10px;
-          font-weight: 600;
+          font-weight: 400;
           letter-spacing: 2.5px;
           text-transform: uppercase;
           color: #888888;
@@ -178,7 +178,7 @@ export const MinimalistSidebar: React.FC<MinimalistSidebarProps> = ({
         }
 
         .drawer-nav a {
-          font-family: var(--font-body, 'Poppins', sans-serif);
+          font-family: var(--font-body, 'Ubuntu', sans-serif);
           font-size: 19px;
           font-weight: 400;
           text-transform: uppercase;
@@ -207,9 +207,9 @@ export const MinimalistSidebar: React.FC<MinimalistSidebarProps> = ({
         }
 
         .drawer-social-heading {
-          font-family: var(--font-body, 'Poppins', sans-serif);
+          font-family: var(--font-body, 'Ubuntu', sans-serif);
           font-size: 10px;
-          font-weight: 600;
+          font-weight: 400;
           letter-spacing: 2.5px;
           text-transform: uppercase;
           color: #888888;

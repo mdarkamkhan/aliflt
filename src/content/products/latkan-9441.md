@@ -7,6 +7,7 @@ image: "/uploads/1765017979441-main-1000026891.webp"
 gallery: []
 is_ad: false
 price: 90
+product_code: "ALIF-LK-9441"
 category: "latkan"
 description: "---"
 permalink: false

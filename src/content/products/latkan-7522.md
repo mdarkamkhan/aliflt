@@ -8,6 +8,7 @@ gallery:
   - "/uploads/1764952707523-0-1000026922.webp"
 is_ad: false
 price: 40
+product_code: "ALIF-LK-7522"
 category: "latkan"
 description: "---"
 permalink: false

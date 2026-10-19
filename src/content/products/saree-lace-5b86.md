@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/65a4f1c6-4286-41b0-be38-1c3bf0c0b168.webp"
 is_ad: false
 price: 50
+product_code: "ALIF-LC-5B86"
 offer_price: 25
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

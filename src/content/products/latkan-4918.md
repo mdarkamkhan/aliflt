@@ -7,6 +7,7 @@ image: "/uploads/1765018084919-main-1000026886.webp"
 gallery: []
 is_ad: false
 price: 38
+product_code: "ALIF-LK-4918"
 category: "latkan"
 description: "---"
 permalink: false

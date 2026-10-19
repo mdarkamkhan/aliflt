@@ -1,0 +1,874 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import reelsData from '../../data/reels.json';
+
+// Pure Reel Feed from reels.json with Enriched Atelier Metadata
+const reelsList = (reelsData || []).map((r, index) => ({
+  id: r.id || `reel-${index + 1}`,
+  title: r.title || `Reel #${index + 1}`,
+  video: r.video,
+  raw_url: r.raw_url,
+  public_id: r.public_id,
+  image: r.poster || r.image || '/icons/icon-512x512.png',
+  duration: r.duration || null,
+  category: r.category || 'blouse',
+  style: r.style || 'festive',
+  tags: r.tags || [],
+  linked_service: r.linked_service || null,
+  linked_products: r.linked_products || []
+}));
+---
+
+<BaseLayout 
+  title="Reels & Atelier Stories" 
+  description="Watch bespoke craftsmanship and luxury stitching in motion."
+  hideFooter={true}
+>
+  <div class="reels-page-container">
+    
+    <!-- 1 Card at a Time Focused Feed with Native Instagram / Shorts Snap -->
+    <div class="reels-feed-container">
+      <div class="reels-feed" id="reelsFeed" tabindex="0" role="region" aria-label="Reels Video Feed">
+        {reelsList.length > 0 ? (
+          reelsList.map((item) => (
+            <div 
+              class="atelier-reel-card" 
+              data-reel-id={item.id} 
+              id={`reel-${item.id}`}
+              data-category={item.category}
+              data-style={item.style}
+              data-tags={JSON.stringify(item.tags)}
+              data-service={item.linked_service || ''}
+              data-products={JSON.stringify(item.linked_products)}
+            >
+              <!-- Edge-to-Edge Reel Video (Single active playback handled by JS) -->
+              <video 
+                src={item.video} 
+                poster={item.image}
+                loop 
+                muted 
+                playsinline 
+                webkit-playsinline
+                preload="metadata"
+                class="reel-video-element"
+              ></video>
+
+              <!-- Top Overlay: Clean Title with Persistent Sound Pill & Underline -->
+              <div class="reel-top-bar">
+                <div class="reel-top-row">
+                  <h3 class="reel-top-title">{item.title}</h3>
+                  <button type="button" class="reel-audio-pill sound-muted" aria-label="Toggle Sound" onclick="event.stopPropagation();" title="Toggle Sound">
+                    <!-- Sound ON Icon -->
+                    <svg class="audio-icon icon-vol-on" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    </svg>
+                    <!-- Sound OFF (Muted) Icon -->
+                    <svg class="audio-icon icon-vol-mute" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="reel-title-divider" aria-hidden="true"></div>
+              </div>
+
+              <!-- Center Audio & Play/Pause Controller -->
+              <button type="button" class="reel-center-ctrl state-mute" aria-label="Audio and Playback Control">
+                <!-- Mute Icon -->
+                <svg class="center-icon icon-mute" viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+                  <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                </svg>
+                <!-- Pause Icon -->
+                <svg class="center-icon icon-pause" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                  <rect x="7" y="5" width="2.5" height="14" rx="1.2" />
+                  <rect x="14.5" y="5" width="2.5" height="14" rx="1.2" />
+                </svg>
+                <!-- Play Icon -->
+                <svg class="center-icon icon-play" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                  <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86a1 1 0 0 0-1.5.86z"/>
+                </svg>
+              </button>
+            </div>
+          ))
+        ) : (
+          <div class="reels-empty-card">
+            <div class="empty-inner">
+              <span class="empty-badge">alif. ATELIER</span>
+              <h2 class="empty-title">Reel Studio Syncing</h2>
+              <p class="empty-desc">Your reels are staged and ready.</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <!-- Desktop Floating Quick Nav Buttons (Insta/Shorts style) -->
+      <div class="reels-nav-controls" aria-label="Reels Navigation">
+        <button type="button" class="reel-nav-btn btn-prev" id="reelNavPrev" aria-label="Previous Reel" title="Previous Reel (Up Arrow)">
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+        <button type="button" class="reel-nav-btn btn-next" id="reelNavNext" aria-label="Next Reel" title="Next Reel (Down Arrow)">
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Embedded Catalog Data for Client-Side Personalization Engine -->
+  <script id="reels-catalog-data" type="application/json" set:html={JSON.stringify(reelsList)} />
+
+  <script>
+    import {
+      rankReelsFeed,
+      trackWatchProgress,
+      trackReelComplete,
+      trackReelSkip,
+      trackReelInteraction,
+      markReelSessionSeen
+    } from '../../utils/reelsEngine.js';
+
+    // Luxury Reels: Instagram / YouTube Shorts 1-at-a-Time Playback & Next-Level Personalization
+    function initReelInteractions() {
+      const reelsFeed = document.getElementById('reelsFeed');
+      if (!reelsFeed) return;
+
+      // 1. Dynamic Client Personalization: Reorder DOM cards based on affinity & anti-fatigue
+      const catalogEl = document.getElementById('reels-catalog-data');
+      let catalog = [];
+      if (catalogEl) {
+        try {
+          catalog = JSON.parse(catalogEl.textContent || '[]');
+        } catch (_) {}
+      }
+
+      if (catalog.length > 0 && !reelsFeed._rankedOnce) {
+        reelsFeed._rankedOnce = true;
+        const cardMap = new Map();
+        document.querySelectorAll('.atelier-reel-card').forEach((c) => {
+          const id = c.getAttribute('data-reel-id');
+          if (id) cardMap.set(id, c);
+        });
+
+        // Run Algorithm Re-ranking
+        const ranked = rankReelsFeed(catalog);
+        const frag = document.createDocumentFragment();
+        ranked.forEach((item) => {
+          const card = cardMap.get(item.id);
+          if (card) frag.appendChild(card);
+        });
+        reelsFeed.appendChild(frag);
+      }
+
+      const cards = Array.from(document.querySelectorAll('.atelier-reel-card'));
+      const btnPrev = document.getElementById('reelNavPrev');
+      const btnNext = document.getElementById('reelNavNext');
+
+      if (cards.length === 0) return;
+
+      // Global Audio State (Persists across reels once user turns sound on)
+      let isAudioGloballyActive = false;
+      let activeCard = null;
+      let activeStartTime = 0;
+      let activeReelItem = null;
+
+      function getCardData(card) {
+        if (!card) return null;
+        const id = card.getAttribute('data-reel-id');
+        return catalog.find((c) => c.id === id) || { id };
+      }
+
+      function updateSoundUI() {
+        cards.forEach((card) => {
+          const video = card.querySelector('video');
+          const centerBtn = card.querySelector('.reel-center-ctrl');
+          const soundPill = card.querySelector('.reel-audio-pill');
+
+          if (soundPill) {
+            if (isAudioGloballyActive) {
+              soundPill.classList.add('sound-active');
+              soundPill.classList.remove('sound-muted');
+            } else {
+              soundPill.classList.add('sound-muted');
+              soundPill.classList.remove('sound-active');
+            }
+          }
+
+          if (video) {
+            video.muted = !isAudioGloballyActive;
+          }
+
+          if (centerBtn && card === activeCard) {
+            if (isAudioGloballyActive) {
+              centerBtn.classList.remove('state-mute');
+              if (video && !video.paused) {
+                centerBtn.classList.add('fade-hidden');
+              }
+            } else {
+              centerBtn.classList.add('state-mute');
+              centerBtn.classList.remove('fade-hidden', 'state-paused');
+            }
+          }
+        });
+      }
+
+      function activateCard(targetCard, forcePlay = false) {
+        if (!targetCard) return;
+        if (targetCard === activeCard && !forcePlay) return;
+
+        // Telemetry: Evaluate previous active reel watch time
+        if (activeCard && activeCard !== targetCard) {
+          const prevVideo = activeCard.querySelector('video');
+          const prevCenterBtn = activeCard.querySelector('.reel-center-ctrl');
+          if (prevVideo) {
+            prevVideo.pause();
+            prevVideo.currentTime = 0;
+          }
+          if (prevCenterBtn) {
+            prevCenterBtn.classList.remove('state-paused');
+          }
+
+          if (activeReelItem && activeStartTime > 0) {
+            const elapsedSec = (Date.now() - activeStartTime) / 1000;
+            trackReelSkip(activeReelItem, elapsedSec);
+            markReelSessionSeen(activeReelItem.id);
+          }
+        }
+
+        // Set new active card & record start time
+        activeCard = targetCard;
+        activeStartTime = Date.now();
+        activeReelItem = getCardData(targetCard);
+
+        const video = targetCard.querySelector('video');
+        const centerBtn = targetCard.querySelector('.reel-center-ctrl');
+
+        if (!video) return;
+
+        // Apply persistent sound state
+        video.muted = !isAudioGloballyActive;
+
+        if (centerBtn) {
+          centerBtn.classList.remove('state-paused');
+          if (isAudioGloballyActive) {
+            centerBtn.classList.remove('state-mute');
+            centerBtn.classList.add('fade-hidden');
+          } else {
+            centerBtn.classList.add('state-mute');
+            centerBtn.classList.remove('fade-hidden');
+          }
+        }
+
+        // Attach telemetry progress handler on active video
+        if (!video._telemetryBound) {
+          video._telemetryBound = true;
+          video.addEventListener('timeupdate', () => {
+            if (activeCard === targetCard && activeReelItem) {
+              trackWatchProgress(activeReelItem, video.currentTime, video.duration);
+            }
+          });
+          video.addEventListener('ended', () => {
+            if (activeReelItem) {
+              trackReelComplete(activeReelItem);
+            }
+          });
+        }
+
+        // Play single active video
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            video.muted = true;
+            video.play().catch(() => {});
+            if (centerBtn) {
+              centerBtn.classList.add('state-mute');
+              centerBtn.classList.remove('fade-hidden');
+            }
+          });
+        }
+      }
+
+      // Cleanup existing observer if re-initialized
+      if (reelsFeed._observer) {
+        reelsFeed._observer.disconnect();
+      }
+
+      // IntersectionObserver: Hardware-accelerated viewport detection without scroll reflow
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.55) {
+            activateCard(entry.target);
+          }
+        });
+      }, {
+        root: reelsFeed,
+        threshold: 0.55
+      });
+      reelsFeed._observer = observer;
+
+      cards.forEach((card) => observer.observe(card));
+
+      // Global Audio Toggle
+      function toggleAudioGlobal() {
+        isAudioGloballyActive = !isAudioGloballyActive;
+        updateSoundUI();
+        if (isAudioGloballyActive && activeReelItem) {
+          trackReelInteraction(activeReelItem, 'audio_unmute');
+        }
+        if (activeCard) {
+          const video = activeCard.querySelector('video');
+          if (video && video.paused) {
+            video.play().catch(() => {});
+          }
+        }
+      }
+
+      // Card Tap & Audio Interactions
+      cards.forEach((card) => {
+        const video = card.querySelector('video');
+        const centerBtn = card.querySelector('.reel-center-ctrl');
+        const soundPill = card.querySelector('.reel-audio-pill');
+
+        if (!video) return;
+
+        // Sound Pill Click
+        if (soundPill) {
+          soundPill.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleAudioGlobal();
+          });
+        }
+
+        // Center Button Click
+        if (centerBtn) {
+          centerBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (video.paused) {
+              isAudioGloballyActive = true;
+              updateSoundUI();
+              video.muted = false;
+              video.play().catch(() => {});
+              centerBtn.classList.remove('state-paused', 'state-mute');
+              centerBtn.classList.add('fade-hidden');
+            } else if (video.muted) {
+              isAudioGloballyActive = true;
+              updateSoundUI();
+              video.muted = false;
+              centerBtn.classList.remove('state-mute');
+              centerBtn.classList.add('fade-hidden');
+            } else {
+              video.pause();
+              centerBtn.classList.remove('fade-hidden');
+              centerBtn.classList.add('state-paused');
+            }
+          });
+        }
+
+        // Distinguish between touch scroll (swipe) and tap
+        let touchStartY = 0;
+        let isTouchSwipe = false;
+
+        card.addEventListener('touchstart', (e) => {
+          if (e.touches && e.touches[0]) {
+            touchStartY = e.touches[0].clientY;
+            isTouchSwipe = false;
+          }
+        }, { passive: true });
+
+        card.addEventListener('touchmove', (e) => {
+          if (e.touches && e.touches[0]) {
+            if (Math.abs(e.touches[0].clientY - touchStartY) > 10) {
+              isTouchSwipe = true;
+            }
+          }
+        }, { passive: true });
+
+        // Tap card to unmute or toggle play/pause (only when not swiping)
+        card.addEventListener('click', (e) => {
+          if (isTouchSwipe) return; // User was scrolling, ignore tap
+          if (e.target.closest('button') || e.target.closest('a')) return;
+
+          if (video.paused) {
+            isAudioGloballyActive = true;
+            updateSoundUI();
+            video.muted = false;
+            video.play().catch(() => {
+              video.muted = true;
+              video.play().catch(() => {});
+            });
+            if (centerBtn) {
+              centerBtn.classList.remove('state-paused', 'state-mute');
+              centerBtn.classList.add('fade-hidden');
+            }
+          } else if (video.muted) {
+            isAudioGloballyActive = true;
+            updateSoundUI();
+            video.muted = false;
+            if (centerBtn) {
+              centerBtn.classList.remove('state-mute');
+              centerBtn.classList.add('fade-hidden');
+            }
+          } else {
+            video.pause();
+            if (centerBtn) {
+              centerBtn.classList.remove('fade-hidden');
+              centerBtn.classList.add('state-paused');
+            }
+          }
+        });
+      });
+
+      // Quick Nav Buttons (Next & Prev)
+      function scrollToRelativeCard(delta) {
+        if (cards.length === 0) return;
+        const currentIdx = activeCard ? cards.indexOf(activeCard) : 0;
+        let nextIdx = currentIdx + delta;
+        if (nextIdx < 0) nextIdx = 0;
+        if (nextIdx >= cards.length) nextIdx = cards.length - 1;
+
+        const target = cards[nextIdx];
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+
+      if (btnPrev) {
+        btnPrev.onclick = () => scrollToRelativeCard(-1);
+      }
+      if (btnNext) {
+        btnNext.onclick = () => scrollToRelativeCard(1);
+      }
+
+      // Keyboard Shortcuts (ArrowDown / ArrowUp / Space / M)
+      window.addEventListener('keydown', (e) => {
+        if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+          e.preventDefault();
+          scrollToRelativeCard(1);
+        } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+          e.preventDefault();
+          scrollToRelativeCard(-1);
+        } else if (e.key === ' ' /* Space */) {
+          e.preventDefault();
+          if (activeCard) {
+            const video = activeCard.querySelector('video');
+            const centerBtn = activeCard.querySelector('.reel-center-ctrl');
+            if (video) {
+              if (video.paused) {
+                video.play().catch(() => {});
+                if (centerBtn) {
+                  centerBtn.classList.remove('state-paused');
+                  centerBtn.classList.add('fade-hidden');
+                }
+              } else {
+                video.pause();
+                if (centerBtn) {
+                  centerBtn.classList.remove('fade-hidden');
+                  centerBtn.classList.add('state-paused');
+                }
+              }
+            }
+          }
+        } else if (e.key === 'm' || e.key === 'M') {
+          e.preventDefault();
+          toggleAudioGlobal();
+        }
+      });
+
+      // Initialize: pause all videos, then start first visible
+      cards.forEach((c) => {
+        const v = c.querySelector('video');
+        if (v) {
+          v.pause();
+          v.currentTime = 0;
+        }
+      });
+
+      let targetInitialCard = null;
+      if (window.location.hash) {
+        try {
+          targetInitialCard = document.querySelector(window.location.hash);
+        } catch (_) {}
+      }
+      if (targetInitialCard && cards.includes(targetInitialCard)) {
+        targetInitialCard.scrollIntoView({ behavior: 'auto', block: 'start' });
+        activateCard(targetInitialCard, true);
+      } else if (cards.length > 0) {
+        activateCard(cards[0], true);
+      }
+    }
+
+    document.addEventListener('astro:page-load', initReelInteractions);
+  </script>
+
+  <style>
+    /* Strictly Hide site footer, chatbot, and marquee on reels page */
+    :global(footer.site-footer),
+    :global(#reviews),
+    :global(.prada-mobile-footer),
+    :global(.marquee-container),
+    :global(#chat-widget),
+    :global(#chat-button) {
+      display: none !important;
+    }
+
+    .reels-page-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: calc(100dvh - 60px);
+      margin: 0 auto;
+      padding: 0;
+      box-sizing: border-box;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media (min-width: 769px) {
+      .reels-page-container {
+        height: calc(100dvh - 70px);
+        max-width: 600px;
+        padding: 8px 0;
+      }
+    }
+
+    /* Wrapper containing the feed and floating desktop nav controls */
+    .reels-feed-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* 1 Card at a Time Focused Feed with Native Snap (Edge-to-Edge, Zero Gap) */
+    .reels-feed {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      overscroll-behavior-y: contain;
+      touch-action: pan-y;
+      gap: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .reels-feed::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Large High-Focus Atelier Reel Card */
+    .atelier-reel-card {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      height: 100%;
+      min-height: 100%;
+      max-height: 100%;
+      flex: 0 0 100%;
+      background: #000000;
+      border: none !important;
+      outline: none !important;
+      overflow: hidden;
+      box-sizing: border-box;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0 auto;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    @media (min-width: 601px) {
+      .atelier-reel-card {
+        border-radius: 16px;
+        height: calc(100% - 16px);
+        min-height: calc(100% - 16px);
+        max-height: calc(100% - 16px);
+        margin: 8px auto;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      }
+    }
+
+    /* Edge-to-Edge Reel Video (pointer-events none enables silky touch swipe) */
+    .reel-video-element {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 1;
+      background: #000000;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* Top Header Bar */
+    .reel-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 4;
+      padding: 16px 16px 28px 16px;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.35) 60%, transparent 100%);
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .reel-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 12px;
+    }
+
+    .reel-top-title {
+      margin: 0;
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.95rem;
+      font-weight: 400;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .reel-audio-pill {
+      pointer-events: auto;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      outline: none;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .reel-audio-pill:hover {
+      background: rgba(0, 0, 0, 0.75);
+      border-color: rgba(255, 255, 255, 0.55);
+      transform: scale(1.08);
+    }
+
+    .reel-audio-pill .audio-icon {
+      display: none;
+    }
+
+    .reel-audio-pill.sound-muted .icon-vol-mute {
+      display: block;
+    }
+
+    .reel-audio-pill.sound-active .icon-vol-on {
+      display: block;
+    }
+
+    .reel-title-divider {
+      width: 100%;
+      height: 1.5px;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.18) 75%, transparent 100%);
+      margin-top: 2px;
+    }
+
+    /* Center Audio & Play/Pause Controller */
+    .reel-center-ctrl {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.32) !important;
+      outline: none !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+      color: rgba(255, 255, 255, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 5;
+      transition: opacity 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  background 0.2s ease,
+                  border-color 0.2s ease;
+      pointer-events: auto;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .reel-center-ctrl:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.6) !important;
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    .reel-center-ctrl.fade-hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0.75);
+    }
+
+    .reel-center-ctrl .center-icon {
+      display: none;
+    }
+
+    .reel-center-ctrl.state-mute .icon-mute {
+      display: block;
+    }
+
+    .reel-center-ctrl.state-paused .icon-pause {
+      display: block;
+    }
+
+    /* Desktop Floating Up / Down Snap Navigation Buttons (Insta/Shorts style) */
+    .reels-nav-controls {
+      position: absolute;
+      right: calc(50% - 280px);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 20;
+    }
+
+    @media (max-width: 900px) {
+      .reels-nav-controls {
+        display: none !important;
+      }
+    }
+
+    .reel-nav-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      color: #111111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      outline: none;
+    }
+
+    .reel-nav-btn:hover {
+      background: #000000;
+      color: #ffffff;
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+    }
+
+    /* Empty state styling */
+    .reels-empty-card {
+      width: 100%;
+      max-width: 410px;
+      height: 100%;
+      aspect-ratio: 9 / 16;
+      border-radius: 16px;
+      background: #111115;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .empty-inner {
+      text-align: center;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .empty-badge {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+    }
+
+    .empty-title {
+      font-family: var(--font-heading, serif);
+      font-size: 1.4rem;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+
+    .empty-desc {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+      max-width: 280px;
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      .reels-page-container {
+        padding: 0;
+        height: calc(100dvh - 60px);
+      }
+      .reels-feed {
+        padding: 0;
+      }
+      .atelier-reel-card {
+        border-radius: 0;
+        max-width: 100%;
+        height: 100%;
+      }
+      .reel-top-bar {
+        padding: 12px 14px 22px 14px;
+      }
+      .reel-top-title {
+        font-size: 0.88rem;
+        letter-spacing: 1.4px;
+      }
+    }
+  </style>
+</BaseLayout>

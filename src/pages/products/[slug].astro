@@ -4,23 +4,120 @@ import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const products = await getCollection('products');
+  const productsMap = new Map(products.map((p) => [p.id, p]));
+
   return products.map((entry) => {
     const currentCategory = (entry.data.category || '').toLowerCase();
-    const similar = products
-      .filter((p) => p.id !== entry.id && (p.data.category || '').toLowerCase() === currentCategory)
-      .slice(0, 8);
-    const ymal = products
-      .filter((p) => p.id !== entry.id && (p.data.category || '').toLowerCase() !== currentCategory)
-      .slice(0, 8);
+    const isEntryCombo = currentCategory === 'curated sets' || currentCategory === 'curated set' || currentCategory === 'dress set' || (entry.data.combo_products && entry.data.combo_products.length > 0) || (entry.data.combo_items && entry.data.combo_items.length > 0);
+
+    let similar = [];
+    let ymal = [];
+
+    if (isEntryCombo) {
+      // ONLY other combo / curated set products!
+      similar = products
+        .filter((p) => {
+          const c = (p.data.category || '').toLowerCase();
+          return p.id !== entry.id && (c === 'curated sets' || c === 'curated set' || c === 'dress set' || (p.data.combo_products && p.data.combo_products.length > 0));
+        })
+        .slice(0, 10);
+      ymal = [];
+    } else {
+      similar = products
+        .filter((p) => {
+          const c = (p.data.category || '').toLowerCase();
+          return p.id !== entry.id && c === currentCategory && c !== 'dress set' && c !== 'curated sets' && c !== 'curated set';
+        })
+        .slice(0, 8);
+      ymal = products
+        .filter((p) => {
+          const c = (p.data.category || '').toLowerCase();
+          return p.id !== entry.id && c !== currentCategory && c !== 'dress set' && c !== 'curated sets' && c !== 'curated set';
+        })
+        .slice(0, 8);
+    }
+
+    // Resolve combo actual products if present
+    const comboProductIds = entry.data.combo_products || [];
+    let resolvedComboItems = [];
+
+    if (comboProductIds.length > 0) {
+      resolvedComboItems = comboProductIds
+        .map((pid) => productsMap.get(pid))
+        .filter(Boolean)
+        .map((p) => ({
+          id: p.id,
+          title: p.data.title,
+          image: p.data.image || '/icons/icon-512x512.png',
+          price: p.data.price,
+          offer_price: p.data.offer_price,
+          final_price: p.data.offer_price || p.data.price,
+          category: p.data.category || 'Matching Piece',
+          description: p.data.description || '',
+          fabric: p.data.fabric || '',
+          size: p.data.size || '',
+          colour: p.data.colour || '',
+          work: p.data.work || '',
+          pattern: p.data.pattern || '',
+          ideal_for: p.data.ideal_for || '',
+          delivery_charges: p.data.delivery_charges || 'Free',
+          return_policy: p.data.return_policy || 'NO',
+          url: `/products/${p.id}/`
+        }));
+    } else if (entry.data.combo_items && entry.data.combo_items.length > 0) {
+      resolvedComboItems = entry.data.combo_items.map((ci) => {
+        const matched = products.find((p) => p.data.title && p.data.title.toLowerCase().trim() === (ci.name || '').toLowerCase().trim());
+        if (matched) {
+          return {
+            id: matched.id,
+            title: matched.data.title,
+            image: matched.data.image || ci.image,
+            price: matched.data.price,
+            offer_price: matched.data.offer_price,
+            final_price: matched.data.offer_price || matched.data.price,
+            category: matched.data.category || 'Matching Piece',
+            description: matched.data.description || '',
+            fabric: matched.data.fabric || '',
+            size: matched.data.size || '',
+            colour: matched.data.colour || '',
+            work: matched.data.work || '',
+            pattern: matched.data.pattern || '',
+            ideal_for: matched.data.ideal_for || '',
+            delivery_charges: matched.data.delivery_charges || 'Free',
+            return_policy: matched.data.return_policy || 'NO',
+            url: `/products/${matched.id}/`
+          };
+        }
+        return {
+          id: '',
+          title: ci.name,
+          image: ci.image,
+          price: entry.data.offer_price || entry.data.price,
+          offer_price: null,
+          final_price: entry.data.offer_price || entry.data.price,
+          category: 'Matching Piece',
+          description: `Coordinated component matching ${entry.data.title}.`,
+          fabric: entry.data.fabric || '',
+          size: 'Standard',
+          colour: entry.data.colour || '',
+          work: entry.data.work || '',
+          pattern: entry.data.pattern || '',
+          ideal_for: entry.data.ideal_for || '',
+          delivery_charges: 'Free',
+          return_policy: 'NO',
+          url: ''
+        };
+      });
+    }
 
     return {
       params: { slug: entry.id },
-      props: { product: entry, similar, ymal },
+      props: { product: entry, similar, ymal, resolvedComboItems },
     };
   });
 }
 
-const { product, similar = [], ymal = [] } = Astro.props;
+const { product, similar = [], ymal = [], resolvedComboItems = [] } = Astro.props;
 const {
   title,
   price,
@@ -35,185 +132,2187 @@ const {
   ideal_for,
   work,
   delivery_charges = "Free",
-  return_policy = "No"
+  return_policy = "No",
+  reel_video,
+  product_code
 } = product.data;
 
 const finalPrice = offer_price || price;
 const discountPercent = offer_price && price ? Math.round(((Number(price) - Number(offer_price)) * 100) / Number(price)) : null;
 
-const wappOrderText = `Hello ALiF, I want to purchase '${title}' (Price: ₹${finalPrice}).`;
+const itemCode = product_code || `ALIF-${product.id.replace(/[^a-zA-Z0-9]/g, '-').toUpperCase()}`;
+
+const wappOrderText = `Hello alif., I want to purchase '${title}' [Code: ${itemCode}] (Price: ₹${finalPrice}).`;
 const wappOrderLink = `https://wa.me/7250470009?text=${encodeURIComponent(wappOrderText)}`;
+
+const catLower = (category || '').toLowerCase();
+const isCombo = (catLower === 'curated sets' || catLower === 'curated set' || catLower === 'dress set' || (resolvedComboItems && resolvedComboItems.length > 0));
+
+const comboPayload = isCombo ? {
+  defaultSet: {
+    id: product.id,
+    title: title,
+    price: price,
+    offer_price: offer_price,
+    final_price: finalPrice,
+    image: image || '/icons/icon-512x512.png',
+    videoSrc: reel_video || null,
+    description: description || '',
+    category: category || 'Curated Sets',
+    wappOrderLink: wappOrderLink,
+    specs: {
+      product_code: itemCode,
+      size: size || '',
+      colour: colour || '',
+      fabric: fabric || '',
+      pattern: pattern || '',
+      ideal_for: ideal_for || '',
+      work: work || '',
+      delivery_charges: delivery_charges || 'Free',
+      return_policy: return_policy || 'No'
+    }
+  },
+  items: resolvedComboItems.map((item) => ({
+    id: item.id,
+    title: item.title,
+    price: item.price,
+    offer_price: item.offer_price,
+    final_price: item.final_price,
+    image: item.image,
+    category: item.category,
+    description: item.description,
+    url: item.url,
+    wappOrderLink: `https://wa.me/7250470009?text=${encodeURIComponent(`Hello alif., I want to purchase '${item.title}' (Price: ₹${item.final_price}).`)}`,
+    specs: {
+      size: item.size || '',
+      colour: item.colour || '',
+      fabric: item.fabric || '',
+      pattern: item.pattern || '',
+      ideal_for: item.ideal_for || '',
+      work: item.work || '',
+      delivery_charges: item.delivery_charges || 'Free',
+      return_policy: item.return_policy || 'NO'
+    }
+  }))
+} : null;
 ---
 
 <BaseLayout 
   title={title} 
-  description={description || `${title} available at ALiF Ladies Tailor, Sahibganj.`}
+  description={description || `${title} available at alif. ladies tailor, Sahibganj.`}
   image={image}
 >
   <div class="container section">
     <div class="product-detail-grid">
 
+      <!-- Left Column: Main Image Card & Combo Cards Directly Under It -->
       <div class="product-detail-image">
-        <div class="swapper-container product-swapper" style="min-height: unset; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 10px; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.08), 0.3em 0.3em 1em rgba(0,0,0,0.18); background: white;">
-          <img src={image || '/icons/icon-512x512.png'} alt={title} style="width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 10px;" />
+        <div class="swapper-container product-swapper" id="mainMediaContainer">
+          {isCombo ? (
+            <>
+              {reel_video ? (
+                <video 
+                  id="comboMainVideo"
+                  class="active"
+                  src={reel_video} 
+                  poster={image}
+                  autoplay 
+                  loop 
+                  muted 
+                  playsinline 
+                  webkit-playsinline
+                ></video>
+              ) : null}
+              <img 
+                id="comboMainImage"
+                class={reel_video ? "hidden" : "active"}
+                src={image || '/icons/icon-512x512.png'} 
+                alt={title} 
+              />
+              <button 
+                id="resetToSetBtn" 
+                type="button" 
+                class="reset-to-set-pill" 
+                style="display: none;"
+                title="Back to Full Curated Look"
+              >
+                <span>↺</span> Back to Full Set Look
+              </button>
+            </>
+          ) : (
+            <img class="active" src={image || '/icons/icon-512x512.png'} alt={title} />
+          )}
         </div>
-      </div>
 
-      <div class="product-detail-info">
-        <h1 class="product-detail-title">{title}</h1>
+        <!-- Combo Cards Tray: Directly Under The Image Card (Zara Complete The Look) -->
+        {isCombo && resolvedComboItems && resolvedComboItems.length > 0 && (
+          <div class="combo-interactive-section">
+            <div class="combo-interactive-header">
+              <div class="combo-header-left">
+                <span class="combo-interactive-label">COMPLETE THE LOOK</span>
+                <span class="combo-items-count">({resolvedComboItems.length + 1} PIECES)</span>
+              </div>
+              <span class="combo-interactive-hint">TAP TO PREVIEW</span>
+            </div>
+            
+            <div class="combo-horizontal-scroll-container">
+              <!-- Full Outfit Look Card -->
+              <button 
+                type="button" 
+                class="combo-interactive-card active" 
+                data-item-type="full-set"
+                id="card-full-set"
+              >
+                <div class="combo-card-thumb">
+                  <img src={image || '/icons/icon-512x512.png'} alt="Full Look" />
+                </div>
+                <div class="combo-card-body">
+                  <span class="combo-card-category">Complete Set</span>
+                  <h4 class="combo-card-heading">Full Ensemble</h4>
+                  <span class="combo-card-cost">₹{finalPrice}</span>
+                </div>
+              </button>
 
-        {offer_price ? (
-          <div class="product-offer-container">
-            <div class="product-detail-price has-offer">
-              <del class="original-price">₹{price}</del> 
-              <span class="offer-price">₹{offer_price}</span>
-              {discountPercent && (
-                <span class="discount-badge-large">-{discountPercent}% OFF</span>
-              )}
+              <!-- Single Product Cards -->
+              {resolvedComboItems.map((ci, idx) => (
+                <button 
+                  type="button" 
+                  class="combo-interactive-card" 
+                  data-item-type="single"
+                  data-item-index={idx}
+                  id={`card-item-${idx}`}
+                >
+                  <div class="combo-card-thumb">
+                    <img src={ci.image} alt={ci.title} loading="lazy" />
+                  </div>
+                  <div class="combo-card-body">
+                    <span class="combo-card-category">{ci.category || 'Piece'}</span>
+                    <h4 class="combo-card-heading" title={ci.title}>{ci.title}</h4>
+                    <span class="combo-card-cost">₹{ci.final_price}</span>
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
-        ) : (
-          <div class="product-detail-price">₹{price}</div>
         )}
+      </div>
 
-        {category && (
-          <span class="product-detail-category" style="display:inline-block; margin-top:8px; text-transform:uppercase; color:#777; font-size:0.85rem; letter-spacing:1px;">
-            {category}
+      <!-- Right Column: Product Details & Clean Main Action Buttons -->
+      <div class="product-detail-info">
+        <div class="product-header-block">
+          <span id="previewModeBadge" class="preview-mode-pill" style="display: none;">
+            • Inspecting Piece
           </span>
-        )}
+          <div class="product-code-badge" id="displayProductCodeBadge" style="font-family: var(--font-body); font-size: 0.75rem; color: #777; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; font-weight: 500;">
+            REF: <span id="displayProductCodeText">{itemCode}</span>
+          </div>
+          <h1 class="product-detail-title" id="displayTitle">{title}</h1>
+        </div>
 
-        <div class="product-delivery-promo" style="margin-top: 15px; font-size: 0.85rem; color: #555;">
+        <!-- Dynamic Price Display (Zara Minimalist Haute Couture) -->
+        <div id="priceSectionWrapper" class="price-section-wrapper">
+          {offer_price ? (
+            <div class="product-detail-price has-offer">
+              <span class="offer-price" id="displayOfferPrice">₹{offer_price}</span>
+              <del class="original-price" id="displayOriginalPrice">₹{price}</del> 
+            </div>
+          ) : (
+            <div class="product-detail-price" id="displayStandardPrice">
+              <span class="standard-price">₹{price}</span>
+            </div>
+          )}
+        </div>
+
+        <div class="product-delivery-promo">
           Free delivery on orders above ₹199 (within Sahibganj)
         </div>
 
-        <div class="product-detail-actions" style="margin-top: 25px; display: flex; flex-direction: column; gap: 12px;">
+        <!-- Clean, Standard Action Buttons (No clunky full text) -->
+        <div class="product-detail-actions" id="productDetailActions" style="margin-top: 25px; display: flex; flex-direction: column; gap: 12px;">
           <button 
+            type="button"
             class="btn-cart" 
             id="addToCartBtn"
             data-product-id={product.id}
             data-title={title}
             data-price={finalPrice}
             data-image={image}
+            data-code={itemCode}
             style="width: 100%; padding: 16px 0; background: #000; color: #fff; border: 1px solid #000; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease;"
           >
             Add to Cart
           </button>
 
-          <a 
-            href={wappOrderLink}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button 
+            type="button"
             class="btn-buy"
-            style="display: block; width: 100%; padding: 16px 0; background: #fff; color: #000; border: 1px solid #000; text-align: center; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease;"
+            id="buyWhatsAppBtn"
+            data-wapp-url={wappOrderLink}
+            style="display: block; width: 100%; padding: 16px 0; background: #fff; color: #000; border: 1px solid #000; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease;"
           >
             Buy Now on WhatsApp
-          </a>
+          </button>
         </div>
       </div>
 
     </div>
   </div>
 
-  <div class="product-accordion-container" style="margin-top: 40px;">
+  <div class="product-accordion-container">
     {description && (
       <details class="accordion-item" open>
         <summary class="accordion-summary">
-          <h3 class="accordion-heading">Description</h3>
-          <span class="accordion-caret">^</span>
+          <h3 class="accordion-heading">Description & Atelier Notes</h3>
+          <span class="accordion-toggle-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </span>
         </summary>
         <div class="accordion-content">
-          <p class="accordion-description-text" style="padding: 15px 0; line-height: 1.6; color: #555;">{description}</p>
+          <p class="accordion-description-text" id="displayDescriptionText">{description}</p>
         </div>
       </details>
     )}
 
     <details class="accordion-item" open>
       <summary class="accordion-summary">
-        <h3 class="accordion-heading">Product Information</h3>
-        <span class="accordion-caret">^</span>
+        <h3 class="accordion-heading">Composition & Specifications</h3>
+        <span class="accordion-toggle-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </span>
       </summary>
-      <div class="accordion-content" style="padding: 15px 0;">
-        <div class="spec-row-wrapper" style="display: flex; flex-direction: column; gap: 8px;">
-          {size && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Size</span><span style="font-weight:500;">{size}</span></div>}
-          {colour && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Colour</span><span style="font-weight:500;">{colour}</span></div>}
-          {fabric && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Fabric</span><span style="font-weight:500;">{fabric}</span></div>}
-          {pattern && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Pattern</span><span style="font-weight:500;">{pattern}</span></div>}
-          {ideal_for && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Ideal For</span><span style="font-weight:500;">{ideal_for}</span></div>}
-          {work && <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Work</span><span style="font-weight:500;">{work}</span></div>}
-          <div class="spec-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 6px 0;"><span style="color:#777;">Delivery Charges</span><span style="font-weight:500;">{delivery_charges}</span></div>
-          <div class="spec-row" style="display: flex; justify-content: space-between; padding: 6px 0;"><span style="color:#777;">Return Policy</span><span style="font-weight:500;">{return_policy}</span></div>
+      <div class="accordion-content">
+        <div class="spec-row-wrapper" id="displaySpecsWrapper">
+          <div class="spec-row"><span class="spec-label">Product Code</span><span class="spec-value" id="specProductCode">{itemCode}</span></div>
+          {size && <div class="spec-row"><span class="spec-label">Size / Cut</span><span class="spec-value">{size}</span></div>}
+          {colour && <div class="spec-row"><span class="spec-label">Colour</span><span class="spec-value">{colour}</span></div>}
+          {fabric && <div class="spec-row"><span class="spec-label">Fabric / Material</span><span class="spec-value">{fabric}</span></div>}
+          {pattern && <div class="spec-row"><span class="spec-label">Pattern</span><span class="spec-value">{pattern}</span></div>}
+          {ideal_for && <div class="spec-row"><span class="spec-label">Ideal For</span><span class="spec-value">{ideal_for}</span></div>}
+          {work && <div class="spec-row"><span class="spec-label">Craft & Work</span><span class="spec-value">{work}</span></div>}
+          <div class="spec-row"><span class="spec-label">Delivery Charges</span><span class="spec-value">{delivery_charges}</span></div>
+          <div class="spec-row"><span class="spec-label">Return Policy</span><span class="spec-value">{return_policy}</span></div>
         </div>
       </div>
     </details>
   </div>
 
   {similar && similar.length > 0 && (
-    <div class="section" style="padding: 30px 20px; background: #fcfcfc; border-top: 1px solid #eee;" id="similar-items-section">
-      <h3 style="text-align: center; margin-bottom: 20px; font-family: var(--font-heading); letter-spacing: 1.5px; font-size: 1.1rem; text-transform: uppercase;">Similar Items</h3>
-      <div id="similar-items-container" style="display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
-        {similar.map((item) => (
-          <a href={`/products/${item.id}/`} style="text-decoration: none; color: #000; min-width: 145px; max-width: 145px; flex-shrink: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.08), 0.3em 0.3em 1em rgba(0,0,0,0.18); display: flex; flex-direction: column; margin: 10px 4px 15px 4px;">
-            <div style="aspect-ratio: 4 / 5; overflow: hidden; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-              <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: center;" loading="lazy" />
-            </div>
-            <div style="padding: 10px 8px; text-align: center;">
-              <p style="margin: 0; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500;">{item.data.title}</p>
-              <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; font-weight: 600;">₹{item.data.offer_price || item.data.price}</p>
-            </div>
-          </a>
-        ))}
+    <section class="luxury-recommendations-section" id="similar-items-section">
+      <div class="luxury-section-header">
+        <h3 class="luxury-section-title">
+          {isCombo ? 'Similar Combo Sets' : 'Similar Items'}
+        </h3>
+        <span class="luxury-section-divider"></span>
       </div>
-    </div>
+
+      <div class="luxury-carousel-track" id="similar-items-container">
+        {similar.map((item) => {
+          const cLower = (item.data.category || '').toLowerCase();
+          const itemIsCombo = cLower === 'curated sets' || cLower === 'curated set' || cLower === 'dress set' || (item.data.combo_products && item.data.combo_products.length > 0) || (item.data.combo_items && item.data.combo_items.length > 0);
+          const itemFinalPrice = item.data.offer_price || item.data.price;
+          return (
+            <a href={`/products/${item.id}/`} class="luxury-product-card">
+              <div class="luxury-card-media">
+                {itemIsCombo && item.data.reel_video ? (
+                  <>
+                    <video 
+                      src={item.data.reel_video} 
+                      poster={item.data.image}
+                      autoplay 
+                      loop 
+                      muted 
+                      playsinline 
+                      webkit-playsinline
+                    ></video>
+                    <span class="luxury-card-combo-badge">Full Set</span>
+                  </>
+                ) : (
+                  <>
+                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} loading="lazy" />
+                    {itemIsCombo && <span class="luxury-card-combo-badge">Full Set</span>}
+                  </>
+                )}
+              </div>
+              <div class="luxury-card-body">
+                <span class="luxury-card-category">{item.data.category || 'Atelier'}</span>
+                <h4 class="luxury-card-title" title={item.data.title}>{item.data.title}</h4>
+                <div class="luxury-card-pricing">
+                  <span class="luxury-price-current">₹{itemFinalPrice}</span>
+                  {item.data.offer_price && item.data.price && (
+                    <del class="luxury-price-original">₹{item.data.price}</del>
+                  )}
+                </div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
   )}
 
   {ymal && ymal.length > 0 && (
-    <div class="section" style="padding: 30px 20px; background: #fff; border-top: 1px solid #eee;" id="ymal-section">
-      <h3 style="text-align: center; margin-bottom: 20px; font-family: var(--font-heading); letter-spacing: 1.5px; font-size: 1.1rem; text-transform: uppercase;">You May Also Like</h3>
-      <div id="ymal-container" style="display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
-        {ymal.map((item) => (
-          <a href={`/products/${item.id}/`} style="text-decoration: none; color: #000; min-width: 145px; max-width: 145px; flex-shrink: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: inset 0 -3em 3em rgba(0,0,0,0.08), 0.3em 0.3em 1em rgba(0,0,0,0.18); display: flex; flex-direction: column; margin: 10px 4px 15px 4px;">
-            <div style="aspect-ratio: 4 / 5; overflow: hidden; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-              <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} style="width: 100%; height: 100%; object-fit: cover; object-position: center;" loading="lazy" />
-            </div>
-            <div style="padding: 10px 8px; text-align: center;">
-              <p style="margin: 0; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500;">{item.data.title}</p>
-              <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; font-weight: 600;">₹{item.data.offer_price || item.data.price}</p>
-            </div>
-          </a>
-        ))}
+    <section class="luxury-recommendations-section ymal-variant" id="ymal-section">
+      <div class="luxury-section-header">
+        <h3 class="luxury-section-title">You May Also Like</h3>
+        <span class="luxury-section-divider"></span>
+      </div>
+
+      <div class="luxury-carousel-track" id="ymal-container">
+        {ymal.map((item) => {
+          const itemFinalPrice = item.data.offer_price || item.data.price;
+          return (
+            <a href={`/products/${item.id}/`} class="luxury-product-card">
+              <div class="luxury-card-media">
+                <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} loading="lazy" />
+              </div>
+              <div class="luxury-card-body">
+                <span class="luxury-card-category">{item.data.category || 'Atelier'}</span>
+                <h4 class="luxury-card-title" title={item.data.title}>{item.data.title}</h4>
+                <div class="luxury-card-pricing">
+                  <span class="luxury-price-current">₹{itemFinalPrice}</span>
+                  {item.data.offer_price && item.data.price && (
+                    <del class="luxury-price-original">₹{item.data.price}</del>
+                  )}
+                </div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  )}
+
+  <!-- Combo Purchase Selection Bottom Sheet Modal -->
+  {isCombo && (
+    <div id="comboSelectionModal" class="combo-modal-overlay" style="display: none;">
+      <div class="combo-modal-sheet">
+        <div class="combo-modal-drag-handle" aria-hidden="true"></div>
+
+        <div class="combo-modal-header">
+          <div>
+            <h3 class="combo-modal-title">Select Items to Purchase</h3>
+            <p class="combo-modal-subtitle">Choose the complete bundle or customize specific pieces</p>
+          </div>
+          <button type="button" id="closeComboModalBtn" class="combo-modal-close" aria-label="Close">✕</button>
+        </div>
+
+        <div class="combo-modal-body">
+          <!-- Option A: Complete Set Bundle -->
+          <div class="bundle-option-card" id="bundleOptionCard">
+            <label class="bundle-option-label">
+              <input type="radio" name="combo_purchase_type" id="radioCompleteSet" value="complete-set" checked />
+              <div class="bundle-option-content">
+                <div class="bundle-badge-row">
+                  <span class="bundle-badge">★ COMPLETE SET (BEST VALUE)</span>
+                </div>
+                <div class="bundle-title-row">
+                  <span class="bundle-name">{title}</span>
+                  <span class="bundle-price">₹{finalPrice}</span>
+                </div>
+                <p class="bundle-desc">Includes all {resolvedComboItems.length} matching pieces curated together.</p>
+              </div>
+            </label>
+          </div>
+
+          <div class="combo-modal-divider">
+            <span>OR PICK SPECIFIC PIECES</span>
+          </div>
+
+          <!-- Option B: Individual Pieces Checklist -->
+          <div class="custom-pieces-list" id="customPiecesList">
+            {resolvedComboItems.map((ci, idx) => (
+              <label class="custom-piece-item" id={`pieceItemRow-${idx}`}>
+                <input 
+                  type="checkbox" 
+                  class="piece-checkbox" 
+                  data-index={idx}
+                  data-id={ci.id}
+                  data-title={ci.title}
+                  data-price={ci.final_price}
+                  data-image={ci.image}
+                  data-url={ci.url}
+                />
+                <div class="piece-thumb">
+                  <img src={ci.image} alt={ci.title} loading="lazy" />
+                </div>
+                <div class="piece-info">
+                  <span class="piece-cat">{ci.category || 'PIECE'}</span>
+                  <span class="piece-title">{ci.title}</span>
+                </div>
+                <div class="piece-price">
+                  ₹{ci.final_price}
+                </div>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <!-- Modal Footer with Real-Time Total & Action -->
+        <div class="combo-modal-footer">
+          <div class="combo-modal-total-row">
+            <span class="total-label" id="modalSummaryLabel">Complete Set Selected</span>
+            <span class="total-value" id="modalTotalPrice">₹{finalPrice}</span>
+          </div>
+
+          <button type="button" id="modalConfirmBtn" class="combo-modal-confirm-btn">
+            Confirm & Proceed
+          </button>
+        </div>
       </div>
     </div>
   )}
 
+  <!-- Sticky Mobile Quick-Buy Bar (Luxury Fashion Standard) -->
+  <aside class="sticky-mobile-buy-bar visible" id="stickyMobileBuyBar" aria-label="Quick Purchase Bar">
+    <div class="sticky-bar-inner">
+      <div class="sticky-bar-product">
+        <img 
+          id="stickyThumb" 
+          src={image || '/icons/icon-512x512.png'} 
+          alt={title} 
+          class="sticky-thumb-img" 
+        />
+        <div class="sticky-product-meta">
+          <span class="sticky-product-title" id="stickyTitle">{title}</span>
+          <span class="sticky-product-price" id="stickyPrice">₹{finalPrice}</span>
+        </div>
+      </div>
+
+      <div class="sticky-bar-actions">
+        <button 
+          type="button" 
+          class="sticky-btn-buy" 
+          id="stickyBuyNowBtn"
+          aria-label="Buy Now"
+        >
+          Buy Now
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  {comboPayload && (
+    <script id="combo-data" type="application/json" set:html={JSON.stringify(comboPayload)} />
+  )}
+
   <script is:inline>
-    // Add to cart local storage handler
-    const addBtn = document.getElementById('addToCartBtn');
-    if (addBtn) {
-      addBtn.addEventListener('click', () => {
-        const id = addBtn.getAttribute('data-product-id');
-        const title = addBtn.getAttribute('data-title');
-        const price = Number(addBtn.getAttribute('data-price'));
-        const image = addBtn.getAttribute('data-image');
+    // Combo Data & Switcher Logic
+    const comboDataEl = document.getElementById('combo-data');
+    if (comboDataEl) {
+      try {
+        const { defaultSet, items } = JSON.parse(comboDataEl.textContent);
 
-        let cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
-        const existing = cart.find(item => item.id === id);
-        if (existing) {
-          existing.quantity = (existing.quantity || 1) + 1;
-        } else {
-          cart.push({ id, title, price, image, quantity: 1 });
+        const mainVideo = document.getElementById('comboMainVideo');
+        const mainImage = document.getElementById('comboMainImage');
+        const resetBtn = document.getElementById('resetToSetBtn');
+        const displayTitle = document.getElementById('displayTitle');
+        const previewBadge = document.getElementById('previewModeBadge');
+        const priceWrapper = document.getElementById('priceSectionWrapper');
+        const addCartBtn = document.getElementById('addToCartBtn');
+        const buyWappBtn = document.getElementById('buyWhatsAppBtn');
+        const descText = document.getElementById('displayDescriptionText');
+        const specsWrapper = document.getElementById('displaySpecsWrapper');
+
+        // Modal Elements
+        const modal = document.getElementById('comboSelectionModal');
+        const closeModalBtn = document.getElementById('closeComboModalBtn');
+        const radioCompleteSet = document.getElementById('radioCompleteSet');
+        const bundleOptionCard = document.getElementById('bundleOptionCard');
+        const pieceCheckboxes = document.querySelectorAll('.piece-checkbox');
+        const modalSummaryLabel = document.getElementById('modalSummaryLabel');
+        const modalTotalPrice = document.getElementById('modalTotalPrice');
+        const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+
+        let currentActiveItemIndex = -1; // -1 means Full Set, 0..N means single item
+        let currentModalMode = 'cart'; // 'cart' or 'whatsapp'
+
+        function renderPrice(price, offerPrice) {
+          if (offerPrice && Number(offerPrice) < Number(price)) {
+            return `
+              <div class="product-detail-price has-offer">
+                <span class="offer-price">₹${offerPrice}</span>
+                <del class="original-price">₹${price}</del> 
+              </div>
+            `;
+          }
+          return `<div class="product-detail-price"><span class="standard-price">₹${price || offerPrice}</span></div>`;
         }
-        localStorage.setItem('alif_cart', JSON.stringify(cart));
 
-        // Update badges
-        const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-        const b1 = document.getElementById('cartCount');
-        const b2 = document.getElementById('cartCountMobile');
-        if (b1) b1.innerText = count;
-        if (b2) b2.innerText = count;
+        function renderSpecs(specs) {
+          if (!specsWrapper || !specs) return;
+          const fields = [
+            { label: 'Product Code', val: specs.product_code },
+            { label: 'Size / Cut', val: specs.size },
+            { label: 'Colour', val: specs.colour },
+            { label: 'Fabric / Material', val: specs.fabric },
+            { label: 'Pattern', val: specs.pattern },
+            { label: 'Ideal For', val: specs.ideal_for },
+            { label: 'Craft & Work', val: specs.work },
+            { label: 'Delivery Charges', val: specs.delivery_charges },
+            { label: 'Return Policy', val: specs.return_policy },
+          ];
+          let html = '';
+          fields.forEach(f => {
+            if (f.val) {
+              html += `<div class="spec-row"><span class="spec-label">${f.label}</span><span class="spec-value">${f.val}</span></div>`;
+            }
+          });
+          specsWrapper.innerHTML = html;
+        }
 
-        addBtn.innerText = 'Added to Cart ✓';
-        setTimeout(() => { addBtn.innerText = 'Add to Cart'; }, 2000);
-      });
+        function updateStickyBarData(data) {
+          const stickyThumb = document.getElementById('stickyThumb');
+          const stickyTitle = document.getElementById('stickyTitle');
+          const stickyPrice = document.getElementById('stickyPrice');
+
+          if (stickyThumb && data.image) {
+            stickyThumb.src = data.image;
+            stickyThumb.alt = data.title;
+          }
+          if (stickyTitle && data.title) {
+            stickyTitle.innerText = data.title;
+          }
+          if (stickyPrice && data.final_price) {
+            stickyPrice.innerText = `₹${data.final_price}`;
+          }
+        }
+
+        function switchToFullSet() {
+          currentActiveItemIndex = -1;
+
+          if (mainVideo) {
+            mainVideo.classList.remove('hidden');
+            mainVideo.classList.add('active');
+            mainVideo.play().catch(() => {});
+          }
+          if (mainImage) {
+            mainImage.classList.remove('active');
+            mainImage.classList.add('hidden');
+          }
+          if (resetBtn) resetBtn.style.display = 'none';
+
+          if (displayTitle) displayTitle.innerText = defaultSet.title;
+          if (previewBadge) previewBadge.style.display = 'none';
+
+          if (priceWrapper) priceWrapper.innerHTML = renderPrice(defaultSet.price, defaultSet.offer_price);
+
+          // Keep button text clean & minimal
+          if (addCartBtn) addCartBtn.innerText = 'Add to Cart';
+          if (buyWappBtn) buyWappBtn.innerText = 'Buy Now on WhatsApp';
+
+          if (descText) descText.innerText = defaultSet.description;
+          renderSpecs(defaultSet.specs);
+
+          // Sync Phase 4 Sticky Mobile Quick-Buy Bar
+          updateStickyBarData({
+            image: defaultSet.image,
+            title: defaultSet.title,
+            final_price: defaultSet.final_price,
+            wappOrderLink: defaultSet.wappOrderLink
+          });
+
+          document.querySelectorAll('.combo-interactive-card').forEach(c => c.classList.remove('active'));
+          const fullSetCard = document.getElementById('card-full-set');
+          if (fullSetCard) fullSetCard.classList.add('active');
+        }
+
+        function switchToItem(item, idx) {
+          currentActiveItemIndex = idx;
+
+          if (mainVideo) {
+            mainVideo.pause();
+            mainVideo.classList.remove('active');
+            mainVideo.classList.add('hidden');
+          }
+          if (mainImage) {
+            mainImage.src = item.image;
+            mainImage.alt = item.title;
+            mainImage.classList.remove('hidden');
+            mainImage.classList.add('active');
+          }
+          if (resetBtn) resetBtn.style.display = 'flex';
+
+          if (displayTitle) displayTitle.innerText = item.title;
+          if (previewBadge) {
+            previewBadge.style.display = 'inline-block';
+            previewBadge.innerText = `• Inspecting Piece (${idx + 1}/${items.length}) — ${item.category || 'Piece'}`;
+          }
+
+          if (priceWrapper) priceWrapper.innerHTML = renderPrice(item.price, item.offer_price);
+
+          // Keep button text clean & minimal as requested
+          if (addCartBtn) addCartBtn.innerText = 'Add to Cart';
+          if (buyWappBtn) buyWappBtn.innerText = 'Buy Now on WhatsApp';
+
+          if (descText) descText.innerText = item.description || defaultSet.description;
+          renderSpecs(item.specs);
+
+          // Sync Phase 4 Sticky Mobile Quick-Buy Bar
+          updateStickyBarData({
+            image: item.image,
+            title: item.title,
+            final_price: item.final_price,
+            wappOrderLink: item.wappOrderLink
+          });
+
+          document.querySelectorAll('.combo-interactive-card').forEach(c => c.classList.remove('active'));
+          const targetCard = document.getElementById(`card-item-${idx}`);
+          if (targetCard) targetCard.classList.add('active');
+        }
+
+        // ==========================================
+        // Modal State & Interaction
+        // ==========================================
+        function updateModalCalculation() {
+          if (radioCompleteSet && radioCompleteSet.checked) {
+            if (modalSummaryLabel) modalSummaryLabel.innerText = 'Complete Set Selected';
+            if (modalTotalPrice) modalTotalPrice.innerText = `₹${defaultSet.final_price}`;
+            if (modalConfirmBtn) {
+              modalConfirmBtn.disabled = false;
+              modalConfirmBtn.innerText = currentModalMode === 'cart' ? `Add Complete Set (₹${defaultSet.final_price}) to Cart` : `Buy Complete Set (₹${defaultSet.final_price}) on WhatsApp`;
+            }
+            return;
+          }
+
+          let sum = 0;
+          let count = 0;
+          pieceCheckboxes.forEach((cb) => {
+            const row = cb.closest('.custom-piece-item');
+            if (cb.checked) {
+              sum += Number(cb.dataset.price || 0);
+              count++;
+              if (row) row.classList.add('selected');
+            } else {
+              if (row) row.classList.remove('selected');
+            }
+          });
+
+          if (count === 0) {
+            if (modalSummaryLabel) modalSummaryLabel.innerText = 'No pieces selected';
+            if (modalTotalPrice) modalTotalPrice.innerText = '₹0';
+            if (modalConfirmBtn) {
+              modalConfirmBtn.disabled = true;
+              modalConfirmBtn.innerText = 'Select At Least 1 Item';
+            }
+          } else {
+            if (modalSummaryLabel) modalSummaryLabel.innerText = `${count} piece${count > 1 ? 's' : ''} selected`;
+            if (modalTotalPrice) modalTotalPrice.innerText = `₹${sum}`;
+            if (modalConfirmBtn) {
+              modalConfirmBtn.disabled = false;
+              modalConfirmBtn.innerText = currentModalMode === 'cart' ? `Add ${count} Item${count > 1 ? 's' : ''} (₹${sum}) to Cart` : `Order ${count} Item${count > 1 ? 's' : ''} (₹${sum}) on WhatsApp`;
+            }
+          }
+        }
+
+        function openModal(mode) {
+          currentModalMode = mode;
+          if (!modal) return;
+
+          // Initial selection setup
+          if (currentActiveItemIndex >= 0) {
+            // Pre-select the currently inspected single piece
+            if (radioCompleteSet) radioCompleteSet.checked = false;
+            pieceCheckboxes.forEach((cb) => {
+              const idx = Number(cb.dataset.index);
+              cb.checked = (idx === currentActiveItemIndex);
+            });
+          } else {
+            // Default to Complete Set
+            if (radioCompleteSet) radioCompleteSet.checked = true;
+            pieceCheckboxes.forEach((cb) => (cb.checked = false));
+          }
+
+          updateModalCalculation();
+
+          modal.style.display = 'flex';
+          setTimeout(() => {
+            modal.classList.add('open');
+          }, 10);
+        }
+
+        function closeModal() {
+          if (!modal) return;
+          modal.classList.remove('open');
+          setTimeout(() => {
+            modal.style.display = 'none';
+          }, 250);
+        }
+
+        // Close handlers
+        if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+        if (modal) {
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+          });
+        }
+
+        // Radio click selects bundle
+        if (radioCompleteSet) {
+          radioCompleteSet.addEventListener('change', () => {
+            if (radioCompleteSet.checked) {
+              pieceCheckboxes.forEach(cb => (cb.checked = false));
+              updateModalCalculation();
+            }
+          });
+        }
+        if (bundleOptionCard) {
+          bundleOptionCard.addEventListener('click', (e) => {
+            if (e.target !== radioCompleteSet) {
+              if (radioCompleteSet) radioCompleteSet.checked = true;
+              pieceCheckboxes.forEach(cb => (cb.checked = false));
+              updateModalCalculation();
+            }
+          });
+        }
+
+        // Checkbox clicks deselect radio
+        pieceCheckboxes.forEach((cb) => {
+          cb.addEventListener('change', () => {
+            if (radioCompleteSet) radioCompleteSet.checked = false;
+            updateModalCalculation();
+          });
+        });
+
+        // Confirm button action
+        if (modalConfirmBtn) {
+          modalConfirmBtn.addEventListener('click', () => {
+            const isFullSet = radioCompleteSet && radioCompleteSet.checked;
+
+            if (isFullSet) {
+              // Action on Complete Set
+              if (currentModalMode === 'cart') {
+                let cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+                const existing = cart.find(i => i.id === defaultSet.id);
+                if (existing) {
+                  existing.quantity = (existing.quantity || 1) + 1;
+                } else {
+                  cart.push({
+                    id: defaultSet.id,
+                    title: `${defaultSet.title} (Full Set)`,
+                    price: Number(defaultSet.final_price),
+                    image: defaultSet.image,
+                    quantity: 1
+                  });
+                }
+                localStorage.setItem('alif_cart', JSON.stringify(cart));
+                updateCartBadges();
+                closeModal();
+
+                if (addCartBtn) {
+                  const orig = addCartBtn.innerText;
+                  addCartBtn.innerText = 'Added Set to Cart ✓';
+                  setTimeout(() => { addCartBtn.innerText = orig; }, 2000);
+                }
+              } else {
+                // WhatsApp
+                window.open(defaultSet.wappOrderLink, '_blank');
+                closeModal();
+              }
+            } else {
+              // Action on Custom Selected Pieces
+              const selectedItems = [];
+              let sum = 0;
+              pieceCheckboxes.forEach((cb) => {
+                if (cb.checked) {
+                  const it = {
+                    id: cb.dataset.id || `${defaultSet.id}-item-${cb.dataset.index}`,
+                    title: cb.dataset.title,
+                    price: Number(cb.dataset.price),
+                    image: cb.dataset.image
+                  };
+                  selectedItems.push(it);
+                  sum += it.price;
+                }
+              });
+
+              if (selectedItems.length === 0) return;
+
+              if (currentModalMode === 'cart') {
+                let cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+                selectedItems.forEach((it) => {
+                  const existing = cart.find(i => i.id === it.id);
+                  if (existing) {
+                    existing.quantity = (existing.quantity || 1) + 1;
+                  } else {
+                    cart.push({ ...it, quantity: 1 });
+                  }
+                });
+                localStorage.setItem('alif_cart', JSON.stringify(cart));
+                updateCartBadges();
+                closeModal();
+
+                if (addCartBtn) {
+                  const orig = addCartBtn.innerText;
+                  addCartBtn.innerText = `Added ${selectedItems.length} Item${selectedItems.length > 1 ? 's' : ''} ✓`;
+                  setTimeout(() => { addCartBtn.innerText = orig; }, 2000);
+                }
+              } else {
+                // WhatsApp
+                let msg = `*Order Request for Selected Pieces from ${defaultSet.title}* 📦\n\n`;
+                selectedItems.forEach(it => {
+                  msg += `▪️ ${it.title} - ₹${it.price}\n`;
+                });
+                msg += `\n*Total Amount: ₹${sum}*`;
+                window.open(`https://wa.me/7250470009?text=${encodeURIComponent(msg)}`, '_blank');
+                closeModal();
+              }
+            }
+          });
+        }
+
+        // Intercept Add to Cart and Buy on WhatsApp clicks for combos
+        if (addCartBtn) {
+          addCartBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openModal('cart');
+          });
+        }
+
+        if (buyWappBtn) {
+          buyWappBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openModal('whatsapp');
+          });
+        }
+
+        // Bind Tray Clicks
+        const fullSetCard = document.getElementById('card-full-set');
+        if (fullSetCard) {
+          fullSetCard.addEventListener('click', switchToFullSet);
+        }
+
+        if (resetBtn) {
+          resetBtn.addEventListener('click', switchToFullSet);
+        }
+
+        items.forEach((item, idx) => {
+          const card = document.getElementById(`card-item-${idx}`);
+          if (card) {
+            card.addEventListener('click', () => switchToItem(item, idx));
+          }
+        });
+
+      } catch (err) {
+        console.error('Error initializing combo logic:', err);
+      }
+    } else {
+      // Regular Non-Combo Product Handling
+      const addBtn = document.getElementById('addToCartBtn');
+      if (addBtn) {
+        addBtn.addEventListener('click', () => {
+          const id = addBtn.getAttribute('data-product-id');
+          const title = addBtn.getAttribute('data-title');
+          const price = Number(addBtn.getAttribute('data-price'));
+          const image = addBtn.getAttribute('data-image');
+          const code = addBtn.getAttribute('data-code') || '';
+
+          let cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+          const existing = cart.find(item => item.id === id);
+          if (existing) {
+            existing.quantity = (existing.quantity || 1) + 1;
+            if (code && !existing.code) existing.code = code;
+          } else {
+            cart.push({ id, title, price, image, code, quantity: 1 });
+          }
+          localStorage.setItem('alif_cart', JSON.stringify(cart));
+          updateCartBadges();
+
+          const originalText = addBtn.innerText;
+          addBtn.innerText = 'Added to Cart ✓';
+          setTimeout(() => { addBtn.innerText = originalText; }, 2000);
+        });
+      }
+
+      const buyWapp = document.getElementById('buyWhatsAppBtn');
+      if (buyWapp) {
+        buyWapp.addEventListener('click', () => {
+          const url = buyWapp.getAttribute('data-wapp-url');
+          if (url) window.open(url, '_blank');
+        });
+      }
     }
+
+    function updateCartBadges() {
+      const cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+      const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      const b1 = document.getElementById('cartCount');
+      const b2 = document.getElementById('cartCountMobile');
+      if (b1) b1.innerText = count;
+      if (b2) b2.innerText = count;
+    }
+
+    // Phase 4: Sticky Mobile Quick-Buy Bar Initialization & Visibility
+    function initStickyBuyBar() {
+      const stickyBar = document.getElementById('stickyMobileBuyBar');
+      const stickyBuyBtn = document.getElementById('stickyBuyNowBtn');
+      const mainBuyBtn = document.getElementById('buyWhatsAppBtn');
+
+      if (!stickyBar) return;
+
+      // Connect sticky Buy Now button to primary buy action
+      if (stickyBuyBtn && mainBuyBtn) {
+        stickyBuyBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          mainBuyBtn.click();
+        });
+      }
+
+      // Starting state: Visible right from the start
+      stickyBar.classList.add('visible');
+
+      // Scroll direction behavior:
+      // Upar scroll krne pr gayab (hide)
+      // Niche scroll krne pr appear (show)
+      // Top of page (starting) pr hamesha visible
+      let lastScrollY = window.scrollY || window.pageYOffset || 0;
+      let ticking = false;
+
+      function onScroll() {
+        const currentScrollY = window.scrollY || window.pageYOffset || 0;
+
+        // If at the very top (starting se), keep it visible
+        if (currentScrollY <= 20) {
+          stickyBar.classList.add('visible');
+          lastScrollY = currentScrollY;
+          ticking = false;
+          return;
+        }
+
+        const diff = currentScrollY - lastScrollY;
+        // Small threshold to avoid micro-jitter
+        if (Math.abs(diff) > 5) {
+          if (diff > 0) {
+            // Scrolling DOWN -> Appear
+            stickyBar.classList.add('visible');
+          } else {
+            // Scrolling UP -> Disappear (Gayab)
+            stickyBar.classList.remove('visible');
+          }
+          lastScrollY = currentScrollY;
+        }
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(onScroll);
+          ticking = true;
+        }
+      }, { passive: true });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initStickyBuyBar);
+    } else {
+      initStickyBuyBar();
+    }
+    document.addEventListener('astro:page-load', initStickyBuyBar);
   </script>
+
+  <style>
+    /* =========================================================
+       CRITICAL LAYOUT RESET: Prevent right-shift / grid blowout
+       ========================================================= */
+    .container.section {
+      width: 100% !important;
+      max-width: 1000px !important;
+      margin: 0 auto !important;
+      padding: 12px 14px 40px 14px !important;
+      box-sizing: border-box !important;
+      overflow-x: hidden !important;
+    }
+
+    @media (min-width: 768px) {
+      .container.section {
+        padding: 30px 20px 50px 20px !important;
+      }
+    }
+
+    .product-detail-grid {
+      display: grid !important;
+      grid-template-columns: 100% !important;
+      gap: 20px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    @media (min-width: 768px) {
+      .product-detail-grid {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr) !important;
+        gap: 40px !important;
+      }
+    }
+
+    .product-detail-image {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    .product-detail-info {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Main Media Container: perfectly aligned and centered */
+    #mainMediaContainer.product-swapper {
+      width: 100% !important;
+      max-width: 480px !important;
+      margin: 0 auto !important;
+      aspect-ratio: 4 / 5 !important;
+      min-height: unset !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
+      background: #e8e8e8 !important;
+      position: relative !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08) !important;
+      box-sizing: border-box !important;
+    }
+
+    #mainMediaContainer img,
+    #mainMediaContainer video {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      border: none !important;
+      border-radius: 12px !important;
+      transition: opacity 0.25s ease, visibility 0.25s ease !important;
+    }
+
+    #mainMediaContainer video.hidden,
+    #mainMediaContainer img.hidden {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      z-index: 1 !important;
+    }
+
+    #mainMediaContainer video.active,
+    #mainMediaContainer img.active {
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      z-index: 2 !important;
+    }
+
+    /* Refined, Luxury Editorial Title & Pricing (Tokens Bound) */
+    .product-detail-title {
+      font-family: var(--font-heading) !important;
+      font-size: var(--typo-h1-size) !important;
+      font-weight: var(--typo-h1-weight) !important;
+      line-height: 1.25 !important;
+      color: #111111 !important;
+      letter-spacing: var(--typo-h1-spacing) !important;
+      margin: 0 0 10px 0 !important;
+    }
+
+    @media (min-width: 768px) {
+      .product-detail-title {
+        font-size: var(--typo-h1-size-desktop) !important;
+      }
+    }
+
+    .price-section-wrapper {
+      margin-bottom: 6px;
+    }
+
+    .product-detail-price {
+      font-family: var(--font-body) !important;
+      font-size: var(--typo-price-size) !important;
+      font-weight: var(--typo-price-weight) !important;
+      color: #111111 !important;
+      display: flex !important;
+      align-items: baseline !important;
+      gap: 10px !important;
+      margin-bottom: 10px !important;
+    }
+
+    .product-detail-price .offer-price {
+      font-size: var(--typo-price-size);
+      font-weight: var(--typo-price-weight);
+      color: #000000;
+    }
+
+    .product-detail-price .original-price,
+    .product-detail-price del {
+      font-size: var(--typo-price-del-size);
+      font-weight: 400;
+      color: var(--typo-price-del-color);
+      text-decoration: line-through;
+    }
+
+    .product-delivery-promo {
+      font-family: var(--font-body);
+      font-size: var(--typo-body-size);
+      font-weight: 400;
+      color: #555555;
+      letter-spacing: 0.3px;
+      padding-top: 10px;
+      margin-top: 8px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    /* Floating Reset to Set Pill */
+    .reset-to-set-pill {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      background: rgba(0, 0, 0, 0.88);
+      color: #ffffff;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.6px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 6;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .reset-to-set-pill:hover {
+      background: #000000;
+      transform: scale(1.03);
+    }
+
+    /* Minimalist Inspecting Single Item Text (Unboxed) */
+    .preview-mode-pill {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #555555;
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      margin-bottom: 6px;
+      display: inline-block;
+      width: auto !important;
+    }
+
+    /* --- Phase 2: Zara "Complete The Look" Minimalist Combo Tray --- */
+    .combo-interactive-section {
+      width: 100% !important;
+      max-width: 480px !important;
+      min-width: 0 !important;
+      margin: 16px auto 0 auto !important;
+      box-sizing: border-box !important;
+    }
+
+    .combo-interactive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0 2px 8px 2px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      margin-bottom: 10px;
+    }
+
+    .combo-header-left {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .combo-interactive-label {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.74rem;
+      font-weight: 400;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: #000000;
+    }
+
+    .combo-items-count {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: #777777;
+    }
+
+    .combo-interactive-hint {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      color: #888888;
+      text-transform: uppercase;
+    }
+
+    .combo-horizontal-scroll-container {
+      display: flex !important;
+      gap: 12px !important;
+      overflow-x: auto !important;
+      width: 100% !important;
+      padding: 8px 4px 16px 4px !important;
+      box-sizing: border-box !important;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .combo-horizontal-scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Minimalist High-Fashion Swatch Cards (Popup elevation on active, no harsh outline) */
+    .combo-interactive-card {
+      flex: 0 0 120px !important;
+      width: 120px !important;
+      max-width: 120px !important;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+      box-sizing: border-box !important;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .combo-interactive-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Clean Popup Elevation for Active Card - NO dark outline */
+    .combo-interactive-card.active {
+      border-color: rgba(0, 0, 0, 0.08) !important;
+      transform: translateY(-5px) !important;
+      box-shadow: 0 12px 24px -2px rgba(0, 0, 0, 0.16), 0 4px 10px -2px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    .combo-card-thumb {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      height: auto;
+      background: #f7f7f7;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .combo-card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .combo-interactive-card:hover .combo-card-thumb img {
+      transform: scale(1.05);
+    }
+
+    .combo-card-body {
+      padding: 8px 8px 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      background: #ffffff;
+    }
+
+    .combo-card-category {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #888888;
+      line-height: 1.2;
+    }
+
+    .combo-card-heading {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.76rem;
+      font-weight: 500;
+      color: #111111;
+      margin: 0;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .combo-card-cost {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: #000000;
+    }
+
+    /* =========================================================
+       COMBO SELECTION MODAL & BOTTOM SHEET
+       ========================================================= */
+    .combo-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      z-index: 99999;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      box-sizing: border-box;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .combo-modal-overlay.open {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    .combo-modal-sheet {
+      background: #ffffff;
+      width: 100%;
+      max-width: 520px;
+      border-radius: 24px 24px 0 0;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.28);
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .combo-modal-overlay.open .combo-modal-sheet {
+      transform: translateY(0) !important;
+    }
+
+    @media (min-width: 768px) {
+      .combo-modal-overlay {
+        align-items: center;
+        padding: 20px;
+      }
+      .combo-modal-sheet {
+        border-radius: 20px;
+        max-height: 80vh;
+        transform: scale(0.95);
+        transition: transform 0.25s ease;
+      }
+      .combo-modal-overlay.open .combo-modal-sheet {
+        transform: scale(1) !important;
+      }
+    }
+
+    .combo-modal-drag-handle {
+      width: 40px;
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 2px;
+      margin: 12px auto 6px auto;
+    }
+
+    .combo-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 10px 22px 14px 22px;
+      border-bottom: 1px solid #f0f0f0;
+      box-sizing: border-box;
+    }
+
+    .combo-modal-title {
+      font-family: var(--font-heading, 'Playfair Display', serif);
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #111111;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .combo-modal-subtitle {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.72rem;
+      color: #666666;
+      margin: 4px 0 0 0;
+    }
+
+    .combo-modal-close {
+      background: #f4f4f4;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: #333333;
+      transition: background 0.2s ease;
+      flex-shrink: 0;
+      margin-left: 12px;
+    }
+
+    .combo-modal-close:hover {
+      background: #e0e0e0;
+      color: #000000;
+    }
+
+    .combo-modal-body {
+      padding: 16px 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-sizing: border-box;
+    }
+
+    /* Bundle Option Card */
+    .bundle-option-card {
+      background: #fbf9f5;
+      border: 1.5px solid #d4af37;
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .bundle-option-card:hover {
+      background: #f8f4eb;
+    }
+
+    .bundle-option-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      width: 100%;
+      margin: 0;
+    }
+
+    .bundle-option-label input[type="radio"] {
+      margin-top: 4px;
+      accent-color: #000000;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .bundle-option-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .bundle-badge {
+      font-size: 0.58rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #8b6508;
+      background: #fff4d3;
+      padding: 2px 7px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .bundle-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bundle-name {
+      font-family: var(--font-heading, 'Playfair Display', serif);
+      font-size: 0.92rem;
+      font-weight: 400;
+      color: #111111;
+    }
+
+    .bundle-price {
+      font-size: 0.98rem;
+      font-weight: 500;
+      color: #000000;
+    }
+
+    .bundle-desc {
+      font-size: 0.72rem;
+      color: #666666;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .combo-modal-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 2px 0;
+    }
+
+    .combo-modal-divider::before,
+    .combo-modal-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    .combo-modal-divider span {
+      padding: 0 10px;
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 1.2px;
+      color: #999999;
+      text-transform: uppercase;
+    }
+
+    /* Individual Custom Pieces Checklist */
+    .custom-pieces-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .custom-piece-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: #ffffff;
+      border: 1px solid #e8e8e8;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+      margin: 0;
+    }
+
+    .custom-piece-item:hover {
+      background: #fafafa;
+      border-color: #cccccc;
+    }
+
+    .custom-piece-item.selected {
+      border-color: #000000;
+      background: #fcfcfc;
+    }
+
+    .piece-checkbox {
+      width: 18px;
+      height: 18px;
+      accent-color: #000000;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .piece-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #f0f0f0;
+      flex-shrink: 0;
+    }
+
+    .piece-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .piece-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .piece-cat {
+      font-size: 0.55rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #888888;
+    }
+
+    .piece-title {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #111111;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .piece-price {
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: #111111;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    /* Modal Footer */
+    .combo-modal-footer {
+      padding: 14px 20px 20px 20px;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #ffffff;
+      box-sizing: border-box;
+    }
+
+    .combo-modal-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .total-label {
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: #555555;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .total-value {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #000000;
+    }
+
+    .combo-modal-confirm-btn {
+      width: 100%;
+      padding: 15px 0;
+      background: #000000;
+      color: #ffffff;
+      border: 1px solid #000000;
+      font-size: 0.85rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .combo-modal-confirm-btn:hover:not(:disabled) {
+      background: #222222;
+      transform: translateY(-1px);
+    }
+
+    .combo-modal-confirm-btn:disabled {
+      background: #cccccc;
+      border-color: #cccccc;
+      cursor: not-allowed;
+      color: #888888;
+    }
+
+    /* =========================================================
+       PHASE 3: LUXURY MINIMALIST ACCORDIONS (ZARA / H&M LEVEL)
+       ========================================================= */
+    .product-accordion-container {
+      width: 100% !important;
+      max-width: 1000px !important;
+      margin: 35px auto 10px auto !important;
+      padding: 0 14px !important;
+      box-sizing: border-box !important;
+    }
+
+    @media (min-width: 768px) {
+      .product-accordion-container {
+        padding: 0 20px !important;
+        margin: 45px auto 25px auto !important;
+      }
+    }
+
+    .accordion-item {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+
+    .accordion-item:last-child {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .accordion-summary {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      padding: 18px 2px !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      list-style: none !important;
+      background: transparent !important;
+      transition: opacity 0.2s ease;
+    }
+
+    .accordion-summary::-webkit-details-marker,
+    .accordion-summary::marker {
+      display: none !important;
+    }
+
+    .accordion-summary:hover {
+      opacity: 0.75;
+    }
+
+    .accordion-heading {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.82rem !important;
+      font-weight: 500 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1.6px !important;
+      color: #111111 !important;
+      margin: 0 !important;
+    }
+
+    .accordion-toggle-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #111111;
+      width: 20px;
+      height: 20px;
+    }
+
+    .accordion-toggle-icon svg {
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    details[open] .accordion-toggle-icon svg {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      padding: 6px 2px 24px 2px;
+      box-sizing: border-box;
+      animation: accordionFade 0.25s ease-out;
+    }
+
+    @keyframes accordionFade {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .accordion-description-text {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: #444444;
+      margin: 0;
+      white-space: pre-line;
+    }
+
+    /* Haute Couture 2-column Atelier Specifications */
+    .spec-row-wrapper {
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 0 !important;
+      width: 100% !important;
+    }
+
+    @media (min-width: 768px) {
+      .spec-row-wrapper {
+        grid-template-columns: repeat(2, 1fr) !important;
+        column-gap: 50px !important;
+      }
+    }
+
+    .spec-row {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: baseline !important;
+      padding: 10px 0 !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+      box-sizing: border-box !important;
+    }
+
+    .spec-label {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.74rem !important;
+      font-weight: 500 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.8px !important;
+      color: #777777 !important;
+    }
+
+    .spec-value {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.82rem !important;
+      font-weight: 500 !important;
+      color: #111111 !important;
+      text-align: right !important;
+    }
+
+    /* =========================================================
+       PHASE 4: STICKY MOBILE QUICK-BUY BAR (ZARA / H&M LUXURY APP)
+       ========================================================= */
+    .sticky-mobile-buy-bar {
+      display: none; /* Hidden on desktop */
+    }
+
+    @media (max-width: 768px) {
+      .sticky-mobile-buy-bar {
+        display: block !important;
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: calc(65px + env(safe-area-inset-bottom, 0px)) !important;
+        background: rgba(255, 255, 255, 0.96) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06) !important;
+        z-index: 9998 !important; /* Under bottom-nav (9999), docked directly above it */
+        transform: translateY(125%) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.25s ease !important;
+        padding: 9px 14px !important;
+        box-sizing: border-box !important;
+      }
+
+      /* Visible by default at start and when scrolling down */
+      .sticky-mobile-buy-bar.visible {
+        transform: translateY(0) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+
+      .sticky-bar-inner {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+        width: 100% !important;
+        max-width: 500px !important;
+        margin: 0 auto !important;
+      }
+
+      .sticky-bar-product {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        min-width: 0 !important;
+        flex: 1 !important;
+      }
+
+      .sticky-thumb-img {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 6px !important;
+        object-fit: cover !important;
+        flex-shrink: 0 !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        background: #f7f7f7 !important;
+      }
+
+      .sticky-product-meta {
+        display: flex !important;
+        flex-direction: column !important;
+        min-width: 0 !important;
+        gap: 2px !important;
+      }
+
+      .sticky-product-title {
+        font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+        font-size: 0.8rem !important;
+        font-weight: 500 !important;
+        color: #111111 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        line-height: 1.25 !important;
+      }
+
+      .sticky-product-price {
+        font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+        font-size: 0.92rem !important;
+        font-weight: 500 !important;
+        color: #000000 !important;
+        line-height: 1.2 !important;
+        letter-spacing: 0.2px !important;
+      }
+
+      .sticky-bar-actions {
+        display: flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* Minimalist Haute-Couture Buy Now Button */
+      .sticky-btn-buy {
+        background: #000000 !important;
+        color: #ffffff !important;
+        border: 1px solid #000000 !important;
+        padding: 12px 24px !important;
+        font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+        font-size: 0.78rem !important;
+        font-weight: 500 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 2px !important;
+        border-radius: 4px !important;
+        cursor: pointer !important;
+        white-space: nowrap !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease !important;
+        -webkit-tap-highlight-color: transparent !important;
+      }
+
+      .sticky-btn-buy:active {
+        background: #1f1f1f !important;
+        transform: scale(0.975) !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+      }
+    }
+
+    /* =========================================================
+       LUXURY RECOMMENDATIONS CAROUSEL (SIMILAR & YMAL CARDS)
+       ========================================================= */
+    .luxury-recommendations-section {
+      width: 100% !important;
+      max-width: 1000px !important;
+      margin: 0 auto !important;
+      padding: 40px 14px 20px 14px !important;
+      box-sizing: border-box !important;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+    }
+
+    .luxury-recommendations-section.ymal-variant {
+      background: #fbfbfb;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      padding-top: 36px;
+    }
+
+    @media (min-width: 768px) {
+      .luxury-recommendations-section {
+        padding: 50px 20px 30px 20px !important;
+      }
+    }
+
+    .luxury-section-header {
+      text-align: center;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .luxury-section-title {
+      font-family: var(--font-heading, 'Playfair Display', serif) !important;
+      font-size: 1.15rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 2.5px !important;
+      text-transform: uppercase !important;
+      color: #111111 !important;
+      margin: 0 !important;
+    }
+
+    .luxury-section-divider {
+      width: 32px;
+      height: 1.5px;
+      background: #111111;
+      opacity: 0.2;
+    }
+
+    .luxury-carousel-track {
+      display: flex !important;
+      overflow-x: auto !important;
+      gap: 16px !important;
+      padding: 6px 4px 20px 4px !important;
+      box-sizing: border-box !important;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+    }
+
+    .luxury-carousel-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Haute-Couture Card: Sharp, Clean, No Muddy Drop Shadow */
+    .luxury-product-card {
+      flex: 0 0 160px !important;
+      min-width: 160px !important;
+      max-width: 160px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      text-decoration: none !important;
+      color: inherit !important;
+      background: #ffffff !important;
+      border-radius: 6px !important;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+      scroll-snap-align: start;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (min-width: 768px) {
+      .luxury-product-card {
+        flex: 0 0 190px !important;
+        min-width: 190px !important;
+        max-width: 190px !important;
+      }
+    }
+
+    .luxury-product-card:hover {
+      transform: translateY(-4px) !important;
+      box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .luxury-card-media {
+      width: 100% !important;
+      aspect-ratio: 4 / 5 !important;
+      position: relative !important;
+      overflow: hidden !important;
+      background: #f7f7f7 !important;
+    }
+
+    .luxury-card-media img,
+    .luxury-card-media video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: center !important;
+      display: block !important;
+      transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .luxury-product-card:hover .luxury-card-media img,
+    .luxury-product-card:hover .luxury-card-media video {
+      transform: scale(1.05);
+    }
+
+    .luxury-card-combo-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      color: #ffffff;
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.58rem;
+      font-weight: 400;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      z-index: 2;
+    }
+
+    .luxury-card-body {
+      padding: 10px 10px 12px 10px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 3px !important;
+      background: #ffffff !important;
+      box-sizing: border-box !important;
+      flex: 1 !important;
+      justify-content: space-between !important;
+    }
+
+    .luxury-card-category {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.62rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.8px !important;
+      text-transform: uppercase !important;
+      color: #888888 !important;
+      line-height: 1.2 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+
+    .luxury-card-title {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.78rem !important;
+      font-weight: 500 !important;
+      color: #111111 !important;
+      line-height: 1.3 !important;
+      margin: 0 !important;
+      display: -webkit-box !important;
+      -webkit-line-clamp: 1 !important;
+      -webkit-box-orient: vertical !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+
+    .luxury-card-pricing {
+      display: flex !important;
+      align-items: baseline !important;
+      gap: 6px !important;
+      margin-top: 4px !important;
+    }
+
+    .luxury-price-current {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.86rem !important;
+      font-weight: 500 !important;
+      color: #000000 !important;
+    }
+
+    .luxury-price-original {
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.74rem !important;
+      font-weight: 400 !important;
+      color: #888888 !important;
+      text-decoration: line-through !important;
+    }
+  </style>
 </BaseLayout>

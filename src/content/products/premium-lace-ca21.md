@@ -6,6 +6,7 @@ tags: "product"
 image: "/uploads/f914ad61-0a04-43a6-9bf0-c531a3ea17b9.webp"
 is_ad: false
 price: 60
+product_code: "ALIF-LC-CA21"
 offer_price: 30
 offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"

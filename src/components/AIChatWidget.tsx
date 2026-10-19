@@ -38,7 +38,7 @@ export default function AIChatWidget() {
     {
       id: 'welcome-1',
       role: 'ai',
-      text: 'Hello! Welcome to ALiF Ladies Tailor & Boutique. How can I help you today?',
+      text: 'Hello! Welcome to alif. ladies tailor & Boutique. How can I help you today?',
     },
   ]);
   const [input, setInput] = useState('');
@@ -228,7 +228,7 @@ export default function AIChatWidget() {
         <button
           id="chat-button"
           onClick={handleOpen}
-          title="Chat with ALiF AI"
+          title="Chat with alif. AI"
           aria-label="Open Chat"
           style={{ display: isOpen ? 'none' : 'flex' }}
         >
@@ -251,12 +251,12 @@ export default function AIChatWidget() {
           id="chat-window"
           className={`mono-chat-window ${isOpen ? 'is-open' : ''}`}
           role="dialog"
-          aria-label="ALiF AI Assistant"
+          aria-label="alif. AI Assistant"
         >
           {/* Header */}
           <div id="chat-header">
             <div className="chat-header-title">
-              <span className="brand-title">ALiF</span>
+              <span className="brand-title">alif.</span>
               <span className="brand-sub">ASSISTANT</span>
             </div>
             <button

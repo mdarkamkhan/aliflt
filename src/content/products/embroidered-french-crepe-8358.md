@@ -7,6 +7,7 @@ image: "/uploads/1765191758367-main-1000027643.webp"
 gallery: ["/uploads/1765191761634-gal-0-1000027644.webp","/uploads/1765191764673-gal-1-1000027645.webp","/uploads/1765191768190-gal-2-1000027646.webp","/uploads/1765191774853-gal-3-1000027647.webp","/uploads/1765191780399-gal-4-1000027276.webp"]
 is_ad: false
 price: 849
+product_code: "ALIF-FB-016"
 category: "organza"
 description: "Turn every outfit into art with this exquisite French Crepe embroidered fabric, featuring bold floral and butterfly motifs in a riot of festive colors. Its smooth texture, fluid drape, and intricate embroidery make it a perfect pick for those who love a mix of luxury and liveliness."
 permalink: false

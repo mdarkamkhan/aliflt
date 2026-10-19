@@ -7,6 +7,7 @@ image: "/uploads/1765017952566-main-1000026887.webp"
 gallery: []
 is_ad: false
 price: 19
+product_code: "ALIF-LK-2565"
 category: "latkan"
 description: "---"
 permalink: false
