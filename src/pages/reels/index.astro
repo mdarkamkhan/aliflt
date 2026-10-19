@@ -162,11 +162,16 @@ const reelsList = (reelsData || []).map((r, index) => ({
         reelsFeed.appendChild(frag);
       }
 
-      const cards = Array.from(document.querySelectorAll('.atelier-reel-card'));
+      let cards = Array.from(document.querySelectorAll('.atelier-reel-card'));
       const btnPrev = document.getElementById('reelNavPrev');
       const btnNext = document.getElementById('reelNavNext');
 
       if (cards.length === 0) return;
+
+      // Base template cards for never-ending infinite looping
+      const baseCards = cards.map(c => c.cloneNode(true));
+      let loopBatchCounter = 1;
+      let isAppendingLoop = false;
 
       // Global Audio State (Persists across reels once user turns sound on)
       let isAudioGloballyActive = false;
@@ -238,9 +243,45 @@ const reelsList = (reelsData || []).map((r, index) => ({
         });
       }
 
+      // Append Next Infinite Loop Batch (Never-ending Reels Feed)
+      function appendNextInfiniteLoop() {
+        if (!baseCards.length || isAppendingLoop) return;
+        isAppendingLoop = true;
+        const frag = document.createDocumentFragment();
+        const batchNum = loopBatchCounter++;
+
+        baseCards.forEach((baseCard) => {
+          const clone = baseCard.cloneNode(true);
+          const origId = clone.getAttribute('data-reel-id') || 'reel';
+          clone.id = `${origId}-loop-${batchNum}`;
+          clone._setupDone = false;
+
+          const v = clone.querySelector('video');
+          if (v) {
+            v.pause();
+            v.currentTime = 0;
+            v.muted = true;
+            v._telemetryBound = false;
+          }
+
+          setupCard(clone);
+          frag.appendChild(clone);
+        });
+
+        reelsFeed.appendChild(frag);
+        cards = Array.from(reelsFeed.querySelectorAll('.atelier-reel-card'));
+        isAppendingLoop = false;
+      }
+
       function activateCard(targetCard, forcePlay = false) {
         if (!targetCard) return;
         if (targetCard === activeCard && !forcePlay) return;
+
+        // Auto append next batch when approaching bottom of feed
+        const activeIdx = cards.indexOf(targetCard);
+        if (activeIdx >= cards.length - 4) {
+          appendNextInfiniteLoop();
+        }
 
         // Hard rule: Pause and mute every other video immediately
         pauseAllExcept(targetCard);
@@ -334,8 +375,6 @@ const reelsList = (reelsData || []).map((r, index) => ({
       });
       reelsFeed._observer = observer;
 
-      cards.forEach((card) => observer.observe(card));
-
       // Scroll Fail-safe: Detects snap landing accurately on all devices
       let scrollCheckRaf = null;
       function checkCenterCard() {
@@ -357,9 +396,19 @@ const reelsList = (reelsData || []).map((r, index) => ({
         if (closestCard && closestCard !== activeCard && minDiff < feedRect.height * 0.45) {
           activateCard(closestCard);
         }
+
+        if (closestCard) {
+          const idx = cards.indexOf(closestCard);
+          if (idx >= cards.length - 4) {
+            appendNextInfiniteLoop();
+          }
+        }
       }
 
       reelsFeed.addEventListener('scroll', () => {
+        if (reelsFeed.scrollHeight - reelsFeed.scrollTop - reelsFeed.clientHeight < 1200) {
+          appendNextInfiniteLoop();
+        }
         if (scrollCheckRaf) cancelAnimationFrame(scrollCheckRaf);
         scrollCheckRaf = requestAnimationFrame(checkCenterCard);
       }, { passive: true });
@@ -383,8 +432,13 @@ const reelsList = (reelsData || []).map((r, index) => ({
         }
       }
 
-      // Card Tap & Audio Interactions
-      cards.forEach((card) => {
+      // Setup and attach interactions to each reel card
+      function setupCard(card) {
+        if (card._setupDone) return;
+        card._setupDone = true;
+
+        observer.observe(card);
+
         const video = card.querySelector('video');
         const centerBtn = card.querySelector('.reel-center-ctrl');
         const soundPill = card.querySelector('.reel-audio-pill');
@@ -493,15 +547,29 @@ const reelsList = (reelsData || []).map((r, index) => ({
             }
           }
         });
-      });
+      }
 
-      // Quick Nav Buttons (Next & Prev)
+      // Initialize all initial cards
+      cards.forEach(card => setupCard(card));
+
+      // Quick Nav Buttons (Next & Prev) with loop-around & endless loading
       function scrollToRelativeCard(delta) {
         if (cards.length === 0) return;
         const currentIdx = activeCard ? cards.indexOf(activeCard) : 0;
         let nextIdx = currentIdx + delta;
-        if (nextIdx < 0) nextIdx = 0;
-        if (nextIdx >= cards.length) nextIdx = cards.length - 1;
+
+        // Auto append if approaching end
+        if (nextIdx >= cards.length - 2) {
+          appendNextInfiniteLoop();
+        }
+
+        if (nextIdx >= cards.length) {
+          nextIdx = cards.length - 1;
+        }
+
+        if (nextIdx < 0) {
+          nextIdx = cards.length - 1;
+        }
 
         const target = cards[nextIdx];
         if (target) {
