@@ -180,6 +180,25 @@ const reelsList = (reelsData || []).map((r, index) => ({
         return catalog.find((c) => c.id === id) || { id };
       }
 
+      // Strictly pause and mute all videos except targetCard
+      function pauseAllExcept(targetCard) {
+        cards.forEach((card) => {
+          if (card !== targetCard) {
+            const v = card.querySelector('video');
+            const centerBtn = card.querySelector('.reel-center-ctrl');
+            if (v) {
+              if (!v.paused || v.currentTime > 0) {
+                v.pause();
+              }
+              v.muted = true;
+            }
+            if (centerBtn) {
+              centerBtn.classList.remove('state-paused');
+            }
+          }
+        });
+      }
+
       function updateSoundUI() {
         cards.forEach((card) => {
           const video = card.querySelector('video');
@@ -197,7 +216,12 @@ const reelsList = (reelsData || []).map((r, index) => ({
           }
 
           if (video) {
-            video.muted = !isAudioGloballyActive;
+            // ONLY the current active card gets unmuted; ALL others remain muted
+            if (card === activeCard) {
+              video.muted = !isAudioGloballyActive;
+            } else {
+              video.muted = true;
+            }
           }
 
           if (centerBtn && card === activeCard) {
@@ -218,18 +242,11 @@ const reelsList = (reelsData || []).map((r, index) => ({
         if (!targetCard) return;
         if (targetCard === activeCard && !forcePlay) return;
 
+        // Hard rule: Pause and mute every other video immediately
+        pauseAllExcept(targetCard);
+
         // Telemetry: Evaluate previous active reel watch time
         if (activeCard && activeCard !== targetCard) {
-          const prevVideo = activeCard.querySelector('video');
-          const prevCenterBtn = activeCard.querySelector('.reel-center-ctrl');
-          if (prevVideo) {
-            prevVideo.pause();
-            prevVideo.currentTime = 0;
-          }
-          if (prevCenterBtn) {
-            prevCenterBtn.classList.remove('state-paused');
-          }
-
           if (activeReelItem && activeStartTime > 0) {
             const elapsedSec = (Date.now() - activeStartTime) / 1000;
             trackReelSkip(activeReelItem, elapsedSec);
@@ -247,7 +264,7 @@ const reelsList = (reelsData || []).map((r, index) => ({
 
         if (!video) return;
 
-        // Apply persistent sound state
+        // Apply persistent sound state strictly to target card
         video.muted = !isAudioGloballyActive;
 
         if (centerBtn) {
@@ -295,20 +312,61 @@ const reelsList = (reelsData || []).map((r, index) => ({
         reelsFeed._observer.disconnect();
       }
 
-      // IntersectionObserver: Hardware-accelerated viewport detection without scroll reflow
+      // IntersectionObserver: Pause cards leaving viewport, activate dominant card
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.55) {
+          if (!entry.isIntersecting || entry.intersectionRatio < 0.25) {
+            if (entry.target !== activeCard) {
+              const v = entry.target.querySelector('video');
+              if (v && (!v.paused || v.currentTime > 0)) {
+                v.pause();
+                v.muted = true;
+              }
+            }
+          }
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
             activateCard(entry.target);
           }
         });
       }, {
         root: reelsFeed,
-        threshold: 0.55
+        threshold: [0.1, 0.25, 0.5, 0.75]
       });
       reelsFeed._observer = observer;
 
       cards.forEach((card) => observer.observe(card));
+
+      // Scroll Fail-safe: Detects snap landing accurately on all devices
+      let scrollCheckRaf = null;
+      function checkCenterCard() {
+        const feedRect = reelsFeed.getBoundingClientRect();
+        const feedCenterY = feedRect.top + feedRect.height / 2;
+        let closestCard = null;
+        let minDiff = Infinity;
+
+        cards.forEach((card) => {
+          const r = card.getBoundingClientRect();
+          const cardCenterY = r.top + r.height / 2;
+          const diff = Math.abs(feedCenterY - cardCenterY);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestCard = card;
+          }
+        });
+
+        if (closestCard && closestCard !== activeCard && minDiff < feedRect.height * 0.45) {
+          activateCard(closestCard);
+        }
+      }
+
+      reelsFeed.addEventListener('scroll', () => {
+        if (scrollCheckRaf) cancelAnimationFrame(scrollCheckRaf);
+        scrollCheckRaf = requestAnimationFrame(checkCenterCard);
+      }, { passive: true });
+
+      if ('onscrollend' in window) {
+        reelsFeed.addEventListener('scrollend', checkCenterCard, { passive: true });
+      }
 
       // Global Audio Toggle
       function toggleAudioGlobal() {
@@ -348,11 +406,18 @@ const reelsList = (reelsData || []).map((r, index) => ({
             e.preventDefault();
             e.stopPropagation();
 
+            if (card !== activeCard) {
+              isAudioGloballyActive = true;
+              activateCard(card, true);
+              return;
+            }
+
             if (video.paused) {
               isAudioGloballyActive = true;
-              updateSoundUI();
+              pauseAllExcept(card);
               video.muted = false;
               video.play().catch(() => {});
+              updateSoundUI();
               centerBtn.classList.remove('state-paused', 'state-mute');
               centerBtn.classList.add('fade-hidden');
             } else if (video.muted) {
@@ -393,14 +458,21 @@ const reelsList = (reelsData || []).map((r, index) => ({
           if (isTouchSwipe) return; // User was scrolling, ignore tap
           if (e.target.closest('button') || e.target.closest('a')) return;
 
+          if (card !== activeCard) {
+            isAudioGloballyActive = true;
+            activateCard(card, true);
+            return;
+          }
+
           if (video.paused) {
             isAudioGloballyActive = true;
-            updateSoundUI();
+            pauseAllExcept(card);
             video.muted = false;
             video.play().catch(() => {
               video.muted = true;
               video.play().catch(() => {});
             });
+            updateSoundUI();
             if (centerBtn) {
               centerBtn.classList.remove('state-paused', 'state-mute');
               centerBtn.classList.add('fade-hidden');
@@ -434,6 +506,7 @@ const reelsList = (reelsData || []).map((r, index) => ({
         const target = cards[nextIdx];
         if (target) {
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          activateCard(target, true);
         }
       }
 
@@ -461,6 +534,7 @@ const reelsList = (reelsData || []).map((r, index) => ({
             const centerBtn = activeCard.querySelector('.reel-center-ctrl');
             if (video) {
               if (video.paused) {
+                pauseAllExcept(activeCard);
                 video.play().catch(() => {});
                 if (centerBtn) {
                   centerBtn.classList.remove('state-paused');
@@ -487,6 +561,7 @@ const reelsList = (reelsData || []).map((r, index) => ({
         if (v) {
           v.pause();
           v.currentTime = 0;
+          v.muted = true;
         }
       });
 
@@ -503,6 +578,22 @@ const reelsList = (reelsData || []).map((r, index) => ({
         activateCard(cards[0], true);
       }
     }
+
+    // Safety Cleanup: Stop all reels playback when navigating away or switching tabs
+    function cleanupAllReels() {
+      document.querySelectorAll('.atelier-reel-card video').forEach((v) => {
+        v.pause();
+        v.muted = true;
+      });
+    }
+
+    document.addEventListener('astro:before-swap', cleanupAllReels);
+    window.addEventListener('pagehide', cleanupAllReels);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cleanupAllReels();
+      }
+    });
 
     document.addEventListener('astro:page-load', initReelInteractions);
   </script>

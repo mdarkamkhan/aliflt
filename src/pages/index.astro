@@ -206,6 +206,9 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                       <img 
                         src={item.image} 
                         alt={item.title} 
+                        width="1400"
+                        height="1980"
+                        decoding="async"
                         loading={index === 0 ? "eager" : "lazy"} 
                         fetchpriority={index === 0 ? "high" : "auto"}
                       />
@@ -1000,6 +1003,25 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
             let isAudioGloballyActive = false;
             let activeCard = null;
 
+            // Strictly pause and mute all videos except targetCard
+            function pauseAllExcept(targetCard) {
+                cards.forEach(card => {
+                    if (card !== targetCard) {
+                        const v = card.querySelector('video');
+                        const centerBtn = card.querySelector('.reel-center-ctrl');
+                        if (v) {
+                            if (!v.paused || v.currentTime > 0) {
+                                v.pause();
+                            }
+                            v.muted = true;
+                        }
+                        if (centerBtn) {
+                            centerBtn.classList.remove('state-paused');
+                        }
+                    }
+                });
+            }
+
             function updateSoundUI() {
                 cards.forEach(card => {
                     const video = card.querySelector('video');
@@ -1017,7 +1039,12 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                     }
 
                     if (video) {
-                        video.muted = !isAudioGloballyActive;
+                        // Only active card gets unmuted; all others remain muted
+                        if (card === activeCard) {
+                            video.muted = !isAudioGloballyActive;
+                        } else {
+                            video.muted = true;
+                        }
                     }
 
                     if (centerBtn && card === activeCard) {
@@ -1038,17 +1065,8 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 if (!targetCard) return;
                 if (targetCard === activeCard && !forcePlay) return;
 
-                if (activeCard && activeCard !== targetCard) {
-                    const prevVideo = activeCard.querySelector('video');
-                    const prevCenterBtn = activeCard.querySelector('.reel-center-ctrl');
-                    if (prevVideo) {
-                        prevVideo.pause();
-                        prevVideo.currentTime = 0;
-                    }
-                    if (prevCenterBtn) {
-                        prevCenterBtn.classList.remove('state-paused');
-                    }
-                }
+                // Hard rule: Pause and mute every other video immediately
+                pauseAllExcept(targetCard);
 
                 activeCard = targetCard;
                 const video = targetCard.querySelector('video');
@@ -1126,10 +1144,10 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 const sectionObserver = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (!entry.isIntersecting) {
-                            if (activeCard) {
-                                const v = activeCard.querySelector('video');
+                            cards.forEach(c => {
+                                const v = c.querySelector('video');
                                 if (v) v.pause();
-                            }
+                            });
                         } else {
                             if (activeCard) {
                                 const v = activeCard.querySelector('video');
@@ -1174,11 +1192,18 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                         e.preventDefault();
                         e.stopPropagation();
 
+                        if (card !== activeCard) {
+                            isAudioGloballyActive = true;
+                            activateCard(card, true);
+                            return;
+                        }
+
                         if (video.paused) {
                             isAudioGloballyActive = true;
-                            updateSoundUI();
+                            pauseAllExcept(card);
                             video.muted = false;
                             video.play().catch(() => {});
+                            updateSoundUI();
                             centerBtn.classList.remove('state-paused', 'state-mute');
                             centerBtn.classList.add('fade-hidden');
                         } else if (video.muted) {
@@ -1198,14 +1223,21 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 card.addEventListener('click', (e) => {
                     if (e.target.closest('a') || e.target.closest('button')) return;
 
+                    if (card !== activeCard) {
+                        isAudioGloballyActive = true;
+                        activateCard(card, true);
+                        return;
+                    }
+
                     if (video.paused) {
                         isAudioGloballyActive = true;
-                        updateSoundUI();
+                        pauseAllExcept(card);
                         video.muted = false;
                         video.play().catch(() => {
                             video.muted = true;
                             video.play().catch(() => {});
                         });
+                        updateSoundUI();
                         if (centerBtn) {
                             centerBtn.classList.remove('state-paused', 'state-mute');
                             centerBtn.classList.add('fade-hidden');
@@ -1234,12 +1266,29 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 if (v) {
                     v.pause();
                     v.currentTime = 0;
+                    v.muted = true;
                 }
             });
             if (cards.length > 0) {
                 activateCard(cards[0]);
             }
         }
+
+        // Hard Cleanup: Stop all homepage video playback when leaving page or changing tabs
+        function cleanupHomeReels() {
+            document.querySelectorAll('.reels-cards-track video').forEach(v => {
+                v.pause();
+                v.muted = true;
+            });
+        }
+
+        document.addEventListener('astro:before-swap', cleanupHomeReels);
+        window.addEventListener('pagehide', cleanupHomeReels);
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                cleanupHomeReels();
+            }
+        });
 
         function initHomePage() {
             initBannerSlider();
@@ -1257,28 +1306,38 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
       #top-banner {
         position: relative;
         width: 100%;
-        max-width: none;
+        max-width: 100%;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
         overflow: hidden;
       }
 
+      @media (min-width: 769px) {
+        #top-banner {
+          max-width: 580px;
+          margin: 16px auto 24px auto;
+          border-radius: 20px;
+          box-shadow: 0 16px 44px rgba(0, 0, 0, 0.08);
+        }
+      }
+
       .banner-carousel {
         position: relative;
         width: 100%;
-        max-width: none;
+        aspect-ratio: 1400 / 1980;
         margin: 0;
         padding: 0;
-        border-radius: 0;
+        border-radius: inherit;
         display: grid;
-        background: transparent;
+        background: #f7f4ee;
+        overflow: hidden;
       }
 
       .banner-slide-item {
         grid-area: 1 / 1;
         width: 100%;
-        height: auto;
+        height: 100%;
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.4s ease;
@@ -1295,10 +1354,10 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
       .banner-slide-item picture,
       .banner-slide-item img {
         width: 100%;
-        height: auto;
+        height: 100%;
         display: block;
-        object-fit: unset;
-        border-radius: 0;
+        object-fit: cover;
+        border-radius: inherit;
       }
 
       /* Thin Slide Navigation Buttons (< >) */
