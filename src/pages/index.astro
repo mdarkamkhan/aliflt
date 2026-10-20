@@ -31,10 +31,17 @@ const recentServices = [...services].reverse().slice(0, 5);
 const recentWorks = [...works].reverse().slice(0, 5);
 const recentDesigns = [...designs].reverse().slice(0, 5);
 
-// Get distinct category highlights for products
+// Strict date sorting: newest/latest uploaded products first
+const sortedProductsByDate = [...products].sort((a, b) => {
+  const dA = a.data.date ? new Date(a.data.date).getTime() : 0;
+  const dB = b.data.date ? new Date(b.data.date).getTime() : 0;
+  return dB - dA;
+});
+
+// Get distinct category highlights for products (newest first)
 const seenCategories = new Set();
 const highlightedProducts = [];
-for (const p of [...products].reverse()) {
+for (const p of sortedProductsByDate) {
   const cat = (p.data.category || '').toLowerCase();
   if (cat && !seenCategories.has(cat)) {
     seenCategories.add(cat);
@@ -42,11 +49,11 @@ for (const p of [...products].reverse()) {
   }
 }
 
-// 5 latest products for scroll-to-slide showcase
-const latestProducts = [...products].reverse().slice(0, 5);
+// Latest products for swipe showcase (10 latest uploads)
+const latestProducts = sortedProductsByDate.slice(0, 10);
 
-// 9 preview images for the 9-frame collection end card
-const collectionPreviewImages = products
+// 9 preview images for the 9-frame collection end card (from latest products)
+const collectionPreviewImages = sortedProductsByDate
   .map((p) => p.data.image)
   .filter(Boolean)
   .slice(0, 9);
@@ -107,7 +114,7 @@ const anarkaliService = services.find((s) => s.id === 'anarkali') || services[1]
 const shararaService = services.find((s) => s.id === 'sharara') || services[2];
 
 // Curated trending reels: Mix of featured product sets (Curated Sets) & bespoke tailoring services
-const trendingProductReels = products
+const trendingProductReels = sortedProductsByDate
   .filter((p) => {
     const cat = (p.data.category || '').toLowerCase();
     const hasCombo = p.data.combo_items && p.data.combo_items.length > 0;
@@ -290,128 +297,127 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         </div>
     </div>
 
-    <!-- Trending Reels Section (Horizontal Scroll-to-Slide Showcase) -->
-    <section class="reels-scroll-track" id="reelsScrollTrack">
-        <div class="reels-sticky-stage" id="reelsStickyStage">
-            <div class="reels-header">
-                <div class="reels-title-row">
-                    <h2 class="reels-title">TRENDING REELS</h2>
-                    <a href="/reels/" class="reels-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
-                </div>
+    <!-- Trending Reels Section (Native Horizontal Swipe Showcase) -->
+    <section class="trending-reels-section" id="reelsSection" aria-label="Trending Reels">
+        <div class="reels-header">
+            <div class="reels-title-row">
+                <h2 class="reels-title">TRENDING REELS</h2>
+                <a href="/reels/" data-astro-prefetch="viewport" class="reels-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
             </div>
+        </div>
 
-            <div class="reels-cards-viewport" id="reelsCardsViewport">
-                <div class="reels-cards-track" id="reelsCardsTrack">
-                    {homepageReelItems.map((item) => (
-                        <div class="reel-card" data-reel-id={item.id} data-reel-type={item.type}>
-                            <div class="reel-media-inner">
-                                <video 
-                                    src={item.video} 
-                                    poster={item.image}
-                                    loop 
-                                    muted 
-                                    playsinline 
-                                    webkit-playsinline
-                                    preload="metadata"
-                                    class="reel-video"
-                                ></video>
-
-                                <!-- Top Header: Title on Left, Persistent Audio Pill on Right -->
-                                <div class="reel-top-bar">
-                                    <div class="reel-top-row">
-                                        <h3 class="reel-top-title">{item.title}</h3>
-                                        <button type="button" class="reel-audio-pill sound-muted" aria-label="Toggle Sound" onclick="event.stopPropagation();" title="Toggle Sound">
-                                            <!-- Sound ON Icon -->
-                                            <svg class="audio-icon icon-vol-on" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                                            </svg>
-                                            <!-- Sound OFF (Muted) Icon -->
-                                            <svg class="audio-icon icon-vol-mute" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                                                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <div class="reel-title-divider" aria-hidden="true"></div>
-                                </div>
-
-                                <!-- Center Audio & Play/Pause Controller (Ultra-thin Frosted Glass Ring) -->
-                                <button type="button" class="reel-center-ctrl state-mute" aria-label="Audio and Playback Control">
-                                    <svg class="center-icon icon-mute" viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
-                                        <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
-                                    </svg>
-                                    <svg class="center-icon icon-pause" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-                                        <rect x="7" y="5" width="2.5" height="14" rx="1.2" />
-                                        <rect x="14.5" y="5" width="2.5" height="14" rx="1.2" />
-                                    </svg>
-                                    <svg class="center-icon icon-play" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                                        <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86a1 1 0 0 0-1.5.86z"/>
-                                    </svg>
-                                </button>
-
-                                <!-- Minimal Floating Action: Watch All -->
-                                <div class="reel-bottom-bar">
-                                    <a 
-                                        href={`/reels/#reel-${item.id}`} 
-                                        class="reel-minimal-cta" 
-                                        onclick="event.stopPropagation();"
-                                        aria-label={`Watch All Reels - ${item.title}`}
-                                    >
-                                        <span>WATCH ALL</span>
-                                        <svg class="reel-minimal-arrow" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                            <polyline points="12 5 19 12 12 19"></polyline>
-                                        </svg>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-
-                    <!-- 9-Grid Blurred Reel Watch All Card -->
-                    <a href="/reels/" class="reel-card reel-watch-all-card" aria-label="Watch All Reels">
+        <div class="reels-cards-viewport" id="reelsCardsViewport">
+            <div class="reels-cards-track" id="reelsCardsTrack">
+                {homepageReelItems.map((item) => (
+                    <div class="reel-card" data-reel-id={item.id} data-reel-type={item.type}>
                         <div class="reel-media-inner">
-                            <div class="reel-grid-9">
-                                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n, i) => {
-                                    const gridReel = reelsData && reelsData[i];
-                                    return (
-                                        <div class="mini-reel-cell">
-                                            {gridReel ? (
-                                                <video 
-                                                    src={gridReel.video} 
-                                                    loop 
-                                                    muted 
-                                                    autoplay
-                                                    playsinline 
-                                                    webkit-playsinline
-                                                    preload="metadata"
-                                                ></video>
-                                            ) : (
-                                                <div class="mini-reel-placeholder"></div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                            <div class="watch-all-overlay">
-                                <div class="watch-all-btn-content">
-                                    <div class="watch-all-icon-circle">
-                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                                            <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                            <video 
+                                src={item.video} 
+                                poster={item.image}
+                                loop 
+                                muted 
+                                playsinline 
+                                webkit-playsinline
+                                preload="metadata"
+                                class="reel-video"
+                            ></video>
+
+                            <!-- Top Header: Title on Left, Persistent Audio Pill on Right -->
+                            <div class="reel-top-bar">
+                                <div class="reel-top-row">
+                                    <h3 class="reel-top-title">{item.title}</h3>
+                                    <button type="button" class="reel-audio-pill sound-muted" aria-label="Toggle Sound" onclick="event.stopPropagation();" title="Toggle Sound">
+                                        <!-- Sound ON Icon -->
+                                        <svg class="audio-icon icon-vol-on" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                                         </svg>
-                                    </div>
-                                    <span class="watch-all-title">Watch All</span>
-                                    <span class="watch-all-sub">
-                                        EXPLORE REELS
-                                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                            <polyline points="12 5 19 12 12 19"></polyline>
+                                        <!-- Sound OFF (Muted) Icon -->
+                                        <svg class="audio-icon icon-vol-mute" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
                                         </svg>
-                                    </span>
+                                    </button>
                                 </div>
+                                <div class="reel-title-divider" aria-hidden="true"></div>
+                            </div>
+
+                            <!-- Center Audio & Play/Pause Controller (Ultra-thin Frosted Glass Ring) -->
+                            <button type="button" class="reel-center-ctrl state-mute" aria-label="Audio and Playback Control">
+                                <svg class="center-icon icon-mute" viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+                                    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                                </svg>
+                                <svg class="center-icon icon-pause" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                                    <rect x="7" y="5" width="2.5" height="14" rx="1.2" />
+                                    <rect x="14.5" y="5" width="2.5" height="14" rx="1.2" />
+                                </svg>
+                                <svg class="center-icon icon-play" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                    <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86a1 1 0 0 0-1.5.86z"/>
+                                </svg>
+                            </button>
+
+                            <!-- Minimal Floating Action: Watch All -->
+                            <div class="reel-bottom-bar">
+                                <a 
+                                    href={`/reels/#reel-${item.id}`} 
+                                    data-astro-prefetch="viewport"
+                                    class="reel-minimal-cta" 
+                                    onclick="event.stopPropagation();"
+                                    aria-label={`Watch All Reels - ${item.title}`}
+                                >
+                                    <span>WATCH ALL</span>
+                                    <svg class="reel-minimal-arrow" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
-                    </a>
-                </div>
+                    </div>
+                ))}
+
+                <!-- 9-Grid Blurred Reel Watch All Card -->
+                <a href="/reels/" data-astro-prefetch="viewport" class="reel-card reel-watch-all-card" aria-label="Watch All Reels">
+                    <div class="reel-media-inner">
+                        <div class="reel-grid-9">
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n, i) => {
+                                const gridReel = reelsData && reelsData[i];
+                                return (
+                                    <div class="mini-reel-cell">
+                                        {gridReel ? (
+                                            <video 
+                                                src={gridReel.video} 
+                                                loop 
+                                                muted 
+                                                autoplay
+                                                playsinline 
+                                                webkit-playsinline
+                                                preload="metadata"
+                                            ></video>
+                                        ) : (
+                                            <div class="mini-reel-placeholder"></div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div class="watch-all-overlay">
+                            <div class="watch-all-btn-content">
+                                <div class="watch-all-icon-circle">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                        <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                                    </svg>
+                                </div>
+                                <span class="watch-all-title">Watch All</span>
+                                <span class="watch-all-sub">
+                                    EXPLORE REELS
+                                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
@@ -484,82 +490,86 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         </div>
     </section>
 
-    <!-- Latest Collection Horizontal Scroll-to-Slide Showcase -->
-    <section class="latest-collection-scroll-track" id="collectionScrollTrack">
-        <div class="latest-collection-sticky-stage" id="collectionStickyStage">
-            <div class="collection-header">
-                <div class="collection-title-row">
-                    <h2 class="collection-title">LATEST COLLECTION</h2>
-                    <a href="/products/" class="collection-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
-                </div>
+    <!-- Latest Collection Horizontal Swipe Showcase (Standardized Product Cards) -->
+    <section class="latest-collection-section" id="collectionSection" aria-label="Latest Collection">
+        <div class="collection-header">
+            <div class="collection-title-row">
+                <h2 class="collection-title">LATEST COLLECTION</h2>
+                <a href="/products/" data-astro-prefetch="viewport" class="collection-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
             </div>
+        </div>
 
-            <div class="collection-cards-viewport" id="collectionCardsViewport">
-                <div class="collection-cards-track" id="collectionCardsTrack">
-                    {latestProducts.map((item, index) => {
-                        const origPrice = item.data.price;
-                        const offerPrice = item.data.offer_price;
-                        const hasDiscount = origPrice && offerPrice && offerPrice < origPrice;
-                        const discountPercent = hasDiscount ? Math.round(((origPrice - offerPrice) / origPrice) * 100) : null;
-                        const displayPrice = offerPrice || origPrice;
+        <div class="collection-cards-viewport" id="collectionCardsViewport">
+            <div class="collection-cards-track" id="collectionCardsTrack">
+                {latestProducts.map((item, index) => {
+                    const origPrice = item.data.price;
+                    const offerPrice = item.data.offer_price;
+                    const hasDiscount = origPrice && offerPrice && offerPrice < origPrice;
+                    const discountPercent = hasDiscount ? Math.round(((origPrice - offerPrice) / origPrice) * 100) : null;
+                    const displayPrice = offerPrice || origPrice;
 
-                        return (
-                            <a href={`/products/${item.id}/`} class="collection-card" aria-label={item.data.title}>
-                                <div class="card-media-wrapper">
-                                    {hasDiscount && (
-                                        <span class="collection-discount-badge">-{discountPercent}%</span>
-                                    )}
-                                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} loading={index < 2 ? "eager" : "lazy"} />
-                                </div>
-                                <div class="card-meta">
+                    return (
+                        <a href={`/products/${item.id}/`} data-astro-prefetch="viewport" class="product-card collection-product-card" aria-label={item.data.title}>
+                            <div class="product-card-image-wrapper">
+                                {hasDiscount && (
+                                    <span class="product-discount-pill">-{discountPercent}%</span>
+                                )}
+                                <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} loading={index < 3 ? "eager" : "lazy"} />
+                            </div>
+                            <div class="product-card-name">
+                                <div class="product-card-title">{item.data.title}</div>
+                                <div class="product-card-bottom-row">
                                     {item.data.category && (
-                                        <span class="card-cat-label">{item.data.category}</span>
+                                        <div class="product-card-category">{item.data.category}</div>
                                     )}
-                                    <h3 class="card-title">{item.data.title}</h3>
-                                    <div class="card-price-row">
-                                        {displayPrice && (
-                                            <span class="card-curr-price">₹{Number(displayPrice).toLocaleString('en-IN')}</span>
-                                        )}
-                                        {hasDiscount && (
-                                            <span class="card-orig-price">₹{Number(origPrice).toLocaleString('en-IN')}</span>
+                                    <div class="product-card-price-wrapper">
+                                        {hasDiscount ? (
+                                            <div class="product-card-price has-offer">
+                                                <del class="original-price">₹{origPrice}</del>
+                                                <span class="offer-price">₹{offerPrice}</span>
+                                            </div>
+                                        ) : (
+                                            <div class="product-card-price">₹{displayPrice}</div>
                                         )}
                                     </div>
                                 </div>
-                            </a>
-                        );
-                    })}
+                            </div>
+                        </a>
+                    );
+                })}
 
-                    <!-- 9-Grid Blurred Products View All Card -->
-                    <a href="/products/" class="collection-card collection-view-all-card" aria-label="View All Products">
-                        <div class="card-media-wrapper collection-view-all-media">
-                            <div class="product-grid-9">
-                                {collectionPreviewImages.map((imgSrc, i) => (
-                                    <div class="mini-prod-cell">
-                                        <img src={imgSrc} alt={`Collection item ${i + 1}`} loading="lazy" />
-                                    </div>
-                                ))}
-                            </div>
-                            <div class="watch-all-overlay">
-                                <div class="watch-all-btn-content">
-                                    <div class="watch-all-icon-circle">
-                                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-                                            <path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z"/>
-                                        </svg>
-                                    </div>
-                                    <span class="watch-all-title">View All</span>
-                                    <span class="watch-all-sub">EXPLORE STORE &rarr;</span>
+                <!-- Standardized View All Card (Matches Product Cards) -->
+                <a href="/products/" data-astro-prefetch="viewport" class="product-card collection-product-card collection-view-all-card" aria-label="View All Products">
+                    <div class="product-card-image-wrapper collection-view-all-media">
+                        <div class="product-grid-9">
+                            {collectionPreviewImages.map((imgSrc, i) => (
+                                <div class="mini-prod-cell">
+                                    <img src={imgSrc} alt={`Collection item ${i + 1}`} loading="lazy" />
                                 </div>
+                            ))}
+                        </div>
+                        <div class="watch-all-overlay">
+                            <div class="watch-all-btn-content">
+                                <div class="watch-all-icon-circle">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                        <path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z"/>
+                                    </svg>
+                                </div>
+                                <span class="watch-all-title">View All</span>
+                                <span class="watch-all-sub">EXPLORE &rarr;</span>
                             </div>
                         </div>
-                        <div class="card-meta">
-                            <span class="card-cat-label">COLLECTION</span>
-                            <h3 class="card-title">All Products & Fabrics</h3>
-                            <div class="card-price-row">
-                                <span class="card-curr-price">Explore 24+ Items →</span>
+                    </div>
+                    <div class="product-card-name">
+                        <div class="product-card-title">All Products & Fabrics</div>
+                        <div class="product-card-bottom-row">
+                            <div class="product-card-category">COLLECTION</div>
+                            <div class="product-card-price-wrapper">
+                                <div class="product-card-price">240+ Items</div>
                             </div>
                         </div>
-                    </a>
-                </div>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
@@ -902,97 +912,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
             updateLaptop();
         }
 
-        // Horizontal Scroll-to-Slide for Trending Reels
-        function initReelsScroll() {
-            const track = document.getElementById('reelsScrollTrack');
-            const cardsTrack = document.getElementById('reelsCardsTrack');
-            const viewport = document.getElementById('reelsCardsViewport');
-            if (!track || !cardsTrack || !viewport) return;
-            if (track._reelsScrollInitialized) return;
-            track._reelsScrollInitialized = true;
-
-            let ticking = false;
-
-            function updateSlide() {
-                const rect = track.getBoundingClientRect();
-                const windowH = window.innerHeight;
-                const totalScrollable = track.offsetHeight - windowH;
-
-                if (totalScrollable <= 0) {
-                    ticking = false;
-                    return;
-                }
-
-                const stickyTop = window.innerWidth > 600 ? 70 : 60;
-                const scrolledPast = -(rect.top - stickyTop);
-                const progress = Math.min(Math.max(scrolledPast / (totalScrollable - stickyTop), 0), 1);
-
-                const maxTranslate = Math.max(cardsTrack.scrollWidth - viewport.clientWidth + 40, 0);
-                cardsTrack.style.transform = `translateX(-${progress * maxTranslate}px)`;
-
-                if (window._updateActiveReelByProgress) {
-                    window._updateActiveReelByProgress();
-                }
-
-                ticking = false;
-            }
-
-            function onScroll() {
-                if (!ticking) {
-                    requestAnimationFrame(updateSlide);
-                    ticking = true;
-                }
-            }
-
-            window.addEventListener('scroll', onScroll, { passive: true });
-            window.addEventListener('resize', onScroll, { passive: true });
-            updateSlide();
-        }
-
-        // Horizontal Scroll-to-Slide for Latest Collection
-        function initCollectionScroll() {
-            const track = document.getElementById('collectionScrollTrack');
-            const cardsTrack = document.getElementById('collectionCardsTrack');
-            const viewport = document.getElementById('collectionCardsViewport');
-            if (!track || !cardsTrack || !viewport) return;
-            if (track._collectionScrollInitialized) return;
-            track._collectionScrollInitialized = true;
-
-            let ticking = false;
-
-            function updateSlide() {
-                const rect = track.getBoundingClientRect();
-                const windowH = window.innerHeight;
-                const totalScrollable = track.offsetHeight - windowH;
-
-                if (totalScrollable <= 0) {
-                    ticking = false;
-                    return;
-                }
-
-                const stickyTop = window.innerWidth > 600 ? 70 : 60;
-                const scrolledPast = -(rect.top - stickyTop);
-                const progress = Math.min(Math.max(scrolledPast / (totalScrollable - stickyTop), 0), 1);
-
-                const maxTranslate = Math.max(cardsTrack.scrollWidth - viewport.clientWidth + 40, 0);
-                cardsTrack.style.transform = `translateX(-${progress * maxTranslate}px)`;
-
-                ticking = false;
-            }
-
-            function onScroll() {
-                if (!ticking) {
-                    requestAnimationFrame(updateSlide);
-                    ticking = true;
-                }
-            }
-
-            window.addEventListener('scroll', onScroll, { passive: true });
-            window.addEventListener('resize', onScroll, { passive: true });
-            updateSlide();
-        }
-
-        // Homepage Trending Reels Interaction & Audio Persistence
+        // Trending Reels Swipe Interactions & Audio Persistence
         function initHomeReelsInteractions() {
             const viewport = document.getElementById('reelsCardsViewport');
             const track = document.getElementById('reelsCardsTrack');
@@ -1131,15 +1051,22 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 return closestCard;
             }
 
-            window._updateActiveReelByProgress = function() {
-                const best = getMostVisibleCard();
-                if (best && best !== activeCard) {
-                    activateCard(best);
+            let swipeTicking = false;
+            track.addEventListener('scroll', () => {
+                if (!swipeTicking) {
+                    requestAnimationFrame(() => {
+                        const best = getMostVisibleCard();
+                        if (best && best !== activeCard) {
+                            activateCard(best);
+                        }
+                        swipeTicking = false;
+                    });
+                    swipeTicking = true;
                 }
-            };
+            }, { passive: true });
 
             // IntersectionObserver: Pause when reels section is offscreen
-            const section = document.getElementById('reelsScrollTrack');
+            const section = document.getElementById('reelsSection');
             if (section) {
                 const sectionObserver = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
@@ -1293,8 +1220,6 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         function initHomePage() {
             initBannerSlider();
             initLaptopScroll();
-            initReelsScroll();
-            initCollectionScroll();
             initHomeReelsInteractions();
         }
 
@@ -2499,46 +2424,22 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         }
       }
 
-      /* --- LATEST COLLECTION SCROLL-TO-SLIDE --- */
-
-      .latest-collection-scroll-track {
+      /* --- LATEST COLLECTION NATIVE HORIZONTAL SWIPE SHOWCASE --- */
+      .latest-collection-section {
         position: relative;
         width: 100%;
-        height: 240vh; /* Smooth, snappy virtual scroll without dead space */
-        margin: 0 0 64px 0; /* Consistent spacing above Line 04 */
+        margin: 0 0 64px 0;
       }
 
       @media (min-width: 860px) {
-        .latest-collection-scroll-track {
-          height: 260vh;
+        .latest-collection-section {
           margin-bottom: 96px;
         }
       }
 
       @media (max-width: 600px) {
-        .latest-collection-scroll-track {
+        .latest-collection-section {
           margin-bottom: 64px;
-        }
-      }
-
-      .latest-collection-sticky-stage {
-        position: -webkit-sticky;
-        position: sticky;
-        top: 60px;
-        height: calc(100dvh - 124px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        overflow: hidden;
-        box-sizing: border-box;
-        padding: 0;
-        z-index: 9;
-      }
-
-      @media (min-width: 601px) {
-        .latest-collection-sticky-stage {
-          top: 70px;
-          height: calc(100dvh - 85px);
         }
       }
 
@@ -2625,218 +2526,212 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
       .collection-cards-viewport {
         width: 100%;
         overflow: hidden;
-        padding: 6px 0;
       }
 
       .collection-cards-track {
         display: flex;
-        gap: 20px;
-        padding: 0 20px;
-        will-change: transform;
-        transition: transform 0.05s linear;
+        gap: 14px;
+        padding: 6px 16px 20px 16px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        width: 100%;
+        box-sizing: border-box;
       }
 
-      @media (max-width: 600px) {
-        .collection-cards-track {
-          gap: 16px;
-          padding: 0 16px;
-        }
-      }
-
-      /* 3:4 Aspect Ratio, Minimal Luxury Editorial Card */
-      .collection-card {
-        flex: 0 0 auto;
-        width: 68vw;
-        max-width: 260px;
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        text-decoration: none;
-        display: flex;
-        flex-direction: column;
-        cursor: pointer;
-        outline: none;
+      .collection-cards-track::-webkit-scrollbar {
+        display: none;
       }
 
       @media (min-width: 768px) {
-        .collection-card {
-          width: 280px;
-          max-width: 280px;
+        .collection-cards-track {
+          gap: 18px;
+          padding: 8px 20px 24px 20px;
+          max-width: 1120px;
+          margin: 0 auto;
         }
       }
 
-      .card-media-wrapper {
+      /* Standardized Homepage Product Cards (Matches Website Product Cards Exactly) */
+      .collection-product-card {
+        flex: 0 0 165px !important;
+        width: 165px !important;
+        min-width: 165px !important;
+        max-width: 165px !important;
+        scroll-snap-align: start;
+        text-decoration: none;
+        color: var(--text-color, #111111);
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        outline: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+        position: relative;
+        cursor: pointer;
+        box-sizing: border-box;
+      }
+
+      @media (min-width: 768px) {
+        .collection-product-card {
+          flex: 0 0 205px !important;
+          width: 205px !important;
+          min-width: 205px !important;
+          max-width: 205px !important;
+        }
+      }
+
+      .collection-product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.1);
+      }
+
+      .collection-product-card .product-card-image-wrapper {
         position: relative;
         width: 100%;
-        aspect-ratio: 3 / 4;
+        aspect-ratio: 4 / 5;
         overflow: hidden;
-        border-radius: 4px;
-        background: #f5f4f0 !important;
-        border: none !important;
-        box-shadow: none;
-        max-height: min(340px, calc(100dvh - 290px));
+        background: #f5f5f5;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
       }
 
-      @media (max-width: 600px) {
-        .card-media-wrapper {
-          max-height: min(280px, calc(100dvh - 275px));
-        }
-      }
-
-      .collection-discount-badge {
+      .collection-product-card .product-card-image-wrapper img {
         position: absolute;
-        top: 12px;
-        left: 12px;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .collection-product-card:hover .product-card-image-wrapper img {
+        transform: scale(1.06);
+      }
+
+      .product-discount-pill {
+        position: absolute;
+        top: 8px;
+        left: 8px;
         z-index: 2;
         background: #111111;
         color: #ffffff;
         font-family: var(--font-body, 'Ubuntu', sans-serif);
-        font-size: 0.62rem;
-        font-weight: 400;
-        letter-spacing: 0.8px;
-        padding: 4px 8px;
+        font-size: 0.60rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        padding: 3px 6px;
         border-radius: 3px;
         line-height: 1;
       }
 
-      .card-media-wrapper img {
-        width: 100%;
-        height: 100%;
-        aspect-ratio: 3 / 4;
-        object-fit: cover;
-        object-position: center;
-        display: block;
-        border: none !important;
-        background: transparent !important;
-        box-shadow: none !important;
-        transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-      }
-
-      .collection-card:hover .card-media-wrapper img {
-        transform: scale(1.04);
-      }
-
-      .card-meta {
-        padding-top: 12px;
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
+      .collection-product-card .product-card-name {
+        padding: 10px 10px 12px 10px;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .card-cat-label {
-        font-family: var(--font-body, 'Ubuntu', sans-serif);
-        font-size: 0.62rem;
-        font-weight: 500;
-        letter-spacing: 1.8px;
-        text-transform: uppercase;
-        color: #888888;
-        margin-bottom: 4px;
-        display: block;
-      }
-
-      .card-title {
-        font-family: var(--font-heading, 'Playfair Display', serif);
-        font-size: 1.15rem;
-        font-weight: 500;
-        line-height: 1.35;
-        color: #111111;
-        margin: 0 0 6px 0;
-        letter-spacing: 0.2px;
         text-align: left;
-        text-decoration: none;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        background: #ffffff;
       }
 
-      .card-price-row {
+      .collection-product-card .product-card-title {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.88rem;
+        font-weight: 500;
+        line-height: 1.3;
+        color: #111111;
+        margin: 0;
+        text-transform: capitalize;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .collection-product-card .product-card-bottom-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 6px;
+        margin-top: 5px;
+        width: 100%;
+      }
+
+      .collection-product-card .product-card-category {
+        font-weight: 500;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.65rem;
+        color: #888888;
+        margin-top: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .collection-product-card .product-card-price-wrapper {
+        margin-top: 0;
+        margin-left: auto;
+        flex-shrink: 0;
+        text-align: right;
+      }
+
+      .collection-product-card .product-card-price {
+        font-weight: 500;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.90rem;
+        color: #111111;
         display: flex;
         align-items: baseline;
-        gap: 8px;
-        margin-top: 2px;
+        justify-content: flex-end;
+        gap: 5px;
       }
 
-      .card-curr-price {
-        font-family: var(--font-body, 'Ubuntu', sans-serif);
-        font-size: 0.95rem;
-        font-weight: 400;
-        color: #111111;
-        letter-spacing: 0.2px;
-      }
-
-      .card-orig-price {
-        font-family: var(--font-body, 'Ubuntu', sans-serif);
-        font-size: 0.82rem;
-        font-weight: 400;
+      .collection-product-card .product-card-price.has-offer .original-price {
+        font-size: 0.74rem;
         color: #999999;
         text-decoration: line-through;
+        font-weight: 400;
       }
 
-      /* View All / Show All Products End Card */
-      .collection-view-all-card {
-        cursor: pointer;
+      .collection-product-card .product-card-price.has-offer .offer-price {
+        font-size: 0.90rem;
+        font-weight: 500;
+        color: #111111;
       }
 
-      .collection-view-all-media {
+      /* View All Card in Latest Collection */
+      .collection-view-all-card .collection-view-all-media {
         position: relative;
         background: #111111 !important;
         overflow: hidden;
       }
 
-      @media (min-width: 768px) {
-        .collection-card {
-          width: 310px;
-          max-width: 310px;
-        }
-
-        .latest-collection-scroll-track {
-          height: 260vh;
-        }
-      }
-
-      /* --- TRENDING REELS SCROLL-TO-SLIDE --- */
-      .reels-scroll-track {
+      /* --- TRENDING REELS NATIVE HORIZONTAL SWIPE --- */
+      .trending-reels-section {
         position: relative;
         width: 100%;
-        height: 240vh; /* Smooth, snappy virtual scroll without dead space */
-        margin: 0 0 64px 0; /* Consistent spacing above Line 02 */
+        margin: 0 0 64px 0;
       }
 
       @media (min-width: 860px) {
-        .reels-scroll-track {
-          height: 260vh;
+        .trending-reels-section {
           margin-bottom: 96px;
         }
       }
 
       @media (max-width: 600px) {
-        .reels-scroll-track {
+        .trending-reels-section {
           margin-bottom: 64px;
-        }
-      }
-
-      .reels-sticky-stage {
-        position: -webkit-sticky;
-        position: sticky;
-        top: 60px;
-        height: calc(100dvh - 124px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        overflow: hidden;
-        box-sizing: border-box;
-        padding: 0;
-        z-index: 9;
-      }
-
-      @media (min-width: 601px) {
-        .reels-sticky-stage {
-          top: 70px;
-          height: calc(100dvh - 85px);
         }
       }
 
@@ -2930,30 +2825,41 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
       .reels-cards-viewport {
         width: 100%;
         overflow: hidden;
-        padding: 6px 0;
       }
 
       .reels-cards-track {
         display: flex;
-        gap: 20px;
-        padding: 0 20px;
-        will-change: transform;
-        transition: transform 0.05s linear;
-        width: max-content;
+        gap: 16px;
+        padding: 4px 20px 24px 20px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        width: 100%;
+        box-sizing: border-box;
       }
 
-      @media (max-width: 600px) {
+      .reels-cards-track::-webkit-scrollbar {
+        display: none;
+      }
+
+      @media (min-width: 768px) {
         .reels-cards-track {
-          gap: 16px;
-          padding: 0 16px;
+          gap: 20px;
+          padding: 6px 20px 28px 20px;
+          max-width: 1120px;
+          margin: 0 auto;
         }
       }
 
       /* Luxury Haute-Couture Reel Cards */
       .reel-card {
-        width: 290px;
-        height: min(480px, calc(100dvh - 190px));
-        flex: 0 0 290px;
+        width: 280px !important;
+        min-width: 280px !important;
+        max-width: 280px !important;
+        height: 480px;
+        flex: 0 0 280px !important;
         border-radius: 12px;
         background: #000000;
         border: none !important;
@@ -2968,27 +2874,27 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
                     box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
         position: relative;
+        scroll-snap-align: start;
         -webkit-tap-highlight-color: transparent;
       }
 
       @media (min-width: 768px) {
         .reel-card {
-          width: 300px;
-          flex: 0 0 300px;
-          height: min(510px, calc(100dvh - 210px));
-        }
-
-        .reels-scroll-track {
-          height: 260vh;
+          width: 300px !important;
+          min-width: 300px !important;
+          max-width: 300px !important;
+          flex: 0 0 300px !important;
+          height: 500px;
         }
       }
 
       @media (max-width: 600px) {
         .reel-card {
-          width: 70vw;
-          max-width: 260px;
-          flex: 0 0 70vw;
-          height: min(420px, calc(100dvh - 205px));
+          width: 72vw !important;
+          min-width: 72vw !important;
+          max-width: 260px !important;
+          flex: 0 0 72vw !important;
+          height: 420px;
         }
       }
 
@@ -3220,7 +3126,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
       }
 
       @media (max-width: 600px) {
-        .reels-scroll-track {
+        .trending-reels-section {
           margin: 0 0 80px 0;
         }
         .reel-minimal-cta {

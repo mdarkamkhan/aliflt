@@ -1,6 +1,6 @@
 /* Service Worker for ALiF PWA */
 
-const CACHE_NAME = 'alif-v3';
+const CACHE_NAME = 'alif-v4';
 
 // Core static assets
 const urlsToCache = [
@@ -38,18 +38,39 @@ self.addEventListener('activate', event => {
 
 // 3. Fetch Event
 self.addEventListener('fetch', event => {
-  // Navigation / HTML requests: NETWORK-FIRST with offline fallback
+  // Navigation / HTML requests: Fast Network-first with 500ms timeout fallback to cache
   if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept')?.includes('text/html'))) {
     event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          if (response && response.status === 200) {
-            const responseClone = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+      (async () => {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 500);
+          const networkResponse = await fetch(event.request, { signal: controller.signal });
+          clearTimeout(timeoutId);
+
+          if (networkResponse && networkResponse.status === 200) {
+            const cache = await caches.open(CACHE_NAME);
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
           }
-          return response;
-        })
-        .catch(() => caches.match(event.request))
+        } catch (_err) {
+          // Network took >500ms or offline: immediately fall through to cache
+        }
+
+        const cachedResponse = await caches.match(event.request);
+        if (cachedResponse) {
+          // Background revalidation
+          fetch(event.request).then(async (freshResponse) => {
+            if (freshResponse && freshResponse.status === 200) {
+              const cache = await caches.open(CACHE_NAME);
+              cache.put(event.request, freshResponse);
+            }
+          }).catch(() => {});
+          return cachedResponse;
+        }
+
+        return fetch(event.request);
+      })()
     );
     return;
   }
