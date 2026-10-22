@@ -3,7 +3,7 @@ title: "Rani Pink Fandy Silk Co-ord & Tunic Set"
 date: "2026-10-22T10:14:22.104Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/soft-pink-plain-satin-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-079.webp"
 price: 1000
 offer_price: 800
 product_code: "ALIF-SET-079"
