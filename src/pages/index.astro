@@ -1018,18 +1018,15 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 return closestCard;
             }
 
-            let swipeTicking = false;
+            let scrollDebounceTimer = null;
             track.addEventListener('scroll', () => {
-                if (!swipeTicking) {
-                    requestAnimationFrame(() => {
-                        const best = getMostVisibleCard();
-                        if (best && best !== activeCard) {
-                            activateCard(best);
-                        }
-                        swipeTicking = false;
-                    });
-                    swipeTicking = true;
-                }
+                if (scrollDebounceTimer) clearTimeout(scrollDebounceTimer);
+                scrollDebounceTimer = setTimeout(() => {
+                    const best = getMostVisibleCard();
+                    if (best && best !== activeCard) {
+                        activateCard(best);
+                    }
+                }, 120);
             }, { passive: true });
 
             // IntersectionObserver: Pause when reels section is offscreen

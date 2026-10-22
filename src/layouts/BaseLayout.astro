@@ -64,7 +64,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
     {preloadImage && (
       <link rel="preload" as="image" href={preloadImage} type="image/webp" fetchpriority="high" />
     )}
-    <link rel="stylesheet" href="/css/style.css?v=luxury2025">
+    <link rel="stylesheet" href="/css/style.css?v=perf20261022">
     <style is:global>
       /* Ensure brand logo 'alif.' is always pristine, minimal, non-bold, and never underlined */
       .nav-logo,
@@ -679,7 +679,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
             } catch(e) {}
         }
 
-        // Instagram-Style Horizontal Swipe Navigation (Home <-> Reels)
+        // Instagram-Style Minimalist Floating Edge Swipe Navigation (Home <-> Reels)
         function initInstagramSwipeNavigation() {
             if (window._instaSwipeBound) return;
             window._instaSwipeBound = true;
@@ -698,6 +698,21 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                     el = document.createElement('div');
                     el.id = 'instaSwipeIndicator';
                     el.className = 'insta-swipe-indicator';
+                    el.innerHTML = `
+                        <div class="indicator-reels-box" style="display:none; align-items:center; gap:7px;">
+                            <span class="swipe-text">REELS</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <rect x="2.5" y="2.5" width="19" height="19" rx="4.5" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <polygon points="10 9 15 12 10 15" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="indicator-home-box" style="display:none; align-items:center; gap:7px;">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                            <span class="swipe-text">HOME</span>
+                        </div>
+                    `;
                     document.body.appendChild(el);
                 }
                 return el;
@@ -736,18 +751,18 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                 touchStartY = touch.clientY;
                 touchCurrentX = touch.clientX;
                 touchCurrentY = touch.clientY;
-                isTrackingSwipe = true;
 
+                // STRICT EDGE DETECTION: Only activate on far edges (within 45px) so middle 90% is 100% native
                 if (isHome) {
-                    // Must start on right side (right 65% of viewport)
-                    if (touchStartX >= window.innerWidth * 0.35) {
+                    if (touchStartX >= window.innerWidth - 45) {
+                        isTrackingSwipe = true;
                         swipeDirection = 'to-reels';
                     } else {
                         isTrackingSwipe = false;
                     }
                 } else if (isReels) {
-                    // Must start on left side (left 65% of viewport)
-                    if (touchStartX <= window.innerWidth * 0.65) {
+                    if (touchStartX <= 45) {
+                        isTrackingSwipe = true;
                         swipeDirection = 'to-home';
                     } else {
                         isTrackingSwipe = false;
@@ -764,40 +779,35 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                 const diffX = touchCurrentX - touchStartX;
                 const diffY = touchCurrentY - touchStartY;
 
-                // Cancel if predominantly scrolling vertically
-                if (Math.abs(diffY) > 25 && Math.abs(diffY) > Math.abs(diffX)) {
+                // Cancel if vertical scroll is dominant
+                if (Math.abs(diffY) > 20 && Math.abs(diffY) > Math.abs(diffX)) {
                     isTrackingSwipe = false;
                     if (indicatorEl) indicatorEl.classList.remove('visible');
                     return;
                 }
 
-                // Home -> Reels (dragging from right towards left, diffX < 0)
+                // Home -> Reels (dragging from right edge towards left)
                 if (swipeDirection === 'to-reels' && diffX < -15) {
                     const pull = Math.min(Math.abs(diffX), 120);
                     indicatorEl = getOrCreateIndicator();
                     indicatorEl.className = 'insta-swipe-indicator right-edge visible';
-                    indicatorEl.innerHTML = `
-                        <span class="swipe-text">REELS</span>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                            <rect x="2.5" y="2.5" width="19" height="19" rx="4.5" fill="none" stroke="currentColor" stroke-width="2"/>
-                            <polygon points="10 9 15 12 10 15" fill="currentColor"/>
-                        </svg>
-                    `;
+                    const reelsBox = indicatorEl.querySelector('.indicator-reels-box');
+                    const homeBox = indicatorEl.querySelector('.indicator-home-box');
+                    if (reelsBox) reelsBox.style.display = 'inline-flex';
+                    if (homeBox) homeBox.style.display = 'none';
                     const opacity = Math.min(pull / 65, 1);
                     indicatorEl.style.transform = `translateY(-50%) translateX(${Math.max(60 - pull * 0.7, 0)}px)`;
                     indicatorEl.style.opacity = opacity;
                 }
-                // Reels -> Home (dragging from left towards right, diffX > 0)
+                // Reels -> Home (dragging from left edge towards right)
                 else if (swipeDirection === 'to-home' && diffX > 15) {
                     const pull = Math.min(diffX, 120);
                     indicatorEl = getOrCreateIndicator();
                     indicatorEl.className = 'insta-swipe-indicator left-edge visible';
-                    indicatorEl.innerHTML = `
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="15 18 9 12 15 6"></polyline>
-                        </svg>
-                        <span class="swipe-text">HOME</span>
-                    `;
+                    const reelsBox = indicatorEl.querySelector('.indicator-reels-box');
+                    const homeBox = indicatorEl.querySelector('.indicator-home-box');
+                    if (reelsBox) reelsBox.style.display = 'none';
+                    if (homeBox) homeBox.style.display = 'inline-flex';
                     const opacity = Math.min(pull / 65, 1);
                     indicatorEl.style.transform = `translateY(-50%) translateX(${Math.min(-60 + pull * 0.7, 0)}px)`;
                     indicatorEl.style.opacity = opacity;
@@ -817,9 +827,9 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                     indicatorEl.style.opacity = '0';
                 }
 
-                // Trigger threshold: 55px horizontal swipe
+                // Trigger threshold: 50px horizontal swipe
                 if (isHorizontal) {
-                    if (swipeDirection === 'to-reels' && diffX < -55) {
+                    if (swipeDirection === 'to-reels' && diffX < -50) {
                         if (navigator.vibrate) {
                             try { navigator.vibrate(15); } catch(_) {}
                         }
@@ -829,7 +839,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                         } else {
                             window.location.assign('/reels/');
                         }
-                    } else if (swipeDirection === 'to-home' && diffX > 55) {
+                    } else if (swipeDirection === 'to-home' && diffX > 50) {
                         if (navigator.vibrate) {
                             try { navigator.vibrate(15); } catch(_) {}
                         }

@@ -109,8 +109,10 @@ export default function SearchModal() {
     }
   }, [isOpen]);
 
-  // Typewriter placeholder effect
+  // Typewriter placeholder effect (only runs when modal is open to prevent idle background re-renders)
   useEffect(() => {
+    if (!isOpen) return;
+
     let wordIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
@@ -141,9 +143,9 @@ export default function SearchModal() {
       timeoutId = setTimeout(tick, isDeleting ? 50 : 100);
     };
 
-    timeoutId = setTimeout(tick, 500);
+    timeoutId = setTimeout(tick, 300);
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [isOpen]);
 
   // Search execution
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {

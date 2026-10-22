@@ -228,6 +228,9 @@ h3 {
         will-change: auto;
         transform: none;
     }
+    #fixed-bg-pattern::before {
+        display: none !important;
+    }
 }
 
 #fixed-bg-pattern::before {
@@ -3824,4 +3827,69 @@ a.luxury-product-card, a.service-luxury-card {
     opacity: 0.88;
     transform: scale(0.985);
     transition: transform 0.1s ease, opacity 0.1s ease;
+}
+
+/* =========================================
+   MOBILE PERFORMANCE & INSTANT RESPONSE ENGINE (< 768px)
+   ========================================= */
+@media (max-width: 768px) {
+    /* 1. Eliminate CPU software rasterization from SVG fractal turbulence filters */
+    .doodle-container {
+        filter: none !important;
+        -webkit-filter: none !important;
+    }
+
+    /* 2. Optimize fixed top nav & swipe indicators (direct GPU compositing) */
+    .fixed-top-nav {
+        background: rgba(251, 249, 246, 0.96) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    .insta-swipe-indicator {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(18, 18, 18, 0.96) !important;
+    }
+
+    /* 3. Fast Touch & Zero Tap-Delay across all interactive buttons, cards & links */
+    button,
+    a,
+    .btn,
+    .product-card,
+    .collection-product-card,
+    .luxury-product-card,
+    .service-luxury-card,
+    .fc-card,
+    .se-card,
+    .atelier-reel-card,
+    .reel-card,
+    .reel-curated-strip,
+    .rc-action-btn,
+    .rc-mini-card,
+    .b-nav-item,
+    .store-route-card,
+    .store-direct-direction-btn,
+    .banner-thin-nav-btn {
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: transparent !important;
+        cursor: pointer;
+    }
+
+    /* 4. Native momentum scrolling with zero gesture collision */
+    .reels-cards-track,
+    .collection-cards-track,
+    .rc-items-row {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x pan-y;
+    }
+
+    /* 5. Ensure Curated Strip child elements don't swallow parent clicks */
+    .reel-curated-strip * {
+        pointer-events: none;
+    }
+    .reel-curated-strip {
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
+    }
 }
