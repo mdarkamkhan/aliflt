@@ -1,6 +1,6 @@
 ---
-title: "Crimson Satin Blouse Set"
-date: "2026-10-22T08:34:48.412Z"
+title: "Boutique Reel #59 Set"
+date: "2026-10-22T09:12:37.692Z"
 layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crimson-red-plain-satin-fabric.webp"

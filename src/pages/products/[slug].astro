@@ -452,11 +452,11 @@ const comboPayload = isCombo ? {
                     <video 
                       src={item.data.reel_video} 
                       poster={item.data.image}
-                      autoplay 
                       loop 
                       muted 
                       playsinline 
                       webkit-playsinline
+                      preload="none"
                     ></video>
                     <span class="luxury-card-combo-badge">Full Set</span>
                   </>
@@ -631,10 +631,11 @@ const comboPayload = isCombo ? {
 
   <script is:inline>
     // Combo Data & Switcher Logic
-    const comboDataEl = document.getElementById('combo-data');
-    if (comboDataEl) {
-      try {
-        const { defaultSet, items } = JSON.parse(comboDataEl.textContent);
+    function initProductActions() {
+      const comboDataEl = document.getElementById('combo-data');
+      if (comboDataEl) {
+        try {
+          const { defaultSet, items } = JSON.parse(comboDataEl.textContent);
 
         const mainVideo = document.getElementById('comboMainVideo');
         const mainImage = document.getElementById('comboMainImage');
@@ -1066,6 +1067,7 @@ const comboPayload = isCombo ? {
           if (url) window.open(url, '_blank');
         });
       }
+      }
     }
 
     function updateCartBadges() {
@@ -1086,7 +1088,8 @@ const comboPayload = isCombo ? {
       if (!stickyBar) return;
 
       // Connect sticky Buy Now button to primary buy action
-      if (stickyBuyBtn && mainBuyBtn) {
+      if (stickyBuyBtn && mainBuyBtn && !stickyBuyBtn._bound) {
+        stickyBuyBtn._bound = true;
         stickyBuyBtn.addEventListener('click', (e) => {
           e.preventDefault();
           mainBuyBtn.click();
@@ -1096,10 +1099,10 @@ const comboPayload = isCombo ? {
       // Starting state: Visible right from the start
       stickyBar.classList.add('visible');
 
+      if (stickyBar._scrollBound) return;
+      stickyBar._scrollBound = true;
+
       // Scroll direction behavior:
-      // Upar scroll krne pr gayab (hide)
-      // Niche scroll krne pr appear (show)
-      // Top of page (starting) pr hamesha visible
       let lastScrollY = window.scrollY || window.pageYOffset || 0;
       let ticking = false;
 
@@ -1137,12 +1140,17 @@ const comboPayload = isCombo ? {
       }, { passive: true });
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initStickyBuyBar);
-    } else {
+    function initProductDetailPage() {
+      initProductActions();
       initStickyBuyBar();
     }
-    document.addEventListener('astro:page-load', initStickyBuyBar);
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initProductDetailPage);
+    } else {
+      initProductDetailPage();
+    }
+    document.addEventListener('astro:page-load', initProductDetailPage);
   </script>
 
   <style>

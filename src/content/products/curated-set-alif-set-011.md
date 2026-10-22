@@ -1,6 +1,6 @@
 ---
 title: "Champagne Gold Tissue Silk Festive Set"
-date: "2026-10-22T08:13:58.775Z"
+date: "2026-10-22T09:14:59.042Z"
 layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/champagne-gold-plain-tissue-silk-fabric.webp"

@@ -3717,3 +3717,111 @@ html {
 }
 
 
+
+/* ==============================================
+   MOBILE-FIRST PERFORMANCE OVERRIDES
+   Phase 1-6: Touch, Layout, Animation, Render
+=============================================== */
+
+/* Phase 1: Remove iOS 300ms tap delay globally */
+a, button, [role="button"], [type="button"], [type="submit"],
+input[type="checkbox"], input[type="radio"], label,
+.luxury-product-card, .reel-card, .atelier-reel-card,
+.service-luxury-card, .rc-mini-card, .b-nav-item,
+.combo-interactive-card, .banner-thin-nav-btn {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Phase 1: Minimum 44x44px touch targets */
+.b-nav-item {
+    min-height: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-search-btn, .nav-cart-btn, .nav-toggle-btn,
+.reel-audio-pill, .drawer-close-btn,
+.combo-modal-close, .banner-thin-nav-btn {
+    min-width: 44px;
+    min-height: 44px;
+}
+
+/* Phase 4: Mobile rendering optimizations */
+@media (max-width: 767px) {
+    .trending-reels-section,
+    .services-editorial-section,
+    .atelier-directory-section,
+    .fc-grid-section,
+    .store-routes-section {
+        content-visibility: auto;
+        contain-intrinsic-size: 0 500px;
+    }
+    .marquee-track {
+        animation-duration: 45s !important;
+    }
+    #fixed-bg-pattern::before {
+        display: none !important;
+    }
+    .reel-card, .atelier-reel-card {
+        will-change: auto !important;
+    }
+    .luxury-product-card {
+        box-shadow: 0 1px 6px rgba(0,0,0,0.07) !important;
+    }
+    body {
+        overscroll-behavior-y: none;
+    }
+}
+
+/* Phase 5: Product card & category card pointer-events fix (Immediate responsive mobile tap) */
+.product-card > *,
+.product-card-image-wrapper > *,
+.luxury-product-card > *:not(a),
+.service-luxury-card > *:not(a),
+.fc-card > *,
+.se-card > *,
+.rc-mini-card > * {
+    pointer-events: none;
+}
+.product-card video,
+.product-grid-video,
+.screen-video {
+    pointer-events: none !important;
+}
+a.product-card,
+a.luxury-product-card,
+a.service-luxury-card,
+a.fc-card,
+a.se-card {
+    pointer-events: auto !important;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+a.luxury-product-card, a.service-luxury-card {
+    display: block;
+    position: relative;
+}
+
+/* Phase 6: Smooth reels scroll on mobile */
+@media (max-width: 767px) {
+    .reels-feed {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+    .atelier-reel-card.is-active {
+        will-change: transform;
+    }
+}
+
+/* Tap active state feedback on cards */
+.luxury-product-card:active, .service-luxury-card:active,
+.reel-card:active, .atelier-reel-card:active,
+.rc-mini-card:active, .combo-interactive-card:active {
+    opacity: 0.88;
+    transform: scale(0.985);
+    transition: transform 0.1s ease, opacity 0.1s ease;
+}

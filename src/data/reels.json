@@ -199,13 +199,15 @@
     "duration": 15.206213,
     "width": 720,
     "height": 1280,
-    "category": "blouse",
+    "category": "curated-sets",
     "style": "bridal",
     "tags": [
       "blouse",
       "velvet",
       "backless",
-      "dori"
+      "dori",
+      "Party Wear",
+      "Trending"
     ],
     "linked_service": "blouse",
     "linked_products": [
@@ -321,13 +323,12 @@
     "duration": 14.161315,
     "width": 720,
     "height": 1280,
-    "category": "blouse",
+    "category": "trending",
     "style": "festive",
     "tags": [
-      "blouse",
-      "princess-cut",
       "pearl",
-      "minimalist"
+      "minimalist",
+      "Party Wear"
     ],
     "linked_service": "blouse",
     "linked_products": [
@@ -1776,13 +1777,14 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (5).mp4",
-    "category": "curated-sets",
+    "category": "trending",
     "style": "boutique-collection",
     "tags": [
       "new-arrival",
       "boutique",
       "ensemble",
-      "sahibganj"
+      "sahibganj",
+      "Simple"
     ],
     "linked_service": "blouse",
     "linked_products": [

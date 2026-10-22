@@ -82,14 +82,14 @@ const products = [...allProducts].reverse();
             <div class="product-card-image-wrapper">
               {item.data.reel_video ? (
                 <video 
-                  src={item.data.reel_video} 
+                  data-src={item.data.reel_video} 
                   poster={image}
-                  autoplay 
                   loop 
                   muted 
                   playsinline 
                   webkit-playsinline
-                  preload="auto"
+                  preload="none"
+                  class="product-grid-video"
                 ></video>
               ) : (
                 <img src={image || '/icons/icon-512x512.png'} alt={title} loading="lazy" />
@@ -205,12 +205,50 @@ const products = [...allProducts].reverse();
       }
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initProductFilters);
-    } else {
-      initProductFilters();
+    function initProductVideos() {
+      const videos = document.querySelectorAll('.product-grid-video');
+      if (videos.length === 0) return;
+
+      if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            const video = entry.target;
+            if (entry.isIntersecting) {
+              const src = video.getAttribute('data-src');
+              if (src && !video.src) {
+                video.src = src;
+                video.load();
+              }
+              video.play().catch(() => {});
+            } else {
+              if (video.src && !video.paused) {
+                video.pause();
+              }
+            }
+          });
+        }, { threshold: 0.25, rootMargin: '100px 0px' });
+
+        videos.forEach(v => obs.observe(v));
+      }
     }
-    document.addEventListener('astro:page-load', initProductFilters);
+
+    function initProductsPage() {
+      initProductFilters();
+      initProductVideos();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initProductsPage);
+    } else {
+      initProductsPage();
+    }
+    document.addEventListener('astro:page-load', initProductsPage);
+
+    document.addEventListener('astro:before-swap', () => {
+      document.querySelectorAll('.product-grid-video').forEach(v => {
+        if (!v.paused) v.pause();
+      });
+    });
   </script>
 </BaseLayout>
 

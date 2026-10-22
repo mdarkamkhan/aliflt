@@ -135,23 +135,36 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       if (b2) b2.innerText = count;
     }
 
-    document.getElementById('proceedToOrderBtn')?.addEventListener('click', () => {
-      const cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
-      if (cart.length === 0) return;
+    function initCartPage() {
+      renderCart();
 
-      let msg = 'Hello alif., I want to place an order from your website:\n\n';
-      let total = 0;
-      cart.forEach((item, idx) => {
-        const itemTotal = Number(item.price) * (item.quantity || 1);
-        total += itemTotal;
-        const codeTag = item.code ? ` [Code: ${item.code}]` : '';
-        msg += `${idx + 1}. ${item.title}${codeTag} (Qty: ${item.quantity || 1}) - ₹${itemTotal}\n`;
-      });
-      msg += `\n*Total Amount:* ₹${total}\n\nPlease confirm availability and delivery.`;
+      const orderBtn = document.getElementById('proceedToOrderBtn');
+      if (orderBtn && !orderBtn._bound) {
+        orderBtn._bound = true;
+        orderBtn.addEventListener('click', () => {
+          const cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
+          if (cart.length === 0) return;
 
-      window.open(`https://wa.me/7250470009?text=${encodeURIComponent(msg)}`, '_blank');
-    });
+          let msg = 'Hello alif., I want to place an order from your website:\n\n';
+          let total = 0;
+          cart.forEach((item, idx) => {
+            const itemTotal = Number(item.price) * (item.quantity || 1);
+            total += itemTotal;
+            const codeTag = item.code ? ` [Code: ${item.code}]` : '';
+            msg += `${idx + 1}. ${item.title}${codeTag} (Qty: ${item.quantity || 1}) - ₹${itemTotal}\n`;
+          });
+          msg += `\n*Total Amount:* ₹${total}\n\nPlease confirm availability and delivery.`;
 
-    renderCart();
+          window.open(`https://wa.me/7250470009?text=${encodeURIComponent(msg)}`, '_blank');
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCartPage);
+    } else {
+      initCartPage();
+    }
+    document.addEventListener('astro:page-load', initCartPage);
   </script>
 </BaseLayout>

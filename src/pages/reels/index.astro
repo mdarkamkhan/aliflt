@@ -113,15 +113,16 @@ const reelsList = (reelsData || []).map((r, index) => {
               data-service={item.linked_service || ''}
               data-products={JSON.stringify(item.linked_products)}
             >
-              <!-- Edge-to-Edge Reel Video (Single active playback handled by JS) -->
+              <!-- Edge-to-Edge Reel Video (lazy-loaded: src set by IntersectionObserver) -->
               <video 
-                src={item.video} 
+                data-src={item.video}
+                src={reelsList.indexOf(item) < 2 ? item.video : undefined}
                 poster={item.image}
                 loop 
                 muted 
                 playsinline 
                 webkit-playsinline
-                preload="metadata"
+                preload={reelsList.indexOf(item) < 2 ? 'metadata' : 'none'}
                 class="reel-video-element"
               ></video>
 
@@ -416,6 +417,14 @@ const reelsList = (reelsData || []).map((r, index) => {
         const centerBtn = targetCard.querySelector('.reel-center-ctrl');
 
         if (!video) return;
+
+        // --- Phase 6: Lazy-load video src on first activation ---
+        const lazySrc = targetCard.dataset.lazySrc || video.getAttribute('data-src');
+        if (lazySrc && !video.src && video.src !== lazySrc) {
+          video.src = lazySrc;
+          targetCard.dataset.lazySrc = '';
+          video.load();
+        }
 
         // Apply persistent sound state strictly to target card
         video.muted = !isAudioGloballyActive;
@@ -776,6 +785,13 @@ const reelsList = (reelsData || []).map((r, index) => {
     });
 
     document.addEventListener('astro:page-load', initReelInteractions);
+
+    // Also run on hard page load (astro:page-load doesn't fire on first visit)
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initReelInteractions);
+    } else {
+      initReelInteractions();
+    }
   </script>
 
   <style>

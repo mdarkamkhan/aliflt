@@ -1,6 +1,6 @@
 ---
 title: "Pearl Georgette Blouse Set"
-date: "2026-10-22T08:14:02.058Z"
+date: "2026-10-22T09:12:37.739Z"
 layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/pearl-white-plain-georgette-fabric.webp"
@@ -20,7 +20,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Boutique Reel #71\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Pearl White"
 fabric: "Georgette"
-ideal_for: "anarkali, Festive, Party Wear"
+ideal_for: "blouse, Festive, Party Wear"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Crimson Rayon Blouse Set"
-date: "2026-10-22T08:35:00.000Z"
+date: "2026-10-22T09:14:59.101Z"
 layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crimson-red-plain-rayon-fabric.webp"
@@ -16,10 +16,10 @@ combo_products:
   - id: "pure-white-plain-rayon-fabric"
     meters: 1
     unit: "mtr"
-description: "Complete bespoke ensemble featured in our trending video \"Boutique Reel #60\". Includes hand-matched premium plain rayon fabrics in Crimson Red and Pure White from Alif boutique Sahibganj."
-colour: "Crimson Red / Pure White"
+description: "Complete bespoke ensemble featured in our trending video \"Boutique Reel #60\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
+colour: "Crimson Red"
 fabric: "Rayon"
-ideal_for: "Kurtis, Palazzos, Suits, Bespoke Tailoring, Daily & Festive Wear"
+ideal_for: "blouse, Festive, Party Wear"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

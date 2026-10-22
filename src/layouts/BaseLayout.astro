@@ -54,7 +54,13 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <!-- Non-blocking font load: preload as style, swap to stylesheet on load -->
+    <link rel="preload" as="style"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap">
+    </noscript>
     {preloadImage && (
       <link rel="preload" as="image" href={preloadImage} type="image/webp" fetchpriority="high" />
     )}
@@ -838,16 +844,27 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
             }, { passive: true });
         }
 
-        document.addEventListener('astro:page-load', () => {
+        function runPageInit() {
             initSidebar();
             initDoodleSocial();
             updateBottomNavActive();
             updateCartBadges();
             initInstagramSwipeNavigation();
-        });
+        }
+
+        // Run on Astro SPA navigations
+        document.addEventListener('astro:page-load', runPageInit);
+
+        // ALSO run immediately on first hard page load
+        // (astro:page-load doesn't fire on initial visit)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', runPageInit);
+        } else {
+            runPageInit();
+        }
 
         document.addEventListener('astro:before-swap', () => {
-            const drawer = document.getElementById('minimalistSidebar');
+            const drawer = document.getElementById('sidebarMenu') || document.getElementById('minimalistSidebar');
             if (drawer) {
                 drawer.classList.remove('is-open');
                 drawer.setAttribute('aria-hidden', 'true');
