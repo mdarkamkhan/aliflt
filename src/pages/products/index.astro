@@ -80,19 +80,14 @@ const products = [...allProducts].reverse();
         return (
           <a href={`/products/${item.id}/`} class="product-card" data-category={(category || '').toLowerCase()} data-has-video={item.data.reel_video ? "true" : "false"}>
             <div class="product-card-image-wrapper">
-              {item.data.reel_video ? (
-                <video 
-                  data-src={item.data.reel_video} 
-                  poster={image}
-                  loop 
-                  muted 
-                  playsinline 
-                  webkit-playsinline
-                  preload="none"
-                  class="product-grid-video"
-                ></video>
-              ) : (
-                <img src={image || '/icons/icon-512x512.png'} alt={title} loading="lazy" />
+              <img src={image || '/icons/icon-512x512.png'} alt={title} loading="lazy" />
+              {item.data.reel_video && (
+                <span class="product-card-video-badge" title="Watch Atelier Reel Video">
+                  <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                  REEL
+                </span>
               )}
             </div>
 
@@ -357,6 +352,27 @@ const products = [...allProducts].reverse();
   }
   .product-card.hidden {
     display: none !important;
+  }
+  .product-card-video-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ffffff;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   }
   .product-card-bottom-row {
     display: flex;

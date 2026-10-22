@@ -240,10 +240,9 @@ const comboPayload = isCombo ? {
               {reel_video ? (
                 <video 
                   id="comboMainVideo"
-                  class="active"
+                  class="hidden"
                   src={reel_video} 
                   poster={image}
-                  autoplay 
                   loop 
                   muted 
                   playsinline 
@@ -252,10 +251,21 @@ const comboPayload = isCombo ? {
               ) : null}
               <img 
                 id="comboMainImage"
-                class={reel_video ? "hidden" : "active"}
+                class="active"
                 src={image || '/icons/icon-512x512.png'} 
                 alt={title} 
               />
+              {reel_video && (
+                <button 
+                  id="toggleReelMediaBtn" 
+                  type="button" 
+                  class="reel-media-toggle-pill"
+                  title="Switch between fabric cover and outfit video"
+                >
+                  <span class="pill-icon">▶</span>
+                  <span class="pill-text">Watch Reel Video</span>
+                </button>
+              )}
               <button 
                 id="resetToSetBtn" 
                 type="button" 
@@ -639,6 +649,7 @@ const comboPayload = isCombo ? {
 
         const mainVideo = document.getElementById('comboMainVideo');
         const mainImage = document.getElementById('comboMainImage');
+        const toggleReelBtn = document.getElementById('toggleReelMediaBtn');
         const resetBtn = document.getElementById('resetToSetBtn');
         const displayTitle = document.getElementById('displayTitle');
         const previewBadge = document.getElementById('previewModeBadge');
@@ -716,13 +727,18 @@ const comboPayload = isCombo ? {
           currentActiveItemIndex = -1;
 
           if (mainVideo) {
-            mainVideo.classList.remove('hidden');
-            mainVideo.classList.add('active');
-            mainVideo.play().catch(() => {});
+            mainVideo.pause();
+            mainVideo.classList.remove('active');
+            mainVideo.classList.add('hidden');
           }
           if (mainImage) {
-            mainImage.classList.remove('active');
-            mainImage.classList.add('hidden');
+            mainImage.src = defaultSet.image;
+            mainImage.classList.remove('hidden');
+            mainImage.classList.add('active');
+          }
+          if (toggleReelBtn) {
+            toggleReelBtn.style.display = defaultSet.videoSrc ? 'inline-flex' : 'none';
+            toggleReelBtn.innerHTML = '<span class="pill-icon">▶</span><span class="pill-text">Watch Reel Video</span>';
           }
           if (resetBtn) resetBtn.style.display = 'none';
 
@@ -758,6 +774,9 @@ const comboPayload = isCombo ? {
             mainVideo.pause();
             mainVideo.classList.remove('active');
             mainVideo.classList.add('hidden');
+          }
+          if (toggleReelBtn) {
+            toggleReelBtn.style.display = 'none';
           }
           if (mainImage) {
             mainImage.src = item.image;
@@ -1022,6 +1041,29 @@ const comboPayload = isCombo ? {
           resetBtn.addEventListener('click', switchToFullSet);
         }
 
+        if (toggleReelBtn && mainVideo && mainImage) {
+          toggleReelBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const isVideoActive = mainVideo.classList.contains('active');
+            if (isVideoActive) {
+              mainVideo.pause();
+              mainVideo.classList.remove('active');
+              mainVideo.classList.add('hidden');
+              mainImage.classList.remove('hidden');
+              mainImage.classList.add('active');
+              toggleReelBtn.innerHTML = '<span class="pill-icon">▶</span><span class="pill-text">Watch Reel Video</span>';
+            } else {
+              mainImage.classList.remove('active');
+              mainImage.classList.add('hidden');
+              mainVideo.classList.remove('hidden');
+              mainVideo.classList.add('active');
+              mainVideo.play().catch(() => {});
+              toggleReelBtn.innerHTML = '<span class="pill-icon">📷</span><span class="pill-text">View Fabric Cover</span>';
+            }
+          });
+        }
+
         items.forEach((item, idx) => {
           const card = document.getElementById(`card-item-${idx}`);
           if (card) {
@@ -1250,6 +1292,44 @@ const comboPayload = isCombo ? {
       visibility: visible !important;
       pointer-events: auto !important;
       z-index: 2 !important;
+    }
+
+    .reel-media-toggle-pill {
+      position: absolute !important;
+      bottom: 14px !important;
+      right: 14px !important;
+      z-index: 10 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      background: rgba(18, 18, 18, 0.88) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      color: #ffffff !important;
+      padding: 7px 14px !important;
+      border-radius: 999px !important;
+      border: 1px solid rgba(255, 255, 255, 0.25) !important;
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.68rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.8px !important;
+      text-transform: uppercase !important;
+      cursor: pointer !important;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+      touch-action: manipulation !important;
+    }
+    .reel-media-toggle-pill:hover {
+      background: #000000 !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
+    }
+    .reel-media-toggle-pill .pill-icon {
+      font-size: 0.72rem !important;
+      line-height: 1 !important;
+    }
+    .reel-media-toggle-pill .pill-text {
+      line-height: 1 !important;
     }
 
     /* Refined, Luxury Editorial Title & Pricing (Tokens Bound) */
