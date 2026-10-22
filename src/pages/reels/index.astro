@@ -1,22 +1,92 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 import reelsData from '../../data/reels.json';
 
-// Pure Reel Feed from reels.json with Enriched Atelier Metadata
-const reelsList = (reelsData || []).map((r, index) => ({
-  id: r.id || `reel-${index + 1}`,
-  title: r.title || `Reel #${index + 1}`,
-  video: r.video,
-  raw_url: r.raw_url,
-  public_id: r.public_id,
-  image: r.poster || r.image || '/icons/icon-512x512.png',
-  duration: r.duration || null,
-  category: r.category || 'blouse',
-  style: r.style || 'festive',
-  tags: r.tags || [],
-  linked_service: r.linked_service || null,
-  linked_products: r.linked_products || []
-}));
+const products = await getCollection('products');
+const productsMap = new Map(products.map((p) => [p.id, p]));
+const productsByCode = new Map(products.map((p) => [p.data.product_code, p]));
+
+const curatedSetsByReelId = new Map();
+products.forEach((p) => {
+  const cat = (p.data.category || '').toLowerCase();
+  if (cat === 'curated sets' || cat === 'curated set' || cat === 'dress set') {
+    if (p.data.linked_reel_id) {
+      curatedSetsByReelId.set(p.data.linked_reel_id, p);
+    }
+  }
+});
+
+function resolveCuratedSetForReel(reelId, slug, code) {
+  const setProduct = (slug && productsMap.get(slug))
+    || (reelId && curatedSetsByReelId.get(reelId))
+    || (code && productsByCode.get(code));
+
+  if (!setProduct) return null;
+
+  const rawCombo = setProduct.data.combo_products || setProduct.data.combo_items || [];
+  const items = rawCombo.map((item) => {
+    const itemId = typeof item === 'string' ? item : (item.id || item.slug);
+    const prod = productsMap.get(itemId) 
+      || productsByCode.get(itemId)
+      || products.find(p => p.id === itemId || p.id.includes(itemId) || (p.data.product_code && p.data.product_code.toLowerCase() === itemId.toLowerCase()));
+
+    if (prod) {
+      return {
+        id: prod.id,
+        title: prod.data.title,
+        category: (prod.data.category || 'Piece').toUpperCase(),
+        image: prod.data.image,
+      };
+    }
+
+    let cleanCategory = 'PIECE';
+    const low = itemId.toLowerCase();
+    if (low.includes('fabric') || low.includes('crape') || low.includes('silk')) cleanCategory = 'FABRIC';
+    else if (low.includes('latkan') || low.includes('tassel')) cleanCategory = 'LATKAN';
+    else if (low.includes('lace') || low.includes('border')) cleanCategory = 'LACE';
+    else if (low.includes('dupatta')) cleanCategory = 'DUPATTA';
+
+    return {
+      id: itemId,
+      title: itemId,
+      category: cleanCategory,
+      image: null,
+    };
+  }).filter(Boolean);
+
+  return {
+    slug: setProduct.id,
+    title: setProduct.data.title,
+    price: setProduct.data.offer_price || setProduct.data.price,
+    origPrice: setProduct.data.price,
+    category: 'DRESS SET',
+    url: `/products/${setProduct.id}/`,
+    items: items.slice(0, 4)
+  };
+}
+
+// Pure Reel Feed from reels.json with Enriched Atelier Metadata & Curated Sets
+const reelsList = (reelsData || []).map((r, index) => {
+  const reelId = r.id || `reel-${index + 1}`;
+  const curatedSet = resolveCuratedSetForReel(reelId, r.curated_set_slug, r.curated_set_code);
+
+  return {
+    id: reelId,
+    title: r.title || `Reel #${index + 1}`,
+    video: r.video,
+    raw_url: r.raw_url,
+    public_id: r.public_id,
+    image: r.poster || r.image || '/icons/icon-512x512.png',
+    duration: r.duration || null,
+    category: r.category || 'blouse',
+    style: r.style || 'festive',
+    tags: r.tags || [],
+    linked_service: r.linked_service || null,
+    linked_products: r.linked_products || [],
+    curatedSet: curatedSet
+  };
+});
 ---
 
 <BaseLayout 
@@ -87,6 +157,46 @@ const reelsList = (reelsData || []).map((r, index) => ({
                   <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86a1 1 0 0 0-1.5.86z"/>
                 </svg>
               </button>
+
+              {item.curatedSet ? (
+                <a 
+                  href={item.curatedSet.url}
+                  data-astro-prefetch="viewport"
+                  class="reel-curated-strip" 
+                  onclick="event.stopPropagation();"
+                  aria-label={`View Curated Set - ${item.curatedSet.title}`}
+                >
+                  {/* Left: 3:4 Tall Portrait Mini Cards */}
+                  <div class="rc-items-row">
+                    {item.curatedSet.items.map((piece) => (
+                      <div class="rc-mini-card" title={piece.title}>
+                        {piece.image ? (
+                          <img src={piece.image} alt={piece.title} loading="lazy" />
+                        ) : (
+                          <div class="rc-mini-fallback">
+                            <span>{piece.category}</span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Vertical Divider */}
+                  <div class="rc-strip-divider" aria-hidden="true"></div>
+
+                  {/* Right: Set Tag & Sharp Editorial Action Button */}
+                  <div class="rc-action-col">
+                    <span class="rc-set-tag">DRESS SET</span>
+                    <span class="rc-action-btn">
+                      <span>SHOW PRODUCT</span>
+                      <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              ) : null}
             </div>
           ))
         ) : (
@@ -1008,10 +1118,222 @@ const reelsList = (reelsData || []).map((r, index) => ({
       margin: 0;
     }
 
+    /* --- FLOATING LUXURY LIQUID GLASS CURATED PRODUCT STRIP --- */
+    .reel-curated-strip {
+      position: absolute;
+      bottom: 20px;
+      left: 14px;
+      right: 14px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(18, 16, 22, 0.58) 100%);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+      text-decoration: none !important;
+      color: #ffffff;
+      box-sizing: border-box;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  background 0.25s ease,
+                  border-color 0.25s ease,
+                  box-shadow 0.25s ease;
+    }
+
+    .reel-curated-strip:hover {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(22, 18, 28, 0.68) 100%);
+      border-color: rgba(255, 255, 255, 0.32);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    /* Left Side: 3:4 Tall Portrait Seamless Borderless Mini Cards */
+    .rc-items-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 1;
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      padding: 2px 0;
+    }
+
+    .rc-items-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .rc-mini-card {
+      width: 44px;
+      height: 60px; /* 3:4 elegant portrait ratio */
+      min-width: 44px;
+      border-radius: 8px;
+      border: none; /* Outlines removed */
+      outline: none;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.08);
+      position: relative;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+      transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease;
+    }
+
+    .reel-curated-strip:hover .rc-mini-card {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+    }
+
+    .rc-mini-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .rc-mini-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: rgba(30, 30, 36, 0.85);
+      color: #ffffff;
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.60rem;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 2px;
+      box-sizing: border-box;
+      line-height: 1.15;
+      border-radius: 8px;
+    }
+
+    /* Vertical Divider */
+    .rc-strip-divider {
+      width: 1px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.15);
+      flex-shrink: 0;
+      margin: 0 4px;
+    }
+
+    /* Right Side: Set Label + Minimal Consistent Action Button */
+    .rc-action-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 5px;
+      min-width: 0;
+      flex-shrink: 0;
+    }
+
+    .rc-set-tag {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1;
+      white-space: nowrap;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+
+    .rc-action-btn {
+      height: 32px; /* Fixed height for absolute size consistency */
+      box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.95);
+      color: #0c0d11;
+      border: none;
+      border-radius: 999px; /* Minimal sleek capsule pill */
+      padding: 0 14px;
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      line-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .reel-curated-strip:hover .rc-action-btn {
+      background: #ffffff;
+      color: #000000;
+      box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .rc-action-btn svg {
+      transition: transform 0.2s ease;
+    }
+
+    .reel-curated-strip:hover .rc-action-btn svg {
+      transform: translateX(3px);
+    }
+
+    @media (max-width: 600px) {
+      .reel-curated-strip {
+        bottom: 12px;
+        left: 10px;
+        right: 10px;
+        padding: 9px 12px;
+        gap: 8px;
+        border-radius: 14px;
+        z-index: 100;
+      }
+      .rc-items-row {
+        gap: 6px;
+      }
+      .rc-mini-card {
+        width: 38px;
+        height: 52px;
+        min-width: 38px;
+        border-radius: 7px;
+        border: none;
+      }
+      .rc-mini-card img,
+      .rc-mini-fallback {
+        border-radius: 7px;
+      }
+      .rc-strip-divider {
+        height: 36px;
+        margin: 0 3px;
+      }
+      .rc-set-tag {
+        font-size: 0.58rem;
+        letter-spacing: 1.2px;
+      }
+      .rc-action-btn {
+        height: 28px;
+        line-height: 28px;
+        padding: 0 11px;
+        font-size: 0.60rem;
+        gap: 5px;
+      }
+    }
+
     @media (max-width: 600px) {
       .reels-page-container {
         padding: 0;
-        height: calc(100dvh - 60px);
+        height: calc(100dvh - 122px);
       }
       .reels-feed {
         padding: 0;

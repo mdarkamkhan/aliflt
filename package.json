@@ -4,10 +4,12 @@
   "description": "ALiF Ladies Tailor Website",
   "scripts": {
     "dev": "astro dev",
+    "curate": "node scripts/curate-api.mjs",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview"
   },
+
   "keywords": [],
   "author": "",
   "license": "ISC",

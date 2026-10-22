@@ -34,8 +34,10 @@ export default function SearchModal() {
   const fuseRef = useRef<Fuse<SearchItem> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Load search index
-  useEffect(() => {
+  const isFetchingRef = useRef(false);
+  const loadSearchIndex = () => {
+    if (fuseRef.current || isFetchingRef.current) return;
+    isFetchingRef.current = true;
     fetch('/search.json')
       .then((res) => res.json())
       .then((data: SearchItem[]) => {
@@ -54,18 +56,34 @@ export default function SearchModal() {
           ignoreLocation: true,
         });
       })
-      .catch((err) => console.warn('Could not load search index:', err));
-  }, []);
+      .catch((err) => {
+        isFetchingRef.current = false;
+        console.warn('Could not load search index:', err);
+      });
+  };
+
+  // Load search index when opened
+  useEffect(() => {
+    if (isOpen) {
+      loadSearchIndex();
+    }
+  }, [isOpen]);
 
   // Connect to navbar search button #open-search
   useEffect(() => {
     const handleOpenBtn = () => {
+      loadSearchIndex();
       setIsOpen(true);
+    };
+
+    const handleMouseEnter = () => {
+      loadSearchIndex();
     };
 
     const openBtn = document.getElementById('open-search');
     if (openBtn) {
       openBtn.addEventListener('click', handleOpenBtn);
+      openBtn.addEventListener('mouseenter', handleMouseEnter, { once: true });
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {

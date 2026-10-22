@@ -8,8 +8,6 @@ gallery: []
 category: lace
 price: 49
 product_code: "ALIF-LC-1497"
-offer_price: 25
-offer_end_date: "2026-10-12T23:59:00Z"
 description: Beautiful golden moti lace for blouse lehanga chundari etc...
 size: 1½ inch
 colour: "Golden "

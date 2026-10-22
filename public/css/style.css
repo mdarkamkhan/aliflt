@@ -223,6 +223,13 @@ h3 {
     transform: translateZ(0);
 }
 
+@media (max-width: 768px) {
+    #fixed-bg-pattern {
+        will-change: auto;
+        transform: none;
+    }
+}
+
 #fixed-bg-pattern::before {
     content: "";
     position: absolute;

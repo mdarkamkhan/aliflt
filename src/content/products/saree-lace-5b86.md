@@ -7,8 +7,6 @@ image: "/uploads/65a4f1c6-4286-41b0-be38-1c3bf0c0b168.webp"
 is_ad: false
 price: 50
 product_code: "ALIF-LC-5B86"
-offer_price: 25
-offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"
 description: "Beautiful saree lace perfect for adding a refined touch to your garments. Width is above 1.5 inches."
 permalink: false

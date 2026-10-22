@@ -38,33 +38,52 @@ export async function getStaticPaths() {
     }
 
     // Resolve combo actual products if present
-    const comboProductIds = entry.data.combo_products || [];
+    const comboProductRaw = entry.data.combo_products || [];
     let resolvedComboItems = [];
 
-    if (comboProductIds.length > 0) {
-      resolvedComboItems = comboProductIds
-        .map((pid) => productsMap.get(pid))
-        .filter(Boolean)
-        .map((p) => ({
-          id: p.id,
-          title: p.data.title,
-          image: p.data.image || '/icons/icon-512x512.png',
-          price: p.data.price,
-          offer_price: p.data.offer_price,
-          final_price: p.data.offer_price || p.data.price,
-          category: p.data.category || 'Matching Piece',
-          description: p.data.description || '',
-          fabric: p.data.fabric || '',
-          size: p.data.size || '',
-          colour: p.data.colour || '',
-          work: p.data.work || '',
-          pattern: p.data.pattern || '',
-          ideal_for: p.data.ideal_for || '',
-          delivery_charges: p.data.delivery_charges || 'Free',
-          return_policy: p.data.return_policy || 'NO',
-          url: `/products/${p.id}/`
-        }));
+    if (comboProductRaw.length > 0) {
+      resolvedComboItems = comboProductRaw
+        .map((item) => {
+          const pid = typeof item === 'string' ? item : (item && (item.id || item.slug));
+          const meters = (typeof item === 'object' && item && item.meters) ? Number(item.meters) : 1;
+          const unit = (typeof item === 'object' && item && item.unit) ? item.unit : 'Meter';
+          const p = productsMap.get(pid);
+          if (!p) return null;
+
+          const baseOfferOrPrice = Number(p.data.offer_price || p.data.price || 0);
+          const calculatedFinalPrice = Math.round(baseOfferOrPrice * meters);
+          const calculatedBasePrice = Math.round(Number(p.data.price || 0) * meters);
+
+          let displaySize = p.data.size || '';
+          if (meters !== 1) {
+            displaySize = `${meters} ${unit}${meters > 1 ? 's' : ''}`;
+          }
+
+          return {
+            id: p.id,
+            title: p.data.title,
+            image: p.data.image || '/icons/icon-512x512.png',
+            price: calculatedBasePrice,
+            offer_price: p.data.offer_price ? calculatedFinalPrice : null,
+            final_price: calculatedFinalPrice,
+            meters: meters,
+            unit: unit,
+            category: p.data.category || 'Matching Piece',
+            description: p.data.description || '',
+            fabric: p.data.fabric || '',
+            size: displaySize,
+            colour: p.data.colour || '',
+            work: p.data.work || '',
+            pattern: p.data.pattern || '',
+            ideal_for: p.data.ideal_for || '',
+            delivery_charges: p.data.delivery_charges || 'Free',
+            return_policy: p.data.return_policy || 'NO',
+            url: `/products/${p.id}/`
+          };
+        })
+        .filter(Boolean);
     } else if (entry.data.combo_items && entry.data.combo_items.length > 0) {
+
       resolvedComboItems = entry.data.combo_items.map((ci) => {
         const matched = products.find((p) => p.data.title && p.data.title.toLowerCase().trim() === (ci.name || '').toLowerCase().trim());
         if (matched) {
@@ -142,11 +161,17 @@ const discountPercent = offer_price && price ? Math.round(((Number(price) - Numb
 
 const itemCode = product_code || `ALIF-${product.id.replace(/[^a-zA-Z0-9]/g, '-').toUpperCase()}`;
 
-const wappOrderText = `Hello alif., I want to purchase '${title}' [Code: ${itemCode}] (Price: ₹${finalPrice}).`;
-const wappOrderLink = `https://wa.me/7250470009?text=${encodeURIComponent(wappOrderText)}`;
-
 const catLower = (category || '').toLowerCase();
 const isCombo = (catLower === 'curated sets' || catLower === 'curated set' || catLower === 'dress set' || (resolvedComboItems && resolvedComboItems.length > 0));
+
+const comboCutsSummary = (isCombo && resolvedComboItems.length > 0)
+  ? resolvedComboItems.map(i => `${i.title} (${i.size || `${i.meters}m`})`).join(' + ')
+  : '';
+
+const wappOrderText = (isCombo && comboCutsSummary)
+  ? `Hello alif., I want to purchase Curated Set '${title}' [Code: ${itemCode}] (Price: ₹${finalPrice}). Includes: ${comboCutsSummary}.`
+  : `Hello alif., I want to purchase '${title}' [Code: ${itemCode}] (Price: ₹${finalPrice}).`;
+const wappOrderLink = `https://wa.me/7250470009?text=${encodeURIComponent(wappOrderText)}`;
 
 const comboPayload = isCombo ? {
   defaultSet: {
@@ -162,7 +187,7 @@ const comboPayload = isCombo ? {
     wappOrderLink: wappOrderLink,
     specs: {
       product_code: itemCode,
-      size: size || '',
+      size: size || comboCutsSummary || 'Curated Ensemble',
       colour: colour || '',
       fabric: fabric || '',
       pattern: pattern || '',
@@ -182,7 +207,7 @@ const comboPayload = isCombo ? {
     category: item.category,
     description: item.description,
     url: item.url,
-    wappOrderLink: `https://wa.me/7250470009?text=${encodeURIComponent(`Hello alif., I want to purchase '${item.title}' (Price: ₹${item.final_price}).`)}`,
+    wappOrderLink: `https://wa.me/7250470009?text=${encodeURIComponent(`Hello alif., I want to purchase '${item.title}' ${item.size ? `(${item.size})` : ''} (Price: ₹${item.final_price}).`)}`,
     specs: {
       size: item.size || '',
       colour: item.colour || '',
@@ -195,6 +220,7 @@ const comboPayload = isCombo ? {
     }
   }))
 } : null;
+
 ---
 
 <BaseLayout 
@@ -289,7 +315,10 @@ const comboPayload = isCombo ? {
                   <div class="combo-card-body">
                     <span class="combo-card-category">{ci.category || 'Piece'}</span>
                     <h4 class="combo-card-heading" title={ci.title}>{ci.title}</h4>
-                    <span class="combo-card-cost">₹{ci.final_price}</span>
+                    <div class="combo-card-meta-row">
+                      <span class="combo-card-cost">₹{ci.final_price}</span>
+                      {ci.size && <span class="combo-card-cut-badge">{ci.size}</span>}
+                    </div>
                   </div>
                 </button>
               ))}
@@ -541,7 +570,7 @@ const comboPayload = isCombo ? {
                   <img src={ci.image} alt={ci.title} loading="lazy" />
                 </div>
                 <div class="piece-info">
-                  <span class="piece-cat">{ci.category || 'PIECE'}</span>
+                  <span class="piece-cat">{ci.category || 'PIECE'}{ci.size ? ` • ${ci.size}` : ''}</span>
                   <span class="piece-title">{ci.title}</span>
                 </div>
                 <div class="piece-price">
@@ -1472,8 +1501,28 @@ const comboPayload = isCombo ? {
 
     .combo-card-cost {
       font-size: 0.8rem;
-      font-weight: 400;
+      font-weight: 500;
       color: #000000;
+    }
+
+    .combo-card-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+      flex-wrap: wrap;
+    }
+
+    .combo-card-cut-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #92400e;
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+      padding: 1px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
     }
 
     /* =========================================================

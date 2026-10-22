@@ -7,8 +7,6 @@ image: "/uploads/1763911279585-1000023666.webp"
 is_ad: false
 price: 49
 product_code: "ALIF-LC-9584"
-offer_price: 25
-offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"
 description: "Transform your outfit with this grand, wide-width lace featuring an intricate floral and leaf vine (bel) design. The heavy zari embroidery creates a rich, textured look against the sheer net background, while the tiny scalloped edges on both sides give it a delicate, finished appearance."
 permalink: false

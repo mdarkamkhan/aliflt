@@ -7,8 +7,6 @@ image: "/uploads/9eb16e41-eab9-4359-b2f4-714ed58e39db.webp"
 is_ad: false
 price: 45
 product_code: "ALIF-LC-81B9"
-offer_price: 23
-offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"
 description: "Beautiful elegant lace perfect for enhancing your garments with a refined touch."
 permalink: false

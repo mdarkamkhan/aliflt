@@ -175,20 +175,88 @@ const trendingServiceReels = services
     taggedProduct: null
   }));
 
-// Cloudinary / Uploaded Reels Priority for Homepage
-const uploadedReelsList = (reelsData || []).map((r, idx) => ({
-  id: r.id || `reel-${idx + 1}`,
-  type: 'reel',
-  title: r.title || `Reel #${idx + 1}`,
-  category: 'Atelier Reel',
-  image: r.poster || r.image || '/icons/icon-512x512.png',
-  video: r.video,
-  priceText: null,
-  url: `/reels/#reel-${r.id || idx + 1}`,
-  badge: 'REEL',
-  cta: 'Watch Reel',
-  productImages: []
-}));
+// Build product maps and curated sets index
+const productsMap = new Map(products.map((p) => [p.id, p]));
+const productsByCode = new Map(products.map((p) => [p.data.product_code, p]));
+
+const curatedSetsByReelId = new Map();
+products.forEach((p) => {
+  const cat = (p.data.category || '').toLowerCase();
+  if (cat === 'curated sets' || cat === 'curated set' || cat === 'dress set') {
+    if (p.data.linked_reel_id) {
+      curatedSetsByReelId.set(p.data.linked_reel_id, p);
+    }
+  }
+});
+
+function resolveCuratedSetForReel(reelId, slug, code) {
+  const setProduct = (slug && productsMap.get(slug))
+    || (reelId && curatedSetsByReelId.get(reelId))
+    || (code && productsByCode.get(code));
+
+  if (!setProduct) return null;
+
+  const rawCombo = setProduct.data.combo_products || setProduct.data.combo_items || [];
+  const items = rawCombo.map((item) => {
+    const itemId = typeof item === 'string' ? item : (item.id || item.slug);
+    const prod = productsMap.get(itemId) 
+      || productsByCode.get(itemId)
+      || products.find(p => p.id === itemId || p.id.includes(itemId) || (p.data.product_code && p.data.product_code.toLowerCase() === itemId.toLowerCase()));
+
+    if (prod) {
+      return {
+        id: prod.id,
+        title: prod.data.title,
+        category: (prod.data.category || 'Piece').toUpperCase(),
+        image: prod.data.image,
+      };
+    }
+
+    let cleanCategory = 'PIECE';
+    const low = itemId.toLowerCase();
+    if (low.includes('fabric') || low.includes('crape') || low.includes('silk')) cleanCategory = 'FABRIC';
+    else if (low.includes('latkan') || low.includes('tassel')) cleanCategory = 'LATKAN';
+    else if (low.includes('lace') || low.includes('border')) cleanCategory = 'LACE';
+    else if (low.includes('dupatta')) cleanCategory = 'DUPATTA';
+
+    return {
+      id: itemId,
+      title: itemId,
+      category: cleanCategory,
+      image: null,
+    };
+  }).filter(Boolean);
+
+  return {
+    slug: setProduct.id,
+    title: setProduct.data.title,
+    price: setProduct.data.offer_price || setProduct.data.price,
+    origPrice: setProduct.data.price,
+    category: 'DRESS SET',
+    url: `/products/${setProduct.id}/`,
+    items: items.slice(0, 4) // Show up to 4 portrait mini cards
+  };
+}
+
+// Cloudinary / Uploaded Reels Priority for Homepage with Curated Set Linking
+const uploadedReelsList = (reelsData || []).map((r, idx) => {
+  const reelId = r.id || `reel-${idx + 1}`;
+  const curatedSet = resolveCuratedSetForReel(reelId, r.curated_set_slug, r.curated_set_code);
+
+  return {
+    id: reelId,
+    type: 'reel',
+    title: r.title || `Reel #${idx + 1}`,
+    category: 'Atelier Reel',
+    image: r.poster || r.image || '/icons/icon-512x512.png',
+    video: r.video,
+    priceText: curatedSet ? `₹${curatedSet.price}` : null,
+    url: curatedSet ? curatedSet.url : `/reels/#reel-${reelId}`,
+    badge: 'REEL',
+    cta: curatedSet ? 'SHOW PRODUCT' : 'Watch Reel',
+    curatedSet: curatedSet
+  };
+});
 
 const fallbackReels = [];
 const homeMax = Math.max(trendingProductReels.length, trendingServiceReels.length);
@@ -275,10 +343,12 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                         <video
                             class="screen-video"
                             src="/videos/laptop-screen.mp4"
+                            poster="/videos/laptop-screen-poster.webp"
                             autoplay
                             muted
                             loop
                             playsinline
+                            preload="none"
                             aria-hidden="true"
                         ></video>
                         <!-- Bezel overlay — video ke UPAR, inner black border banata hai -->
@@ -312,13 +382,13 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                     <div class="reel-card" data-reel-id={item.id} data-reel-type={item.type}>
                         <div class="reel-media-inner">
                             <video 
-                                src={item.video} 
+                                data-src={item.video} 
                                 poster={item.image}
                                 loop 
                                 muted 
                                 playsinline 
                                 webkit-playsinline
-                                preload="metadata"
+                                preload="none"
                                 class="reel-video"
                             ></video>
 
@@ -354,22 +424,61 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                                 </svg>
                             </button>
 
-                            <!-- Minimal Floating Action: Watch All -->
-                            <div class="reel-bottom-bar">
+                            {item.curatedSet ? (
                                 <a 
-                                    href={`/reels/#reel-${item.id}`} 
+                                    href={item.curatedSet.url}
                                     data-astro-prefetch="viewport"
-                                    class="reel-minimal-cta" 
+                                    class="reel-curated-strip" 
                                     onclick="event.stopPropagation();"
-                                    aria-label={`Watch All Reels - ${item.title}`}
+                                    aria-label={`View Curated Set - ${item.curatedSet.title}`}
                                 >
-                                    <span>WATCH ALL</span>
-                                    <svg class="reel-minimal-arrow" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        <polyline points="12 5 19 12 12 19"></polyline>
-                                    </svg>
+                                    {/* Left: 3:4 Tall Portrait Mini Cards */}
+                                    <div class="rc-items-row">
+                                        {item.curatedSet.items.map((piece) => (
+                                            <div class="rc-mini-card" title={piece.title}>
+                                                {piece.image ? (
+                                                    <img src={piece.image} alt={piece.title} loading="lazy" />
+                                                ) : (
+                                                    <div class="rc-mini-fallback">
+                                                        <span>{piece.category}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Vertical Divider */}
+                                    <div class="rc-strip-divider" aria-hidden="true"></div>
+
+                                    {/* Right: Set Tag & Sharp Editorial Action Button */}
+                                    <div class="rc-action-col">
+                                        <span class="rc-set-tag">DRESS SET</span>
+                                        <span class="rc-action-btn">
+                                            <span>SHOW PRODUCT</span>
+                                            <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                <polyline points="12 5 19 12 12 19"></polyline>
+                                            </svg>
+                                        </span>
+                                    </div>
                                 </a>
-                            </div>
+                            ) : (
+                                <div class="reel-bottom-bar">
+                                    <a 
+                                        href={`/reels/#reel-${item.id}`} 
+                                        data-astro-prefetch="viewport"
+                                        class="reel-minimal-cta" 
+                                        onclick="event.stopPropagation();"
+                                        aria-label={`Watch All Reels - ${item.title}`}
+                                    >
+                                        <span>WATCH ALL</span>
+                                        <svg class="reel-minimal-arrow" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            <polyline points="12 5 19 12 12 19"></polyline>
+                                        </svg>
+                                    </a>
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}
@@ -805,23 +914,59 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
             const body = document.getElementById('laptopBody');
             const statusHint = document.getElementById('laptopStatusHint');
             const screenContent = document.getElementById('screenContent');
+            const video = screen ? screen.querySelector('video') : null;
 
             if (!track || !screen || !body) return;
             if (track._laptopScrollInitialized) return;
             track._laptopScrollInitialized = true;
 
+            // Mobile devices (<= 768px): zero scroll hijacking, instant 60fps
+            if (window.innerWidth <= 768) {
+                if (screenContent) screenContent.style.opacity = '1';
+                if (video) {
+                    const mobileObs = new IntersectionObserver((entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                video.play().catch(() => {});
+                            } else {
+                                video.pause();
+                            }
+                        });
+                    }, { threshold: 0.1 });
+                    mobileObs.observe(track);
+                }
+                return;
+            }
+
             let ticking = false;
+            let isVisible = false;
 
             function getBaseScale() {
                 const w = window.innerWidth;
-                if (w < 375) return 0.46;
-                if (w <= 440) return 0.54;
-                if (w <= 650) return 0.62;
                 if (w <= 860) return 0.74;
                 return 0.85;
             }
 
+            // Desktop: observer to pause/resume video & scroll listener when in view
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    isVisible = entry.isIntersecting;
+                    if (video) {
+                        if (isVisible) {
+                            video.play().catch(() => {});
+                        } else {
+                            video.pause();
+                        }
+                    }
+                });
+            }, { rootMargin: '100px 0px' });
+            obs.observe(track);
+
             function updateLaptop() {
+                if (!isVisible) {
+                    ticking = false;
+                    return;
+                }
                 const rect = track.getBoundingClientRect();
                 const windowH = window.innerHeight;
                 const totalScrollable = track.offsetHeight - windowH;
@@ -838,13 +983,6 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
 
                 const baseScale = getBaseScale();
 
-                // -------------------------------------------------------------
-                // Scroll-to-open hinge physics:
-                // progress <= 0.08: Perfectly closed silver MacBook clamshell
-                // progress 0.08 - 0.85: Smooth hinge rotation (-88.5deg -> 0deg)
-                // progress 0.85 - 1.0: Gentle camera push-in zoom (1.0 -> 1.10x)
-                // -------------------------------------------------------------
-
                 let screenAngle = -88.5;
                 let perspective = 1900;
                 let scaleMultiplier = 1.0;
@@ -857,9 +995,9 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                     bodyTranslateY = 0;
                     if (screenContent) screenContent.style.opacity = '0';
                 } else if (progress <= 0.85) {
-                    const p = (progress - 0.08) / 0.77; // 0 to 1
-                    screenAngle = -88.5 * (1 - p); // -88.5deg to 0deg
-                    perspective = 1900 - 900 * p;  // 1900px to 1000px
+                    const p = (progress - 0.08) / 0.77;
+                    screenAngle = -88.5 * (1 - p);
+                    perspective = 1900 - 900 * p;
                     scaleMultiplier = 1.0;
                     bodyTranslateY = 0;
                     if (screenContent) {
@@ -867,7 +1005,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                         screenContent.style.opacity = `${contentP}`;
                     }
                 } else {
-                    const p3 = (progress - 0.85) / 0.15; // 0 to 1
+                    const p3 = (progress - 0.85) / 0.15;
                     screenAngle = 0;
                     perspective = 1000;
                     scaleMultiplier = 1.0 + 0.10 * p3;
@@ -875,14 +1013,10 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                     if (screenContent) screenContent.style.opacity = '1';
                 }
 
-                // Apply body scale without tilt
                 const currentScale = baseScale * scaleMultiplier;
                 body.style.transform = `scale(${currentScale}) translateY(${bodyTranslateY}px)`;
-
-                // Apply screen hinge angle
                 screen.style.transform = `perspective(${perspective}px) rotateX(${screenAngle}deg)`;
 
-                // Status cue text update (pure editorial typography, NO pills)
                 if (statusHint) {
                     if (progress <= 0.08) {
                         statusHint.textContent = "SCROLL TO OPEN";
@@ -901,6 +1035,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
             }
 
             function onScroll() {
+                if (!isVisible) return;
                 if (!ticking) {
                     requestAnimationFrame(updateLaptop);
                     ticking = true;
@@ -959,7 +1094,6 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                     }
 
                     if (video) {
-                        // Only active card gets unmuted; all others remain muted
                         if (card === activeCard) {
                             video.muted = !isAudioGloballyActive;
                         } else {
@@ -985,7 +1119,6 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 if (!targetCard) return;
                 if (targetCard === activeCard && !forcePlay) return;
 
-                // Hard rule: Pause and mute every other video immediately
                 pauseAllExcept(targetCard);
 
                 activeCard = targetCard;
@@ -993,6 +1126,12 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 const centerBtn = targetCard.querySelector('.reel-center-ctrl');
 
                 if (!video) return;
+
+                // Lazy load actual video source on demand
+                if (!video.src && video.getAttribute('data-src')) {
+                    video.src = video.getAttribute('data-src');
+                    video.load();
+                }
 
                 video.muted = !isAudioGloballyActive;
 
@@ -1022,13 +1161,20 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 }
             }
 
-            if (track._homeReelsInitialized) {
-                if (cards.length > 0) {
-                    activateCard(cards[0], true);
-                }
-                return;
-            }
+            if (track._homeReelsInitialized) return;
             track._homeReelsInitialized = true;
+
+            const reelsSectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const best = getMostVisibleCard() || cards[0];
+                        if (best) activateCard(best);
+                    } else {
+                        pauseAllExcept(null);
+                    }
+                });
+            }, { rootMargin: '100px 0px' });
+            reelsSectionObserver.observe(viewport);
 
             function getMostVisibleCard() {
                 if (!viewport) return null;
@@ -1397,9 +1543,29 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         }
       }
 
-      @media (max-width: 600px) {
+      @media (max-width: 768px) {
         .laptop-scroll-track {
-          margin-bottom: 64px;
+          height: auto !important;
+          margin-bottom: 40px !important;
+        }
+        .laptop-sticky-stage {
+          position: relative !important;
+          top: 0 !important;
+          height: auto !important;
+          padding: 10px 16px 20px 16px !important;
+        }
+        .laptop-stage-header {
+          margin-bottom: 12px !important;
+          padding: 10px 16px 0 16px !important;
+        }
+        .laptop-scroll-cue {
+          display: none !important;
+        }
+        .screen {
+          transform: perspective(1000px) rotateX(0deg) !important;
+        }
+        .screen-content {
+          opacity: 1 !important;
         }
       }
 
@@ -1416,6 +1582,8 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         box-sizing: border-box;
         padding: 14px 16px;
         z-index: 10;
+        will-change: transform;
+        transform: translateZ(0);
       }
 
       .laptop-stage-header {
@@ -2529,9 +2697,13 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
       }
 
       .collection-cards-track {
+        contain: layout paint;
         display: flex;
         gap: 14px;
         padding: 6px 16px 20px 16px;
+        scroll-padding-left: 16px;
+        scroll-padding-right: 16px;
+        scroll-padding-inline: 16px;
         overflow-x: auto;
         overflow-y: hidden;
         scroll-snap-type: x mandatory;
@@ -2549,6 +2721,9 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         .collection-cards-track {
           gap: 18px;
           padding: 8px 20px 24px 20px;
+          scroll-padding-left: 20px;
+          scroll-padding-right: 20px;
+          scroll-padding-inline: 20px;
           max-width: 1120px;
           margin: 0 auto;
         }
@@ -2828,9 +3003,13 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
       }
 
       .reels-cards-track {
+        contain: layout paint;
         display: flex;
         gap: 16px;
-        padding: 4px 20px 24px 20px;
+        padding: 4px 16px 24px 16px;
+        scroll-padding-left: 16px;
+        scroll-padding-right: 16px;
+        scroll-padding-inline: 16px;
         overflow-x: auto;
         overflow-y: hidden;
         scroll-snap-type: x mandatory;
@@ -2848,6 +3027,9 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         .reels-cards-track {
           gap: 20px;
           padding: 6px 20px 28px 20px;
+          scroll-padding-left: 20px;
+          scroll-padding-right: 20px;
+          scroll-padding-inline: 20px;
           max-width: 1120px;
           margin: 0 auto;
         }
@@ -2855,11 +3037,11 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
 
       /* Luxury Haute-Couture Reel Cards */
       .reel-card {
-        width: 280px !important;
-        min-width: 280px !important;
-        max-width: 280px !important;
-        height: 480px;
-        flex: 0 0 280px !important;
+        width: 320px !important;
+        min-width: 320px !important;
+        max-width: 320px !important;
+        height: 535px;
+        flex: 0 0 320px !important;
         border-radius: 12px;
         background: #000000;
         border: none !important;
@@ -2880,21 +3062,21 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
 
       @media (min-width: 768px) {
         .reel-card {
-          width: 300px !important;
-          min-width: 300px !important;
-          max-width: 300px !important;
-          flex: 0 0 300px !important;
-          height: 500px;
+          width: 340px !important;
+          min-width: 340px !important;
+          max-width: 340px !important;
+          flex: 0 0 340px !important;
+          height: 555px;
         }
       }
 
       @media (max-width: 600px) {
         .reel-card {
-          width: 72vw !important;
-          min-width: 72vw !important;
-          max-width: 260px !important;
-          flex: 0 0 72vw !important;
-          height: 420px;
+          width: 86vw !important;
+          min-width: 86vw !important;
+          max-width: 340px !important;
+          flex: 0 0 86vw !important;
+          height: 530px;
         }
       }
 
@@ -3072,6 +3254,177 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         display: block;
       }
 
+      /* --- FLOATING LUXURY LIQUID GLASS CURATED PRODUCT STRIP --- */
+      .reel-curated-strip {
+        position: absolute;
+        bottom: 12px;
+        left: 10px;
+        right: 10px;
+        z-index: 6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 9px 12px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(18, 16, 22, 0.58) 100%);
+        backdrop-filter: blur(28px) saturate(190%);
+        -webkit-backdrop-filter: blur(28px) saturate(190%);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 14px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+        text-decoration: none !important;
+        color: #ffffff;
+        box-sizing: border-box;
+        cursor: pointer;
+        pointer-events: auto;
+        transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    background 0.25s ease,
+                    border-color 0.25s ease,
+                    box-shadow 0.25s ease;
+      }
+
+      .reel-curated-strip:hover {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(22, 18, 28, 0.68) 100%);
+        border-color: rgba(255, 255, 255, 0.32);
+        transform: translateY(-2px);
+        box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      }
+
+      /* Left Side: 3:4 Tall Portrait Seamless Borderless Mini Cards */
+      .rc-items-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 1;
+        min-width: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        padding: 2px 0;
+      }
+
+      .rc-items-row::-webkit-scrollbar {
+        display: none;
+      }
+
+      .rc-mini-card {
+        width: 40px;
+        height: 56px; /* 3:4 elegant portrait ratio */
+        min-width: 40px;
+        border-radius: 7px;
+        border: none; /* Outlines removed */
+        outline: none;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.08);
+        position: relative;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+        transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease;
+      }
+
+      .reel-curated-strip:hover .rc-mini-card {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+      }
+
+      .rc-mini-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 7px;
+      }
+
+      .rc-mini-fallback {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background: rgba(30, 30, 36, 0.85);
+        color: #ffffff;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.60rem;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        padding: 2px;
+        box-sizing: border-box;
+        line-height: 1.15;
+        border-radius: 7px;
+      }
+
+      /* Vertical Divider */
+      .rc-strip-divider {
+        width: 1px;
+        height: 38px;
+        background: rgba(255, 255, 255, 0.15);
+        flex-shrink: 0;
+        margin: 0 4px;
+      }
+
+      /* Right Side: Set Label + Minimal Consistent Action Button */
+      .rc-action-col {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 5px;
+        min-width: 0;
+        flex-shrink: 0;
+      }
+
+      .rc-set-tag {
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.60rem;
+        font-weight: 700;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1;
+        white-space: nowrap;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      }
+
+      .rc-action-btn {
+        height: 30px; /* Fixed height for size consistency */
+        box-sizing: border-box;
+        background: rgba(255, 255, 255, 0.95);
+        color: #0c0d11;
+        border: none;
+        border-radius: 999px; /* Minimal sleek capsule pill */
+        padding: 0 12px;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.64rem;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        line-height: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        white-space: nowrap;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+        transition: all 0.2s ease;
+      }
+
+      .reel-curated-strip:hover .rc-action-btn {
+        background: #ffffff;
+        color: #000000;
+        box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25);
+        transform: translateY(-1px);
+      }
+
+      .rc-action-btn svg {
+        transition: transform 0.2s ease;
+      }
+
+      .reel-curated-strip:hover .rc-action-btn svg {
+        transform: translateX(3px);
+      }
+
       /* --- Bottom Minimal Action: WATCH ALL --- */
       .reel-bottom-bar {
         position: absolute;
@@ -3088,24 +3441,27 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
       }
 
       .reel-minimal-cta {
+        height: 30px; /* Consistent height matching rc-action-btn */
+        box-sizing: border-box;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 7px;
-        padding: 7px 18px;
-        background: rgba(0, 0, 0, 0.42);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        border: 1px solid rgba(255, 255, 255, 0.24);
+        gap: 6px;
+        padding: 0 14px;
+        background: rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.22);
         border-radius: 999px;
         color: #ffffff;
         text-decoration: none;
         font-family: var(--font-body, 'Ubuntu', sans-serif);
         font-size: 0.64rem;
-        font-weight: 500;
-        letter-spacing: 1.8px;
+        font-weight: 600;
+        letter-spacing: 1.4px;
+        line-height: 30px;
         text-transform: uppercase;
-        transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+        transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
       }
 

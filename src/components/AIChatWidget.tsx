@@ -48,13 +48,26 @@ export default function AIChatWidget() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Pre-fetch search index for in-chat catalog recommendations
-  useEffect(() => {
+  const isFetchingCatalogRef = useRef(false);
+
+  const loadCatalog = () => {
+    if (searchCatalog.length > 0 || isFetchingCatalogRef.current) return;
+    isFetchingCatalogRef.current = true;
     fetch('/search.json')
       .then((res) => res.json())
       .then((data: CatalogItem[]) => setSearchCatalog(data))
-      .catch((err) => console.warn('Could not load catalog index:', err));
-  }, []);
+      .catch((err) => {
+        isFetchingCatalogRef.current = false;
+        console.warn('Could not load catalog index:', err);
+      });
+  };
+
+  // Pre-fetch search index only when chat widget is opened
+  useEffect(() => {
+    if (isOpen) {
+      loadCatalog();
+    }
+  }, [isOpen]);
 
   // Handle body scroll locking and backdrop blur
   useEffect(() => {

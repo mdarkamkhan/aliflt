@@ -7,8 +7,6 @@ image: "/uploads/1763903019449-1000023645.webp"
 is_ad: false
 price: 20
 product_code: "ALIF-LC-9449"
-offer_price: 10
-offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"
 description: "Add a refined and delicate touch to your designs with this beautiful sheer lace border. The elegant scalloped edge is highlighted by a row of sparkling sequins, making it perfect for adding a subtle shimmer to any outfit without being too heavy."
 permalink: false

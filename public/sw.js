@@ -36,8 +36,13 @@ self.addEventListener('activate', event => {
   );
 });
 
-// 3. Fetch Event
 self.addEventListener('fetch', event => {
+  const reqUrl = new URL(event.request.url);
+  // Never cache studio / admin routes or localhost:4322 API calls
+  if (reqUrl.pathname.startsWith('/curate') || reqUrl.port === '4322') {
+    return;
+  }
+
   // Navigation / HTML requests: Fast Network-first with 500ms timeout fallback to cache
   if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept')?.includes('text/html'))) {
     event.respondWith(

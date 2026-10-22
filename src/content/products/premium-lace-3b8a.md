@@ -7,8 +7,6 @@ image: "/uploads/d6d75362-fee0-4c85-b063-895db7eab91f.webp"
 is_ad: false
 price: 60
 product_code: "ALIF-LC-3B8A"
-offer_price: 30
-offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"
 description: "Beautiful premium lace perfect for enhancing your garments with a refined touch."
 permalink: false

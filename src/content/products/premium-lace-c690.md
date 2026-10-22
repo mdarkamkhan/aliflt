@@ -7,8 +7,6 @@ image: "/uploads/69776362-3a2c-4a62-ac99-7c4fb265cedf.webp"
 is_ad: false
 price: 60
 product_code: "ALIF-LC-C690"
-offer_price: 30
-offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"
 description: "Beautiful premium lace perfect for enhancing your garments with a refined touch."
 permalink: false

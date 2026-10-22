@@ -9,19 +9,32 @@
     "duration": 6.52195,
     "width": 720,
     "height": 1280,
-    "category": "blouse",
+    "category": "fancy",
     "style": "bridal",
     "tags": [
       "blouse",
       "bridal",
-      "zari",
-      "embroidery"
+      "embroidery",
+      "Trending",
+      "Heavy Work",
+      "Party Wear"
     ],
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-LC-1059",
-      "ALIF-LK-4814"
-    ]
+      "ALIF-LK-4814",
+      "ALIF-SET-001",
+      "lace-1059",
+      "latkan-4814",
+      "crush-top-fabric-03",
+      "fandy-top-fabric-13",
+      "crush-silk-dupatta-05",
+      "moss-crape",
+      "astar-cotton-lining-30",
+      "crush-top-fabric-01"
+    ],
+    "curated_set_slug": "curated-set-alif-set-001",
+    "curated_set_code": "ALIF-SET-001"
   },
   {
     "id": "reel-2",
@@ -33,7 +46,7 @@
     "duration": 15.717052,
     "width": 720,
     "height": 1280,
-    "category": "finishing",
+    "category": "suit",
     "style": "traditional",
     "tags": [
       "finishing",
@@ -44,12 +57,18 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-LK-4814",
-      "ALIF-LK-0883"
-    ]
+      "ALIF-LK-0883",
+      "ALIF-SET-002",
+      "champagne-gold-floral-butti-tissue-silk-fabric",
+      "champagne-gold-plain-tissue-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-002",
+    "curated_set_code": "ALIF-SET-002"
   },
   {
     "id": "reel-3",
-    "title": "Crush Silk Natural Sheen & Texture Drape",
+    "title": "fandy Silk Natural Sheen & Texture Drape",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336446/alif-reels/reel_03.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336446/alif-reels/reel_03.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336446/alif-reels/reel_03.jpg",
@@ -57,19 +76,26 @@
     "duration": 11.83932,
     "width": 720,
     "height": 1280,
-    "category": "fabric",
+    "category": "trending",
     "style": "festive",
     "tags": [
       "fabric",
       "crush-silk",
       "texture",
-      "sheen"
+      "sheen",
+      "Simple",
+      "Fancy"
     ],
     "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-FB-010",
-      "ALIF-DP-001"
-    ]
+      "ALIF-DP-001",
+      "ALIF-SET-003",
+      "rani-pink-plain-fandy-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-003",
+    "curated_set_code": "ALIF-SET-003"
   },
   {
     "id": "reel-4",
@@ -81,7 +107,7 @@
     "duration": 26.328571,
     "width": 720,
     "height": 1280,
-    "category": "lehenga",
+    "category": "suit",
     "style": "bridal",
     "tags": [
       "lehenga",
@@ -92,8 +118,12 @@
     "linked_service": "lehenga",
     "linked_products": [
       "ALIF-LC-1469",
-      "ALIF-FB-003"
-    ]
+      "ALIF-FB-003",
+      "ALIF-SET-004",
+      "pearl-white-plain-georgette-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-004",
+    "curated_set_code": "ALIF-SET-004"
   },
   {
     "id": "reel-5",
@@ -105,7 +135,7 @@
     "duration": 30.368844,
     "width": 720,
     "height": 1280,
-    "category": "kurti-top",
+    "category": "suit",
     "style": "contemporary",
     "tags": [
       "kurti",
@@ -116,8 +146,15 @@
     "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-FB-015",
-      "ALIF-LC-7579"
-    ]
+      "ALIF-LC-7579",
+      "ALIF-SET-005",
+      "fandy-top-fabric-04",
+      "crush-top-fabric-05",
+      "pearl-ivory-plain-fandy-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-005",
+    "curated_set_code": "ALIF-SET-005"
   },
   {
     "id": "reel-6",
@@ -129,19 +166,28 @@
     "duration": 47.73737,
     "width": 720,
     "height": 1280,
-    "category": "anarkali",
+    "category": "curated-sets",
     "style": "traditional",
     "tags": [
       "anarkali",
       "kalidar",
       "floor-length",
-      "regal"
+      "regal",
+      "Party Wear"
     ],
     "linked_service": "anarkali",
     "linked_products": [
       "ALIF-FB-020",
-      "ALIF-DP-004"
-    ]
+      "ALIF-DP-004",
+      "ALIF-SET-006",
+      "crush-bottom-fabric-03",
+      "crush-silk-dupatta-05",
+      "crush-top-fabric-03",
+      "moss-crape",
+      "crush-top-fabric-01"
+    ],
+    "curated_set_slug": "curated-set-alif-set-006",
+    "curated_set_code": "ALIF-SET-006"
   },
   {
     "id": "reel-7",
@@ -164,8 +210,15 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-LK-5693",
-      "ALIF-LC-3302"
-    ]
+      "ALIF-LC-3302",
+      "ALIF-SET-007",
+      "fandy-top-fabric-09",
+      "sunshine-yellow-plain-fandy-silk-fabric",
+      "rani-pink-plain-fandy-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-007",
+    "curated_set_code": "ALIF-SET-007"
   },
   {
     "id": "reel-8",
@@ -177,7 +230,7 @@
     "duration": 24.981814,
     "width": 720,
     "height": 1280,
-    "category": "sharara",
+    "category": "trending",
     "style": "traditional",
     "tags": [
       "gharara",
@@ -188,8 +241,14 @@
     "linked_service": "gharara",
     "linked_products": [
       "ALIF-LC-7882",
-      "ALIF-FB-002"
-    ]
+      "ALIF-FB-002",
+      "ALIF-SET-008",
+      "crush-top-fabric-03",
+      "white-dyed-satin-plain-fabric",
+      "crush-top-fabric-01"
+    ],
+    "curated_set_slug": "curated-set-alif-set-008",
+    "curated_set_code": "ALIF-SET-008"
   },
   {
     "id": "reel-9",
@@ -212,8 +271,16 @@
     "linked_service": "gown",
     "linked_products": [
       "ALIF-FB-005",
-      "ALIF-FB-006"
-    ]
+      "ALIF-FB-006",
+      "ALIF-SET-009",
+      "pearl-ivory-plain-fandy-silk-fabric",
+      "crush-top-fabric-03",
+      "moss-crape",
+      "crush-top-fabric-01",
+      "crush-silk-dupatta-05"
+    ],
+    "curated_set_slug": "curated-set-alif-set-009",
+    "curated_set_code": "ALIF-SET-009"
   },
   {
     "id": "reel-10",
@@ -236,8 +303,13 @@
     "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-FB-018",
-      "ALIF-LC-665c"
-    ]
+      "ALIF-LC-665c",
+      "ALIF-SET-010",
+      "champagne-gold-plain-tissue-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-010",
+    "curated_set_code": "ALIF-SET-010"
   },
   {
     "id": "reel-11",
@@ -260,8 +332,13 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-LC-9263",
-      "ALIF-LK-7521"
-    ]
+      "ALIF-LK-7521",
+      "ALIF-SET-011",
+      "champagne-gold-plain-tissue-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-011",
+    "curated_set_code": "ALIF-SET-011"
   },
   {
     "id": "reel-12",
@@ -284,8 +361,17 @@
     "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-025",
-      "ALIF-DP-002"
-    ]
+      "ALIF-DP-002",
+      "ALIF-SET-012",
+      "fandy-top-fabric-01",
+      "crush-silk-dupatta-02",
+      "crush-top-fabric-01",
+      "pearl-ivory-plain-fandy-silk-fabric",
+      "crush-silk-dupatta-05",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-012",
+    "curated_set_code": "ALIF-SET-012"
   },
   {
     "id": "reel-13",
@@ -308,8 +394,16 @@
     "linked_service": "lehenga",
     "linked_products": [
       "ALIF-TM-004",
-      "ALIF-FB-001"
-    ]
+      "ALIF-FB-001",
+      "ALIF-SET-013",
+      "fandy-bottom-fabric-04",
+      "fandy-silk-dupatta-04",
+      "fandy-top-fabric-10",
+      "moti-pipe-lace-9548",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-013",
+    "curated_set_code": "ALIF-SET-013"
   },
   {
     "id": "reel-14",
@@ -332,8 +426,14 @@
     "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-030",
-      "ALIF-DP-006"
-    ]
+      "ALIF-DP-006",
+      "ALIF-SET-014",
+      "champagne-gold-floral-butti-tissue-silk-fabric",
+      "champagne-gold-plain-tissue-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-014",
+    "curated_set_code": "ALIF-SET-014"
   },
   {
     "id": "reel-15",
@@ -356,8 +456,14 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-LC-5472",
-      "ALIF-FB-040"
-    ]
+      "ALIF-FB-040",
+      "ALIF-SET-015",
+      "pearl-ivory-plain-fandy-silk-fabric",
+      "crush-top-fabric-03",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-015",
+    "curated_set_code": "ALIF-SET-015"
   },
   {
     "id": "reel-16",
@@ -380,8 +486,14 @@
     "linked_service": "sharara",
     "linked_products": [
       "ALIF-LC-9263",
-      "ALIF-FB-004"
-    ]
+      "ALIF-FB-004",
+      "ALIF-SET-016",
+      "champagne-gold-plain-tissue-silk-fabric",
+      "fandy-silk-dupatta-07",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-016",
+    "curated_set_code": "ALIF-SET-016"
   },
   {
     "id": "reel-17",
@@ -404,8 +516,15 @@
     "linked_service": "anarkali",
     "linked_products": [
       "ALIF-FB-022",
-      "ALIF-DP-003"
-    ]
+      "ALIF-DP-003",
+      "ALIF-SET-017",
+      "crush-top-fabric-02",
+      "crush-silk-dupatta-01",
+      "teal-green-plain-crushed-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-017",
+    "curated_set_code": "ALIF-SET-017"
   },
   {
     "id": "reel-18",
@@ -428,8 +547,15 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-TM-001",
-      "ALIF-TM-002"
-    ]
+      "ALIF-TM-002",
+      "ALIF-SET-018",
+      "fandy-top-fabric-05",
+      "fandy-silk-dupatta-01",
+      "crush-top-fabric-05",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-018",
+    "curated_set_code": "ALIF-SET-018"
   },
   {
     "id": "reel-19",
@@ -452,8 +578,13 @@
     "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-FB-012",
-      "ALIF-LC-5038"
-    ]
+      "ALIF-LC-5038",
+      "ALIF-SET-019",
+      "champagne-gold-plain-tissue-silk-fabric",
+      "daman-lace-7953"
+    ],
+    "curated_set_slug": "curated-set-alif-set-019",
+    "curated_set_code": "ALIF-SET-019"
   },
   {
     "id": "reel-20",
@@ -476,8 +607,14 @@
     "linked_service": "gown",
     "linked_products": [
       "ALIF-FB-007",
-      "ALIF-LC-4997"
-    ]
+      "ALIF-LC-4997",
+      "ALIF-SET-020",
+      "crush-top-fabric-01",
+      "crush-silk-dupatta-05",
+      "deep-wine-plain-georgette-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-020",
+    "curated_set_code": "ALIF-SET-020"
   },
   {
     "id": "reel-21",
@@ -500,8 +637,13 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-LC-1059",
-      "ALIF-LK-3883"
-    ]
+      "ALIF-LK-3883",
+      "ALIF-SET-021",
+      "champagne-gold-floral-butti-tissue-silk-fabric",
+      "champagne-gold-plain-tissue-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-021",
+    "curated_set_code": "ALIF-SET-021"
   },
   {
     "id": "reel-22",
@@ -524,8 +666,14 @@
     "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-035",
-      "ALIF-LC-8775"
-    ]
+      "ALIF-LC-8775",
+      "ALIF-SET-022",
+      "crush-bottom-fabric-03",
+      "crush-silk-dupatta-05",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-022",
+    "curated_set_code": "ALIF-SET-022"
   },
   {
     "id": "reel-23",
@@ -548,8 +696,15 @@
     "linked_service": "lehenga",
     "linked_products": [
       "ALIF-LC-1469",
-      "ALIF-LK-4814"
-    ]
+      "ALIF-LK-4814",
+      "ALIF-SET-023",
+      "fandy-top-fabric-04",
+      "fandy-silk-dupatta-06",
+      "crush-top-fabric-05",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-023",
+    "curated_set_code": "ALIF-SET-023"
   },
   {
     "id": "reel-24",
@@ -572,8 +727,12 @@
     "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-DP-001",
-      "ALIF-DP-005"
-    ]
+      "ALIF-DP-005",
+      "ALIF-SET-024",
+      "white-dyed-satin-plain-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-024",
+    "curated_set_code": "ALIF-SET-024"
   },
   {
     "id": "reel-25",
@@ -596,8 +755,15 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-LC-9149",
-      "ALIF-FB-045"
-    ]
+      "ALIF-FB-045",
+      "ALIF-SET-025",
+      "fandy-top-fabric-04",
+      "fandy-silk-dupatta-06",
+      "fandy-bottom-fabric-02",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-025",
+    "curated_set_code": "ALIF-SET-025"
   },
   {
     "id": "reel-26",
@@ -620,8 +786,13 @@
     "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-TM-006",
-      "ALIF-FB-011"
-    ]
+      "ALIF-FB-011",
+      "ALIF-SET-026",
+      "pearl-ivory-plain-fandy-silk-fabric",
+      "bridal-lace-1997"
+    ],
+    "curated_set_slug": "curated-set-alif-set-026",
+    "curated_set_code": "ALIF-SET-026"
   },
   {
     "id": "reel-27",
@@ -644,8 +815,15 @@
     "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LC-2178",
-      "ALIF-FB-028"
-    ]
+      "ALIF-FB-028",
+      "ALIF-SET-027",
+      "fandy-bottom-fabric-04",
+      "fandy-silk-dupatta-04",
+      "fandy-top-fabric-10",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-027",
+    "curated_set_code": "ALIF-SET-027"
   },
   {
     "id": "reel-28",
@@ -668,8 +846,13 @@
     "linked_service": "anarkali",
     "linked_products": [
       "ALIF-FB-016",
-      "ALIF-DP-006"
-    ]
+      "ALIF-DP-006",
+      "ALIF-SET-028",
+      "fandy-top-fabric-08",
+      "rani-pink-plain-fandy-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-028",
+    "curated_set_code": "ALIF-SET-028"
   },
   {
     "id": "reel-29",
@@ -692,8 +875,12 @@
     "linked_service": "lehenga",
     "linked_products": [
       "ALIF-LC-9263",
-      "ALIF-LK-8725"
-    ]
+      "ALIF-LK-8725",
+      "ALIF-SET-029",
+      "fandy-top-fabric-02"
+    ],
+    "curated_set_slug": "curated-set-alif-set-029",
+    "curated_set_code": "ALIF-SET-029"
   },
   {
     "id": "reel-30",
@@ -716,8 +903,15 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-FB-047",
-      "ALIF-FB-048"
-    ]
+      "ALIF-FB-048",
+      "ALIF-SET-030",
+      "fandy-top-fabric-05",
+      "sunshine-yellow-plain-fandy-silk-fabric",
+      "fandy-silk-dupatta-01",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-030",
+    "curated_set_code": "ALIF-SET-030"
   },
   {
     "id": "reel-31",
@@ -729,7 +923,7 @@
     "duration": 23.054558,
     "width": 720,
     "height": 1280,
-    "category": "blouse",
+    "category": "fancy",
     "style": "minimalist",
     "tags": [
       "blouse",
@@ -740,8 +934,15 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-LC-7579",
-      "ALIF-LK-7201"
-    ]
+      "ALIF-LK-7201",
+      "ALIF-SET-031",
+      "fandy-bottom-fabric-04",
+      "fandy-silk-dupatta-04",
+      "fandy-top-fabric-10",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-031",
+    "curated_set_code": "ALIF-SET-031"
   },
   {
     "id": "reel-32",
@@ -764,8 +965,15 @@
     "linked_service": "coord-set",
     "linked_products": [
       "ALIF-FB-014",
-      "ALIF-LC-665c"
-    ]
+      "ALIF-LC-665c",
+      "ALIF-SET-032",
+      "fandy-bottom-fabric-01",
+      "crush-top-fabric-01",
+      "fandy-silk-dupatta-07",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-032",
+    "curated_set_code": "ALIF-SET-032"
   },
   {
     "id": "reel-33",
@@ -788,8 +996,13 @@
     "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-003",
-      "ALIF-LC-1469"
-    ]
+      "ALIF-LC-1469",
+      "ALIF-SET-033",
+      "fandy-top-fabric-07",
+      "rani-pink-plain-fandy-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-033",
+    "curated_set_code": "ALIF-SET-033"
   },
   {
     "id": "reel-34",
@@ -812,8 +1025,12 @@
     "linked_service": "sharara",
     "linked_products": [
       "ALIF-FB-009",
-      "ALIF-LC-5472"
-    ]
+      "ALIF-LC-5472",
+      "ALIF-SET-034",
+      "pearl-ivory-plain-fandy-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-034",
+    "curated_set_code": "ALIF-SET-034"
   },
   {
     "id": "reel-35",
@@ -836,8 +1053,13 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-LK-4814",
-      "ALIF-LC-9263"
-    ]
+      "ALIF-LC-9263",
+      "ALIF-SET-035",
+      "fandy-top-fabric-01",
+      "fandy-top-fabric-02"
+    ],
+    "curated_set_slug": "curated-set-alif-set-035",
+    "curated_set_code": "ALIF-SET-035"
   },
   {
     "id": "reel-36",
@@ -861,8 +1083,14 @@
     "linked_service": "saree-fall-pico",
     "linked_products": [
       "ALIF-TM-010",
-      "ALIF-TM-011"
-    ]
+      "ALIF-TM-011",
+      "ALIF-SET-036",
+      "pearl-white-plain-georgette-fabric",
+      "moss-crape",
+      "diamond-lace-1466"
+    ],
+    "curated_set_slug": "curated-set-alif-set-036",
+    "curated_set_code": "ALIF-SET-036"
   },
   {
     "id": "reel-37",
@@ -886,8 +1114,15 @@
     "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-FB-026",
-      "ALIF-LC-5038"
-    ]
+      "ALIF-LC-5038",
+      "ALIF-SET-037",
+      "white-dyed-satin-plain-fabric",
+      "fandy-silk-dupatta-07",
+      "moss-crape",
+      "daman-lace-6213"
+    ],
+    "curated_set_slug": "curated-set-alif-set-037",
+    "curated_set_code": "ALIF-SET-037"
   },
   {
     "id": "reel-38",
@@ -911,8 +1146,14 @@
     "linked_service": "gown",
     "linked_products": [
       "ALIF-FB-008",
-      "ALIF-LC-4997"
-    ]
+      "ALIF-LC-4997",
+      "ALIF-SET-038",
+      "pearl-ivory-plain-fandy-silk-fabric",
+      "white-dyed-satin-plain-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-038",
+    "curated_set_code": "ALIF-SET-038"
   },
   {
     "id": "reel-39",
@@ -936,8 +1177,14 @@
     "linked_service": "lehenga",
     "linked_products": [
       "ALIF-FB-006",
-      "ALIF-LC-1059"
-    ]
+      "ALIF-LC-1059",
+      "ALIF-SET-039",
+      "white-dyed-satin-plain-fabric",
+      "fandy-silk-dupatta-07",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-039",
+    "curated_set_code": "ALIF-SET-039"
   },
   {
     "id": "reel-40",
@@ -961,8 +1208,13 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-LC-1059",
-      "ALIF-LK-5693"
-    ]
+      "ALIF-LK-5693",
+      "ALIF-SET-040",
+      "champagne-gold-floral-butti-tissue-silk-fabric",
+      "champagne-gold-plain-tissue-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-040",
+    "curated_set_code": "ALIF-SET-040"
   },
   {
     "id": "reel-41",
@@ -1011,8 +1263,14 @@
     "linked_service": "anarkali",
     "linked_products": [
       "ALIF-FB-021",
-      "ALIF-DP-005"
-    ]
+      "ALIF-DP-005",
+      "ALIF-SET-042",
+      "fandy-bottom-fabric-04",
+      "crush-silk-dupatta-05",
+      "crimson-red-plain-satin-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-042",
+    "curated_set_code": "ALIF-SET-042"
   },
   {
     "id": "reel-43",
@@ -1036,8 +1294,13 @@
     "linked_service": "sharara",
     "linked_products": [
       "ALIF-FB-004",
-      "ALIF-LC-7882"
-    ]
+      "ALIF-LC-7882",
+      "ALIF-SET-043",
+      "deep-wine-plain-georgette-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-043",
+    "curated_set_code": "ALIF-SET-043"
   },
   {
     "id": "reel-44",
@@ -1061,8 +1324,14 @@
     "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-FB-032",
-      "ALIF-LC-5300"
-    ]
+      "ALIF-LC-5300",
+      "ALIF-SET-044",
+      "emerald-green-plain-georgette-fabric",
+      "crush-silk-dupatta-05",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-044",
+    "curated_set_code": "ALIF-SET-044"
   },
   {
     "id": "reel-45",
@@ -1086,8 +1355,12 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-LC-9149",
-      "ALIF-LK-7521"
-    ]
+      "ALIF-LK-7521",
+      "ALIF-SET-045",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-045",
+    "curated_set_code": "ALIF-SET-045"
   },
   {
     "id": "reel-46",
@@ -1111,8 +1384,12 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-TM-001",
-      "ALIF-TM-005"
-    ]
+      "ALIF-TM-005",
+      "ALIF-SET-046",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-046",
+    "curated_set_code": "ALIF-SET-046"
   },
   {
     "id": "reel-47",
@@ -1136,8 +1413,14 @@
     "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-034",
-      "ALIF-DP-002"
-    ]
+      "ALIF-DP-002",
+      "ALIF-SET-047",
+      "rani-pink-plain-fandy-silk-fabric",
+      "white-dyed-satin-plain-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-047",
+    "curated_set_code": "ALIF-SET-047"
   },
   {
     "id": "reel-48",
@@ -1161,8 +1444,13 @@
     "linked_service": "anarkali",
     "linked_products": [
       "ALIF-FB-005",
-      "ALIF-DP-003"
-    ]
+      "ALIF-DP-003",
+      "ALIF-SET-048",
+      "soft-pink-plain-satin-fabric",
+      "pearl-ivory-plain-fandy-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-048",
+    "curated_set_code": "ALIF-SET-048"
   },
   {
     "id": "reel-49",
@@ -1186,8 +1474,12 @@
     "linked_service": "lehenga",
     "linked_products": [
       "ALIF-LC-1469",
-      "ALIF-FB-003"
-    ]
+      "ALIF-FB-003",
+      "ALIF-SET-049",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-049",
+    "curated_set_code": "ALIF-SET-049"
   },
   {
     "id": "reel-50",
@@ -1211,8 +1503,12 @@
     "linked_service": "gown",
     "linked_products": [
       "ALIF-FB-007",
-      "ALIF-LC-4997"
-    ]
+      "ALIF-LC-4997",
+      "ALIF-SET-050",
+      "jet-black-plain-satin-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-050",
+    "curated_set_code": "ALIF-SET-050"
   },
   {
     "id": "reel-51",
@@ -1236,8 +1532,13 @@
     "linked_service": "coord-set",
     "linked_products": [
       "ALIF-FB-013",
-      "ALIF-LC-5472"
-    ]
+      "ALIF-LC-5472",
+      "ALIF-SET-051",
+      "soft-pink-plain-satin-fabric",
+      "pearl-ivory-plain-fandy-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-051",
+    "curated_set_code": "ALIF-SET-051"
   },
   {
     "id": "reel-52",
@@ -1261,8 +1562,13 @@
     "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-FB-031",
-      "ALIF-TM-006"
-    ]
+      "ALIF-TM-006",
+      "ALIF-SET-052",
+      "butter-yellow-plain-satin-fabric",
+      "diamond-lace-7844"
+    ],
+    "curated_set_slug": "curated-set-alif-set-052",
+    "curated_set_code": "ALIF-SET-052"
   },
   {
     "id": "reel-53",
@@ -1286,8 +1592,12 @@
     "linked_service": "lehenga",
     "linked_products": [
       "ALIF-LK-4814",
-      "ALIF-LK-5693"
-    ]
+      "ALIF-LK-5693",
+      "ALIF-SET-053",
+      "jet-black-plain-satin-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-053",
+    "curated_set_code": "ALIF-SET-053"
   },
   {
     "id": "reel-54",
@@ -1311,7 +1621,687 @@
     "linked_service": "blouse",
     "linked_products": [
       "ALIF-TM-001",
-      "ALIF-TM-010"
-    ]
+      "ALIF-TM-010",
+      "ALIF-SET-054",
+      "champagne-gold-plain-tissue-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-054",
+    "curated_set_code": "ALIF-SET-054"
+  },
+  {
+    "id": "reel-55",
+    "title": "Boutique Reel #55",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483609/alif-reels/reel_55.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483609/alif-reels/reel_55.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483609/alif-reels/reel_55.jpg",
+    "public_id": "alif-reels/reel_55",
+    "duration": 21.614921,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019.mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-055",
+      "jet-black-plain-satin-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-055",
+    "curated_set_code": "ALIF-SET-055"
+  },
+  {
+    "id": "reel-56",
+    "title": "Boutique Reel #56",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483622/alif-reels/reel_56.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483622/alif-reels/reel_56.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483622/alif-reels/reel_56.jpg",
+    "public_id": "alif-reels/reel_56",
+    "duration": 9.727755,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (1).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-056",
+      "jet-black-plain-satin-fabric",
+      "white-dyed-satin-plain-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-056",
+    "curated_set_code": "ALIF-SET-056"
+  },
+  {
+    "id": "reel-57",
+    "title": "Boutique Reel #57",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483626/alif-reels/reel_57.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483626/alif-reels/reel_57.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483626/alif-reels/reel_57.jpg",
+    "public_id": "alif-reels/reel_57",
+    "duration": 8.936825,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (2).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": []
+  },
+  {
+    "id": "reel-58",
+    "title": "Boutique Reel #58",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483639/alif-reels/reel_58.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483639/alif-reels/reel_58.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483639/alif-reels/reel_58.jpg",
+    "public_id": "alif-reels/reel_58",
+    "duration": 12.373379,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (3).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-058",
+      "sunshine-yellow-plain-fandy-silk-fabric",
+      "rani-pink-plain-fandy-silk-fabric",
+      "pearl-ivory-plain-fandy-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-058",
+    "curated_set_code": "ALIF-SET-058"
+  },
+  {
+    "id": "reel-59",
+    "title": "Boutique Reel #59",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483672/alif-reels/reel_59.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483672/alif-reels/reel_59.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483672/alif-reels/reel_59.jpg",
+    "public_id": "alif-reels/reel_59",
+    "duration": 10.747982,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (4).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-059",
+      "crimson-red-plain-satin-fabric",
+      "butter-yellow-plain-satin-fabric",
+      "jet-black-plain-satin-fabric",
+      "white-dyed-satin-plain-fabric",
+      "soft-pink-plain-satin-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-059",
+    "curated_set_code": "ALIF-SET-059"
+  },
+  {
+    "id": "reel-60",
+    "title": "Boutique Reel #60",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483682/alif-reels/reel_60.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483682/alif-reels/reel_60.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483682/alif-reels/reel_60.jpg",
+    "public_id": "alif-reels/reel_60",
+    "duration": 15.368753,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (5).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-060",
+      "crimson-red-plain-rayon-fabric",
+      "pure-white-plain-rayon-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-060",
+    "curated_set_code": "ALIF-SET-060"
+  },
+  {
+    "id": "reel-61",
+    "title": "Boutique Reel #61",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483690/alif-reels/reel_61.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483690/alif-reels/reel_61.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483690/alif-reels/reel_61.jpg",
+    "public_id": "alif-reels/reel_61",
+    "duration": 6.52195,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (6).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": []
+  },
+  {
+    "id": "reel-62",
+    "title": "Boutique Reel #62",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483695/alif-reels/reel_62.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483695/alif-reels/reel_62.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483695/alif-reels/reel_62.jpg",
+    "public_id": "alif-reels/reel_62",
+    "duration": 11.189161,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (7).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": []
+  },
+  {
+    "id": "reel-63",
+    "title": "Boutique Reel #63",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483701/alif-reels/reel_63.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483701/alif-reels/reel_63.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483701/alif-reels/reel_63.jpg",
+    "public_id": "alif-reels/reel_63",
+    "duration": 16.71551,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (8).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-063",
+      "butter-yellow-plain-satin-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-063",
+    "curated_set_code": "ALIF-SET-063"
+  },
+  {
+    "id": "reel-64",
+    "title": "Boutique Reel #64",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483706/alif-reels/reel_64.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483706/alif-reels/reel_64.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483706/alif-reels/reel_64.jpg",
+    "public_id": "alif-reels/reel_64",
+    "duration": 11.003401,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (9).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-064",
+      "butter-yellow-plain-satin-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-064",
+    "curated_set_code": "ALIF-SET-064"
+  },
+  {
+    "id": "reel-65",
+    "title": "Boutique Reel #65",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483711/alif-reels/reel_65.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483711/alif-reels/reel_65.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483711/alif-reels/reel_65.jpg",
+    "public_id": "alif-reels/reel_65",
+    "duration": 20.384263,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (10).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": []
+  },
+  {
+    "id": "reel-66",
+    "title": "Boutique Reel #66",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483720/alif-reels/reel_66.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483720/alif-reels/reel_66.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483720/alif-reels/reel_66.jpg",
+    "public_id": "alif-reels/reel_66",
+    "duration": 17.922948,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (12).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-066",
+      "emerald-green-plain-georgette-fabric",
+      "deep-wine-plain-georgette-fabric",
+      "pearl-white-plain-georgette-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-066",
+    "curated_set_code": "ALIF-SET-066"
+  },
+  {
+    "id": "reel-67",
+    "title": "Boutique Reel #67",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483728/alif-reels/reel_67.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483728/alif-reels/reel_67.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483728/alif-reels/reel_67.jpg",
+    "public_id": "alif-reels/reel_67",
+    "duration": 24.679955,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (13).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-067",
+      "fandy-bottom-fabric-02",
+      "fandy-silk-dupatta-06",
+      "fandy-top-fabric-04",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-067",
+    "curated_set_code": "ALIF-SET-067"
+  },
+  {
+    "id": "reel-68",
+    "title": "Boutique Reel #68",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483733/alif-reels/reel_68.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483733/alif-reels/reel_68.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483733/alif-reels/reel_68.jpg",
+    "public_id": "alif-reels/reel_68",
+    "duration": 10.167483,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (14).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-068",
+      "pearl-ivory-plain-fandy-silk-fabric",
+      "rani-pink-plain-fandy-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-068",
+    "curated_set_code": "ALIF-SET-068"
+  },
+  {
+    "id": "reel-69",
+    "title": "Boutique Reel #69",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483743/alif-reels/reel_69.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483743/alif-reels/reel_69.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483743/alif-reels/reel_69.jpg",
+    "public_id": "alif-reels/reel_69",
+    "duration": 21.522041,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (15).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-069",
+      "champagne-gold-plain-tissue-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-069",
+    "curated_set_code": "ALIF-SET-069"
+  },
+  {
+    "id": "reel-70",
+    "title": "Boutique Reel #70",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483755/alif-reels/reel_70.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483755/alif-reels/reel_70.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483755/alif-reels/reel_70.jpg",
+    "public_id": "alif-reels/reel_70",
+    "duration": 8.890385,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (16).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-070",
+      "pearl-ivory-plain-fandy-silk-fabric",
+      "white-dyed-satin-plain-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-070",
+    "curated_set_code": "ALIF-SET-070"
+  },
+  {
+    "id": "reel-71",
+    "title": "Boutique Reel #71",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483980/alif-reels/reel_71.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483980/alif-reels/reel_71.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483980/alif-reels/reel_71.jpg",
+    "public_id": "alif-reels/reel_71",
+    "duration": 23.217098,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (18).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-071",
+      "pearl-white-plain-georgette-fabric",
+      "rani-pink-plain-fandy-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-071",
+    "curated_set_code": "ALIF-SET-071"
+  },
+  {
+    "id": "reel-72",
+    "title": "Boutique Reel #72",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483985/alif-reels/reel_72.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483985/alif-reels/reel_72.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483985/alif-reels/reel_72.jpg",
+    "public_id": "alif-reels/reel_72",
+    "duration": 14.602494,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (19).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-072",
+      "rani-pink-plain-fandy-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-072",
+    "curated_set_code": "ALIF-SET-072"
+  },
+  {
+    "id": "reel-73",
+    "title": "Boutique Reel #73",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483987/alif-reels/reel_73.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483987/alif-reels/reel_73.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483987/alif-reels/reel_73.jpg",
+    "public_id": "alif-reels/reel_73",
+    "duration": 9.401224,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (20).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": []
+  },
+  {
+    "id": "reel-74",
+    "title": "Boutique Reel #74",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483991/alif-reels/reel_74.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483991/alif-reels/reel_74.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483991/alif-reels/reel_74.jpg",
+    "public_id": "alif-reels/reel_74",
+    "duration": 14.161315,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (21).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-074",
+      "soft-pink-plain-satin-fabric",
+      "pearl-ivory-plain-fandy-silk-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-074",
+    "curated_set_code": "ALIF-SET-074"
+  },
+  {
+    "id": "reel-75",
+    "title": "Boutique Reel #75",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483995/alif-reels/reel_75.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483995/alif-reels/reel_75.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483995/alif-reels/reel_75.jpg",
+    "public_id": "alif-reels/reel_75",
+    "duration": 18.317687,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (22).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-075",
+      "fandy-top-fabric-12",
+      "rani-pink-plain-fandy-silk-fabric",
+      "sunshine-yellow-plain-fandy-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-075",
+    "curated_set_code": "ALIF-SET-075"
+  },
+  {
+    "id": "reel-76",
+    "title": "Boutique Reel #76",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792484005/alif-reels/reel_76.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792484005/alif-reels/reel_76.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792484005/alif-reels/reel_76.jpg",
+    "public_id": "alif-reels/reel_76",
+    "duration": 20.755782,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (23).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-076",
+      "fandy-bottom-fabric-03",
+      "sunshine-yellow-plain-fandy-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-076",
+    "curated_set_code": "ALIF-SET-076"
+  },
+  {
+    "id": "reel-77",
+    "title": "Boutique Reel #77",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792484025/alif-reels/reel_77.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792484025/alif-reels/reel_77.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792484025/alif-reels/reel_77.jpg",
+    "public_id": "alif-reels/reel_77",
+    "duration": 32.899819,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (24).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-077",
+      "rani-pink-plain-fandy-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-077",
+    "curated_set_code": "ALIF-SET-077"
+  },
+  {
+    "id": "reel-78",
+    "title": "Boutique Reel #78",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792484031/alif-reels/reel_78.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792484031/alif-reels/reel_78.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792484031/alif-reels/reel_78.jpg",
+    "public_id": "alif-reels/reel_78",
+    "duration": 11.63034,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (25).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-078",
+      "pearl-white-plain-georgette-fabric"
+    ],
+    "curated_set_slug": "curated-set-alif-set-078",
+    "curated_set_code": "ALIF-SET-078"
+  },
+  {
+    "id": "reel-79",
+    "title": "Boutique Reel #79",
+    "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792484064/alif-reels/reel_79.mp4",
+    "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792484064/alif-reels/reel_79.mp4",
+    "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792484064/alif-reels/reel_79.jpg",
+    "public_id": "alif-reels/reel_79",
+    "duration": 14.091655,
+    "width": 720,
+    "height": 1280,
+    "source_file": "downloadmedia-20261019 (17).mp4",
+    "category": "curated-sets",
+    "style": "boutique-collection",
+    "tags": [
+      "new-arrival",
+      "boutique",
+      "ensemble",
+      "sahibganj"
+    ],
+    "linked_service": "blouse",
+    "linked_products": [
+      "ALIF-SET-079",
+      "soft-pink-plain-satin-fabric",
+      "rani-pink-plain-fandy-silk-fabric",
+      "moss-crape"
+    ],
+    "curated_set_slug": "curated-set-alif-set-079",
+    "curated_set_code": "ALIF-SET-079"
   }
 ]

@@ -8,8 +8,6 @@ gallery: []
 category: lace
 price: 25
 product_code: "ALIF-LC-6257"
-offer_price: 13
-offer_end_date: "2026-10-12T23:59:00Z"
 description: Beautiful multi colour pompom lace for dupatta blouse lehanga chundari etc...
 size: 1 inch
 colour: "Multi "

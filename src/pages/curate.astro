@@ -1,0 +1,3076 @@
+---
+import { getCollection } from 'astro:content';
+import reelsData from '../data/reels.json';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Load products and services
+const allProducts = await getCollection('products');
+const allServices = await getCollection('services');
+
+// Check existing curated sets in src/content/products
+const productsDir = path.resolve(process.cwd(), 'src/content/products');
+let existingFiles: string[] = [];
+try {
+  existingFiles = fs.readdirSync(productsDir);
+} catch (e) {
+  existingFiles = [];
+}
+
+const existingSets: any[] = [];
+for (const file of existingFiles) {
+  if (!file.endsWith('.md')) continue;
+  try {
+    const content = fs.readFileSync(path.join(productsDir, file), 'utf8');
+    if (content.includes('category: "Curated Sets"') || content.includes("category: 'Curated Sets'")) {
+      const slug = file.replace(/\.md$/, '');
+      const reelMatch = content.match(/linked_reel_id:\s*["']([^"']+)["']/);
+      const titleMatch = content.match(/title:\s*["']([^"']+)["']/);
+      const codeMatch = content.match(/product_code:\s*["']([^"']+)["']/);
+      const priceMatch = content.match(/price:\s*([0-9.]+)/);
+      const offerMatch = content.match(/offer_price:\s*([0-9.]+)/);
+      const imageMatch = content.match(/image:\s*["']([^"']+)["']/);
+      
+      const comboMatches: any[] = [];
+      const lines = content.split('\n');
+      let inCombo = false;
+      let curItem: any = null;
+
+      for (const line of lines) {
+        if (/^combo_products:/.test(line)) {
+          inCombo = true;
+          continue;
+        }
+        if (inCombo) {
+          if (/^[a-zA-Z0-9_]+:/.test(line) && !line.startsWith('  ') && !line.startsWith('-')) {
+            inCombo = false;
+            break;
+          }
+          const itemStart = line.match(/^\s*-\s*(?:id:\s*["']?([^"'\r\n]+)["']?|["']?([^"'\r\n:]+)["']?)/);
+          if (itemStart) {
+            const id = (itemStart[1] || itemStart[2] || '').trim();
+            if (id) {
+              curItem = { id, meters: 1, unit: 'mtr' };
+              comboMatches.push(curItem);
+            }
+          } else if (curItem) {
+            const mMatch = line.match(/meters:\s*([0-9.]+)/);
+            if (mMatch) curItem.meters = Number(mMatch[1]);
+            const uMatch = line.match(/unit:\s*["']?([^"'\r\n]+)["']?/);
+            if (uMatch) curItem.unit = uMatch[1].trim();
+          }
+        }
+      }
+
+      existingSets.push({
+        slug,
+        title: titleMatch ? titleMatch[1] : slug,
+        reel_id: reelMatch ? reelMatch[1] : null,
+        product_code: codeMatch ? codeMatch[1] : null,
+        price: priceMatch ? Number(priceMatch[1]) : 0,
+        offer_price: offerMatch ? Number(offerMatch[1]) : null,
+        image: imageMatch ? imageMatch[1] : null,
+        combo_products: comboMatches,
+      });
+    }
+  } catch (err) {}
+}
+
+
+// Client products
+const clientProducts = allProducts.map(p => ({
+  id: p.id,
+  title: p.data.title,
+  image: p.data.image || '/icons/icon-512x512.png',
+  price: Number(p.data.price) || 0,
+  offer_price: p.data.offer_price ? Number(p.data.offer_price) : null,
+  final_price: Number(p.data.offer_price || p.data.price || 0),
+  category: p.data.category || '',
+  colour: p.data.colour || '',
+  fabric: p.data.fabric || '',
+  code: p.data.product_code || `ALIF-${p.id}`,
+  ideal_for: p.data.ideal_for || '',
+}));
+
+const servicesList = allServices.map(s => ({
+  id: s.id,
+  title: s.data.title,
+  price: s.data.price,
+}));
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curated Sets Studio | alif.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <style is:global>
+    :root {
+
+      --bg-dark: #0f1115;
+      --bg-card: #171a21;
+      --bg-card-hover: #1e222d;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(212, 163, 115, 0.3);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --gold: #d4a373;
+      --gold-hover: #e0b080;
+      --gold-glow: rgba(212, 163, 115, 0.25);
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-serif: 'Playfair Display', Georgia, serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation Bar */
+    .studio-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(15, 17, 21, 0.94);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: #fff;
+    }
+
+    .brand-badge {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, rgba(212, 163, 115, 0.2), rgba(212, 163, 115, 0.05));
+      color: var(--gold);
+      border: 1px solid var(--border-accent);
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      max-width: 600px;
+      justify-content: center;
+    }
+
+    .reel-nav-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .reel-nav-btn:hover:not(:disabled) {
+      background: var(--bg-card-hover);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .reel-select-dropdown {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      flex: 1;
+      max-width: 360px;
+      outline: none;
+    }
+    .reel-select-dropdown:focus {
+      border-color: var(--gold);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .progress-pill {
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 5px 12px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .store-link-btn {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .store-link-btn:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* Mobile / Tablet View Switcher */
+    .mobile-tab-bar {
+      display: none;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 8px 12px;
+      gap: 8px;
+    }
+    .mobile-tab-btn {
+      flex: 1;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 8px 6px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .mobile-tab-btn.active {
+      background: rgba(212, 163, 115, 0.15);
+      color: var(--gold);
+      border-color: var(--border-accent);
+    }
+
+    /* Main Studio Container */
+    .studio-container {
+      display: grid;
+      grid-template-columns: 330px 460px 1fr;
+      height: calc(100vh - 58px);
+      overflow: hidden;
+    }
+
+    @media (max-width: 1024px) {
+      .mobile-tab-bar {
+        display: flex;
+      }
+      .studio-container {
+        display: block;
+        height: calc(100vh - 105px);
+        overflow-y: auto;
+      }
+      .col-reel, .col-builder, .col-catalog {
+        display: none !important;
+      }
+      .col-reel.tab-active, .col-builder.tab-active, .col-catalog.tab-active {
+        display: flex !important;
+        height: 100%;
+        overflow-y: auto;
+      }
+    }
+
+    /* Left Column: Reel Player & Categorization Hub */
+    .col-reel {
+      background: #12151b;
+      border-right: 1px solid var(--border-subtle);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+    }
+
+    .video-frame-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      aspect-ratio: 9/16;
+      max-height: 420px;
+      margin: 0 auto;
+    }
+
+    .reel-video-el {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-overlay-controls {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 999px;
+    }
+
+    .video-ctrl-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .video-ctrl-btn:hover {
+      color: var(--gold);
+    }
+
+    .reel-info-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cat-save-feedback {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 2px 8px;
+      border-radius: 999px;
+      opacity: 0;
+      transform: translateY(-2px);
+      transition: all 0.2s ease;
+    }
+    .cat-save-feedback.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reel-title-edit-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .reel-title-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 10px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .reel-title-input:focus {
+      border-color: var(--gold);
+    }
+
+    .reel-title-save-btn {
+      background: rgba(212, 163, 115, 0.15);
+      border: 1px solid var(--border-accent);
+      color: var(--gold);
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .reel-title-save-btn:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .reel-cat-section {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .cat-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cat-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gold);
+    }
+
+    .cat-current-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 8px;
+      border-radius: 999px;
+      text-transform: capitalize;
+    }
+
+    .reel-cat-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .cat-pill-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .cat-pill-btn:hover {
+      background: rgba(212, 163, 115, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-1px);
+    }
+    .cat-pill-btn.active {
+      background: var(--gold);
+      color: #090b0e;
+      border-color: var(--gold);
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(212, 163, 115, 0.35);
+    }
+
+    .reel-tag-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .tag-pill-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tag-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .tag-pill-btn.active {
+      background: rgba(212, 163, 115, 0.2);
+      border-color: var(--gold);
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .add-custom-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .custom-tag-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 5px;
+      color: #fff;
+      font-size: 11px;
+      padding: 4px 8px;
+      outline: none;
+    }
+    .custom-tag-input:focus {
+      border-color: var(--gold);
+      border-style: solid;
+    }
+
+    .btn-add-custom-tag {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-add-custom-tag:hover {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+    }
+
+    .meta-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .meta-tag.highlight {
+      background: rgba(212, 163, 115, 0.15);
+      color: var(--gold);
+      border-color: var(--border-accent);
+    }
+
+    .status-badge {
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .status-badge.created {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-badge.pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .status-badge.draft {
+      background: rgba(139, 92, 246, 0.2);
+      color: #c4b5fd;
+      border: 1px solid rgba(139, 92, 246, 0.45);
+    }
+
+
+    /* Middle Column: Ensemble Builder Form */
+    .col-builder {
+      background: var(--bg-dark);
+      border-right: 1px solid var(--border-subtle);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+    }
+
+    .builder-section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .selected-items-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 120px;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    .empty-selection-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px 12px;
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .selected-item-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 12px;
+      transition: all 0.2s ease;
+    }
+    .selected-item-row:hover {
+      border-color: rgba(212, 163, 115, 0.4);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .item-top-row {
+      display: grid;
+      grid-template-columns: 46px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .item-thumbnail {
+      width: 46px !important;
+      height: 46px !important;
+      min-width: 46px !important;
+      max-width: 46px !important;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #000;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .item-meta {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .item-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .item-unit-rate {
+      color: var(--gold);
+      font-weight: 700;
+      background: rgba(212, 163, 115, 0.12);
+      border: 1px solid rgba(212, 163, 115, 0.25);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    .item-calc-price {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .line-calc-val {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .remove-item-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .remove-item-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--accent-red);
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    /* Meter / Cut Controls */
+    .meter-control-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .meter-stepper-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meter-label-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meter-label-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .meter-stepper-wrap {
+      display: inline-flex;
+      align-items: center;
+      background: #090b0e;
+      border: 1px solid rgba(212, 163, 115, 0.4);
+      border-radius: 6px;
+      overflow: hidden;
+      height: 28px;
+    }
+
+    .meter-step-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .meter-step-btn:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .meter-input {
+      width: 48px;
+      height: 28px;
+      background: transparent !important;
+      border: none !important;
+      color: var(--gold) !important;
+      font-weight: 800;
+      font-size: 13px;
+      text-align: center;
+      outline: none;
+      padding: 0 2px;
+      -moz-appearance: textfield;
+    }
+    .meter-input::-webkit-outer-spin-button,
+    .meter-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .meter-unit-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      background: rgba(212, 163, 115, 0.15);
+      border: 1px solid rgba(212, 163, 115, 0.3);
+      padding: 3px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .meter-live-calc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+    .meter-live-calc strong {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .meter-chips-line {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .meter-chip-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-right: 2px;
+    }
+
+    .meter-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .meter-chip:hover {
+      background: rgba(212, 163, 115, 0.2);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .meter-chip.active {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+      font-weight: 800;
+    }
+
+
+
+    /* Form Fields */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-input, .form-textarea, .form-select {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #fff;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--gold);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .price-summary-box {
+      background: linear-gradient(135deg, rgba(212, 163, 115, 0.08), rgba(212, 163, 115, 0.02));
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .price-sum-text {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .price-sum-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Save & Action Buttons */
+    .save-action-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 8px;
+    }
+
+    .btn-save-set {
+      background: linear-gradient(135deg, #d4a373, #ba8857);
+      color: #12151b;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px var(--gold-glow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-save-set:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(212, 163, 115, 0.4);
+    }
+    .btn-save-set:active {
+      transform: translateY(0);
+    }
+
+    .btn-save-all-set {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-save-all-set:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+    .btn-save-all-set:active {
+      transform: translateY(0);
+    }
+    .btn-save-all-set:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-save-all-header {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-save-all-header:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+    .btn-save-all-header:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .header-draft-badge {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 999px;
+      margin-left: 2px;
+    }
+
+    .batch-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .batch-modal-card {
+      background: #171a21;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 12px;
+      padding: 28px 32px;
+      width: 90%;
+      max-width: 440px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .batch-modal-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(16, 185, 129, 0.2);
+      border-top-color: #10b981;
+      border-radius: 50%;
+      animation: batchSpin 0.8s linear infinite;
+    }
+    @keyframes batchSpin {
+      to { transform: rotate(360deg); }
+    }
+    .batch-modal-card h3 {
+      font-size: 18px;
+      color: #fff;
+    }
+    .batch-modal-card p {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+    .batch-progress-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .batch-progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #d4a373);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .secondary-action-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .btn-secondary.danger:hover {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+    .btn-secondary.draft-discard {
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .btn-secondary.draft-discard:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #ef4444;
+      color: #fca5a5;
+    }
+
+    /* Right Column: Catalog Picker */
+    .col-catalog {
+      background: #11141a;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .catalog-header {
+      padding: 14px 18px 10px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .catalog-search-wrap {
+      position: relative;
+    }
+
+    .catalog-search-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 9px 12px 9px 36px;
+      font-size: 13px;
+      color: #fff;
+      outline: none;
+    }
+    .catalog-search-input:focus {
+      border-color: var(--gold);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .category-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .category-pills::-webkit-scrollbar {
+      height: 4px;
+    }
+    .category-pills::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+    }
+
+    .cat-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cat-pill:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.2);
+    }
+    .cat-pill.active {
+      background: var(--gold);
+      color: #12151b;
+      border-color: var(--gold);
+    }
+
+    /* Catalog Product Grid */
+    .catalog-grid {
+      flex: 1;
+      height: 100%;
+      min-height: 0;
+      padding: 14px 18px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      align-content: start;
+    }
+
+    .product-pick-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+      min-height: 220px;
+    }
+    .product-pick-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(212, 163, 115, 0.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .product-pick-card.is-selected {
+      border-color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .card-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 130px;
+      min-height: 130px;
+      flex-shrink: 0;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .product-pick-card:hover .card-img {
+      transform: scale(1.04);
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+
+    .card-body {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.3;
+    }
+
+    .card-code {
+      font-size: 9px;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+
+    .card-price {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .btn-add-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: none;
+      transition: all 0.2s;
+    }
+    .product-pick-card.is-selected .btn-add-tag {
+      background: var(--accent-green);
+      color: #fff;
+    }
+
+
+    /* Toast Notification */
+    .toast-popup {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1f2937;
+      color: #fff;
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 999;
+    }
+    .toast-popup.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Studio Bar -->
+  <header class="studio-header">
+    <div class="brand-wrap">
+      <h1 class="brand-title">alif.</h1>
+      <span class="brand-badge">Curated Sets Studio</span>
+    </div>
+
+    <div class="header-center">
+      <button id="btnPrevReel" class="reel-nav-btn" title="Previous Reel (Left Arrow)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Prev
+      </button>
+
+      <select id="reelSelectDropdown" class="reel-select-dropdown">
+        <!-- populated by JS -->
+      </select>
+
+      <button id="btnNextReel" class="reel-nav-btn" title="Next Reel (Right Arrow)">
+        Next
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    <div class="header-actions">
+      <div id="progressPill" class="progress-pill">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        <span id="progressCount">0 / {reelsData.length} Done</span>
+      </div>
+
+      <button id="btnSaveAllDraftsHeader" class="btn-save-all-header" style="display:none;" title="Save all pending drafts to disk at once">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span>Save All Drafts</span>
+        <span id="headerDraftCountBadge" class="header-draft-badge">0</span>
+      </button>
+
+      <a href="/products/" target="_blank" class="store-link-btn" title="View Store Products">
+        View Store
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- Mobile / Tablet Tab Switcher -->
+  <nav class="mobile-tab-bar">
+    <button class="mobile-tab-btn active" data-tab="col-reel">🎬 1. Reel</button>
+    <button class="mobile-tab-btn" data-tab="col-builder">🛍️ 2. Set Details</button>
+    <button class="mobile-tab-btn" data-tab="col-catalog">🔍 3. Pick Pieces</button>
+  </nav>
+
+  <!-- Studio Main Layout -->
+  <main class="studio-container">
+    
+    <!-- 1. Left: Reel Video Player -->
+    <section class="col-reel tab-active">
+      <div class="video-frame-wrap">
+        <video id="reelVideoPlayer" class="reel-video-el" loop playsinline muted preload="auto"></video>
+        <div class="video-overlay-controls">
+          <button id="btnTogglePlay" class="video-ctrl-btn">
+            <svg id="playIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span id="playLabel">Play</span>
+
+          </button>
+          <button id="btnToggleSound" class="video-ctrl-btn">
+            <svg id="soundIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+            <span id="soundLabel">Unmute</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="reel-info-box">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span id="reelIndexTag" class="meta-tag highlight">Reel 1 of {reelsData.length}</span>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span id="reelSaveFeedback" class="cat-save-feedback">✓ Saved</span>
+            <span id="reelStatusBadge" class="status-badge pending">Pending</span>
+          </div>
+        </div>
+
+        <!-- Editable Reel Title -->
+        <div class="reel-title-edit-wrap">
+          <input id="reelTitleInput" class="reel-title-input" type="text" placeholder="Reel Title..." />
+          <button id="btnSaveReelTitle" type="button" class="reel-title-save-btn" title="Save Title">✓</button>
+        </div>
+
+        <!-- 1-Click Primary Category Selection -->
+        <div class="reel-cat-section">
+          <div class="cat-section-header">
+            <span class="cat-section-label">1-Click Category</span>
+            <span id="currentCatBadge" class="cat-current-badge">Trending</span>
+          </div>
+          <div id="primaryCatPills" class="reel-cat-pills">
+            <!-- 1-Click buttons populated by JS -->
+          </div>
+        </div>
+
+        <!-- Multi-Tag Vibe Pills -->
+        <div class="reel-cat-section">
+          <div class="cat-section-header">
+            <span class="cat-section-label">Tags & Vibe</span>
+            <span style="font-size:10px; color:var(--text-muted);">Multi-select</span>
+          </div>
+          <div id="tagPillsContainer" class="reel-tag-pills">
+            <!-- Tag pills populated by JS -->
+          </div>
+
+          <!-- Add Custom Category / Tag -->
+          <div class="add-custom-tag-row">
+            <input id="customTagInput" class="custom-tag-input" type="text" placeholder="+ Add category or tag..." />
+            <button id="btnAddCustomTag" type="button" class="btn-add-custom-tag">+ Add</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Middle: Curated Set Builder Form -->
+    <section class="col-builder">
+      <div class="builder-section-title">
+        <span>Selected Components</span>
+        <span id="selectedCountText" style="color:var(--text-muted); font-size:12px;">0 items picked</span>
+      </div>
+
+      <div id="selectedItemsContainer" class="selected-items-card">
+        <div class="empty-selection-placeholder">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span>Select matching Fabric & Lace from the catalog on the right.</span>
+        </div>
+      </div>
+
+      <div class="price-summary-box">
+        <div>
+          <div class="price-sum-text">Calculated Pieces Total</div>
+          <div id="calculatedTotalVal" class="price-sum-val">₹0</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-sum-text">Target Curated Set Offer</div>
+          <div id="suggestedOfferVal" class="price-sum-val" style="color:var(--gold);">₹0</div>
+        </div>
+      </div>
+
+      <!-- Set Metadata Fields -->
+      <div class="form-group">
+        <label class="form-label" for="setTitleInput">Curated Set Title *</label>
+        <input id="setTitleInput" class="form-input" type="text" placeholder="e.g. Royal Wine Sequin Blouse & Scallop Lace Set" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="setPriceInput">Base Price (₹) *</label>
+          <input id="setPriceInput" class="form-input" type="number" placeholder="999" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="setOfferPriceInput">Offer Price (₹)</label>
+          <input id="setOfferPriceInput" class="form-input" type="number" placeholder="799" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="setCodeInput">Product Code</label>
+          <input id="setCodeInput" class="form-input" type="text" placeholder="ALIF-SET-001" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="setServiceSelect">Recommended Stitching</label>
+          <select id="setServiceSelect" class="form-select">
+            <option value="blouse">Bespoke Blouse Stitching</option>
+            <option value="salwar-suit">Salwar Suit Stitching</option>
+            <option value="kurti-top">Designer Kurti Stitching</option>
+            <option value="lehenga">Regal Lehenga Stitching</option>
+            <option value="anarkali">Kalidar Anarkali Stitching</option>
+            <option value="gown">Evening Gown Stitching</option>
+            <option value="sharara">Sharara / Gharara</option>
+            <option value="none">Fabric Ensemble Only</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="setDescriptionInput">Set Description</label>
+        <textarea id="setDescriptionInput" class="form-textarea" rows="2" placeholder="Handcrafted ensemble curated directly from our trending boutique reel..."></textarea>
+      </div>
+
+      <div class="save-action-wrap">
+        <button id="btnSaveCuratedSet" class="btn-save-set">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span id="saveBtnLabel">Save Curated Set (Ctrl + Enter)</span>
+        </button>
+
+        <button id="btnSaveAllDrafts" type="button" class="btn-save-all-set" style="display:none;" title="Save all drafted sets to disk">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span id="saveAllBtnLabel">Save All Drafts (0)</span>
+        </button>
+
+        <div class="secondary-action-row">
+          <button id="btnDiscardDraft" type="button" class="btn-secondary draft-discard" style="display:none;" title="Discard unsaved changes">
+            Discard Draft
+          </button>
+          <a id="btnViewCuratedPage" href="#" target="_blank" class="btn-secondary" style="display:none;">
+            View in Store ↗
+          </a>
+          <button id="btnDeleteCuratedSet" class="btn-secondary danger" style="display:none;">
+            Delete Set
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Right: Catalog Picker -->
+    <section class="col-catalog">
+      <div class="catalog-header">
+        <div class="catalog-search-wrap">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="catalogSearchInput" class="catalog-search-input" type="text" placeholder="Search fabrics, laces, colors (wine, gold, velvet), codes..." />
+        </div>
+
+        <div class="category-pills">
+          <button class="cat-pill active" data-cat="all">All (247)</button>
+          <button class="cat-pill" data-cat="fabric">Fabrics & Dupattas (60)</button>
+          <button class="cat-pill" data-cat="lace">Laces & Borders (98)</button>
+          <button class="cat-pill" data-cat="latkan">Latkans & Tassels (62)</button>
+          <button class="cat-pill" data-cat="tailoring">Linings & Trims (27)</button>
+        </div>
+      </div>
+
+      <div id="catalogGrid" class="catalog-grid">
+        <!-- Product Cards injected by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toastPopup" class="toast-popup">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMessage">Curated Set Saved Successfully!</span>
+  </div>
+
+  <!-- Batch Progress Modal -->
+  <div id="batchProgressModal" class="batch-modal-overlay" style="display:none;">
+    <div class="batch-modal-card">
+      <div class="batch-modal-spinner"></div>
+      <h3 id="batchModalTitle">Saving All Drafts...</h3>
+      <p id="batchModalStatus">Processing curated sets to disk...</p>
+      <div class="batch-progress-bar-bg">
+        <div id="batchProgressBarFill" class="batch-progress-bar-fill" style="width: 0%;"></div>
+      </div>
+      <span id="batchProgressPct">0%</span>
+    </div>
+  </div>
+
+  <script define:vars={{ reelsData, clientProducts, existingSets }}>
+    // Studio State
+    let currentReelIndex = -1;
+    // Map of selected components: key = pid, value = { id, meters, unit, type }
+    let selectedComponentsMap = new Map();
+    let existingSetsMap = new Map(existingSets.map(s => [s.reel_id || s.slug, s]));
+
+    // Working Drafts Map (Key = reel.id, Value = Draft Object)
+    let draftsMap = new Map();
+    try {
+      let storedRaw = localStorage.getItem('alif_curate_drafts');
+      if (!storedRaw || storedRaw === '{}') {
+        storedRaw = localStorage.getItem('alif_curate_drafts_backup') || '{}';
+      }
+      const stored = JSON.parse(storedRaw || '{}');
+      Object.entries(stored).forEach(([k, v]) => draftsMap.set(k, v));
+    } catch (_) {}
+
+    function persistDrafts() {
+      try {
+        const obj = Object.fromEntries(draftsMap);
+        localStorage.setItem('alif_curate_drafts', JSON.stringify(obj));
+        if (Object.keys(obj).length > 0) {
+          localStorage.setItem('alif_curate_drafts_backup', JSON.stringify(obj));
+        }
+      } catch (_) {}
+      updateProgressCount();
+      updateDropdownDraftBadges();
+      updateSaveAllDraftsButtons();
+    }
+
+    let activeCategory = 'all';
+    let searchQuery = '';
+
+    // DOM Elements
+    const reelSelectDropdown = document.getElementById('reelSelectDropdown');
+    const reelVideoPlayer = document.getElementById('reelVideoPlayer');
+    const btnTogglePlay = document.getElementById('btnTogglePlay');
+    const playIcon = document.getElementById('playIcon');
+    const playLabel = document.getElementById('playLabel');
+    const btnToggleSound = document.getElementById('btnToggleSound');
+    const soundLabel = document.getElementById('soundLabel');
+    const reelIndexTag = document.getElementById('reelIndexTag');
+    const reelStatusBadge = document.getElementById('reelStatusBadge');
+    const reelSaveFeedback = document.getElementById('reelSaveFeedback');
+    const reelTitleInput = document.getElementById('reelTitleInput');
+    const btnSaveReelTitle = document.getElementById('btnSaveReelTitle');
+    const primaryCatPills = document.getElementById('primaryCatPills');
+    const currentCatBadge = document.getElementById('currentCatBadge');
+    const tagPillsContainer = document.getElementById('tagPillsContainer');
+    const customTagInput = document.getElementById('customTagInput');
+    const btnAddCustomTag = document.getElementById('btnAddCustomTag');
+
+    const selectedItemsContainer = document.getElementById('selectedItemsContainer');
+    const selectedCountText = document.getElementById('selectedCountText');
+    const calculatedTotalVal = document.getElementById('calculatedTotalVal');
+    const suggestedOfferVal = document.getElementById('suggestedOfferVal');
+    const setTitleInput = document.getElementById('setTitleInput');
+    const setPriceInput = document.getElementById('setPriceInput');
+    const setOfferPriceInput = document.getElementById('setOfferPriceInput');
+    const setCodeInput = document.getElementById('setCodeInput');
+    const setServiceSelect = document.getElementById('setServiceSelect');
+    const setDescriptionInput = document.getElementById('setDescriptionInput');
+    const btnSaveCuratedSet = document.getElementById('btnSaveCuratedSet');
+    const saveBtnLabel = document.getElementById('saveBtnLabel');
+    const btnSaveAllDrafts = document.getElementById('btnSaveAllDrafts');
+    const saveAllBtnLabel = document.getElementById('saveAllBtnLabel');
+    const btnSaveAllDraftsHeader = document.getElementById('btnSaveAllDraftsHeader');
+    const headerDraftCountBadge = document.getElementById('headerDraftCountBadge');
+    const batchProgressModal = document.getElementById('batchProgressModal');
+    const batchModalTitle = document.getElementById('batchModalTitle');
+    const batchModalStatus = document.getElementById('batchModalStatus');
+    const batchProgressBarFill = document.getElementById('batchProgressBarFill');
+    const batchProgressPct = document.getElementById('batchProgressPct');
+    const btnDiscardDraft = document.getElementById('btnDiscardDraft');
+    const btnViewCuratedPage = document.getElementById('btnViewCuratedPage');
+    const btnDeleteCuratedSet = document.getElementById('btnDeleteCuratedSet');
+    const catalogSearchInput = document.getElementById('catalogSearchInput');
+    const catalogGrid = document.getElementById('catalogGrid');
+    const progressCount = document.getElementById('progressCount');
+    const toastPopup = document.getElementById('toastPopup');
+    const toastMessage = document.getElementById('toastMessage');
+
+    // Real Boutique Reels Categories with alias matching
+    let categoriesList = [
+      { id: 'trending', label: '🔥 Trending' },
+      { id: 'fancy', label: '✨ Fancy' },
+      { id: 'suit', aliases: ['salwar-suit'], label: '👗 Suit' },
+      { id: 'kurti', aliases: ['kurti-top'], label: '👘 Kurti' },
+      { id: 'blouse', label: '🌸 Blouse' },
+      { id: 'lehenga', label: '👑 Lehenga' },
+      { id: 'anarkali', label: '💃 Anarkali' },
+      { id: 'sharara', aliases: ['gharara'], label: '✨ Sharara' },
+      { id: 'gown', label: '👗 Gown' },
+      { id: 'saree', label: '🥻 Saree' },
+      { id: 'dupatta', label: '🧣 Dupatta' },
+      { id: 'coord-set', label: '✨ Co-ord Set' },
+      { id: 'fabric', label: '🧵 Fabric' },
+      { id: 'finishing', label: '🪡 Laces & Latkans' },
+      { id: 'curated-sets', label: '🛍️ Curated Set' },
+    ];
+
+    function findCategoryObj(catStr) {
+      if (!catStr) return null;
+      const s = String(catStr).toLowerCase().trim();
+      return categoriesList.find(c => c.id.toLowerCase() === s || (c.aliases && c.aliases.map(a => a.toLowerCase()).includes(s))) || null;
+    }
+
+    const initialReelStateMap = new Map(reelsData.map(r => [r.id, {
+      category: r.category || '',
+      tags: Array.isArray(r.tags) ? [...r.tags] : [],
+      title: r.title || ''
+    }]));
+
+    // Load custom categories saved by user
+    try {
+      const storedCustom = JSON.parse(localStorage.getItem('alif_custom_reel_cats') || '[]');
+      storedCustom.forEach(c => {
+        if (!categoriesList.some(x => x.id === c.id)) {
+          categoriesList.push(c);
+        }
+      });
+    } catch (_) {}
+
+    // Vibe & Style Multi-Tags
+    let tagsList = [
+      'Trending', 'Fancy', 'Party Wear', 'Daily Wear', 'Festive', 'Bridal', 'Heavy Work', 'Simple', 'Designer', 'Boutique Collection', 'Velvet', 'Organza', 'Zari', 'Pure Cotton'
+    ];
+    try {
+      const storedTags = JSON.parse(localStorage.getItem('alif_custom_reel_tags') || '[]');
+      storedTags.forEach(t => {
+        if (!tagsList.includes(t)) tagsList.push(t);
+      });
+    } catch (_) {}
+
+    // Helper: Toast
+    function showToast(msg) {
+      toastMessage.textContent = msg;
+      toastPopup.classList.add('visible');
+      setTimeout(() => {
+        toastPopup.classList.remove('visible');
+      }, 3500);
+    }
+
+    // Helper: Get default meters and unit for product
+    function getDefaultMetersAndUnit(p) {
+      if (!p) return { meters: 1, unit: 'mtr', type: 'fabric' };
+      const cat = (p.category || '').toLowerCase();
+      if (['fabric', 'net', 'tissue silk', 'plain fabric', 'jorget', 'organza', 'dupatta'].some(k => cat.includes(k))) {
+        return { meters: 2.5, unit: 'mtr', type: 'fabric' };
+      }
+      if (cat.includes('lace')) {
+        return { meters: 2.0, unit: 'mtr', type: 'lace' };
+      }
+      if (cat.includes('latkan')) {
+        return { meters: 1, unit: 'pair', type: 'latkan' };
+      }
+      return { meters: 1, unit: 'mtr', type: 'other' };
+    }
+
+    // Initialize Dropdown
+    function populateDropdown() {
+      const curVal = reelSelectDropdown.value;
+      reelSelectDropdown.innerHTML = '';
+      reelsData.forEach((reel, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        const isDone = existingSetsMap.has(reel.id);
+        const isDraft = draftsMap.has(reel.id);
+        const catTag = (reel.category || 'pending').toUpperCase();
+        
+        let statusBadge = '';
+        if (isDraft) {
+          statusBadge = ' [✎ Draft]';
+        } else if (isDone) {
+          statusBadge = ' [✓ Saved]';
+        }
+        
+        opt.textContent = `${idx + 1}. [${catTag}] ${reel.title}${statusBadge}`;
+        reelSelectDropdown.appendChild(opt);
+      });
+      if (curVal !== undefined && curVal !== '') {
+        reelSelectDropdown.value = curVal;
+      }
+      updateProgressCount();
+    }
+
+    function updateDropdownDraftBadges() {
+      const curVal = reelSelectDropdown.value;
+      Array.from(reelSelectDropdown.options).forEach((opt, idx) => {
+        const reel = reelsData[idx];
+        if (!reel) return;
+        const isDone = existingSetsMap.has(reel.id);
+        const isDraft = draftsMap.has(reel.id);
+        const catTag = (reel.category || 'pending').toUpperCase();
+        
+        let statusBadge = '';
+        if (isDraft) {
+          statusBadge = ' [✎ Draft]';
+        } else if (isDone) {
+          statusBadge = ' [✓ Saved]';
+        }
+        opt.textContent = `${idx + 1}. [${catTag}] ${reel.title}${statusBadge}`;
+      });
+      if (curVal !== undefined && curVal !== '') {
+        reelSelectDropdown.value = curVal;
+      }
+    }
+
+    function updateProgressCount() {
+      const doneCount = reelsData.filter(r => existingSetsMap.has(r.id)).length;
+      const draftCount = reelsData.filter(r => draftsMap.has(r.id) && !existingSetsMap.has(r.id)).length;
+      const pct = Math.round((doneCount / reelsData.length) * 100);
+      let text = `${doneCount} / ${reelsData.length} Done (${pct}%)`;
+      if (draftCount > 0) {
+        text += ` • ${draftCount} Draft${draftCount > 1 ? 's' : ''}`;
+      }
+      progressCount.textContent = text;
+    }
+
+    // Category mapping
+    function matchCategory(product, catFilter) {
+      const cat = (product.category || '').toLowerCase();
+      if (catFilter === 'all') return true;
+      if (catFilter === 'fabric') {
+        return ['fabric', 'net', 'tissue silk', 'plain fabric', 'jorget', 'organza', 'dupatta'].some(k => cat.includes(k));
+      }
+      if (catFilter === 'lace') {
+        return cat.includes('lace');
+      }
+      if (catFilter === 'latkan') {
+        return cat.includes('latkan');
+      }
+      if (catFilter === 'tailoring') {
+        return cat.includes('tailoring') || cat.includes('lining') || cat.includes('material');
+      }
+      return true;
+    }
+
+    // Render Catalog Grid
+    function renderCatalog() {
+      const q = searchQuery.toLowerCase().trim();
+      const filtered = clientProducts.filter(p => {
+        const matchCat = matchCategory(p, activeCategory);
+        if (!matchCat) return false;
+        if (!q) return true;
+        const text = `${p.title} ${p.code} ${p.category} ${p.colour} ${p.fabric} ${p.ideal_for}`.toLowerCase();
+        return text.includes(q);
+      });
+
+      catalogGrid.innerHTML = '';
+      filtered.forEach(p => {
+        const isSel = selectedComponentsMap.has(p.id);
+        const card = document.createElement('div');
+        card.className = `product-pick-card ${isSel ? 'is-selected' : ''}`;
+        card.innerHTML = `
+          <div class="card-img-wrap">
+            <img class="card-img" src="${p.image}" alt="${p.title}" loading="lazy" />
+            <span class="card-badge">${p.category || 'Piece'}</span>
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">${p.title}</h4>
+            <span class="card-code">${p.code}</span>
+            <div class="card-foot">
+              <span class="card-price">₹${p.final_price || p.price}</span>
+              <button class="btn-add-tag">${isSel ? '✓ Added' : '+ Add'}</button>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleProductSelection(p.id);
+        });
+
+        catalogGrid.appendChild(card);
+      });
+    }
+
+    // Toggle product selection
+    function toggleProductSelection(pid) {
+      if (selectedComponentsMap.has(pid)) {
+        selectedComponentsMap.delete(pid);
+      } else {
+        const p = clientProducts.find(item => item.id === pid);
+        const def = getDefaultMetersAndUnit(p);
+        selectedComponentsMap.set(pid, { id: pid, meters: def.meters, unit: def.unit, type: def.type });
+      }
+      updateSelectedComponentsUI();
+      renderCatalog();
+      captureCurrentDraft();
+    }
+
+    // Update meter quantity for an item
+    function updateComponentMeters(pid, newMeters) {
+      const comp = selectedComponentsMap.get(pid);
+      if (!comp) return;
+      const num = Math.max(0.25, Math.round(Number(newMeters) * 100) / 100 || 1);
+      comp.meters = num;
+      updateSelectedComponentsUI();
+      captureCurrentDraft();
+    }
+
+    // Update selected components and prices
+    function updateSelectedComponentsUI() {
+      selectedItemsContainer.innerHTML = '';
+
+      if (selectedComponentsMap.size === 0) {
+        selectedItemsContainer.innerHTML = `
+          <div class="empty-selection-placeholder">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span>Select matching Fabric & Lace from the catalog on the right.</span>
+          </div>
+        `;
+        selectedCountText.textContent = '0 items picked';
+        calculatedTotalVal.textContent = '₹0';
+        suggestedOfferVal.textContent = '₹0';
+        return;
+      }
+
+      selectedCountText.textContent = `${selectedComponentsMap.size} items picked`;
+      let totalPiecesPrice = 0;
+
+      selectedComponentsMap.forEach((comp, pid) => {
+        const p = clientProducts.find(item => item.id === pid);
+        if (!p) return;
+
+        const unitRate = p.final_price || p.price || 0;
+        const lineTotal = Math.round(unitRate * comp.meters);
+        totalPiecesPrice += lineTotal;
+
+        const row = document.createElement('div');
+        row.className = 'selected-item-row';
+        row.dataset.pid = pid;
+
+        // Generate preset chips based on component type
+        let presetChipsHtml = '';
+        if (comp.type === 'fabric') {
+          const presets = [
+            { m: 1, label: '1m (Blouse)' },
+            { m: 1.5, label: '1.5m' },
+            { m: 2, label: '2m' },
+            { m: 2.5, label: '2.5m (Kurti)' },
+            { m: 3, label: '3m (Suit/Pant)' },
+            { m: 4, label: '4m (Anarkali)' },
+            { m: 5, label: '5m (Saree/Lehenga)' },
+          ];
+          presetChipsHtml = presets.map(val => 
+            `<button type="button" class="meter-chip ${comp.meters === val.m ? 'active' : ''}" data-m="${val.m}">${val.label}</button>`
+          ).join('');
+        } else if (comp.type === 'lace') {
+          const presets = [
+            { m: 1, label: '1m' },
+            { m: 2, label: '2m (Neck/Sleeve)' },
+            { m: 2.5, label: '2.5m' },
+            { m: 4.5, label: '4.5m' },
+            { m: 8, label: '8m (Dupatta 4-Side)' },
+            { m: 9, label: '9m (Full Saree)' },
+          ];
+          presetChipsHtml = presets.map(val => 
+            `<button type="button" class="meter-chip ${comp.meters === val.m ? 'active' : ''}" data-m="${val.m}">${val.label}</button>`
+          ).join('');
+        } else if (comp.type === 'latkan') {
+          const presets = [
+            { m: 1, label: '1 Pair' },
+            { m: 2, label: '2 Pairs' },
+            { m: 4, label: '4 Pcs' },
+          ];
+          presetChipsHtml = presets.map(val => 
+            `<button type="button" class="meter-chip ${comp.meters === val.m ? 'active' : ''}" data-m="${val.m}">${val.label}</button>`
+          ).join('');
+        } else {
+          const presets = [
+            { m: 1, label: '1m' },
+            { m: 2, label: '2m' },
+            { m: 2.5, label: '2.5m' },
+            { m: 3, label: '3m' },
+          ];
+          presetChipsHtml = presets.map(val => 
+            `<button type="button" class="meter-chip ${comp.meters === val.m ? 'active' : ''}" data-m="${val.m}">${val.label}</button>`
+          ).join('');
+        }
+
+        row.innerHTML = `
+          <div class="item-top-row">
+            <img class="item-thumbnail" src="${p.image}" alt="${p.title}" />
+            <div class="item-meta">
+              <div class="item-title" title="${p.title}">${p.title}</div>
+              <div class="item-sub">
+                <span>${p.code}</span>
+                <span class="item-unit-rate">₹${unitRate}/${comp.unit}</span>
+              </div>
+            </div>
+            <div class="item-calc-price">
+              <span class="line-calc-val">₹${lineTotal}</span>
+              <button type="button" class="remove-item-btn" title="Remove piece">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="meter-control-row">
+            <div class="meter-stepper-line">
+              <div class="meter-label-wrap">
+                <span class="meter-label-text">Cut / Length:</span>
+                <div class="meter-stepper-wrap">
+                  <button type="button" class="meter-step-btn step-down" title="Decrease Cut">−</button>
+                  <input class="meter-input" type="number" step="0.25" min="0.25" max="50" value="${comp.meters}" />
+                  <button type="button" class="meter-step-btn step-up" title="Increase Cut">+</button>
+                </div>
+                <span class="meter-unit-label">${comp.unit}</span>
+              </div>
+
+              <div class="meter-live-calc">
+                <span>₹${unitRate} × ${comp.meters} = <strong>₹${lineTotal}</strong></span>
+              </div>
+            </div>
+
+            <div class="meter-chips-line">
+              <span class="meter-chip-label">Quick Cut:</span>
+              ${presetChipsHtml}
+            </div>
+          </div>
+        `;
+
+
+        // Remove listener
+        row.querySelector('.remove-item-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleProductSelection(pid);
+        });
+
+        // Stepper down
+        row.querySelector('.step-down').addEventListener('click', (e) => {
+          e.stopPropagation();
+          const cur = comp.meters;
+          const step = cur > 1 ? 0.5 : 0.25;
+          updateComponentMeters(pid, Math.max(0.25, cur - step));
+        });
+
+        // Stepper up
+        row.querySelector('.step-up').addEventListener('click', (e) => {
+          e.stopPropagation();
+          const cur = comp.meters;
+          const step = cur >= 1 ? 0.5 : 0.25;
+          updateComponentMeters(pid, cur + step);
+        });
+
+        // Direct input change
+        const inputEl = row.querySelector('.meter-input');
+        inputEl.addEventListener('change', (e) => {
+          updateComponentMeters(pid, e.target.value);
+        });
+        inputEl.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            updateComponentMeters(pid, e.target.value);
+          }
+        });
+
+        // Chips click
+        row.querySelectorAll('.meter-chip').forEach(chip => {
+          chip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            updateComponentMeters(pid, Number(chip.dataset.m));
+          });
+        });
+
+        selectedItemsContainer.appendChild(row);
+      });
+
+      calculatedTotalVal.textContent = `₹${totalPiecesPrice}`;
+      
+      // Auto-suggest prices ONLY if user has NOT manually typed/locked the price
+      const isManualPrice = setPriceInput.dataset.autoFilled === 'false';
+      const isManualOffer = setOfferPriceInput.dataset.manuallyEdited === 'true';
+
+      if (!isManualPrice) {
+        if (totalPiecesPrice > 0) {
+          const roundedPrice = Math.round(totalPiecesPrice * 1.15 / 50) * 50 || totalPiecesPrice;
+          setPriceInput.value = roundedPrice;
+          setPriceInput.dataset.autoFilled = 'true';
+        } else if (!setPriceInput.value) {
+          setPriceInput.value = '';
+          setPriceInput.dataset.autoFilled = 'true';
+        }
+      }
+
+      const calculatedOffer = totalPiecesPrice > 0 ? (Math.round(totalPiecesPrice * 0.95 / 50) * 50 || totalPiecesPrice) : 0;
+      suggestedOfferVal.textContent = `₹${calculatedOffer}`;
+
+      if (!isManualOffer) {
+        if (!isManualPrice && totalPiecesPrice > 0) {
+          setOfferPriceInput.value = calculatedOffer;
+        }
+      }
+    }
+
+    // Helper: Test if current draft has any changes compared to pristine baseline
+    function isDraftMeaningful(reel, existing, draftData) {
+      if (!reel) return false;
+
+      // 1. Components
+      if (draftData.combo_products && draftData.combo_products.length > 0) {
+        if (existing) {
+          const savedSig = (existing.combo_products || []).map(c => `${typeof c === 'string' ? c : c.id}:${c.meters || 1}:${c.unit || 'mtr'}`).sort().join(';');
+          const curSig = draftData.combo_products.map(c => `${c.id}:${c.meters || 1}:${c.unit || 'mtr'}`).sort().join(';');
+          if (savedSig !== curSig) return true;
+        } else {
+          const defaultLinked = (reel.linked_products || []).slice().sort().join(',');
+          const curIds = draftData.combo_products.map(c => c.id).sort().join(',');
+          if (curIds !== defaultLinked) return true;
+        }
+      } else {
+        if (existing && (existing.combo_products || []).length > 0) return true;
+        if (!existing && (reel.linked_products || []).length > 0) return true;
+      }
+
+      // 2. Base price & offer price
+      if (existing) {
+        if (draftData.price !== '' && Number(draftData.price) !== Number(existing.price || 0)) return true;
+        if (draftData.offer_price !== '' && Number(draftData.offer_price) !== Number(existing.offer_price || 0)) return true;
+      } else {
+        if (draftData.manual_price && draftData.price !== '') return true;
+        if (draftData.manual_offer && draftData.offer_price !== '') return true;
+      }
+
+      // 3. Titles
+      const defaultSetTitle = `${reel.title} Set`;
+      if (existing) {
+        if (draftData.title.trim() !== (existing.title || '').trim()) return true;
+      } else {
+        if (draftData.title.trim() && draftData.title.trim() !== defaultSetTitle.trim()) return true;
+      }
+      const initialReel = initialReelStateMap.get(reel.id);
+      const baseReelTitle = initialReel ? initialReel.title : (reel.title || '');
+      if (draftData.reel_title && draftData.reel_title.trim() !== baseReelTitle.trim()) return true;
+
+      // 4. Category & Tags
+      const baseCat = initialReel ? initialReel.category : (reel.category || '');
+      if (draftData.reel_category && draftData.reel_category.toLowerCase() !== baseCat.toLowerCase()) return true;
+
+      const baseTags = (initialReel ? initialReel.tags : (reel.tags || [])).slice().sort().join(',');
+      const curTags = (draftData.reel_tags || []).slice().sort().join(',');
+      if (curTags !== baseTags) return true;
+
+      // 5. Service & Description
+      if (existing) {
+        if (draftData.service && draftData.service !== (existing.service || '')) return true;
+        if (draftData.description && draftData.description.trim() !== (existing.description || '').trim()) return true;
+      } else {
+        const defaultService = reel.linked_service || reel.category || 'blouse';
+        if (draftData.service && draftData.service !== defaultService) return true;
+      }
+
+      return false;
+    }
+
+    // Capture current reel draft
+    function captureCurrentDraft() {
+      if (currentReelIndex < 0 || currentReelIndex >= reelsData.length) return;
+      const reel = reelsData[currentReelIndex];
+      if (!reel) return;
+
+      const currentComponents = Array.from(selectedComponentsMap.values());
+      const existing = existingSetsMap.get(reel.id);
+
+      const draftObj = {
+        title: setTitleInput.value,
+        product_code: setCodeInput.value,
+        price: setPriceInput.value,
+        offer_price: setOfferPriceInput.value,
+        manual_price: setPriceInput.dataset.autoFilled === 'false',
+        manual_offer: setOfferPriceInput.dataset.manuallyEdited === 'true',
+        autoFilled: setPriceInput.dataset.autoFilled === 'true',
+        service: setServiceSelect.value,
+        description: setDescriptionInput.value,
+        combo_products: currentComponents,
+        reel_category: reel.category || '',
+        reel_tags: Array.isArray(reel.tags) ? [...reel.tags] : [],
+        reel_title: reelTitleInput ? reelTitleInput.value : (reel.title || ''),
+        timestamp: Date.now()
+      };
+
+      const hasChange = isDraftMeaningful(reel, existing, draftObj);
+
+      if (!hasChange) {
+        if (draftsMap.has(reel.id)) {
+          draftsMap.delete(reel.id);
+          persistDrafts();
+        }
+        return;
+      }
+
+      draftsMap.set(reel.id, draftObj);
+      persistDrafts();
+    }
+
+    // Load reel into editor
+    function loadReel(index) {
+      if (index < 0) index = 0;
+      if (index >= reelsData.length) index = reelsData.length - 1;
+
+      // Auto-save draft of currently active reel before moving to the new one
+      if (currentReelIndex >= 0 && currentReelIndex !== index) {
+        captureCurrentDraft();
+      }
+
+      currentReelIndex = index;
+      reelSelectDropdown.value = index;
+      try {
+        localStorage.setItem('alif_curate_active_index', String(index));
+      } catch (_) {}
+
+      const reel = reelsData[index];
+      const reelVideoUrl = reel.video || reel.raw_url;
+      reelVideoPlayer.src = reelVideoUrl;
+      reelVideoPlayer.poster = reel.poster || '';
+      reelVideoPlayer.load();
+      reelVideoPlayer.play().then(() => {
+        playLabel.textContent = 'Pause';
+      }).catch(() => {
+        playLabel.textContent = 'Play';
+      });
+
+      reelIndexTag.textContent = `Reel ${index + 1} of ${reelsData.length}`;
+
+      selectedComponentsMap.clear();
+
+      // Check if this reel has an active draft or saved set
+      const draft = draftsMap.get(reel.id);
+      const existing = existingSetsMap.get(reel.id);
+
+      if (draft) {
+        reelStatusBadge.className = 'status-badge draft';
+        reelStatusBadge.textContent = existing ? '⚠️ Unsaved Changes (Draft)' : '✎ Unsaved Draft';
+
+        // 1. Restore Reel Meta (Title, Category, Tags)
+        if (draft.reel_title !== undefined) {
+          reel.title = draft.reel_title;
+        }
+        reelTitleInput.value = reel.title || '';
+
+        if (draft.reel_category !== undefined) {
+          reel.category = draft.reel_category;
+        }
+        const matchedCat = findCategoryObj(reel.category);
+        currentCatBadge.textContent = matchedCat ? matchedCat.label : (reel.category || 'Unassigned');
+        renderCategoryPills(reel);
+
+        if (Array.isArray(draft.reel_tags)) {
+          reel.tags = [...draft.reel_tags];
+        }
+        renderTagPills(reel);
+
+        // 2. Restore Curated Set Form (Title, Code, Prices, Service, Description)
+        setTitleInput.value = draft.title || `${reel.title} Set`;
+        setCodeInput.value = draft.product_code || `ALIF-SET-${String(index + 1).padStart(3, '0')}`;
+        setPriceInput.value = draft.price !== undefined ? draft.price : '';
+        setOfferPriceInput.value = draft.offer_price !== undefined ? draft.offer_price : '';
+        setPriceInput.dataset.autoFilled = draft.manual_price ? 'false' : (draft.autoFilled ? 'true' : 'false');
+        setOfferPriceInput.dataset.manuallyEdited = draft.manual_offer ? 'true' : 'false';
+        setDescriptionInput.value = draft.description || '';
+        if (draft.service && setServiceSelect.querySelector(`option[value="${draft.service}"]`)) {
+          setServiceSelect.value = draft.service;
+        }
+
+        (draft.combo_products || []).forEach(item => {
+          const pid = typeof item === 'string' ? item : item.id;
+          const meters = (typeof item === 'object' && item.meters) ? Number(item.meters) : 1;
+          const unit = (typeof item === 'object' && item.unit) ? item.unit : 'mtr';
+          const p = clientProducts.find(x => x.id === pid);
+          const def = getDefaultMetersAndUnit(p);
+          selectedComponentsMap.set(pid, { id: pid, meters, unit: unit || def.unit, type: def.type });
+        });
+
+        btnDiscardDraft.style.display = 'inline-flex';
+        if (existing) {
+          btnViewCuratedPage.style.display = 'inline-flex';
+          btnViewCuratedPage.href = `/products/${existing.slug}/`;
+          btnDeleteCuratedSet.style.display = 'inline-flex';
+          saveBtnLabel.textContent = 'Update Curated Set (Ctrl + Enter)';
+        } else {
+          btnViewCuratedPage.style.display = 'none';
+          btnDeleteCuratedSet.style.display = 'none';
+          saveBtnLabel.textContent = 'Save Curated Set (Ctrl + Enter)';
+        }
+      } else if (existing) {
+        reelStatusBadge.className = 'status-badge created';
+        reelStatusBadge.textContent = '✓ Curated Set Created';
+
+        reelTitleInput.value = reel.title || '';
+        const matchedCat = findCategoryObj(reel.category);
+        currentCatBadge.textContent = matchedCat ? matchedCat.label : (reel.category || 'Unassigned');
+        renderCategoryPills(reel);
+        renderTagPills(reel);
+
+        setTitleInput.value = existing.title;
+        setCodeInput.value = existing.product_code || `ALIF-SET-${String(index + 1).padStart(3, '0')}`;
+        setPriceInput.value = existing.price || '';
+        setOfferPriceInput.value = existing.offer_price || '';
+        setPriceInput.dataset.autoFilled = 'false';
+        setOfferPriceInput.dataset.manuallyEdited = Boolean(existing.offer_price) ? 'true' : 'false';
+
+        (existing.combo_products || []).forEach(item => {
+          const pid = typeof item === 'string' ? item : item.id;
+          const meters = (typeof item === 'object' && item.meters) ? Number(item.meters) : 1;
+          const unit = (typeof item === 'object' && item.unit) ? item.unit : 'mtr';
+          const p = clientProducts.find(x => x.id === pid);
+          const def = getDefaultMetersAndUnit(p);
+          selectedComponentsMap.set(pid, { id: pid, meters, unit: unit || def.unit, type: def.type });
+        });
+
+        btnDiscardDraft.style.display = 'none';
+        btnViewCuratedPage.style.display = 'inline-flex';
+        btnViewCuratedPage.href = `/products/${existing.slug}/`;
+        btnDeleteCuratedSet.style.display = 'inline-flex';
+        saveBtnLabel.textContent = 'Update Curated Set (Ctrl + Enter)';
+
+        // Pre-fill description
+        setDescriptionInput.value = existing.description || `Complete bespoke ensemble featured in our trending video "${reel.title}". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj.`;
+        if (existing.service && setServiceSelect.querySelector(`option[value="${existing.service}"]`)) {
+          setServiceSelect.value = existing.service;
+        }
+      } else {
+        reelStatusBadge.className = 'status-badge pending';
+        reelStatusBadge.textContent = 'Pending Curation';
+
+        reelTitleInput.value = reel.title || '';
+        const matchedCat = findCategoryObj(reel.category);
+        currentCatBadge.textContent = matchedCat ? matchedCat.label : (reel.category || 'Unassigned');
+        renderCategoryPills(reel);
+        renderTagPills(reel);
+
+        setTitleInput.value = `${reel.title} Set`;
+        setCodeInput.value = `ALIF-SET-${String(index + 1).padStart(3, '0')}`;
+        setPriceInput.value = '';
+        setOfferPriceInput.value = '';
+        setPriceInput.dataset.autoFilled = 'true';
+        setOfferPriceInput.dataset.manuallyEdited = 'false';
+
+        // Check if reel has preset linked products
+        if (reel.linked_products && Array.isArray(reel.linked_products)) {
+          reel.linked_products.forEach(codeOrId => {
+            const matched = clientProducts.find(p => p.code === codeOrId || p.id === codeOrId);
+            if (matched && !selectedComponentsMap.has(matched.id)) {
+              const def = getDefaultMetersAndUnit(matched);
+              selectedComponentsMap.set(matched.id, { id: matched.id, meters: def.meters, unit: def.unit, type: def.type });
+            }
+          });
+        }
+
+        btnDiscardDraft.style.display = 'none';
+        btnViewCuratedPage.style.display = 'none';
+        btnDeleteCuratedSet.style.display = 'none';
+        saveBtnLabel.textContent = 'Save Curated Set (Ctrl + Enter)';
+
+        // Pre-fill description
+        setDescriptionInput.value = `Complete bespoke ensemble featured in our trending video "${reel.title}". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj.`;
+
+        // Match recommended service
+        if (reel.linked_service && setServiceSelect.querySelector(`option[value="${reel.linked_service}"]`)) {
+          setServiceSelect.value = reel.linked_service;
+        } else if (reel.category && setServiceSelect.querySelector(`option[value="${reel.category}"]`)) {
+          setServiceSelect.value = reel.category;
+        }
+      }
+
+      updateSelectedComponentsUI();
+      renderCatalog();
+    }
+
+    // Curate API Client with dual-fallback (Astro dev port 4321 + standalone port 4322)
+    async function curateApiFetch(endpoint, options = {}) {
+      try {
+        const res = await fetch(endpoint, options);
+        if (res.ok) return res;
+      } catch (_) {}
+      return await fetch(`http://localhost:4322${endpoint}`, options);
+    }
+
+    // Save Curated Set Action
+    async function saveCuratedSet() {
+      const reel = reelsData[currentReelIndex];
+      const title = setTitleInput.value.trim();
+      if (!title) {
+        alert('Please enter a Title for this Curated Set.');
+        setTitleInput.focus();
+        return;
+      }
+
+      if (selectedComponentsMap.size === 0) {
+        alert('Please select at least 1 fabric or lace component for this Curated Set from the catalog!');
+        return;
+      }
+
+      const price = Number(setPriceInput.value) || 0;
+      const offer_price = setOfferPriceInput.value ? Number(setOfferPriceInput.value) : null;
+      const product_code = setCodeInput.value.trim() || `ALIF-SET-${String(currentReelIndex + 1).padStart(3, '0')}`;
+      
+      // Slug generation
+      const slug = `curated-set-${product_code.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+
+      const comboProductsArray = Array.from(selectedComponentsMap.values());
+      const firstCompId = comboProductsArray[0].id;
+      const firstComp = clientProducts.find(p => p.id === firstCompId);
+      const image = (firstComp && firstComp.image) ? firstComp.image : (reel.poster || '/icons/icon-512x512.png');
+
+      const payload = {
+        title,
+        slug,
+        reel_id: reel.id,
+        reel_video: reel.video || reel.raw_url,
+        product_code,
+        price,
+        offer_price,
+        image,
+        category: 'Curated Sets',
+        combo_products: comboProductsArray,
+        description: setDescriptionInput.value.trim(),
+        ideal_for: `${setServiceSelect.options[setServiceSelect.selectedIndex].text}, Festive, Party Wear`,
+        service: setServiceSelect.value,
+        colour: firstComp ? firstComp.colour : '',
+        fabric: firstComp ? firstComp.fabric : '',
+      };
+
+      btnSaveCuratedSet.disabled = true;
+      saveBtnLabel.textContent = 'Saving to Disk...';
+
+      try {
+        const res = await curateApiFetch('/api/save-curated-set', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          draftsMap.delete(reel.id);
+          persistDrafts();
+          existingSetsMap.set(reel.id, {
+            slug,
+            title,
+            reel_id: reel.id,
+            product_code,
+            price,
+            offer_price,
+            image,
+            combo_products: comboProductsArray
+          });
+
+          populateDropdown();
+          showToast(`Curated Set saved! Created ${slug}.md`);
+
+          // Auto-advance to next reel if available
+          if (currentReelIndex < reelsData.length - 1) {
+            setTimeout(() => {
+              loadReel(currentReelIndex + 1);
+            }, 800);
+          } else {
+            loadReel(currentReelIndex);
+          }
+        } else {
+          alert('Save failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Error saving set: ' + err.message);
+      } finally {
+        btnSaveCuratedSet.disabled = false;
+        saveBtnLabel.textContent = 'Save Curated Set (Ctrl + Enter)';
+      }
+    }
+
+
+    // Delete Curated Set Action
+    async function deleteCuratedSet() {
+      const reel = reelsData[currentReelIndex];
+      const existing = existingSetsMap.get(reel.id);
+      if (!existing) return;
+
+      if (!confirm(`Are you sure you want to delete Curated Set "${existing.title}"?`)) return;
+
+      try {
+        const delPayload = { action: 'delete', slug: existing.slug, reel_id: reel.id };
+        const res = await curateApiFetch('/api/save-curated-set', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(delPayload)
+        });
+        const data = await res.json();
+
+
+        if (data.success) {
+          draftsMap.delete(reel.id);
+          persistDrafts();
+          existingSetsMap.delete(reel.id);
+          populateDropdown();
+          showToast(`Curated Set removed.`);
+          loadReel(currentReelIndex);
+        }
+      } catch (err) {
+        alert('Error deleting set: ' + err.message);
+      }
+    }
+
+    // Update Save All Drafts buttons visibility and counts
+    function updateSaveAllDraftsButtons() {
+      const count = draftsMap.size;
+      const countLabel = count > 0 ? ` (${count})` : '';
+      if (saveAllBtnLabel) {
+        saveAllBtnLabel.textContent = `Save All Drafts${countLabel}`;
+      }
+      if (btnSaveAllDraftsHeader) {
+        if (headerDraftCountBadge) headerDraftCountBadge.textContent = String(count);
+        btnSaveAllDraftsHeader.style.display = count > 0 ? 'inline-flex' : 'none';
+      }
+      if (btnSaveAllDrafts) {
+        btnSaveAllDrafts.style.display = count > 0 ? 'flex' : 'none';
+      }
+    }
+
+    function showBatchProgressModal(total) {
+      if (!batchProgressModal) return;
+      batchProgressModal.style.display = 'flex';
+      batchModalTitle.textContent = `Saving ${total} Drafts...`;
+      batchModalStatus.textContent = `Starting batch save...`;
+      batchProgressBarFill.style.width = '0%';
+      batchProgressPct.textContent = '0%';
+    }
+
+    function updateBatchProgressModal(current, total, name) {
+      if (!batchProgressModal) return;
+      const pct = Math.round((current / total) * 100);
+      batchProgressBarFill.style.width = `${pct}%`;
+      batchProgressPct.textContent = `${pct}% (${current}/${total})`;
+      batchModalStatus.textContent = `Saving: ${name}...`;
+    }
+
+    function hideBatchProgressModal() {
+      if (!batchProgressModal) return;
+      batchProgressModal.style.display = 'none';
+    }
+
+    // Save All Drafts Action
+    async function saveAllDrafts() {
+      captureCurrentDraft();
+
+      if (draftsMap.size === 0) {
+        alert('No unsaved drafts found! All sets are already saved.');
+        return;
+      }
+
+      const total = draftsMap.size;
+      const confirmMsg = `Save all ${total} pending draft(s) directly to disk now?`;
+      if (!confirm(confirmMsg)) return;
+
+      btnSaveAllDrafts.disabled = true;
+      if (btnSaveAllDraftsHeader) btnSaveAllDraftsHeader.disabled = true;
+      btnSaveCuratedSet.disabled = true;
+
+      showBatchProgressModal(total);
+
+      const allEntries = Array.from(draftsMap.entries());
+      let successCount = 0;
+      let errorCount = 0;
+      const errors = [];
+
+      for (let i = 0; i < allEntries.length; i++) {
+        const [reelId, draft] = allEntries[i];
+        const reelIdx = reelsData.findIndex(r => r.id === reelId);
+        const reel = reelIdx !== -1 ? reelsData[reelIdx] : null;
+
+        const displayName = draft.title || reel?.title || reelId;
+        updateBatchProgressModal(i + 1, total, displayName);
+
+        try {
+          // 1. Reel Metadata (category, tags, title)
+          if (reel && (draft.reel_category !== undefined || draft.reel_tags !== undefined || draft.reel_title !== undefined)) {
+            try {
+              await curateApiFetch('/api/update-reel-category', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  reel_id: reel.id,
+                  category: draft.reel_category !== undefined ? draft.reel_category : reel.category,
+                  tags: Array.isArray(draft.reel_tags) ? draft.reel_tags : reel.tags,
+                  title: draft.reel_title ? draft.reel_title : reel.title
+                })
+              });
+              if (draft.reel_category !== undefined) reel.category = draft.reel_category;
+              if (draft.reel_tags) reel.tags = [...draft.reel_tags];
+              if (draft.reel_title) reel.title = draft.reel_title;
+            } catch (_) {}
+          }
+
+          // 2. Curated Set
+          const comboProducts = draft.combo_products || [];
+          if (comboProducts.length > 0 && reel) {
+            const title = (draft.title || `${reel.title || 'Curated'} Set`).trim();
+            const codeNum = reelIdx >= 0 ? reelIdx + 1 : 1;
+            const product_code = (draft.product_code || `ALIF-SET-${String(codeNum).padStart(3, '0')}`).trim();
+            const slug = `curated-set-${product_code.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+
+            const firstCompId = comboProducts[0]?.id;
+            const firstComp = clientProducts.find(p => p.id === firstCompId);
+            const image = (firstComp && firstComp.image) ? firstComp.image : (reel.poster || '/icons/icon-512x512.png');
+
+            const price = Number(draft.price) || 0;
+            const offer_price = draft.offer_price ? Number(draft.offer_price) : null;
+
+            const payload = {
+              title,
+              slug,
+              reel_id: reel.id,
+              reel_video: reel.video || reel.raw_url,
+              product_code,
+              price,
+              offer_price,
+              image,
+              category: 'Curated Sets',
+              combo_products: comboProducts,
+              description: (draft.description || '').trim(),
+              ideal_for: draft.service ? `${draft.service}, Festive, Party Wear` : 'Bespoke Tailoring & Styling',
+              service: draft.service || 'blouse',
+              colour: firstComp ? firstComp.colour : '',
+              fabric: firstComp ? firstComp.fabric : '',
+            };
+
+            const res = await curateApiFetch('/api/save-curated-set', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+            if (data.success) {
+              existingSetsMap.set(reel.id, {
+                slug,
+                title,
+                reel_id: reel.id,
+                product_code,
+                price,
+                offer_price,
+                image,
+                combo_products: comboProducts
+              });
+              draftsMap.delete(reelId);
+              persistDrafts();
+              successCount++;
+            } else {
+              errorCount++;
+              errors.push(`${title}: ${data.error || 'Save failed'}`);
+            }
+          } else {
+            // No combo products, only reel metadata was drafted
+            draftsMap.delete(reelId);
+            persistDrafts();
+            successCount++;
+          }
+        } catch (err) {
+          errorCount++;
+          errors.push(`${displayName}: ${err.message}`);
+        }
+      }
+
+      hideBatchProgressModal();
+      persistDrafts();
+      populateDropdown();
+      updateProgressCount();
+      updateSaveAllDraftsButtons();
+
+      btnSaveAllDrafts.disabled = false;
+      if (btnSaveAllDraftsHeader) btnSaveAllDraftsHeader.disabled = false;
+      btnSaveCuratedSet.disabled = false;
+
+      loadReel(currentReelIndex);
+
+      if (errorCount === 0) {
+        showToast(`✓ All ${successCount} draft(s) saved to disk!`);
+        alert(`Success! All ${successCount} drafts have been saved to disk.`);
+      } else {
+        alert(`Saved ${successCount} draft(s).\n${errorCount} failed:\n${errors.join('\n')}`);
+      }
+    }
+
+    // --- 1-Click Category & Tagging Hub ---
+    function renderCategoryPills(reel) {
+      if (!primaryCatPills) return;
+      primaryCatPills.innerHTML = '';
+      const curCat = (reel.category || '').toLowerCase().trim();
+      const matched = findCategoryObj(curCat);
+      const activeId = matched ? matched.id : curCat;
+
+      categoriesList.forEach(c => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        const isCurrent = activeId === c.id.toLowerCase() || (c.aliases && c.aliases.map(a => a.toLowerCase()).includes(curCat));
+        btn.className = `cat-pill-btn ${isCurrent ? 'active' : ''}`;
+        btn.textContent = c.label;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          setReelCategory(reel, c.id, c.label);
+        });
+        primaryCatPills.appendChild(btn);
+      });
+    }
+
+    function renderTagPills(reel) {
+      if (!tagPillsContainer) return;
+      tagPillsContainer.innerHTML = '';
+      const curTags = (reel.tags || []).map(t => String(t).toLowerCase().trim());
+
+      const allUniqueTags = Array.from(new Set([
+        ...tagsList,
+        ...(reel.tags || [])
+      ]));
+
+      allUniqueTags.forEach(tag => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        const isCurrent = curTags.includes(String(tag).toLowerCase().trim());
+        btn.className = `tag-pill-btn ${isCurrent ? 'active' : ''}`;
+        btn.textContent = `#${tag}`;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleReelTag(reel, tag);
+        });
+        tagPillsContainer.appendChild(btn);
+      });
+    }
+
+    async function setReelCategory(reel, newCat, label) {
+      reel.category = newCat;
+      if (reelsData[currentReelIndex]) {
+        reelsData[currentReelIndex].category = newCat;
+      }
+      const matched = findCategoryObj(newCat);
+      currentCatBadge.textContent = matched ? matched.label : (label || newCat);
+      renderCategoryPills(reel);
+      captureCurrentDraft();
+      flashCatFeedback('Saving...');
+
+      try {
+        const res = await curateApiFetch('/api/update-reel-category', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reel_id: reel.id, category: newCat })
+        });
+        const data = await res.json();
+        if (data.success) {
+          flashCatFeedback(`✓ ${label} Saved`);
+          updateDropdownDraftBadges();
+        }
+      } catch (err) {
+        console.error('Failed to save category:', err);
+        flashCatFeedback('✗ Error saving');
+      }
+    }
+
+    async function toggleReelTag(reel, tag) {
+      if (!reel.tags) reel.tags = [];
+      const tagLower = String(tag).toLowerCase().trim();
+      const existingIdx = reel.tags.findIndex(t => String(t).toLowerCase().trim() === tagLower);
+      if (existingIdx !== -1) {
+        reel.tags.splice(existingIdx, 1);
+      } else {
+        reel.tags.push(tag);
+      }
+      if (reelsData[currentReelIndex]) {
+        reelsData[currentReelIndex].tags = [...reel.tags];
+      }
+      renderTagPills(reel);
+      captureCurrentDraft();
+      flashCatFeedback('Saving tags...');
+
+      try {
+        const res = await curateApiFetch('/api/update-reel-category', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reel_id: reel.id, tags: reel.tags })
+        });
+        const data = await res.json();
+        if (data.success) {
+          flashCatFeedback(`✓ Tags Saved`);
+        }
+      } catch (err) {
+        console.error('Failed to save tags:', err);
+        flashCatFeedback('✗ Error saving');
+      }
+    }
+
+    async function saveReelTitle() {
+      const reel = reelsData[currentReelIndex];
+      const newTitle = reelTitleInput.value.trim();
+      if (!newTitle) return;
+      reel.title = newTitle;
+      if (reelsData[currentReelIndex]) {
+        reelsData[currentReelIndex].title = newTitle;
+      }
+      captureCurrentDraft();
+      flashCatFeedback('Saving title...');
+
+      try {
+        const res = await curateApiFetch('/api/update-reel-category', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reel_id: reel.id, title: newTitle })
+        });
+        const data = await res.json();
+        if (data.success) {
+          flashCatFeedback(`✓ Title Saved`);
+          updateDropdownDraftBadges();
+        }
+      } catch (err) {
+        console.error('Failed to save title:', err);
+        flashCatFeedback('✗ Error saving');
+      }
+    }
+
+    function addCustomCategoryOrTag() {
+      const val = customTagInput.value.trim();
+      if (!val) return;
+      const reel = reelsData[currentReelIndex];
+      const cleanId = val.toLowerCase().replace(/[^a-z0-9]/g, '-');
+
+      const newCatObj = { id: cleanId, label: `🏷️ ${val}` };
+      if (!categoriesList.some(c => c.id === cleanId)) {
+        categoriesList.push(newCatObj);
+        try {
+          const stored = JSON.parse(localStorage.getItem('alif_custom_reel_cats') || '[]');
+          stored.push(newCatObj);
+          localStorage.setItem('alif_custom_reel_cats', JSON.stringify(stored));
+        } catch (_) {}
+      }
+
+      if (!tagsList.includes(val)) {
+        tagsList.push(val);
+        try {
+          const stored = JSON.parse(localStorage.getItem('alif_custom_reel_tags') || '[]');
+          stored.push(val);
+          localStorage.setItem('alif_custom_reel_tags', JSON.stringify(stored));
+        } catch (_) {}
+      }
+
+      customTagInput.value = '';
+      setReelCategory(reel, cleanId, newCatObj.label);
+      toggleReelTag(reel, val);
+      captureCurrentDraft();
+    }
+
+    function flashCatFeedback(text) {
+      if (!reelSaveFeedback) return;
+      reelSaveFeedback.textContent = text;
+      reelSaveFeedback.classList.add('show');
+      setTimeout(() => {
+        reelSaveFeedback.classList.remove('show');
+      }, 2200);
+    }
+
+    // Event Listeners
+    reelSelectDropdown.addEventListener('change', (e) => {
+      loadReel(parseInt(e.target.value, 10));
+    });
+
+    document.getElementById('btnPrevReel').addEventListener('click', () => {
+      if (currentReelIndex > 0) loadReel(currentReelIndex - 1);
+    });
+
+    document.getElementById('btnNextReel').addEventListener('click', () => {
+      if (currentReelIndex < reelsData.length - 1) loadReel(currentReelIndex + 1);
+    });
+
+    btnTogglePlay.addEventListener('click', () => {
+      if (reelVideoPlayer.paused) {
+        reelVideoPlayer.play();
+        playLabel.textContent = 'Pause';
+      } else {
+        reelVideoPlayer.pause();
+        playLabel.textContent = 'Play';
+      }
+    });
+
+    btnToggleSound.addEventListener('click', () => {
+      reelVideoPlayer.muted = !reelVideoPlayer.muted;
+      soundLabel.textContent = reelVideoPlayer.muted ? 'Unmute' : 'Mute';
+    });
+
+    btnSaveCuratedSet.addEventListener('click', saveCuratedSet);
+    btnDeleteCuratedSet.addEventListener('click', deleteCuratedSet);
+    btnSaveAllDrafts.addEventListener('click', saveAllDrafts);
+    btnSaveAllDraftsHeader.addEventListener('click', saveAllDrafts);
+
+    btnDiscardDraft.addEventListener('click', () => {
+      const reel = reelsData[currentReelIndex];
+      if (!reel) return;
+      if (!confirm(`Discard unsaved draft for "${reel.title}"? This will revert the form.`)) return;
+      draftsMap.delete(reel.id);
+      persistDrafts();
+      const orig = initialReelStateMap.get(reel.id);
+      if (orig) {
+        reel.category = orig.category;
+        reel.tags = [...orig.tags];
+        reel.title = orig.title;
+      }
+      const idx = currentReelIndex;
+      currentReelIndex = -1;
+      loadReel(idx);
+      showToast('Draft discarded.');
+    });
+
+    // Auto-capture drafts whenever inputs change
+    setTitleInput.addEventListener('input', captureCurrentDraft);
+    setCodeInput.addEventListener('input', captureCurrentDraft);
+    setPriceInput.addEventListener('input', () => {
+      setPriceInput.dataset.autoFilled = 'false';
+      captureCurrentDraft();
+    });
+    setPriceInput.addEventListener('change', () => {
+      setPriceInput.dataset.autoFilled = 'false';
+      captureCurrentDraft();
+    });
+    setOfferPriceInput.addEventListener('input', () => {
+      setOfferPriceInput.dataset.manuallyEdited = 'true';
+      captureCurrentDraft();
+    });
+    setOfferPriceInput.addEventListener('change', () => {
+      setOfferPriceInput.dataset.manuallyEdited = 'true';
+      captureCurrentDraft();
+    });
+    setServiceSelect.addEventListener('change', captureCurrentDraft);
+    setDescriptionInput.addEventListener('input', captureCurrentDraft);
+    reelTitleInput.addEventListener('input', captureCurrentDraft);
+    window.addEventListener('beforeunload', captureCurrentDraft);
+
+    btnSaveReelTitle.addEventListener('click', saveReelTitle);
+    reelTitleInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveReelTitle();
+      }
+    });
+
+    btnAddCustomTag.addEventListener('click', addCustomCategoryOrTag);
+    customTagInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addCustomCategoryOrTag();
+      }
+    });
+
+    // Search input
+    catalogSearchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderCatalog();
+    });
+
+    // Category pills
+    document.querySelectorAll('.cat-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategory = btn.dataset.cat;
+        renderCatalog();
+      });
+    });
+
+    // Mobile / Tablet Tab Switcher
+    document.querySelectorAll('.mobile-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mobile-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const targetClass = btn.dataset.tab;
+        document.querySelectorAll('.col-reel, .col-builder, .col-catalog').forEach(col => {
+          col.classList.toggle('tab-active', col.classList.contains(targetClass));
+        });
+      });
+    });
+
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      // Ctrl + Enter: Save Set
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        saveCuratedSet();
+        return;
+      }
+
+      // Ignore arrows if typing in input
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (currentReelIndex > 0) loadReel(currentReelIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        if (currentReelIndex < reelsData.length - 1) loadReel(currentReelIndex + 1);
+      } else if (e.key === ' ') {
+        e.preventDefault();
+        btnTogglePlay.click();
+      }
+    });
+
+    // Initial Startup
+    populateDropdown();
+    let initialIdx = 0;
+    try {
+      const savedIdx = parseInt(localStorage.getItem('alif_curate_active_index') || '0', 10);
+      if (!isNaN(savedIdx) && savedIdx >= 0 && savedIdx < reelsData.length) {
+        initialIdx = savedIdx;
+      }
+    } catch (_) {}
+    loadReel(initialIdx);
+    renderCatalog();
+    updateSaveAllDraftsButtons();
+  </script>
+</body>
+</html>

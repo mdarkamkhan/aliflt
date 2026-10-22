@@ -1,5 +1,5 @@
 ---
-title: "Plum Mulberry Sequin Jaal Crush Top Fabric"
+title: "Magenta Gold Floral Embroidered Crush Top Fabric"
 date: "2026-10-19T14:50:00.000Z"
 layout: "product.liquid"
 tags: "product"
@@ -8,14 +8,14 @@ is_ad: false
 price: 349
 product_code: "ALIF-FB-012"
 category: "fabric"
-description: "Regal plum mulberry crush silk top fabric draped in shimmering sequin floral medallion sprays and fine threadwork branches for evening occasion wear."
+description: "Vibrant magenta pink crush silk top fabric richly embellished with golden floral embroidery, shimmering sequin medallions, and delicate vines for festive kurtis, blouses, and designer ensembles."
 size: "1 Meter"
-colour: "Plum Mulberry"
+colour: "Magenta Pink / Gold"
 number_of_pieces: "1 Meter"
 fabric: "Crush Silk"
-work: "Shimmering Sequin Medallion Sprays & Branch Embroidery"
-pattern: "Rich Medallion Sprays on Textured Silk"
-ideal_for: "Evening Tops, Kurtis, Fusion Wear"
+work: "Golden Floral Sequin & Threadwork Jaal"
+pattern: "Rich Floral Medallion Sprays on Textured Silk"
+ideal_for: "Festive Kurtis, Blouses, Tops, Anarkalis"
 delivery_charges: "₹20"
 return_policy: "7 days exchange (at store)"
 ---

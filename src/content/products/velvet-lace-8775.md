@@ -6,8 +6,6 @@ tags: "product"
 image: "/uploads/1763831178775-1000026097.webp"
 price: 30
 product_code: "ALIF-LC-8775"
-offer_price: 15
-offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"
 description: "This is a premium velvet lace featuring a distinctive scalloped (wavy) design. The soft velvet center is bordered by intricate metallic zari embroidery, creating a rich contrast between the matte fabric and the shimmering thread. Its unique curved edge adds a graceful and fluid look, making it an ideal embellishment for saree borders, dupattas, and festive ethnic wear."
 permalink: false

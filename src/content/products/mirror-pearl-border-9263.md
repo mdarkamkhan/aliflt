@@ -7,8 +7,6 @@ image: "/uploads/1763911939264-1000023667.webp"
 is_ad: false
 price: 59
 product_code: "ALIF-LC-9263"
-offer_price: 30
-offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"
 description: "This is a heavy, luxurious border that beautifully blends traditional mirror work with modern elegance. The center features a continuous row of diamond-shaped mirrors (foil/abhla work) encased in intricate zari embroidery, flanked by rows of delicate pearl beads on the edges. It reflects light beautifully, adding a festive sparkle to any outfit."
 permalink: false

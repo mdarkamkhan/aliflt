@@ -7,8 +7,6 @@ image: "/uploads/1763903012350-1000023649.webp"
 is_ad: false
 price: 20
 product_code: "ALIF-LC-2349"
-offer_price: 10
-offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"
 description: "Add a delicate and trendy touch to your garments with this exquisite cutwork lace. Featuring a sheer base with refined thread embroidery and sparkling sequin highlights, this lace offers a modern yet ethnic appeal. Its scalloped edge provides a beautiful finish to any hemline."
 permalink: false

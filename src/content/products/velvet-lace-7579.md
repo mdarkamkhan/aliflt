@@ -7,8 +7,6 @@ image: "/uploads/1763911927579-1000023676.webp"
 is_ad: true
 price: 39
 product_code: "ALIF-LC-7579"
-offer_price: 20
-offer_end_date: "2026-10-12T23:59:00Z"
 category: "lace"
 description: "-----"
 permalink: false
