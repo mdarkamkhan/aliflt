@@ -1,5 +1,5 @@
 ---
-title: "Bridal Raw Silk Kalidar Lehenga with Gold Zardozi Set"
+title: "Fandy Silk Bridal Set"
 date: "2026-10-22T08:13:59.380Z"
 layout: "product.liquid"
 tags: "product"

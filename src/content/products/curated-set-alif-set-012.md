@@ -1,5 +1,5 @@
 ---
-title: "Straight Cut Cigarette Pant Suit Ensemble Set"
+title: "Pearl Crush Silk Festive Set"
 date: "2026-10-22T08:27:09.377Z"
 layout: "product.liquid"
 tags: "product"

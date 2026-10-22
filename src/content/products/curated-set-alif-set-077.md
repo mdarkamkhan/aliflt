@@ -1,5 +1,5 @@
 ---
-title: "Boutique Reel #77 Set"
+title: "Rani Pink Fandy Silk Blouse Set"
 date: "2026-10-22T08:14:02.349Z"
 layout: "product.liquid"
 tags: "product"

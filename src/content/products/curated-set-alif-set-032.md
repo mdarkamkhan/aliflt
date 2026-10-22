@@ -1,5 +1,5 @@
 ---
-title: "Modern Indo-Western Co-ord Set with Belt Accent Set"
+title: "Fandy Silk Festive Set"
 date: "2026-10-22T08:14:00.080Z"
 layout: "product.liquid"
 tags: "product"

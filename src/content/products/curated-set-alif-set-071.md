@@ -1,5 +1,5 @@
 ---
-title: "Boutique Reel #71 Set"
+title: "Pearl Georgette Blouse Set"
 date: "2026-10-22T08:14:02.058Z"
 layout: "product.liquid"
 tags: "product"

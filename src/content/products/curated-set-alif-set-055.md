@@ -1,5 +1,5 @@
 ---
-title: "Boutique Reel #55 Set"
+title: "Jet Black Satin Blouse Set"
 date: "2026-10-22T08:14:01.298Z"
 layout: "product.liquid"
 tags: "product"

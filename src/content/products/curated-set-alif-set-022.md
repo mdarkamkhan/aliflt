@@ -1,5 +1,5 @@
 ---
-title: "Classic Patiala Salwar Volume & Pleating Precision Set"
+title: "Crush Silk Traditional Set"
 date: "2026-10-22T08:13:59.293Z"
 layout: "product.liquid"
 tags: "product"

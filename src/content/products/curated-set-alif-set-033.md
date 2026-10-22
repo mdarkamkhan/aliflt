@@ -1,5 +1,5 @@
 ---
-title: "Velvet Winter Suit with Zari Neck Panel Set"
+title: "Rani Pink Fandy Silk Festive Set"
 date: "2026-10-22T08:14:00.128Z"
 layout: "product.liquid"
 tags: "product"

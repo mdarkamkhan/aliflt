@@ -1,5 +1,5 @@
 ---
-title: "High Collar Front Slit Designer Blouse Set"
+title: "Fandy Silk Blouse Set"
 date: "2026-10-22T08:13:59.605Z"
 layout: "product.liquid"
 tags: "product"

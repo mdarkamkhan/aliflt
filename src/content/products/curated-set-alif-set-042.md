@@ -1,5 +1,5 @@
 ---
-title: "Regal Navy Blue Zari Jaal Kalidar Anarkali Set"
+title: "Crimson Crush Silk Dupatta Bridal Set"
 date: "2026-10-22T08:18:20.529Z"
 layout: "product.liquid"
 tags: "product"

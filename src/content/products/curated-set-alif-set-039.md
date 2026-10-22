@@ -1,5 +1,5 @@
 ---
-title: "Emerald Green Floral Sequin Kali Cutting Set"
+title: "Satin Lehenga Set"
 date: "2026-10-22T08:14:00.353Z"
 layout: "product.liquid"
 tags: "product"

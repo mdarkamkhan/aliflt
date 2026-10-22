@@ -1,5 +1,5 @@
 ---
-title: "Chanderi Silk Formal Suit with Delicate Threadwork Set"
+title: "Rani Pink Fandy Silk Festive Set"
 date: "2026-10-22T08:14:00.865Z"
 layout: "product.liquid"
 tags: "product"

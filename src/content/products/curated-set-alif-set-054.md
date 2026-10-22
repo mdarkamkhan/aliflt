@@ -1,5 +1,5 @@
 ---
-title: "Atelier Signature Finishing Touch & Steam Press Set"
+title: "Champagne Gold Tissue Silk Traditional Set"
 date: "2026-10-22T08:14:01.250Z"
 layout: "product.liquid"
 tags: "product"

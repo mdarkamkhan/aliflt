@@ -1,5 +1,5 @@
 ---
-title: "Tiered Gharara Stitching with Gotta Patti Precision Set"
+title: "Satin Festive Set"
 date: "2026-10-22T08:30:35.964Z"
 layout: "product.liquid"
 tags: "product"

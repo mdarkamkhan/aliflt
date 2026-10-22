@@ -245,8 +245,10 @@ const uploadedReelsList = (reelsData || []).map((r, idx) => {
 
   return {
     id: reelId,
+    reelNumber: idx + 1,
     type: 'reel',
-    title: r.title || `Reel #${idx + 1}`,
+    title: `Reel #${idx + 1}`,
+    internalTitle: r.title || `Reel #${idx + 1}`,
     category: 'Atelier Reel',
     image: r.poster || r.image || '/icons/icon-512x512.png',
     video: r.video,
@@ -469,7 +471,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                                         data-astro-prefetch="viewport"
                                         class="reel-minimal-cta" 
                                         onclick="event.stopPropagation();"
-                                        aria-label={`Watch All Reels - ${item.title}`}
+                                        aria-label={`Watch All Reels - ${item.internalTitle || item.title}`}
                                     >
                                         <span>WATCH ALL</span>
                                         <svg class="reel-minimal-arrow" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

@@ -1,5 +1,5 @@
 ---
-title: "Boutique Reel #59 Set"
+title: "Crimson Satin Blouse Set"
 date: "2026-10-22T08:34:48.412Z"
 layout: "product.liquid"
 tags: "product"

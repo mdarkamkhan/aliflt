@@ -1,5 +1,5 @@
 ---
-title: "Ruffled Net Party Gown with Structured Yoke Set"
+title: "Jet Black Satin Party Wear Set"
 date: "2026-10-22T08:14:01.033Z"
 layout: "product.liquid"
 tags: "product"

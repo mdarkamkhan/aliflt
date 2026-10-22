@@ -1,5 +1,5 @@
 ---
-title: "Hand Stitching & Invisible Hemming Mastery Set"
+title: "Moss Crepe Traditional Set"
 date: "2026-10-22T08:14:00.778Z"
 layout: "product.liquid"
 tags: "product"

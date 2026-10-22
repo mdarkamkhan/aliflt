@@ -1,5 +1,5 @@
 ---
-title: "Floor Length Regal Anarkali Kalidar Silhouette Set"
+title: "Crush Silk Party Wear Set"
 date: "2026-10-22T08:18:20.576Z"
 layout: "product.liquid"
 tags: "product"

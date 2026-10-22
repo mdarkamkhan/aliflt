@@ -1,5 +1,5 @@
 ---
-title: "Pure Tissue Silk Fluidity & Golden Luster Set"
+title: "Sunshine Yellow Fandy Silk Traditional Set"
 date: "2026-10-22T08:13:59.994Z"
 layout: "product.liquid"
 tags: "product"

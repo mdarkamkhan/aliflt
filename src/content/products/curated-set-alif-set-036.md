@@ -1,5 +1,5 @@
 ---
-title: "Invisible Saree Fall & Pico Precision Sewing Set"
+title: "Pearl Georgette Traditional Set"
 date: "2026-10-22T08:14:00.245Z"
 layout: "product.liquid"
 tags: "product"

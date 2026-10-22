@@ -1,5 +1,5 @@
 ---
-title: "Backless Bridal Blouse with Pearl Latkan Strands Set"
+title: "Fandy Silk Bridal Set"
 date: "2026-10-22T08:14:00.207Z"
 layout: "product.liquid"
 tags: "product"

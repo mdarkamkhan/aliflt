@@ -1,5 +1,5 @@
 ---
-title: "Nayra Cut Georgette Kurti with Side Slit Gathers Set"
+title: "Champagne Gold Tissue Silk Kurti Set"
 date: "2026-10-22T08:13:59.122Z"
 layout: "product.liquid"
 tags: "product"

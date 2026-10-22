@@ -1,5 +1,5 @@
 ---
-title: "Deep U-Neck Velvet Blouse with Dori Tie-Ups Set"
+title: "Sunshine Yellow Fandy Silk Bridal Set"
 date: "2026-10-22T08:27:09.229Z"
 layout: "product.liquid"
 tags: "product"

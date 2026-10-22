@@ -1,5 +1,5 @@
 ---
-title: "Pintuck Pleated Cotton Kurti with Mandarin Collar Set"
+title: "Butter Yellow Satin Kurti Set"
 date: "2026-10-22T08:14:01.143Z"
 layout: "product.liquid"
 tags: "product"

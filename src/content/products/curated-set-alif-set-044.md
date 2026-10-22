@@ -1,5 +1,5 @@
 ---
-title: "Square Neck Classic Kurti with Resham Border Set"
+title: "Emerald Georgette Kurti Set"
 date: "2026-10-22T08:14:00.655Z"
 layout: "product.liquid"
 tags: "product"

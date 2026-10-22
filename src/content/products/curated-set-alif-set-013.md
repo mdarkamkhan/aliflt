@@ -1,5 +1,5 @@
 ---
-title: "Double Can-Can Layering for Extreme Lehenga Volume Set"
+title: "Fandy Silk Bridal Set"
 date: "2026-10-22T08:13:58.858Z"
 layout: "product.liquid"
 tags: "product"

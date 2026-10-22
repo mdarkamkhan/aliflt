@@ -1,5 +1,5 @@
 ---
-title: "Sequin Net Transparency & Soft Drape Test Set"
+title: "Pearl Fandy Silk Festive Set"
 date: "2026-10-22T08:34:48.353Z"
 layout: "product.liquid"
 tags: "product"

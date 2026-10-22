@@ -1,5 +1,5 @@
 ---
-title: "Bespoke Zari Bridal Blouse Ensemble"
+title: "Fandy Silk Bridal Set"
 date: "2026-10-22T08:16:35.904Z"
 layout: "product.liquid"
 tags: "product"

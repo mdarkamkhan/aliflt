@@ -1,5 +1,5 @@
 ---
-title: "Mirror Work Garba Special Navratri Lehenga Set"
+title: "Fandy Silk Lehenga Set"
 date: "2026-10-22T08:13:59.918Z"
 layout: "product.liquid"
 tags: "product"

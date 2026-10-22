@@ -1,5 +1,5 @@
 ---
-title: "Princess Cut Designer Blouse with Pearl Border Set"
+title: "Champagne Gold Tissue Silk Festive Set"
 date: "2026-10-22T08:13:58.775Z"
 layout: "product.liquid"
 tags: "product"

@@ -1,5 +1,5 @@
 ---
-title: "Sabyasachi Sweetheart Neckline Blouse Fitting Set"
+title: "Champagne Gold Tissue Silk Bridal Set"
 date: "2026-10-22T08:13:59.255Z"
 layout: "product.liquid"
 tags: "product"

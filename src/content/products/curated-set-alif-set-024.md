@@ -1,5 +1,5 @@
 ---
-title: "Scallop Cutwork Border Dupatta Styling Guide Set"
+title: "Satin Festive Set"
 date: "2026-10-22T08:13:59.537Z"
 layout: "product.liquid"
 tags: "product"

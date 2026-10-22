@@ -1,5 +1,5 @@
 ---
-title: "Handmade Potli Buttons & Concealed Placket Stitching Set"
+title: "Pearl Fandy Silk Traditional Set"
 date: "2026-10-22T08:13:59.719Z"
 layout: "product.liquid"
 tags: "product"

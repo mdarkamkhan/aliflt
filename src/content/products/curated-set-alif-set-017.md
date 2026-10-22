@@ -1,5 +1,5 @@
 ---
-title: "32-Kali Pure Chiffon Umbrella Flare Anarkali Set"
+title: "Teal Crush Silk Festive Set"
 date: "2026-10-22T08:13:59.040Z"
 layout: "product.liquid"
 tags: "product"

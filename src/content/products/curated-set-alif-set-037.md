@@ -1,5 +1,5 @@
 ---
-title: "A-Line Embroidered Kurti with Contrast Piping Set"
+title: "Satin Kurti Set"
 date: "2026-10-22T08:14:00.288Z"
 layout: "product.liquid"
 tags: "product"

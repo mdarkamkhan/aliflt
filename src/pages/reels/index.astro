@@ -73,7 +73,9 @@ const reelsList = (reelsData || []).map((r, index) => {
 
   return {
     id: reelId,
-    title: r.title || `Reel #${index + 1}`,
+    reelNumber: index + 1,
+    title: `Reel #${index + 1}`,
+    internalTitle: r.title || `Reel #${index + 1}`,
     video: r.video,
     raw_url: r.raw_url,
     public_id: r.public_id,

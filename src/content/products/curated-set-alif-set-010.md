@@ -1,5 +1,5 @@
 ---
-title: "Alia Cut Georgette Kurti Neckline Perfection Set"
+title: "Champagne Gold Tissue Silk Kurti Set"
 date: "2026-10-22T08:30:36.013Z"
 layout: "product.liquid"
 tags: "product"

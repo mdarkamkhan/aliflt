@@ -1,5 +1,5 @@
 ---
-title: "Tiered Georgette Sharara Hem Movement Test Set"
+title: "Deep Wine Georgette Festive Set"
 date: "2026-10-22T08:14:00.570Z"
 layout: "product.liquid"
 tags: "product"

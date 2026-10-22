@@ -1,5 +1,5 @@
 ---
-title: "Boutique Reel #69 Set"
+title: "Champagne Gold Tissue Silk Blouse Set"
 date: "2026-10-22T08:14:01.931Z"
 layout: "product.liquid"
 tags: "product"

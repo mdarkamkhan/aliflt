@@ -1,5 +1,5 @@
 ---
-title: "Boutique Reel #74 Set"
+title: "Soft Pink Satin Blouse Set"
 date: "2026-10-22T08:14:02.238Z"
 layout: "product.liquid"
 tags: "product"

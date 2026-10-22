@@ -1,5 +1,5 @@
 ---
-title: "Corset Style Boned Evening Gown Construction Set"
+title: "Pearl Fandy Silk Festive Set"
 date: "2026-10-22T08:14:00.616Z"
 layout: "product.liquid"
 tags: "product"

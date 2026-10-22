@@ -1,5 +1,5 @@
 ---
-title: "Boat Neckline Blouse with Keyhole Back Detail Set"
+title: "Fandy Silk Blouse Set"
 date: "2026-10-22T08:14:00.030Z"
 layout: "product.liquid"
 tags: "product"

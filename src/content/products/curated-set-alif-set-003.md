@@ -1,5 +1,5 @@
 ---
-title: "fandy Silk Natural Sheen & Texture Drape Set"
+title: "Rani Pink Fandy Silk Festive Set"
 date: "2026-10-22T05:27:39.395Z"
 layout: "product.liquid"
 tags: "product"

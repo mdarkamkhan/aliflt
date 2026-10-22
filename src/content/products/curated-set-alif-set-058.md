@@ -1,5 +1,5 @@
 ---
-title: "Boutique Reel #58 Set"
+title: "Sunshine Yellow Fandy Silk Blouse Set"
 date: "2026-10-22T08:14:01.420Z"
 layout: "product.liquid"
 tags: "product"

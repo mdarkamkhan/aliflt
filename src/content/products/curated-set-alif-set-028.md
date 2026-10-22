@@ -1,5 +1,5 @@
 ---
-title: "Haldi Ochre Tiered Kalidar Anarkali Gown Set"
+title: "Rani Pink Fandy Silk Festive Set"
 date: "2026-10-22T08:13:59.821Z"
 layout: "product.liquid"
 tags: "product"

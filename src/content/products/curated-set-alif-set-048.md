@@ -1,5 +1,5 @@
 ---
-title: "Pastel Pink Net Anarkali with Soft Flare Set"
+title: "Soft Pink Satin Festive Set"
 date: "2026-10-22T08:14:00.922Z"
 layout: "product.liquid"
 tags: "product"

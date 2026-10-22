@@ -1,5 +1,5 @@
 ---
-title: "Royal Zardozi Waistband Stitching on Heavy Velvet Set"
+title: "Moss Crepe Bridal Set"
 date: "2026-10-22T08:14:01.000Z"
 layout: "product.liquid"
 tags: "product"

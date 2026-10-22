@@ -1,5 +1,5 @@
 ---
-title: "Puff Sleeve Organza Blouse with Zari Cuffs Set"
+title: "Pearl Fandy Silk Blouse Set"
 date: "2026-10-22T08:13:58.943Z"
 layout: "product.liquid"
 tags: "product"

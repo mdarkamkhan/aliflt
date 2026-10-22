@@ -1,5 +1,5 @@
 ---
-title: "Maggam Work Heavy Embroidered Bridal Blouse Set"
+title: "Champagne Gold Tissue Silk Bridal Set"
 date: "2026-10-22T08:14:00.457Z"
 layout: "product.liquid"
 tags: "product"

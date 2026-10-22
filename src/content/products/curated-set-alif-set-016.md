@@ -1,5 +1,5 @@
 ---
-title: "Pleated Georgette Sharara with Delicate Mirror Border Set"
+title: "Champagne Gold Tissue Silk Festive Set"
 date: "2026-10-22T08:13:58.989Z"
 layout: "product.liquid"
 tags: "product"

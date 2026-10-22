@@ -1,5 +1,5 @@
 ---
-title: "Royal 12-Kali Velvet Bridal Lehenga Flare Set"
+title: "Pearl Georgette Bridal Set"
 date: "2026-10-22T08:34:48.306Z"
 layout: "product.liquid"
 tags: "product"

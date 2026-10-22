@@ -1,5 +1,5 @@
 ---
-title: "Handcrafted Latkan Hangings and Tassel Finish Set"
+title: "Champagne Gold Tissue Silk Traditional Set"
 date: "2026-10-22T05:09:04.850Z"
 layout: "product.liquid"
 tags: "product"

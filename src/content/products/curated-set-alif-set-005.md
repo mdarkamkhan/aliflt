@@ -1,5 +1,5 @@
 ---
-title: "Pakistani Long Slit Kurti with Scallop Hem Set"
+title: "Pearl Fandy Silk Kurti Set"
 date: "2026-10-22T05:27:20.613Z"
 layout: "product.liquid"
 tags: "product"

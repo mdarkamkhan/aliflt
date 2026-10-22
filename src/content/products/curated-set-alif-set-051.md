@@ -1,5 +1,5 @@
 ---
-title: "Peplum Top Co-ord with Wide Leg Flared Pants Set"
+title: "Soft Pink Satin Festive Set"
 date: "2026-10-22T08:14:01.097Z"
 layout: "product.liquid"
 tags: "product"

@@ -1,5 +1,5 @@
 ---
-title: "Precision Piping & Armhole Fitting Demonstration Set"
+title: "Fandy Silk Traditional Set"
 date: "2026-10-22T08:13:59.084Z"
 layout: "product.liquid"
 tags: "product"

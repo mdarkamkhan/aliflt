@@ -1,5 +1,5 @@
 ---
-title: "Halter Neck Designer Blouse with Golden Trim Set"
+title: "Moss Crepe Blouse Set"
 date: "2026-10-22T08:14:00.697Z"
 layout: "product.liquid"
 tags: "product"
