@@ -1,5 +1,5 @@
 ---
-title: "Pearl Georgette Bridal Set"
+title: "Pearl White Georgette Bridal Lehenga Flare Set"
 date: "2026-10-22T08:34:48.306Z"
 layout: "product.liquid"
 tags: "product"
@@ -17,7 +17,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Royal 12-Kali Velvet Bridal Lehenga Flare\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Pearl White"
 fabric: "Georgette"
-ideal_for: "lehenga, Festive, Party Wear"
+ideal_for: "Bespoke Pearl White Georgette Bridal Lehenga Flare Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

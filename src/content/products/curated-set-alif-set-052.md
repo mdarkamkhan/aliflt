@@ -1,5 +1,5 @@
 ---
-title: "Butter Yellow Satin Kurti Set"
+title: "Butter Yellow Satin Co-ord & Tunic Set"
 date: "2026-10-22T08:14:01.143Z"
 layout: "product.liquid"
 tags: "product"
@@ -20,7 +20,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Pintuck Pleated Cotton Kurti with Mandarin Collar\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Butter Yellow"
 fabric: "Satin"
-ideal_for: "kurti-top, Festive, Party Wear"
+ideal_for: "Bespoke Butter Yellow Satin Co-ord & Tunic Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

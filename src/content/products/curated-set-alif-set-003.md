@@ -1,5 +1,5 @@
 ---
-title: "Rani Pink Fandy Silk Festive Set"
+title: "Rani Pink Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T05:27:39.395Z"
 layout: "product.liquid"
 tags: "product"
@@ -20,7 +20,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Crush Silk Natural Sheen & Texture Drape\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Rani Pink"
 fabric: "Fandy Silk"
-ideal_for: "Designer Kurti Stitching, Festive, Party Wear"
+ideal_for: "Bespoke Rani Pink Fandy Silk Kurti & Bottom Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

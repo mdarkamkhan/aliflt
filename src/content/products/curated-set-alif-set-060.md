@@ -1,6 +1,6 @@
 ---
-title: "Crimson Rayon Blouse Set"
-date: "2026-10-22T09:14:59.101Z"
+title: "Crimson Red Rayon Co-ord & Tunic Set"
+date: "2026-10-22T10:14:22.052Z"
 layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crimson-red-plain-rayon-fabric.webp"
@@ -19,7 +19,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Boutique Reel #60\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Crimson Red"
 fabric: "Rayon"
-ideal_for: "blouse, Festive, Party Wear"
+ideal_for: "Bespoke Crimson Red Rayon Co-ord & Tunic Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

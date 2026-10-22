@@ -1,5 +1,5 @@
 ---
-title: "Sunshine Yellow Fandy Silk Blouse Set"
+title: "Sunshine Yellow Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T08:14:02.307Z"
 layout: "product.liquid"
 tags: "product"
@@ -23,7 +23,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Boutique Reel #76\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Rani Pink / Magenta Rose"
 fabric: "Fandy Silk"
-ideal_for: "salwar-suit, Festive, Party Wear"
+ideal_for: "Bespoke Sunshine Yellow Fandy Silk Kurti & Bottom Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

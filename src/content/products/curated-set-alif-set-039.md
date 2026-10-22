@@ -1,5 +1,5 @@
 ---
-title: "Satin Lehenga Set"
+title: "Wine Fandy Silk 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:14:00.353Z"
 layout: "product.liquid"
 tags: "product"
@@ -23,7 +23,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Emerald Green Floral Sequin Kali Cutting\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Pure White"
 fabric: "Satin"
-ideal_for: "lehenga, Festive, Party Wear"
+ideal_for: "Bespoke Wine Fandy Silk 3-Piece Salwar Suit Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

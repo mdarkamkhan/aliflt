@@ -1,5 +1,5 @@
 ---
-title: "Butter Yellow Satin Blouse Set"
+title: "Butter Yellow Satin Co-ord & Tunic Set"
 date: "2026-10-22T08:14:01.676Z"
 layout: "product.liquid"
 tags: "product"
@@ -17,7 +17,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Boutique Reel #64\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Butter Yellow"
 fabric: "Satin"
-ideal_for: "blouse, Festive, Party Wear"
+ideal_for: "Bespoke Butter Yellow Satin Co-ord & Tunic Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

@@ -1,5 +1,5 @@
 ---
-title: "Fandy Silk Bridal Set"
+title: "Wine Maroon Fandy Silk 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:16:35.904Z"
 layout: "product.liquid"
 tags: "product"
@@ -23,10 +23,10 @@ combo_products:
   - id: "crush-top-fabric-01"
     meters: 2
     unit: "mtr"
-description: "Complete bespoke ensemble featured in our trending video \"Bespoke Bridal Blouse with Zari Embroidery\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
+description: "Complete bespoke ensemble featured in our trending video \"Bespoke Bridal ensemble with Zari Embroidery\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: ""
 fabric: ""
-ideal_for: "salwar-suit, Festive, Party Wear"
+ideal_for: "Bespoke Wine Maroon Fandy Silk 3-Piece Salwar Suit Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

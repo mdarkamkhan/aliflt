@@ -1,5 +1,5 @@
 ---
-title: "Fandy Silk Lehenga Set"
+title: "Aqua Turquoise Fandy Silk Kurti Dress Material"
 date: "2026-10-22T08:13:59.918Z"
 layout: "product.liquid"
 tags: "product"
@@ -17,7 +17,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Mirror Work Garba Special Navratri Lehenga\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Aqua Turquoise Blue"
 fabric: "Fandy Silk"
-ideal_for: "none, Festive, Party Wear"
+ideal_for: "Bespoke Aqua Turquoise Fandy Silk Kurti Dress Material Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

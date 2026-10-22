@@ -1,5 +1,5 @@
 ---
-title: "Fandy Silk Blouse Set"
+title: "Dusty Rose Fandy Silk 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:14:00.030Z"
 layout: "product.liquid"
 tags: "product"
@@ -23,10 +23,10 @@ combo_products:
   - id: "moss-crape"
     meters: 4
     unit: "mtr"
-description: "Complete bespoke ensemble featured in our trending video \"Boat Neckline Blouse with Keyhole Back Detail\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
+description: "Complete bespoke ensemble featured in our trending video \"Boat Neckline ensemble with Keyhole Back Detail\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Mauve / Dusty Rose"
 fabric: "Fandy Silk"
-ideal_for: "salwar-suit, Festive, Party Wear"
+ideal_for: "Bespoke Dusty Rose Fandy Silk 3-Piece Salwar Suit Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

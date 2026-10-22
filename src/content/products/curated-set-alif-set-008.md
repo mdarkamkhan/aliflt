@@ -1,5 +1,5 @@
 ---
-title: "Satin Festive Set"
+title: "Wine Maroon Satin Tiered Gharara Set"
 date: "2026-10-22T08:30:35.964Z"
 layout: "product.liquid"
 tags: "product"
@@ -20,7 +20,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Tiered Gharara Stitching with Gotta Patti Precision\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Pure White"
 fabric: "Satin"
-ideal_for: "gown, Festive, Party Wear"
+ideal_for: "Bespoke Wine Maroon Satin Tiered Gharara Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

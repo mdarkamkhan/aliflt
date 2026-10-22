@@ -1,5 +1,5 @@
 ---
-title: "Satin Festive Set"
+title: "Satin Co-ord & Tunic Set"
 date: "2026-10-22T08:13:59.537Z"
 layout: "product.liquid"
 tags: "product"
@@ -17,7 +17,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Scallop Cutwork Border Dupatta Styling Guide\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Pure White"
 fabric: "Satin"
-ideal_for: "anarkali, Festive, Party Wear"
+ideal_for: "Bespoke Satin Co-ord & Tunic Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

@@ -1,7 +1,7 @@
 [
   {
     "id": "reel-1",
-    "title": "Bespoke Bridal Blouse with Zari Embroidery",
+    "title": "Reel #1",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336434/alif-reels/reel_01.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336434/alif-reels/reel_01.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336434/alif-reels/reel_01.jpg",
@@ -9,17 +9,20 @@
     "duration": 6.52195,
     "width": 720,
     "height": 1280,
-    "category": "fancy",
+    "category": "salwar-suit",
     "style": "bridal",
     "tags": [
-      "blouse",
-      "bridal",
-      "embroidery",
-      "Trending",
-      "Heavy Work",
-      "Party Wear"
+      "salwar-suit",
+      "fandy-silk",
+      "wine-maroon",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set",
+      "with-latkan"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LC-1059",
       "ALIF-LK-4814",
@@ -38,7 +41,7 @@
   },
   {
     "id": "reel-2",
-    "title": "Handcrafted Latkan Hangings & Tassel Finish",
+    "title": "Reel #2",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336441/alif-reels/reel_02.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336441/alif-reels/reel_02.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336441/alif-reels/reel_02.jpg",
@@ -46,15 +49,17 @@
     "duration": 15.717052,
     "width": 720,
     "height": 1280,
-    "category": "suit",
+    "category": "salwar-suit",
     "style": "traditional",
     "tags": [
-      "finishing",
-      "latkan",
-      "tassel",
-      "handmade"
+      "salwar-suit",
+      "tissue-silk",
+      "champagne-gold",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LK-4814",
       "ALIF-LK-0883",
@@ -68,7 +73,7 @@
   },
   {
     "id": "reel-3",
-    "title": "fandy Silk Natural Sheen & Texture Drape",
+    "title": "Reel #3",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336446/alif-reels/reel_03.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336446/alif-reels/reel_03.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336446/alif-reels/reel_03.jpg",
@@ -76,17 +81,17 @@
     "duration": 11.83932,
     "width": 720,
     "height": 1280,
-    "category": "trending",
+    "category": "salwar-suit",
     "style": "festive",
     "tags": [
-      "fabric",
-      "crush-silk",
-      "texture",
-      "sheen",
-      "Simple",
-      "Fancy"
+      "salwar-suit",
+      "fandy-silk",
+      "rani-pink",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "kurti-top",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-010",
       "ALIF-DP-001",
@@ -99,7 +104,7 @@
   },
   {
     "id": "reel-4",
-    "title": "Royal 12-Kali Velvet Bridal Lehenga Flare",
+    "title": "Reel #4",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336466/alif-reels/reel_04.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336466/alif-reels/reel_04.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336466/alif-reels/reel_04.jpg",
@@ -107,13 +112,15 @@
     "duration": 26.328571,
     "width": 720,
     "height": 1280,
-    "category": "suit",
+    "category": "lehenga",
     "style": "bridal",
     "tags": [
       "lehenga",
-      "velvet",
-      "bridal",
-      "flare"
+      "georgette",
+      "pearl-white",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
     "linked_service": "lehenga",
     "linked_products": [
@@ -127,7 +134,7 @@
   },
   {
     "id": "reel-5",
-    "title": "Pakistani Long Slit Kurti with Scallop Hem",
+    "title": "Reel #5",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336470/alif-reels/reel_05.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336470/alif-reels/reel_05.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336470/alif-reels/reel_05.jpg",
@@ -135,15 +142,17 @@
     "duration": 30.368844,
     "width": 720,
     "height": 1280,
-    "category": "suit",
+    "category": "salwar-suit",
     "style": "contemporary",
     "tags": [
-      "kurti",
-      "pakistani",
-      "scallop",
-      "long-slit"
+      "salwar-suit",
+      "fandy-silk",
+      "sunset-orange",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "kurti-top",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-015",
       "ALIF-LC-7579",
@@ -158,7 +167,7 @@
   },
   {
     "id": "reel-6",
-    "title": "Floor Length Regal Anarkali Kalidar Silhouette",
+    "title": "Reel #6",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336475/alif-reels/reel_06.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336475/alif-reels/reel_06.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336475/alif-reels/reel_06.jpg",
@@ -166,14 +175,17 @@
     "duration": 47.73737,
     "width": 720,
     "height": 1280,
-    "category": "curated-sets",
+    "category": "anarkali",
     "style": "traditional",
     "tags": [
       "anarkali",
-      "kalidar",
-      "floor-length",
-      "regal",
-      "Party Wear"
+      "moss-crepe",
+      "wine-maroon",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
     "linked_service": "anarkali",
     "linked_products": [
@@ -191,7 +203,7 @@
   },
   {
     "id": "reel-7",
-    "title": "Deep U-Neck Velvet Blouse with Dori Tie-Ups",
+    "title": "Reel #7",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336436/alif-reels/reel_07.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336436/alif-reels/reel_07.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336436/alif-reels/reel_07.jpg",
@@ -199,17 +211,17 @@
     "duration": 15.206213,
     "width": 720,
     "height": 1280,
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "bridal",
     "tags": [
-      "blouse",
-      "velvet",
-      "backless",
-      "dori",
-      "Party Wear",
-      "Trending"
+      "salwar-suit",
+      "fandy-silk",
+      "haldi-yellow",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LK-5693",
       "ALIF-LC-3302",
@@ -224,7 +236,7 @@
   },
   {
     "id": "reel-8",
-    "title": "Tiered Gharara Stitching with Gotta Patti Precision",
+    "title": "Reel #8",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336462/alif-reels/reel_08.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336462/alif-reels/reel_08.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336462/alif-reels/reel_08.jpg",
@@ -232,15 +244,17 @@
     "duration": 24.981814,
     "width": 720,
     "height": 1280,
-    "category": "trending",
+    "category": "sharara",
     "style": "traditional",
     "tags": [
-      "gharara",
-      "gotta-patti",
-      "tiered",
-      "festive"
+      "sharara",
+      "satin",
+      "wine-maroon",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "gharara",
+    "linked_service": "sharara",
     "linked_products": [
       "ALIF-LC-7882",
       "ALIF-FB-002",
@@ -254,7 +268,7 @@
   },
   {
     "id": "reel-9",
-    "title": "Sequin Net Transparency & Soft Drape Test",
+    "title": "Reel #9",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336474/alif-reels/reel_09.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336474/alif-reels/reel_09.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336474/alif-reels/reel_09.jpg",
@@ -262,15 +276,19 @@
     "duration": 18.108707,
     "width": 720,
     "height": 1280,
-    "category": "fabric",
+    "category": "salwar-suit",
     "style": "festive",
     "tags": [
-      "fabric",
-      "sequin",
-      "net",
-      "sheer"
+      "salwar-suit",
+      "fandy-silk",
+      "wine-maroon",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "gown",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-005",
       "ALIF-FB-006",
@@ -286,7 +304,7 @@
   },
   {
     "id": "reel-10",
-    "title": "Alia Cut Georgette Kurti Neckline Perfection",
+    "title": "Reel #10",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336419/alif-reels/reel_10.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336419/alif-reels/reel_10.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336419/alif-reels/reel_10.jpg",
@@ -294,15 +312,17 @@
     "duration": 7.264989,
     "width": 720,
     "height": 1280,
-    "category": "kurti-top",
+    "category": "salwar-suit",
     "style": "contemporary",
     "tags": [
-      "kurti",
-      "alia-cut",
-      "neckline",
-      "v-neck"
+      "salwar-suit",
+      "tissue-silk",
+      "champagne-gold",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "kurti-top",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-018",
       "ALIF-LC-665c",
@@ -315,7 +335,7 @@
   },
   {
     "id": "reel-11",
-    "title": "Princess Cut Designer Blouse with Pearl Border",
+    "title": "Reel #11",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336444/alif-reels/reel_11.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336444/alif-reels/reel_11.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336444/alif-reels/reel_11.jpg",
@@ -323,14 +343,17 @@
     "duration": 14.161315,
     "width": 720,
     "height": 1280,
-    "category": "trending",
+    "category": "salwar-suit",
     "style": "festive",
     "tags": [
-      "pearl",
-      "minimalist",
-      "Party Wear"
+      "salwar-suit",
+      "tissue-silk",
+      "champagne-gold",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LC-9263",
       "ALIF-LK-7521",
@@ -343,7 +366,7 @@
   },
   {
     "id": "reel-12",
-    "title": "Straight Cut Cigarette Pant Suit Ensemble",
+    "title": "Reel #12",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336458/alif-reels/reel_12.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336458/alif-reels/reel_12.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336458/alif-reels/reel_12.jpg",
@@ -355,9 +378,13 @@
     "style": "minimalist",
     "tags": [
       "salwar-suit",
-      "pant-suit",
-      "straight-cut",
-      "formal"
+      "fandy-silk",
+      "wine-maroon",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
     "linked_service": "salwar-suit",
     "linked_products": [
@@ -376,7 +403,7 @@
   },
   {
     "id": "reel-13",
-    "title": "Double Can-Can Layering for Extreme Lehenga Volume",
+    "title": "Reel #13",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336453/alif-reels/reel_13.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336453/alif-reels/reel_13.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336453/alif-reels/reel_13.jpg",
@@ -384,15 +411,20 @@
     "duration": 16.90127,
     "width": 720,
     "height": 1280,
-    "category": "lehenga",
+    "category": "salwar-suit",
     "style": "bridal",
     "tags": [
-      "lehenga",
-      "can-can",
-      "volume",
-      "structure"
+      "salwar-suit",
+      "fandy-silk",
+      "dusty-rose",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set",
+      "designer-border"
     ],
-    "linked_service": "lehenga",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-TM-004",
       "ALIF-FB-001",
@@ -408,7 +440,7 @@
   },
   {
     "id": "reel-14",
-    "title": "Fandy Silk Draping Feel & Soft Crepe Texture",
+    "title": "Reel #14",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336472/alif-reels/reel_14.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336472/alif-reels/reel_14.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336472/alif-reels/reel_14.jpg",
@@ -416,13 +448,15 @@
     "duration": 23.077778,
     "width": 720,
     "height": 1280,
-    "category": "fabric",
+    "category": "salwar-suit",
     "style": "festive",
     "tags": [
-      "fabric",
-      "fandy-silk",
-      "soft",
-      "fluid"
+      "salwar-suit",
+      "tissue-silk",
+      "champagne-gold",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
     "linked_service": "salwar-suit",
     "linked_products": [
@@ -438,7 +472,7 @@
   },
   {
     "id": "reel-15",
-    "title": "Puff Sleeve Organza Blouse with Zari Cuffs",
+    "title": "Reel #15",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336480/alif-reels/reel_15.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336480/alif-reels/reel_15.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336480/alif-reels/reel_15.jpg",
@@ -446,15 +480,17 @@
     "duration": 19.826984,
     "width": 720,
     "height": 1280,
-    "category": "blouse",
+    "category": "salwar-suit",
     "style": "contemporary",
     "tags": [
-      "blouse",
-      "organza",
-      "puff-sleeve",
-      "cuff"
+      "salwar-suit",
+      "fandy-silk",
+      "pearl-ivory",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LC-5472",
       "ALIF-FB-040",
@@ -468,7 +504,7 @@
   },
   {
     "id": "reel-16",
-    "title": "Pleated Georgette Sharara with Delicate Mirror Border",
+    "title": "Reel #16",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336475/alif-reels/reel_16.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336475/alif-reels/reel_16.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336475/alif-reels/reel_16.jpg",
@@ -476,15 +512,19 @@
     "duration": 35.871973,
     "width": 720,
     "height": 1280,
-    "category": "sharara",
+    "category": "salwar-suit",
     "style": "festive",
     "tags": [
-      "sharara",
-      "georgette",
-      "mirror-work",
-      "pleats"
+      "salwar-suit",
+      "fandy-silk",
+      "wine",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "sharara",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LC-9263",
       "ALIF-FB-004",
@@ -498,7 +538,7 @@
   },
   {
     "id": "reel-17",
-    "title": "32-Kali Pure Chiffon Umbrella Flare Anarkali",
+    "title": "Reel #17",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336439/alif-reels/reel_17.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336439/alif-reels/reel_17.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336439/alif-reels/reel_17.jpg",
@@ -506,15 +546,19 @@
     "duration": 14.556054,
     "width": 720,
     "height": 1280,
-    "category": "anarkali",
+    "category": "salwar-suit",
     "style": "festive",
     "tags": [
-      "anarkali",
-      "chiffon",
-      "kalidar",
-      "umbrella-flare"
+      "salwar-suit",
+      "moss-crepe",
+      "teal-green",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "anarkali",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-022",
       "ALIF-DP-003",
@@ -529,7 +573,7 @@
   },
   {
     "id": "reel-18",
-    "title": "Precision Piping & Armhole Fitting Demonstration",
+    "title": "Reel #18",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336453/alif-reels/reel_18.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336453/alif-reels/reel_18.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336453/alif-reels/reel_18.jpg",
@@ -537,15 +581,19 @@
     "duration": 11.119501,
     "width": 720,
     "height": 1280,
-    "category": "finishing",
+    "category": "salwar-suit",
     "style": "traditional",
     "tags": [
-      "finishing",
-      "piping",
-      "fitting",
-      "tailoring"
+      "salwar-suit",
+      "fandy-silk",
+      "haldi-yellow",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-TM-001",
       "ALIF-TM-002",
@@ -560,7 +608,7 @@
   },
   {
     "id": "reel-19",
-    "title": "Nayra Cut Georgette Kurti with Side Slit Gathers",
+    "title": "Reel #19",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336457/alif-reels/reel_19.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336457/alif-reels/reel_19.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336457/alif-reels/reel_19.jpg",
@@ -571,10 +619,13 @@
     "category": "kurti-top",
     "style": "contemporary",
     "tags": [
-      "kurti",
-      "nayra-cut",
-      "gathers",
-      "georgette"
+      "kurti-top",
+      "tissue-silk",
+      "champagne-gold",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "designer-border"
     ],
     "linked_service": "kurti-top",
     "linked_products": [
@@ -589,7 +640,7 @@
   },
   {
     "id": "reel-20",
-    "title": "Indo-Western Drape Evening Gown with Cape Sleeves",
+    "title": "Reel #20",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336446/alif-reels/reel_20.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336446/alif-reels/reel_20.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336446/alif-reels/reel_20.jpg",
@@ -597,15 +648,19 @@
     "duration": 18.433787,
     "width": 720,
     "height": 1280,
-    "category": "gown",
+    "category": "salwar-suit",
     "style": "contemporary",
     "tags": [
-      "gown",
-      "indo-western",
-      "cape-sleeve",
-      "evening"
+      "salwar-suit",
+      "georgette",
+      "wine-maroon",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "gown",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-007",
       "ALIF-LC-4997",
@@ -619,7 +674,7 @@
   },
   {
     "id": "reel-21",
-    "title": "Sabyasachi Sweetheart Neckline Blouse Fitting",
+    "title": "Reel #21",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336419/alif-reels/reel_21.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336419/alif-reels/reel_21.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336419/alif-reels/reel_21.jpg",
@@ -627,15 +682,17 @@
     "duration": 11.4678,
     "width": 720,
     "height": 1280,
-    "category": "blouse",
+    "category": "salwar-suit",
     "style": "bridal",
     "tags": [
-      "blouse",
-      "sweetheart-neck",
-      "sabyasachi",
-      "bridal"
+      "salwar-suit",
+      "tissue-silk",
+      "champagne-gold",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LC-1059",
       "ALIF-LK-3883",
@@ -648,7 +705,7 @@
   },
   {
     "id": "reel-22",
-    "title": "Classic Patiala Salwar Volume & Pleating Precision",
+    "title": "Reel #22",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336488/alif-reels/reel_22.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336488/alif-reels/reel_22.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336488/alif-reels/reel_22.jpg",
@@ -660,9 +717,13 @@
     "style": "traditional",
     "tags": [
       "salwar-suit",
-      "patiala",
-      "pleats",
-      "punjabi"
+      "moss-crepe",
+      "wine-maroon",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
     "linked_service": "salwar-suit",
     "linked_products": [
@@ -678,7 +739,7 @@
   },
   {
     "id": "reel-23",
-    "title": "Bridal Raw Silk Kalidar Lehenga with Gold Zardozi",
+    "title": "Reel #23",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336458/alif-reels/reel_23.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336458/alif-reels/reel_23.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336458/alif-reels/reel_23.jpg",
@@ -686,15 +747,19 @@
     "duration": 20.268163,
     "width": 720,
     "height": 1280,
-    "category": "lehenga",
+    "category": "salwar-suit",
     "style": "bridal",
     "tags": [
-      "lehenga",
-      "raw-silk",
-      "zardozi",
-      "gold"
+      "salwar-suit",
+      "fandy-silk",
+      "sunset-orange",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "lehenga",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LC-1469",
       "ALIF-LK-4814",
@@ -709,7 +774,7 @@
   },
   {
     "id": "reel-24",
-    "title": "Scallop Cutwork Border Dupatta Styling Guide",
+    "title": "Reel #24",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336427/alif-reels/reel_24.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336427/alif-reels/reel_24.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336427/alif-reels/reel_24.jpg",
@@ -717,15 +782,16 @@
     "duration": 11.351701,
     "width": 720,
     "height": 1280,
-    "category": "dupatta",
+    "category": "coord-set",
     "style": "festive",
     "tags": [
-      "dupatta",
-      "scallop",
-      "styling",
-      "drape"
+      "coord-set",
+      "satin",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "salwar-suit",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-DP-001",
       "ALIF-DP-005",
@@ -737,7 +803,7 @@
   },
   {
     "id": "reel-25",
-    "title": "High Collar Front Slit Designer Blouse",
+    "title": "Reel #25",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336477/alif-reels/reel_25.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336477/alif-reels/reel_25.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336477/alif-reels/reel_25.jpg",
@@ -745,15 +811,19 @@
     "duration": 26.028163,
     "width": 720,
     "height": 1280,
-    "category": "blouse",
+    "category": "salwar-suit",
     "style": "contemporary",
     "tags": [
-      "blouse",
-      "collar",
-      "front-slit",
-      "modern"
+      "salwar-suit",
+      "fandy-silk",
+      "terracotta-rust",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LC-9149",
       "ALIF-FB-045",
@@ -768,7 +838,7 @@
   },
   {
     "id": "reel-26",
-    "title": "Handmade Potli Buttons & Concealed Placket Stitching",
+    "title": "Reel #26",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336474/alif-reels/reel_26.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336474/alif-reels/reel_26.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336474/alif-reels/reel_26.jpg",
@@ -776,13 +846,16 @@
     "duration": 22.892018,
     "width": 720,
     "height": 1280,
-    "category": "finishing",
+    "category": "kurti-top",
     "style": "traditional",
     "tags": [
-      "finishing",
-      "potli-buttons",
-      "placket",
-      "craftsmanship"
+      "kurti-top",
+      "fandy-silk",
+      "pearl-ivory",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "designer-border"
     ],
     "linked_service": "kurti-top",
     "linked_products": [
@@ -797,7 +870,7 @@
   },
   {
     "id": "reel-27",
-    "title": "Pakistani Lawn Suit with Lace Inset Sleeves",
+    "title": "Reel #27",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336445/alif-reels/reel_27.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336445/alif-reels/reel_27.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336445/alif-reels/reel_27.jpg",
@@ -809,9 +882,13 @@
     "style": "contemporary",
     "tags": [
       "salwar-suit",
-      "lawn",
-      "lace-insets",
-      "pakistani"
+      "fandy-silk",
+      "dusty-rose",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
     "linked_service": "salwar-suit",
     "linked_products": [
@@ -828,7 +905,7 @@
   },
   {
     "id": "reel-28",
-    "title": "Haldi Ochre Tiered Kalidar Anarkali Gown",
+    "title": "Reel #28",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336477/alif-reels/reel_28.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336477/alif-reels/reel_28.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336477/alif-reels/reel_28.jpg",
@@ -836,15 +913,17 @@
     "duration": 30.299184,
     "width": 720,
     "height": 1280,
-    "category": "anarkali",
+    "category": "salwar-suit",
     "style": "festive",
     "tags": [
-      "anarkali",
-      "haldi",
-      "tiered",
-      "yellow"
+      "salwar-suit",
+      "fandy-silk",
+      "rani-pink",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "anarkali",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-016",
       "ALIF-DP-006",
@@ -857,7 +936,7 @@
   },
   {
     "id": "reel-29",
-    "title": "Mirror Work Garba Special Navratri Lehenga",
+    "title": "Reel #29",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336471/alif-reels/reel_29.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336471/alif-reels/reel_29.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336471/alif-reels/reel_29.jpg",
@@ -865,15 +944,17 @@
     "duration": 27.350249,
     "width": 720,
     "height": 1280,
-    "category": "lehenga",
+    "category": "kurti-top",
     "style": "festive",
     "tags": [
-      "lehenga",
-      "mirror-work",
-      "navratri",
-      "flared"
+      "kurti-top",
+      "fandy-silk",
+      "aqua-turquoise",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "lehenga",
+    "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-LC-9263",
       "ALIF-LK-8725",
@@ -885,7 +966,7 @@
   },
   {
     "id": "reel-30",
-    "title": "Pure Tissue Silk Fluidity & Golden Luster",
+    "title": "Reel #30",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336442/alif-reels/reel_30.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336442/alif-reels/reel_30.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336442/alif-reels/reel_30.jpg",
@@ -893,15 +974,19 @@
     "duration": 15.182993,
     "width": 720,
     "height": 1280,
-    "category": "fabric",
+    "category": "salwar-suit",
     "style": "traditional",
     "tags": [
-      "fabric",
-      "tissue-silk",
-      "golden",
-      "sheen"
+      "salwar-suit",
+      "fandy-silk",
+      "haldi-yellow",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-047",
       "ALIF-FB-048",
@@ -916,7 +1001,7 @@
   },
   {
     "id": "reel-31",
-    "title": "Boat Neckline Blouse with Keyhole Back Detail",
+    "title": "Reel #31",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336459/alif-reels/reel_31.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336459/alif-reels/reel_31.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336459/alif-reels/reel_31.jpg",
@@ -924,15 +1009,19 @@
     "duration": 23.054558,
     "width": 720,
     "height": 1280,
-    "category": "fancy",
+    "category": "salwar-suit",
     "style": "minimalist",
     "tags": [
-      "blouse",
-      "boat-neck",
-      "keyhole",
-      "minimalist"
+      "salwar-suit",
+      "fandy-silk",
+      "dusty-rose",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LC-7579",
       "ALIF-LK-7201",
@@ -947,7 +1036,7 @@
   },
   {
     "id": "reel-32",
-    "title": "Modern Indo-Western Co-ord Set with Belt Accent",
+    "title": "Reel #32",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336445/alif-reels/reel_32.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336445/alif-reels/reel_32.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336445/alif-reels/reel_32.jpg",
@@ -955,15 +1044,19 @@
     "duration": 14.904354,
     "width": 720,
     "height": 1280,
-    "category": "coord-set",
+    "category": "salwar-suit",
     "style": "contemporary",
     "tags": [
-      "coord-set",
-      "indo-western",
-      "belt",
-      "modern"
+      "salwar-suit",
+      "fandy-silk",
+      "wine-maroon",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "coord-set",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-014",
       "ALIF-LC-665c",
@@ -978,7 +1071,7 @@
   },
   {
     "id": "reel-33",
-    "title": "Velvet Winter Suit with Zari Neck Panel",
+    "title": "Reel #33",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336475/alif-reels/reel_33.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336475/alif-reels/reel_33.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336475/alif-reels/reel_33.jpg",
@@ -990,9 +1083,11 @@
     "style": "festive",
     "tags": [
       "salwar-suit",
-      "velvet",
-      "winter",
-      "zari"
+      "fandy-silk",
+      "rani-pink",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
     "linked_service": "salwar-suit",
     "linked_products": [
@@ -1007,7 +1102,7 @@
   },
   {
     "id": "reel-34",
-    "title": "Peplum Style Kurti with Flared Georgette Sharara",
+    "title": "Reel #34",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336414/alif-reels/reel_34.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336414/alif-reels/reel_34.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336414/alif-reels/reel_34.jpg",
@@ -1015,15 +1110,17 @@
     "duration": 5.825351,
     "width": 720,
     "height": 1280,
-    "category": "sharara",
+    "category": "kurti-top",
     "style": "festive",
     "tags": [
-      "sharara",
-      "peplum",
-      "georgette",
-      "flared"
+      "kurti-top",
+      "fandy-silk",
+      "pearl-ivory",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "sharara",
+    "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-FB-009",
       "ALIF-LC-5472",
@@ -1035,7 +1132,7 @@
   },
   {
     "id": "reel-35",
-    "title": "Backless Bridal Blouse with Pearl Latkan Strands",
+    "title": "Reel #35",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336461/alif-reels/reel_35.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792336461/alif-reels/reel_35.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792336461/alif-reels/reel_35.jpg",
@@ -1043,15 +1140,17 @@
     "duration": 19.641224,
     "width": 720,
     "height": 1280,
-    "category": "blouse",
+    "category": "salwar-suit",
     "style": "bridal",
     "tags": [
-      "blouse",
-      "backless",
-      "pearl",
-      "bridal-latkan"
+      "salwar-suit",
+      "fandy-silk",
+      "rani-pink",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LK-4814",
       "ALIF-LC-9263",
@@ -1064,7 +1163,7 @@
   },
   {
     "id": "reel-36",
-    "title": "Invisible Saree Fall & Pico Precision Sewing",
+    "title": "Reel #36",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340389/alif-reels/reel_36.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340389/alif-reels/reel_36.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340389/alif-reels/reel_36.jpg",
@@ -1073,15 +1172,18 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (10).mp4",
-    "category": "finishing",
+    "category": "salwar-suit",
     "style": "traditional",
     "tags": [
-      "finishing",
-      "saree-fall",
-      "pico",
-      "hemming"
+      "salwar-suit",
+      "georgette",
+      "pearl-white",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "designer-border"
     ],
-    "linked_service": "saree-fall-pico",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-TM-010",
       "ALIF-TM-011",
@@ -1095,7 +1197,7 @@
   },
   {
     "id": "reel-37",
-    "title": "A-Line Embroidered Kurti with Contrast Piping",
+    "title": "Reel #37",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340399/alif-reels/reel_37.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340399/alif-reels/reel_37.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340399/alif-reels/reel_37.jpg",
@@ -1104,15 +1206,20 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (11).mp4",
-    "category": "kurti-top",
+    "category": "salwar-suit",
     "style": "minimalist",
     "tags": [
-      "kurti",
-      "a-line",
-      "piping",
-      "contrast"
+      "salwar-suit",
+      "fandy-silk",
+      "wine",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set",
+      "designer-border"
     ],
-    "linked_service": "kurti-top",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-026",
       "ALIF-LC-5038",
@@ -1127,7 +1234,7 @@
   },
   {
     "id": "reel-38",
-    "title": "Corset Style Boned Evening Gown Construction",
+    "title": "Reel #38",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340405/alif-reels/reel_38.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340405/alif-reels/reel_38.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340405/alif-reels/reel_38.jpg",
@@ -1136,15 +1243,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (12).mp4",
-    "category": "gown",
+    "category": "coord-set",
     "style": "contemporary",
     "tags": [
-      "gown",
-      "corset",
-      "boning",
-      "evening"
+      "coord-set",
+      "fandy-silk",
+      "pearl-ivory",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "gown",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-FB-008",
       "ALIF-LC-4997",
@@ -1158,7 +1267,7 @@
   },
   {
     "id": "reel-39",
-    "title": "Emerald Green Floral Sequin Kali Cutting",
+    "title": "Reel #39",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340407/alif-reels/reel_39.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340407/alif-reels/reel_39.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340407/alif-reels/reel_39.jpg",
@@ -1167,15 +1276,19 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (13).mp4",
-    "category": "lehenga",
+    "category": "salwar-suit",
     "style": "festive",
     "tags": [
-      "lehenga",
-      "emerald-green",
-      "sequin",
-      "kali-cutting"
+      "salwar-suit",
+      "fandy-silk",
+      "wine",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "lehenga",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-006",
       "ALIF-LC-1059",
@@ -1189,7 +1302,7 @@
   },
   {
     "id": "reel-40",
-    "title": "Maggam Work Heavy Embroidered Bridal Blouse",
+    "title": "Reel #40",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340436/alif-reels/reel_40.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340436/alif-reels/reel_40.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340436/alif-reels/reel_40.jpg",
@@ -1198,15 +1311,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (14).mp4",
-    "category": "blouse",
+    "category": "salwar-suit",
     "style": "bridal",
     "tags": [
-      "blouse",
-      "maggam-work",
-      "zardozi",
-      "heavy-embroidery"
+      "salwar-suit",
+      "tissue-silk",
+      "champagne-gold",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-LC-1059",
       "ALIF-LK-5693",
@@ -1219,7 +1334,7 @@
   },
   {
     "id": "reel-41",
-    "title": "Angrakha Style Festive Suit with Tassel Ties",
+    "title": "Reel #41",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340453/alif-reels/reel_41.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340453/alif-reels/reel_41.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340453/alif-reels/reel_41.jpg",
@@ -1234,7 +1349,9 @@
       "salwar-suit",
       "angrakha",
       "tassel",
-      "festive"
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
     "linked_service": "salwar-suit",
     "linked_products": [
@@ -1244,7 +1361,7 @@
   },
   {
     "id": "reel-42",
-    "title": "Regal Navy Blue Zari Jaal Kalidar Anarkali",
+    "title": "Reel #42",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340476/alif-reels/reel_42.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340476/alif-reels/reel_42.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340476/alif-reels/reel_42.jpg",
@@ -1253,15 +1370,19 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (16).mp4",
-    "category": "anarkali",
+    "category": "salwar-suit",
     "style": "bridal",
     "tags": [
-      "anarkali",
-      "navy-blue",
-      "zari-jaal",
-      "regal"
+      "salwar-suit",
+      "satin",
+      "wine-maroon",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "anarkali",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-021",
       "ALIF-DP-005",
@@ -1275,7 +1396,7 @@
   },
   {
     "id": "reel-43",
-    "title": "Tiered Georgette Sharara Hem Movement Test",
+    "title": "Reel #43",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340539/alif-reels/reel_43.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340539/alif-reels/reel_43.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340539/alif-reels/reel_43.jpg",
@@ -1284,15 +1405,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (17).mp4",
-    "category": "sharara",
+    "category": "salwar-suit",
     "style": "festive",
     "tags": [
-      "sharara",
-      "tiered",
+      "salwar-suit",
       "georgette",
-      "movement"
+      "wine",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "sharara",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-004",
       "ALIF-LC-7882",
@@ -1305,7 +1428,7 @@
   },
   {
     "id": "reel-44",
-    "title": "Square Neck Classic Kurti with Resham Border",
+    "title": "Reel #44",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340554/alif-reels/reel_44.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340554/alif-reels/reel_44.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340554/alif-reels/reel_44.jpg",
@@ -1314,15 +1437,19 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (18).mp4",
-    "category": "kurti-top",
+    "category": "salwar-suit",
     "style": "minimalist",
     "tags": [
-      "kurti",
-      "square-neck",
-      "resham",
-      "classic"
+      "salwar-suit",
+      "georgette",
+      "wine-maroon",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "kurti-top",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-FB-032",
       "ALIF-LC-5300",
@@ -1336,7 +1463,7 @@
   },
   {
     "id": "reel-45",
-    "title": "Halter Neck Designer Blouse with Golden Trim",
+    "title": "Reel #45",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340559/alif-reels/reel_45.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340559/alif-reels/reel_45.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340559/alif-reels/reel_45.jpg",
@@ -1345,15 +1472,16 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (19).mp4",
-    "category": "blouse",
+    "category": "kurti-top",
     "style": "contemporary",
     "tags": [
-      "blouse",
-      "halter-neck",
-      "golden-trim",
-      "glam"
+      "kurti-top",
+      "moss-crepe",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-LC-9149",
       "ALIF-LK-7521",
@@ -1365,7 +1493,7 @@
   },
   {
     "id": "reel-46",
-    "title": "Hand Stitching & Invisible Hemming Mastery",
+    "title": "Reel #46",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340564/alif-reels/reel_46.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340564/alif-reels/reel_46.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340564/alif-reels/reel_46.jpg",
@@ -1374,15 +1502,16 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (21).mp4",
-    "category": "finishing",
+    "category": "kurti-top",
     "style": "traditional",
     "tags": [
-      "finishing",
-      "hand-stitching",
-      "hemming",
-      "artisan"
+      "kurti-top",
+      "moss-crepe",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-TM-001",
       "ALIF-TM-005",
@@ -1394,7 +1523,7 @@
   },
   {
     "id": "reel-47",
-    "title": "Chanderi Silk Formal Suit with Delicate Threadwork",
+    "title": "Reel #47",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340580/alif-reels/reel_47.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340580/alif-reels/reel_47.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340580/alif-reels/reel_47.jpg",
@@ -1403,15 +1532,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (20).mp4",
-    "category": "salwar-suit",
+    "category": "coord-set",
     "style": "minimalist",
     "tags": [
-      "salwar-suit",
-      "chanderi",
-      "threadwork",
-      "formal"
+      "coord-set",
+      "fandy-silk",
+      "rani-pink",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "salwar-suit",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-FB-034",
       "ALIF-DP-002",
@@ -1425,7 +1556,7 @@
   },
   {
     "id": "reel-48",
-    "title": "Pastel Pink Net Anarkali with Soft Flare",
+    "title": "Reel #48",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340586/alif-reels/reel_48.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340586/alif-reels/reel_48.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340586/alif-reels/reel_48.jpg",
@@ -1434,15 +1565,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (22).mp4",
-    "category": "anarkali",
+    "category": "coord-set",
     "style": "contemporary",
     "tags": [
-      "anarkali",
-      "pastel-pink",
-      "net",
-      "flare"
+      "coord-set",
+      "fandy-silk",
+      "soft-pink",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "anarkali",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-FB-005",
       "ALIF-DP-003",
@@ -1455,7 +1588,7 @@
   },
   {
     "id": "reel-49",
-    "title": "Royal Zardozi Waistband Stitching on Heavy Velvet",
+    "title": "Reel #49",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340589/alif-reels/reel_49.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340589/alif-reels/reel_49.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340589/alif-reels/reel_49.jpg",
@@ -1464,15 +1597,16 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (23).mp4",
-    "category": "lehenga",
+    "category": "kurti-top",
     "style": "bridal",
     "tags": [
-      "lehenga",
-      "zardozi",
-      "waistband",
-      "velvet"
+      "kurti-top",
+      "moss-crepe",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "lehenga",
+    "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-LC-1469",
       "ALIF-FB-003",
@@ -1484,7 +1618,7 @@
   },
   {
     "id": "reel-50",
-    "title": "Ruffled Net Party Gown with Structured Yoke",
+    "title": "Reel #50",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340593/alif-reels/reel_50.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340593/alif-reels/reel_50.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340593/alif-reels/reel_50.jpg",
@@ -1493,15 +1627,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (24).mp4",
-    "category": "gown",
+    "category": "coord-set",
     "style": "contemporary",
     "tags": [
-      "gown",
-      "ruffled-net",
-      "party",
-      "structured"
+      "coord-set",
+      "satin",
+      "jet-black",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "gown",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-FB-007",
       "ALIF-LC-4997",
@@ -1513,7 +1649,7 @@
   },
   {
     "id": "reel-51",
-    "title": "Peplum Top Co-ord with Wide Leg Flared Pants",
+    "title": "Reel #51",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340598/alif-reels/reel_51.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340598/alif-reels/reel_51.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340598/alif-reels/reel_51.jpg",
@@ -1526,9 +1662,11 @@
     "style": "contemporary",
     "tags": [
       "coord-set",
-      "peplum",
-      "wide-leg",
-      "flared"
+      "fandy-silk",
+      "soft-pink",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
     "linked_service": "coord-set",
     "linked_products": [
@@ -1543,7 +1681,7 @@
   },
   {
     "id": "reel-52",
-    "title": "Pintuck Pleated Cotton Kurti with Mandarin Collar",
+    "title": "Reel #52",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340600/alif-reels/reel_52.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340600/alif-reels/reel_52.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340600/alif-reels/reel_52.jpg",
@@ -1552,15 +1690,18 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (27).mp4",
-    "category": "kurti-top",
+    "category": "coord-set",
     "style": "minimalist",
     "tags": [
-      "kurti",
-      "pintuck",
-      "cotton",
-      "mandarin-collar"
+      "coord-set",
+      "satin",
+      "butter-yellow",
+      "festive",
+      "boutique",
+      "sahibganj",
+      "designer-border"
     ],
-    "linked_service": "kurti-top",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-FB-031",
       "ALIF-TM-006",
@@ -1573,7 +1714,7 @@
   },
   {
     "id": "reel-53",
-    "title": "Velvet Kali Lehenga Latkan Tassel Assembly",
+    "title": "Reel #53",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340604/alif-reels/reel_53.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340604/alif-reels/reel_53.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340604/alif-reels/reel_53.jpg",
@@ -1582,15 +1723,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (26).mp4",
-    "category": "lehenga",
+    "category": "coord-set",
     "style": "bridal",
     "tags": [
-      "lehenga",
-      "velvet",
-      "tassel",
-      "bridal"
+      "coord-set",
+      "satin",
+      "jet-black",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "lehenga",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-LK-4814",
       "ALIF-LK-5693",
@@ -1602,7 +1745,7 @@
   },
   {
     "id": "reel-54",
-    "title": "Atelier Signature Finishing Touch & Steam Press",
+    "title": "Reel #54",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340610/alif-reels/reel_54.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792340610/alif-reels/reel_54.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792340610/alif-reels/reel_54.jpg",
@@ -1611,15 +1754,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261018 (28).mp4",
-    "category": "finishing",
+    "category": "kurti-top",
     "style": "traditional",
     "tags": [
-      "finishing",
-      "steam-press",
-      "quality-check",
-      "alif-standard"
+      "kurti-top",
+      "tissue-silk",
+      "champagne-gold",
+      "festive",
+      "boutique",
+      "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-TM-001",
       "ALIF-TM-010",
@@ -1631,7 +1776,7 @@
   },
   {
     "id": "reel-55",
-    "title": "Boutique Reel #55",
+    "title": "Reel #55",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483609/alif-reels/reel_55.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483609/alif-reels/reel_55.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483609/alif-reels/reel_55.jpg",
@@ -1640,15 +1785,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019.mp4",
-    "category": "curated-sets",
+    "category": "coord-set",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "coord-set",
+      "satin",
+      "jet-black",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-SET-055",
       "jet-black-plain-satin-fabric"
@@ -1658,7 +1805,7 @@
   },
   {
     "id": "reel-56",
-    "title": "Boutique Reel #56",
+    "title": "Reel #56",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483622/alif-reels/reel_56.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483622/alif-reels/reel_56.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483622/alif-reels/reel_56.jpg",
@@ -1667,15 +1814,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (1).mp4",
-    "category": "curated-sets",
+    "category": "coord-set",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "coord-set",
+      "satin",
+      "jet-black",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-SET-056",
       "jet-black-plain-satin-fabric",
@@ -1686,7 +1835,7 @@
   },
   {
     "id": "reel-57",
-    "title": "Boutique Reel #57",
+    "title": "Reel #57",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483626/alif-reels/reel_57.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483626/alif-reels/reel_57.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483626/alif-reels/reel_57.jpg",
@@ -1695,20 +1844,21 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (2).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
       "new-arrival",
       "boutique",
       "ensemble",
-      "sahibganj"
+      "sahibganj",
+      "salwar-suit"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": []
   },
   {
     "id": "reel-58",
-    "title": "Boutique Reel #58",
+    "title": "Reel #58",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483639/alif-reels/reel_58.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483639/alif-reels/reel_58.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483639/alif-reels/reel_58.jpg",
@@ -1717,15 +1867,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (3).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "salwar-suit",
+      "fandy-silk",
+      "sunshine-yellow",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-SET-058",
       "sunshine-yellow-plain-fandy-silk-fabric",
@@ -1737,7 +1889,7 @@
   },
   {
     "id": "reel-59",
-    "title": "Boutique Reel #59",
+    "title": "Reel #59",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483672/alif-reels/reel_59.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483672/alif-reels/reel_59.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483672/alif-reels/reel_59.jpg",
@@ -1746,15 +1898,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (4).mp4",
-    "category": "curated-sets",
+    "category": "coord-set",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "coord-set",
+      "satin",
+      "butter-yellow",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-SET-059",
       "crimson-red-plain-satin-fabric",
@@ -1768,7 +1922,7 @@
   },
   {
     "id": "reel-60",
-    "title": "Boutique Reel #60",
+    "title": "Reel #60",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483682/alif-reels/reel_60.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483682/alif-reels/reel_60.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483682/alif-reels/reel_60.jpg",
@@ -1777,16 +1931,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (5).mp4",
-    "category": "trending",
+    "category": "coord-set",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "coord-set",
+      "rayon",
+      "crimson-red",
+      "festive",
       "boutique",
-      "ensemble",
-      "sahibganj",
-      "Simple"
+      "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-SET-060",
       "crimson-red-plain-rayon-fabric",
@@ -1797,7 +1952,7 @@
   },
   {
     "id": "reel-61",
-    "title": "Boutique Reel #61",
+    "title": "Reel #61",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483690/alif-reels/reel_61.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483690/alif-reels/reel_61.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483690/alif-reels/reel_61.jpg",
@@ -1806,20 +1961,21 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (6).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
       "new-arrival",
       "boutique",
       "ensemble",
-      "sahibganj"
+      "sahibganj",
+      "salwar-suit"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": []
   },
   {
     "id": "reel-62",
-    "title": "Boutique Reel #62",
+    "title": "Reel #62",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483695/alif-reels/reel_62.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483695/alif-reels/reel_62.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483695/alif-reels/reel_62.jpg",
@@ -1828,20 +1984,21 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (7).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
       "new-arrival",
       "boutique",
       "ensemble",
-      "sahibganj"
+      "sahibganj",
+      "salwar-suit"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": []
   },
   {
     "id": "reel-63",
-    "title": "Boutique Reel #63",
+    "title": "Reel #63",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483701/alif-reels/reel_63.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483701/alif-reels/reel_63.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483701/alif-reels/reel_63.jpg",
@@ -1850,15 +2007,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (8).mp4",
-    "category": "curated-sets",
+    "category": "coord-set",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "coord-set",
+      "satin",
+      "butter-yellow",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-SET-063",
       "butter-yellow-plain-satin-fabric"
@@ -1868,7 +2027,7 @@
   },
   {
     "id": "reel-64",
-    "title": "Boutique Reel #64",
+    "title": "Reel #64",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483706/alif-reels/reel_64.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483706/alif-reels/reel_64.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483706/alif-reels/reel_64.jpg",
@@ -1877,15 +2036,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (9).mp4",
-    "category": "curated-sets",
+    "category": "coord-set",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "coord-set",
+      "satin",
+      "butter-yellow",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-SET-064",
       "butter-yellow-plain-satin-fabric"
@@ -1895,7 +2056,7 @@
   },
   {
     "id": "reel-65",
-    "title": "Boutique Reel #65",
+    "title": "Reel #65",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483711/alif-reels/reel_65.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483711/alif-reels/reel_65.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483711/alif-reels/reel_65.jpg",
@@ -1904,20 +2065,21 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (10).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
       "new-arrival",
       "boutique",
       "ensemble",
-      "sahibganj"
+      "sahibganj",
+      "salwar-suit"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": []
   },
   {
     "id": "reel-66",
-    "title": "Boutique Reel #66",
+    "title": "Reel #66",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483720/alif-reels/reel_66.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483720/alif-reels/reel_66.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483720/alif-reels/reel_66.jpg",
@@ -1926,15 +2088,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (12).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "salwar-suit",
+      "georgette",
+      "wine",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-SET-066",
       "emerald-green-plain-georgette-fabric",
@@ -1946,7 +2110,7 @@
   },
   {
     "id": "reel-67",
-    "title": "Boutique Reel #67",
+    "title": "Reel #67",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483728/alif-reels/reel_67.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483728/alif-reels/reel_67.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483728/alif-reels/reel_67.jpg",
@@ -1955,15 +2119,19 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (13).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "salwar-suit",
+      "fandy-silk",
+      "terracotta-rust",
+      "festive",
       "boutique",
-      "ensemble",
-      "sahibganj"
+      "sahibganj",
+      "with-dupatta",
+      "3-piece-set"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-SET-067",
       "fandy-bottom-fabric-02",
@@ -1976,7 +2144,7 @@
   },
   {
     "id": "reel-68",
-    "title": "Boutique Reel #68",
+    "title": "Reel #68",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483733/alif-reels/reel_68.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483733/alif-reels/reel_68.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483733/alif-reels/reel_68.jpg",
@@ -1985,15 +2153,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (14).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "salwar-suit",
+      "fandy-silk",
+      "rani-pink",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-SET-068",
       "pearl-ivory-plain-fandy-silk-fabric",
@@ -2004,7 +2174,7 @@
   },
   {
     "id": "reel-69",
-    "title": "Boutique Reel #69",
+    "title": "Reel #69",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483743/alif-reels/reel_69.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483743/alif-reels/reel_69.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483743/alif-reels/reel_69.jpg",
@@ -2013,15 +2183,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (15).mp4",
-    "category": "curated-sets",
+    "category": "kurti-top",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "kurti-top",
+      "tissue-silk",
+      "champagne-gold",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-SET-069",
       "champagne-gold-plain-tissue-silk-fabric"
@@ -2031,7 +2203,7 @@
   },
   {
     "id": "reel-70",
-    "title": "Boutique Reel #70",
+    "title": "Reel #70",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483755/alif-reels/reel_70.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483755/alif-reels/reel_70.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483755/alif-reels/reel_70.jpg",
@@ -2040,15 +2212,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (16).mp4",
-    "category": "curated-sets",
+    "category": "coord-set",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "coord-set",
+      "fandy-silk",
+      "pearl-ivory",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-SET-070",
       "pearl-ivory-plain-fandy-silk-fabric",
@@ -2060,7 +2234,7 @@
   },
   {
     "id": "reel-71",
-    "title": "Boutique Reel #71",
+    "title": "Reel #71",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483980/alif-reels/reel_71.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483980/alif-reels/reel_71.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483980/alif-reels/reel_71.jpg",
@@ -2069,15 +2243,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (18).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "salwar-suit",
+      "fandy-silk",
+      "rani-pink",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-SET-071",
       "pearl-white-plain-georgette-fabric",
@@ -2088,7 +2264,7 @@
   },
   {
     "id": "reel-72",
-    "title": "Boutique Reel #72",
+    "title": "Reel #72",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483985/alif-reels/reel_72.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483985/alif-reels/reel_72.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483985/alif-reels/reel_72.jpg",
@@ -2097,15 +2273,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (19).mp4",
-    "category": "curated-sets",
+    "category": "kurti-top",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "kurti-top",
+      "fandy-silk",
+      "rani-pink",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "kurti-top",
     "linked_products": [
       "ALIF-SET-072",
       "rani-pink-plain-fandy-silk-fabric"
@@ -2115,7 +2293,7 @@
   },
   {
     "id": "reel-73",
-    "title": "Boutique Reel #73",
+    "title": "Reel #73",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483987/alif-reels/reel_73.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483987/alif-reels/reel_73.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483987/alif-reels/reel_73.jpg",
@@ -2124,20 +2302,21 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (20).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
       "new-arrival",
       "boutique",
       "ensemble",
-      "sahibganj"
+      "sahibganj",
+      "salwar-suit"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": []
   },
   {
     "id": "reel-74",
-    "title": "Boutique Reel #74",
+    "title": "Reel #74",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483991/alif-reels/reel_74.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483991/alif-reels/reel_74.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483991/alif-reels/reel_74.jpg",
@@ -2146,15 +2325,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (21).mp4",
-    "category": "curated-sets",
+    "category": "coord-set",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "coord-set",
+      "fandy-silk",
+      "soft-pink",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-SET-074",
       "soft-pink-plain-satin-fabric",
@@ -2165,7 +2346,7 @@
   },
   {
     "id": "reel-75",
-    "title": "Boutique Reel #75",
+    "title": "Reel #75",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483995/alif-reels/reel_75.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792483995/alif-reels/reel_75.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792483995/alif-reels/reel_75.jpg",
@@ -2174,15 +2355,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (22).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "salwar-suit",
+      "fandy-silk",
+      "sunshine-yellow",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-SET-075",
       "fandy-top-fabric-12",
@@ -2195,7 +2378,7 @@
   },
   {
     "id": "reel-76",
-    "title": "Boutique Reel #76",
+    "title": "Reel #76",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792484005/alif-reels/reel_76.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792484005/alif-reels/reel_76.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792484005/alif-reels/reel_76.jpg",
@@ -2204,15 +2387,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (23).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "salwar-suit",
+      "fandy-silk",
+      "sunshine-yellow",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-SET-076",
       "fandy-bottom-fabric-03",
@@ -2224,7 +2409,7 @@
   },
   {
     "id": "reel-77",
-    "title": "Boutique Reel #77",
+    "title": "Reel #77",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792484025/alif-reels/reel_77.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792484025/alif-reels/reel_77.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792484025/alif-reels/reel_77.jpg",
@@ -2233,15 +2418,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (24).mp4",
-    "category": "curated-sets",
+    "category": "salwar-suit",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "salwar-suit",
+      "fandy-silk",
+      "rani-pink",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "salwar-suit",
     "linked_products": [
       "ALIF-SET-077",
       "rani-pink-plain-fandy-silk-fabric",
@@ -2252,7 +2439,7 @@
   },
   {
     "id": "reel-78",
-    "title": "Boutique Reel #78",
+    "title": "Reel #78",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792484031/alif-reels/reel_78.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792484031/alif-reels/reel_78.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792484031/alif-reels/reel_78.jpg",
@@ -2261,15 +2448,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (25).mp4",
-    "category": "curated-sets",
+    "category": "sharara",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "sharara",
+      "georgette",
+      "pearl-white",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "sharara",
     "linked_products": [
       "ALIF-SET-078",
       "pearl-white-plain-georgette-fabric"
@@ -2279,7 +2468,7 @@
   },
   {
     "id": "reel-79",
-    "title": "Boutique Reel #79",
+    "title": "Reel #79",
     "video": "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792484064/alif-reels/reel_79.mp4",
     "raw_url": "https://res.cloudinary.com/b4r0p4me/video/upload/v1792484064/alif-reels/reel_79.mp4",
     "poster": "https://res.cloudinary.com/b4r0p4me/video/upload/so_0,f_auto,q_auto,w_480/v1792484064/alif-reels/reel_79.jpg",
@@ -2288,15 +2477,17 @@
     "width": 720,
     "height": 1280,
     "source_file": "downloadmedia-20261019 (17).mp4",
-    "category": "curated-sets",
+    "category": "coord-set",
     "style": "boutique-collection",
     "tags": [
-      "new-arrival",
+      "coord-set",
+      "fandy-silk",
+      "rani-pink",
+      "festive",
       "boutique",
-      "ensemble",
       "sahibganj"
     ],
-    "linked_service": "blouse",
+    "linked_service": "coord-set",
     "linked_products": [
       "ALIF-SET-079",
       "soft-pink-plain-satin-fabric",

@@ -1,5 +1,5 @@
 ---
-title: "Moss Crepe Traditional Set"
+title: "Moss Crepe Kurti Dress Material"
 date: "2026-10-22T08:14:00.778Z"
 layout: "product.liquid"
 tags: "product"
@@ -17,7 +17,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Hand Stitching & Invisible Hemming Mastery\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Multicolor Rolls (Wide Shade Palette)"
 fabric: "Moss Crape"
-ideal_for: "kurti-top, Festive, Party Wear"
+ideal_for: "Bespoke Moss Crepe Kurti Dress Material Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

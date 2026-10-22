@@ -1,5 +1,5 @@
 ---
-title: "Rani Pink Fandy Silk Festive Set"
+title: "Rani Pink Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T08:13:59.821Z"
 layout: "product.liquid"
 tags: "product"
@@ -20,7 +20,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Haldi Ochre Tiered Kalidar Anarkali Gown\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Fuchsia Rani / Hot Pink"
 fabric: "Fandy Silk"
-ideal_for: "kurti-top, Festive, Party Wear"
+ideal_for: "Bespoke Rani Pink Fandy Silk Kurti & Bottom Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

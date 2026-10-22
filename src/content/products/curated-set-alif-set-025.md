@@ -1,5 +1,5 @@
 ---
-title: "Fandy Silk Blouse Set"
+title: "Terracotta Rust Fandy Silk 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:13:59.605Z"
 layout: "product.liquid"
 tags: "product"
@@ -23,10 +23,10 @@ combo_products:
   - id: "moss-crape"
     meters: 4
     unit: "mtr"
-description: "Complete bespoke ensemble featured in our trending video \"High Collar Front Slit Designer Blouse\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
+description: "Complete bespoke ensemble featured in our trending video \"High Collar Front Slit Designer ensemble\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Sunset Orange / Rust"
 fabric: "Fandy Silk"
-ideal_for: "sharara, Festive, Party Wear"
+ideal_for: "Bespoke Terracotta Rust Fandy Silk 3-Piece Salwar Suit Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

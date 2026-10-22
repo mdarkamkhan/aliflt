@@ -1,5 +1,5 @@
 ---
-title: "Champagne Gold Tissue Silk Festive Set"
+title: "Champagne Gold Tissue Silk Kurti & Bottom Set"
 date: "2026-10-22T08:13:58.901Z"
 layout: "product.liquid"
 tags: "product"
@@ -23,7 +23,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Fandy Silk Draping Feel & Soft Crepe Texture\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Champagne Gold"
 fabric: "Tissue Silk"
-ideal_for: "salwar-suit, Festive, Party Wear"
+ideal_for: "Bespoke Champagne Gold Tissue Silk Kurti & Bottom Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

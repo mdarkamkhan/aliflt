@@ -1,5 +1,5 @@
 ---
-title: "Fandy Silk Traditional Set"
+title: "Haldi Yellow Fandy Silk 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:13:59.084Z"
 layout: "product.liquid"
 tags: "product"
@@ -26,7 +26,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Precision Piping & Armhole Fitting Demonstration\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Mustard Gold / Ochre"
 fabric: "Fandy Silk"
-ideal_for: "sharara, Festive, Party Wear"
+ideal_for: "Bespoke Haldi Yellow Fandy Silk 3-Piece Salwar Suit Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

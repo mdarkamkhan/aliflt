@@ -1,5 +1,5 @@
 ---
-title: "Champagne Gold Tissue Silk Bridal Set"
+title: "Champagne Gold Tissue Silk Kurti & Bottom Set"
 date: "2026-10-22T08:13:59.255Z"
 layout: "product.liquid"
 tags: "product"
@@ -17,10 +17,10 @@ combo_products:
   - id: "champagne-gold-plain-tissue-silk-fabric"
     meters: 2
     unit: "mtr"
-description: "Complete bespoke ensemble featured in our trending video \"Sabyasachi Sweetheart Neckline Blouse Fitting\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
+description: "Complete bespoke ensemble featured in our trending video \"Sabyasachi Sweetheart Neckline ensemble Fitting\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Champagne Gold"
 fabric: "Tissue Silk"
-ideal_for: "salwar-suit, Festive, Party Wear"
+ideal_for: "Bespoke Champagne Gold Tissue Silk Kurti & Bottom Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

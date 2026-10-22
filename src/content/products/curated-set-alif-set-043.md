@@ -1,5 +1,5 @@
 ---
-title: "Deep Wine Georgette Festive Set"
+title: "Wine Georgette Kurti & Bottom Set"
 date: "2026-10-22T08:14:00.570Z"
 layout: "product.liquid"
 tags: "product"
@@ -20,7 +20,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Tiered Georgette Sharara Hem Movement Test\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Deep Wine Maroon"
 fabric: "Georgette"
-ideal_for: "sharara, Festive, Party Wear"
+ideal_for: "Bespoke Wine Georgette Kurti & Bottom Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

@@ -1,5 +1,5 @@
 ---
-title: "Pearl Georgette Blouse Set"
+title: "Rani Pink Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T09:12:37.739Z"
 layout: "product.liquid"
 tags: "product"
@@ -20,7 +20,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Boutique Reel #71\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Pearl White"
 fabric: "Georgette"
-ideal_for: "blouse, Festive, Party Wear"
+ideal_for: "Bespoke Rani Pink Fandy Silk Kurti & Bottom Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

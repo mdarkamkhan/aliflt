@@ -1,5 +1,5 @@
 ---
-title: "Fandy Silk Bridal Set"
+title: "Dusty Rose Fandy Silk 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:13:58.858Z"
 layout: "product.liquid"
 tags: "product"
@@ -29,7 +29,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Double Can-Can Layering for Extreme Lehenga Volume\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Mauve / Dusty Rose"
 fabric: "Fandy Silk"
-ideal_for: "sharara, Festive, Party Wear"
+ideal_for: "Bespoke Dusty Rose Fandy Silk 3-Piece Salwar Suit Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

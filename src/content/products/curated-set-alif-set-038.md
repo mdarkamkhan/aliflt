@@ -1,5 +1,5 @@
 ---
-title: "Pearl Fandy Silk Festive Set"
+title: "Pearl Ivory Fandy Silk Co-ord & Tunic Set"
 date: "2026-10-22T08:14:00.616Z"
 layout: "product.liquid"
 tags: "product"
@@ -23,7 +23,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Corset Style Boned Evening Gown Construction\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Pearl Ivory"
 fabric: "Fandy Silk"
-ideal_for: "gown, Festive, Party Wear"
+ideal_for: "Bespoke Pearl Ivory Fandy Silk Co-ord & Tunic Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

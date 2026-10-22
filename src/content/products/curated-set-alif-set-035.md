@@ -1,5 +1,5 @@
 ---
-title: "Fandy Silk Bridal Set"
+title: "Rani Pink Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T08:14:00.207Z"
 layout: "product.liquid"
 tags: "product"
@@ -17,10 +17,10 @@ combo_products:
   - id: "fandy-top-fabric-02"
     meters: 2
     unit: "mtr"
-description: "Complete bespoke ensemble featured in our trending video \"Backless Bridal Blouse with Pearl Latkan Strands\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
+description: "Complete bespoke ensemble featured in our trending video \"Backless Bridal ensemble with Pearl Latkan Strands\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Rani Pink / Magenta"
 fabric: "Fandy Silk"
-ideal_for: "blouse, Festive, Party Wear"
+ideal_for: "Bespoke Rani Pink Fandy Silk Kurti & Bottom Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

@@ -1,5 +1,5 @@
 ---
-title: "Sunshine Yellow Fandy Silk Bridal Set"
+title: "Haldi Yellow Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T09:12:37.776Z"
 layout: "product.liquid"
 tags: "product"
@@ -22,10 +22,10 @@ combo_products:
   - id: "moss-crape"
     meters: 4
     unit: "mtr"
-description: "Complete bespoke ensemble featured in our trending video \"Deep U-Neck Velvet Blouse with Dori Tie-Ups\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
+description: "Complete bespoke ensemble featured in our trending video \"Deep U-Neck Velvet ensemble with Dori Tie-Ups\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Haldi Yellow"
 fabric: "Fandy Silk"
-ideal_for: "blouse, Festive, Party Wear"
+ideal_for: "Bespoke Haldi Yellow Fandy Silk Kurti & Bottom Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

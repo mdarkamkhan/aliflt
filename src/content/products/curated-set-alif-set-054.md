@@ -1,5 +1,5 @@
 ---
-title: "Champagne Gold Tissue Silk Traditional Set"
+title: "Champagne Gold Tissue Silk Kurti Dress Material"
 date: "2026-10-22T08:14:01.250Z"
 layout: "product.liquid"
 tags: "product"
@@ -17,7 +17,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Atelier Signature Finishing Touch & Steam Press\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Champagne Gold"
 fabric: "Tissue Silk"
-ideal_for: "blouse, Festive, Party Wear"
+ideal_for: "Bespoke Champagne Gold Tissue Silk Kurti Dress Material Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

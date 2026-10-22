@@ -1,5 +1,5 @@
 ---
-title: "Moss Crepe Blouse Set"
+title: "Moss Crepe Kurti Dress Material"
 date: "2026-10-22T08:14:00.697Z"
 layout: "product.liquid"
 tags: "product"
@@ -14,10 +14,10 @@ combo_products:
   - id: "moss-crape"
     meters: 4
     unit: "mtr"
-description: "Complete bespoke ensemble featured in our trending video \"Halter Neck Designer Blouse with Golden Trim\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
+description: "Complete bespoke ensemble featured in our trending video \"Halter Neck Designer ensemble with Golden Trim\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Multicolor Rolls (Wide Shade Palette)"
 fabric: "Moss Crape"
-ideal_for: "kurti-top, Festive, Party Wear"
+ideal_for: "Bespoke Moss Crepe Kurti Dress Material Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

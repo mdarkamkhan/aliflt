@@ -1,5 +1,5 @@
 ---
-title: "Rani Pink Fandy Silk Festive Set"
+title: "Rani Pink Fandy Silk Co-ord & Tunic Set"
 date: "2026-10-22T08:14:00.865Z"
 layout: "product.liquid"
 tags: "product"
@@ -23,7 +23,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Chanderi Silk Formal Suit with Delicate Threadwork\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Rani Pink"
 fabric: "Fandy Silk"
-ideal_for: "salwar-suit, Festive, Party Wear"
+ideal_for: "Bespoke Rani Pink Fandy Silk Co-ord & Tunic Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

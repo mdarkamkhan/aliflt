@@ -1,5 +1,5 @@
 ---
-title: "Jet Black Satin Blouse Set"
+title: "Jet Black Satin Co-ord & Tunic Set"
 date: "2026-10-22T08:14:01.298Z"
 layout: "product.liquid"
 tags: "product"
@@ -17,7 +17,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Boutique Reel #55\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Jet Black"
 fabric: "Satin"
-ideal_for: "blouse, Festive, Party Wear"
+ideal_for: "Bespoke Jet Black Satin Co-ord & Tunic Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

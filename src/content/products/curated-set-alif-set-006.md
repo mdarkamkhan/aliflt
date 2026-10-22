@@ -1,5 +1,5 @@
 ---
-title: "Crush Silk Party Wear Set"
+title: "Wine Maroon Moss Crepe Kalidar Anarkali Set"
 date: "2026-10-22T08:18:20.576Z"
 layout: "product.liquid"
 tags: "product"
@@ -25,7 +25,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Floor Length Regal Anarkali Kalidar Silhouette\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Wine Maroon"
 fabric: "Crush Silk"
-ideal_for: "salwar-suit, Festive, Party Wear"
+ideal_for: "Bespoke Wine Maroon Moss Crepe Kalidar Anarkali Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

@@ -1,5 +1,5 @@
 ---
-title: "Emerald Georgette Blouse Set"
+title: "Wine Georgette Kurti & Bottom Set"
 date: "2026-10-22T08:27:09.441Z"
 layout: "product.liquid"
 tags: "product"
@@ -23,7 +23,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Boutique Reel #66\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Emerald Bottle Green"
 fabric: "Georgette"
-ideal_for: "gown, Festive, Party Wear"
+ideal_for: "Bespoke Wine Georgette Kurti & Bottom Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

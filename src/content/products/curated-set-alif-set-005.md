@@ -1,5 +1,5 @@
 ---
-title: "Pearl Fandy Silk Kurti Set"
+title: "Sunset Orange Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T05:27:20.613Z"
 layout: "product.liquid"
 tags: "product"
@@ -26,7 +26,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Pakistani Long Slit Kurti with Scallop Hem\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Sunset Orange / Rust"
 fabric: "Fandy Silk"
-ideal_for: "Designer Kurti Stitching, Festive, Party Wear"
+ideal_for: "Bespoke Sunset Orange Fandy Silk Kurti & Bottom Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---

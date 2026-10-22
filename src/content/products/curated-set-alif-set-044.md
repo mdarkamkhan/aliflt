@@ -1,5 +1,5 @@
 ---
-title: "Emerald Georgette Kurti Set"
+title: "Wine Maroon Georgette 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:14:00.655Z"
 layout: "product.liquid"
 tags: "product"
@@ -23,7 +23,7 @@ combo_products:
 description: "Complete bespoke ensemble featured in our trending video \"Square Neck Classic Kurti with Resham Border\". Includes hand-matched designer fabrics and trims from Alif boutique Sahibganj."
 colour: "Emerald Bottle Green"
 fabric: "Georgette"
-ideal_for: "kurti-top, Festive, Party Wear"
+ideal_for: "Bespoke Wine Maroon Georgette 3-Piece Salwar Suit Set Styling & Tailoring"
 delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---
