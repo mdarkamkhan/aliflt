@@ -3,7 +3,7 @@ title: "Wine Maroon Fandy Silk 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:14:00.080Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/fandy-bottom-fabric-01.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-032.webp"
 price: 2450
 offer_price: 2050
 product_code: "ALIF-SET-032"

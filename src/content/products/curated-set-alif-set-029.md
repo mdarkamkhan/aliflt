@@ -3,7 +3,7 @@ title: "Aqua Turquoise Fandy Silk Kurti Dress Material"
 date: "2026-10-22T08:13:59.918Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/fandy-top-fabric-02.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-029.webp"
 price: 800
 offer_price: 650
 product_code: "ALIF-SET-029"

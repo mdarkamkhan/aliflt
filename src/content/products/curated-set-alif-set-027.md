@@ -3,7 +3,7 @@ title: "Dusty Rose Fandy Silk 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:13:59.784Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/fandy-bottom-fabric-04.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-027.webp"
 price: 2700
 offer_price: 2200
 product_code: "ALIF-SET-027"

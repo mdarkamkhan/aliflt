@@ -3,7 +3,7 @@ title: "Haldi Yellow Fandy Silk 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:13:59.994Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/fandy-top-fabric-05.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-030.webp"
 price: 2000
 offer_price: 1650
 product_code: "ALIF-SET-030"
