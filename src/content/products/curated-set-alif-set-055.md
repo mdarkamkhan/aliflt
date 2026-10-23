@@ -3,7 +3,7 @@ title: "Jet Black Satin Co-ord & Tunic Set"
 date: "2026-10-22T08:14:01.298Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/jet-black-plain-satin-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-055.webp"
 price: 350
 offer_price: 300
 product_code: "ALIF-SET-055"

@@ -3,7 +3,7 @@ title: "Wine Maroon Satin 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:18:20.529Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/crush-silk-dupatta-05.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-042.webp"
 price: 720
 offer_price: 690
 product_code: "ALIF-SET-042"

@@ -3,7 +3,7 @@ title: "Wine Georgette Kurti & Bottom Set"
 date: "2026-10-22T08:14:00.570Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/deep-wine-plain-georgette-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-043.webp"
 price: 800
 offer_price: 650
 product_code: "ALIF-SET-043"
