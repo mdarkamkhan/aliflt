@@ -640,9 +640,22 @@ const comboPayload = isCombo ? {
       <div class="sticky-bar-actions">
         <button 
           type="button" 
+          class="sticky-btn-cart" 
+          id="stickyAddToCartBtn"
+          aria-label="Add to Bag"
+          title="Add to Bag"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </button>
+        <button 
+          type="button" 
           class="sticky-btn-buy" 
           id="stickyBuyNowBtn"
-          aria-label="Buy Now"
+          aria-label="Buy Now on WhatsApp"
         >
           Buy Now
         </button>
@@ -1182,6 +1195,17 @@ const comboPayload = isCombo ? {
         stickyBuyBtn.addEventListener('click', (e) => {
           e.preventDefault();
           mainBuyBtn.click();
+        });
+      }
+
+      // Connect sticky Add to Bag button to primary add to cart action
+      const stickyCartBtn = document.getElementById('stickyAddToCartBtn');
+      const mainCartBtn = document.getElementById('addToCartBtn');
+      if (stickyCartBtn && mainCartBtn && !stickyCartBtn._bound) {
+        stickyCartBtn._bound = true;
+        stickyCartBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          mainCartBtn.click();
         });
       }
 
@@ -2411,7 +2435,30 @@ const comboPayload = isCombo ? {
       .sticky-bar-actions {
         display: flex !important;
         align-items: center !important;
+        gap: 8px !important;
         flex-shrink: 0 !important;
+      }
+
+      .sticky-btn-cart {
+        background: #fbf9f6 !important;
+        color: #111111 !important;
+        border: 1px solid #dcd7ce !important;
+        width: 42px !important;
+        height: 42px !important;
+        border-radius: 4px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        touch-action: manipulation !important;
+      }
+
+      .sticky-btn-cart:active {
+        background: #111111 !important;
+        color: #ffffff !important;
+        border-color: #111111 !important;
+        transform: scale(0.95) !important;
       }
 
       /* Minimalist Haute-Couture Buy Now Button */
@@ -2419,7 +2466,7 @@ const comboPayload = isCombo ? {
         background: #000000 !important;
         color: #ffffff !important;
         border: 1px solid #000000 !important;
-        padding: 12px 24px !important;
+        padding: 12px 20px !important;
         font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
         font-size: 0.78rem !important;
         font-weight: 500 !important;
