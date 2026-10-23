@@ -142,6 +142,10 @@ const reelsList = (reelsData || []).map((r, index) => {
                   </button>
                 </div>
                 <div class="reel-title-divider" aria-hidden="true"></div>
+                <!-- Precision Minimalist Video Progress Bar -->
+                <div class="reel-progress-track" aria-hidden="true">
+                  <div class="reel-progress-fill"></div>
+                </div>
               </div>
 
               <!-- Center Audio & Play/Pause Controller -->
@@ -440,15 +444,21 @@ const reelsList = (reelsData || []).map((r, index) => {
           }
         }
 
-        // Attach telemetry progress handler on active video
+        // Attach telemetry progress handler on active video & real-time progress bar
         if (!video._telemetryBound) {
           video._telemetryBound = true;
+          const progressFill = targetCard.querySelector('.reel-progress-fill');
           video.addEventListener('timeupdate', () => {
+            if (video.duration && progressFill) {
+              const pct = (video.currentTime / video.duration) * 100;
+              progressFill.style.width = pct + '%';
+            }
             if (activeCard === targetCard && activeReelItem) {
               trackWatchProgress(activeReelItem, video.currentTime, video.duration);
             }
           });
           video.addEventListener('ended', () => {
+            if (progressFill) progressFill.style.width = '0%';
             if (activeReelItem) {
               trackReelComplete(activeReelItem);
             }
@@ -990,6 +1000,24 @@ const reelsList = (reelsData || []).map((r, index) => {
       height: 1.5px;
       background: linear-gradient(to right, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.18) 75%, transparent 100%);
       margin-top: 2px;
+    }
+
+    /* Minimalist Video Scrubber Progress Track */
+    .reel-progress-track {
+      width: 100%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .reel-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #ffffff;
+      border-radius: 2px;
+      transition: width 0.1s linear;
     }
 
     /* Center Audio & Play/Pause Controller */
