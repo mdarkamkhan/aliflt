@@ -3,7 +3,7 @@ title: "Sunshine Yellow Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T08:14:02.307Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/fandy-bottom-fabric-03.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-076.webp"
 price: 1650
 offer_price: 1400
 product_code: "ALIF-SET-076"

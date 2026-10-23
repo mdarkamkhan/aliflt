@@ -3,7 +3,7 @@ title: "Moss Crepe Kurti Dress Material"
 date: "2026-10-22T08:14:00.697Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/moss-crape-plain-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-045.webp"
 price: 250
 offer_price: 200
 product_code: "ALIF-SET-045"

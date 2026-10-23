@@ -3,7 +3,7 @@ title: "Rani Pink Fandy Silk Kurti Dress Material"
 date: "2026-10-22T08:14:02.149Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/rani-pink-plain-fandy-silk-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-072.webp"
 price: 800
 offer_price: 650
 product_code: "ALIF-SET-072"

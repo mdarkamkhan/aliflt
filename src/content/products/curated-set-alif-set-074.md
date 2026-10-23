@@ -3,7 +3,7 @@ title: "Soft Pink Fandy Silk Co-ord & Tunic Set"
 date: "2026-10-22T08:14:02.238Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/soft-pink-plain-satin-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-074.webp"
 price: 550
 offer_price: 450
 product_code: "ALIF-SET-074"
