@@ -3,7 +3,7 @@ title: "Champagne Gold Tissue Silk Kurti & Bottom Set"
 date: "2026-10-22T08:30:36.013Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/champagne-gold-plain-tissue-silk-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-010.webp"
 price: 1500
 offer_price: 1250
 product_code: "ALIF-SET-010"

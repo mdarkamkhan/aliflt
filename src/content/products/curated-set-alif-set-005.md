@@ -3,7 +3,7 @@ title: "Sunset Orange Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T05:27:20.613Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/fandy-top-fabric-04.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-005.webp"
 price: 2150
 offer_price: 1790
 product_code: "ALIF-SET-005"

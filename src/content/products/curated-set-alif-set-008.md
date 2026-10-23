@@ -3,7 +3,7 @@ title: "Wine Maroon Satin Tiered Gharara Set"
 date: "2026-10-22T08:30:35.964Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/white-dyed-satin-plain-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-008.webp"
 price: 500
 offer_price: 450
 product_code: "ALIF-SET-008"

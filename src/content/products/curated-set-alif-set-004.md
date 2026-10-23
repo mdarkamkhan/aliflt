@@ -3,7 +3,7 @@ title: "Pearl White Georgette Bridal Lehenga Flare Set"
 date: "2026-10-22T08:34:48.306Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/pearl-white-plain-georgette-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-004.webp"
 price: 650
 offer_price: 550
 product_code: "ALIF-SET-004"

@@ -3,7 +3,7 @@ title: "Haldi Yellow Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T09:12:37.776Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/fandy-top-fabric-09.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-007.webp"
 price: 1900
 product_code: "ALIF-SET-007"
 category: "Curated Sets"

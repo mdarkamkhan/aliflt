@@ -3,7 +3,7 @@ title: "Wine Maroon Moss Crepe Kalidar Anarkali Set"
 date: "2026-10-22T08:18:20.576Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/crush-bottom-fabric-03.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-006.webp"
 price: 2700
 product_code: "ALIF-SET-006"
 category: "Curated Sets"
