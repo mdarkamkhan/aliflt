@@ -2815,10 +2815,10 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
       }
 
       .rc-mini-card {
-        width: 40px;
-        height: 56px; /* 3:4 elegant portrait ratio */
-        min-width: 40px;
-        border-radius: 7px;
+        width: 52px;
+        height: 70px; /* 3:4 elegant portrait ratio */
+        min-width: 52px;
+        border-radius: 8px;
         border: none; /* Outlines removed */
         outline: none;
         overflow: hidden;
@@ -2991,6 +2991,38 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
       @media (max-width: 600px) {
         .trending-reels-section {
           margin: 0 0 80px 0;
+        }
+        .reel-curated-strip {
+          bottom: 12px;
+          left: 8px;
+          right: 8px;
+          padding: 9px 10px;
+          gap: 8px;
+          border-radius: 14px;
+        }
+        .rc-items-row {
+          gap: 7px;
+        }
+        .rc-mini-card {
+          width: 48px;
+          height: 66px;
+          min-width: 48px;
+          border-radius: 7px;
+        }
+        .rc-strip-divider {
+          height: 42px;
+          margin: 0 3px;
+        }
+        .rc-set-tag {
+          font-size: 0.58rem;
+          letter-spacing: 1.2px;
+        }
+        .rc-action-btn {
+          height: 30px;
+          line-height: 30px;
+          padding: 0 11px;
+          font-size: 0.62rem;
+          gap: 5px;
         }
         .reel-minimal-cta {
           padding: 6px 15px;

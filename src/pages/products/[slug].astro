@@ -235,56 +235,62 @@ const comboPayload = isCombo ? {
       <!-- Left Column: Main Image Card & Combo Cards Directly Under It -->
       <div class="product-detail-image">
         <div class="swapper-container product-swapper" id="mainMediaContainer">
-          {isCombo ? (
-            <>
-              {reel_video ? (
-                <video 
-                  id="comboMainVideo"
-                  class="hidden"
-                  src={reel_video} 
-                  poster={image}
-                  loop 
-                  muted 
-                  playsinline 
-                  webkit-playsinline
-                ></video>
-              ) : null}
-              <img 
-                id="comboMainImage"
-                class="active"
-                src={image || '/icons/icon-512x512.png'} 
-                alt={title} 
-              />
-              {reel_video && (
-                <button 
-                  id="toggleReelMediaBtn" 
-                  type="button" 
-                  class="reel-media-toggle-pill"
-                  data-mode="cover"
-                  title="Switch between fabric cover and outfit video"
-                >
-                  <svg class="pill-svg" viewBox="0 0 24 24" width="10" height="10" fill="currentColor">
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
-                  <span class="pill-text">Watch Reel Video</span>
-                </button>
-              )}
-              <button 
-                id="resetToSetBtn" 
-                type="button" 
-                class="reset-to-set-pill" 
-                style="display: none;"
-                title="Back to Full Curated Look"
-              >
-                <svg class="pill-svg" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                  <path d="M3 3v5h5"/>
+          {reel_video ? (
+            <video 
+              id="comboMainVideo"
+              class="hidden"
+              src={reel_video} 
+              poster={image}
+              loop 
+              muted 
+              playsinline 
+              webkit-playsinline
+            ></video>
+          ) : null}
+          <img 
+            id="comboMainImage"
+            class="active"
+            src={image || '/icons/icon-512x512.png'} 
+            alt={title} 
+          />
+          {reel_video && (
+            <button 
+              id="toggleReelMediaBtn" 
+              type="button" 
+              class="reel-media-toggle-pill"
+              data-mode="cover"
+              title="Switch between fabric cover and outfit video"
+              aria-label="Switch between fabric cover and outfit video"
+            >
+              <span class="pill-media-state state-to-video">
+                <svg class="pill-svg icon-play" viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                  <path d="M8 5v14l11-7z"/>
                 </svg>
-                <span class="pill-text">Full Set Look</span>
-              </button>
-            </>
-          ) : (
-            <img class="active" src={image || '/icons/icon-512x512.png'} alt={title} />
+                <span class="pill-text">Watch Video</span>
+              </span>
+              <span class="pill-media-state state-to-cover">
+                <svg class="pill-svg icon-fabric" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <path d="M3 15l5-5 4 4 4-4 5 5"/>
+                </svg>
+                <span class="pill-text">View Cover</span>
+              </span>
+            </button>
+          )}
+          {isCombo && (
+            <button 
+              id="resetToSetBtn" 
+              type="button" 
+              class="reset-to-set-pill" 
+              style="display: none;"
+              title="Back to Full Curated Look"
+            >
+              <svg class="pill-svg" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+              </svg>
+              <span class="pill-text">Full Set Look</span>
+            </button>
           )}
         </div>
 
@@ -747,7 +753,6 @@ const comboPayload = isCombo ? {
             toggleReelBtn.classList.remove('hidden-pill');
             toggleReelBtn.style.display = defaultSet.videoSrc ? 'inline-flex' : 'none';
             toggleReelBtn.setAttribute('data-mode', 'cover');
-            toggleReelBtn.innerHTML = '<svg class="pill-svg" viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="pill-text">Watch Reel Video</span>';
           }
           if (resetBtn) {
             resetBtn.classList.remove('visible');
@@ -1057,31 +1062,6 @@ const comboPayload = isCombo ? {
           resetBtn.addEventListener('click', switchToFullSet);
         }
 
-        if (toggleReelBtn && mainVideo && mainImage) {
-          toggleReelBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const isVideoActive = mainVideo.classList.contains('active');
-            if (isVideoActive) {
-              mainVideo.pause();
-              mainVideo.classList.remove('active');
-              mainVideo.classList.add('hidden');
-              mainImage.classList.remove('hidden');
-              mainImage.classList.add('active');
-              toggleReelBtn.setAttribute('data-mode', 'cover');
-              toggleReelBtn.innerHTML = '<svg class="pill-svg" viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="pill-text">Watch Reel Video</span>';
-            } else {
-              mainImage.classList.remove('active');
-              mainImage.classList.add('hidden');
-              mainVideo.classList.remove('hidden');
-              mainVideo.classList.add('active');
-              mainVideo.play().catch(() => {});
-              toggleReelBtn.setAttribute('data-mode', 'video');
-              toggleReelBtn.innerHTML = '<svg class="pill-svg" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 4-4 5 5"/></svg><span class="pill-text">View Fabric Cover</span>';
-            }
-          });
-        }
-
         items.forEach((item, idx) => {
           const card = document.getElementById(`card-item-${idx}`);
           if (card) {
@@ -1127,8 +1107,55 @@ const comboPayload = isCombo ? {
           if (url) window.open(url, '_blank');
         });
       }
-      }
     }
+
+    // Global Media Switcher Pill (Watch Outfit Video <-> View Fabric Cover)
+    const toggleReelBtn = document.getElementById('toggleReelMediaBtn');
+    const mainVideo = document.getElementById('comboMainVideo');
+    const mainImage = document.getElementById('comboMainImage');
+
+    if (toggleReelBtn && mainVideo && mainImage && !toggleReelBtn._bound) {
+      toggleReelBtn._bound = true;
+      toggleReelBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const isCurrentlyVideo = !mainVideo.classList.contains('hidden');
+
+        if (isCurrentlyVideo) {
+          // Switch to Fabric Cover image
+          try {
+            mainVideo.pause();
+          } catch (err) {}
+          mainVideo.classList.remove('active');
+          mainVideo.classList.add('hidden');
+
+          mainImage.classList.remove('hidden');
+          mainImage.classList.add('active');
+
+          toggleReelBtn.setAttribute('data-mode', 'cover');
+        } else {
+          // Switch to Reel Video
+          mainImage.classList.remove('active');
+          mainImage.classList.add('hidden');
+
+          mainVideo.classList.remove('hidden');
+          mainVideo.classList.add('active');
+
+          // Ensure video is unmuted & plays on user gesture
+          mainVideo.muted = true; // start muted for zero-rejection policy on iOS/Android
+          const playPromise = mainVideo.play();
+          if (playPromise !== undefined) {
+            playPromise.catch((err) => {
+              console.warn('Video auto-playback blocked or awaiting tap:', err);
+            });
+          }
+
+          toggleReelBtn.setAttribute('data-mode', 'video');
+        }
+      });
+    }
+  }
 
     function updateCartBadges() {
       const cart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
@@ -1312,58 +1339,80 @@ const comboPayload = isCombo ? {
       z-index: 2 !important;
     }
 
-    /* Minimalist Floating Media Switcher (Matches alif. Couture Aesthetic) */
+    /* Luxury alif. Floating Media Switcher (Watch Video <-> View Cover) */
     .reel-media-toggle-pill {
       position: absolute !important;
-      bottom: 12px !important;
-      right: 12px !important;
+      bottom: 14px !important;
+      right: 14px !important;
       z-index: 10 !important;
-      display: inline-flex;
+      display: inline-flex !important;
       align-items: center !important;
-      gap: 7px !important;
-      background: rgba(255, 255, 255, 0.94) !important;
-      backdrop-filter: blur(12px) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
-      color: #111111 !important;
-      padding: 6px 12px !important;
-      border-radius: 4px !important;
-      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      justify-content: center !important;
+      background: rgba(18, 16, 22, 0.72) !important;
+      backdrop-filter: blur(16px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+      color: #ffffff !important;
+      padding: 8px 14px !important;
+      border-radius: 999px !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
       font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-      font-size: 0.64rem !important;
-      font-weight: 500 !important;
+      font-size: 0.68rem !important;
+      font-weight: 600 !important;
       letter-spacing: 0.8px !important;
       text-transform: uppercase !important;
       cursor: pointer !important;
       transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
       touch-action: manipulation !important;
+      min-height: 34px !important;
     }
 
     .reel-media-toggle-pill.hidden-pill {
       display: none !important;
     }
 
-    .reel-media-toggle-pill:hover {
-      background: #000000 !important;
-      color: #ffffff !important;
-      border-color: #000000 !important;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    .reel-media-toggle-pill .pill-media-state {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
     }
 
+    /* By default (mode="cover"), show "Watch Video", hide "View Cover" */
+    .reel-media-toggle-pill[data-mode="cover"] .state-to-video {
+      display: inline-flex !important;
+    }
+    .reel-media-toggle-pill[data-mode="cover"] .state-to-cover {
+      display: none !important;
+    }
+
+    /* When playing video (mode="video"), show "View Cover", hide "Watch Video" */
     .reel-media-toggle-pill[data-mode="video"] {
-      background: rgba(18, 18, 18, 0.85) !important;
-      color: #ffffff !important;
-      border-color: rgba(255, 255, 255, 0.25) !important;
+      background: rgba(255, 255, 255, 0.92) !important;
+      color: #111111 !important;
+      border-color: rgba(255, 255, 255, 0.95) !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+    }
+    .reel-media-toggle-pill[data-mode="video"] .state-to-video {
+      display: none !important;
+    }
+    .reel-media-toggle-pill[data-mode="video"] .state-to-cover {
+      display: inline-flex !important;
+    }
+
+    .reel-media-toggle-pill:hover {
+      transform: translateY(-2px) scale(1.02) !important;
+      border-color: rgba(255, 255, 255, 0.45) !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45) !important;
     }
 
     .reel-media-toggle-pill[data-mode="video"]:hover {
-      background: #000000 !important;
-      border-color: #ffffff !important;
+      background: #ffffff !important;
+      color: #000000 !important;
     }
 
     .reel-media-toggle-pill .pill-svg {
-      width: 10px !important;
-      height: 10px !important;
+      width: 12px !important;
+      height: 12px !important;
       flex-shrink: 0 !important;
       display: block !important;
     }
@@ -1371,6 +1420,7 @@ const comboPayload = isCombo ? {
     .reel-media-toggle-pill .pill-text {
       line-height: 1 !important;
       display: inline-block !important;
+      white-space: nowrap !important;
     }
 
     /* Refined, Luxury Editorial Title & Pricing (Tokens Bound) */
