@@ -3,7 +3,7 @@ title: "Crimson Red Rayon Co-ord & Tunic Set"
 date: "2026-10-22T10:14:22.052Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/crimson-red-plain-rayon-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-060.webp"
 price: 220
 product_code: "ALIF-SET-060"
 category: "Curated Sets"

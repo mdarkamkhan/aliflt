@@ -3,7 +3,7 @@ title: "Butter Yellow Satin Co-ord & Tunic Set"
 date: "2026-10-22T08:14:01.676Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/butter-yellow-plain-satin-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-064.webp"
 price: 350
 offer_price: 300
 product_code: "ALIF-SET-064"
