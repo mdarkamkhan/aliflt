@@ -3,7 +3,7 @@ title: "Wine Maroon Georgette 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:27:09.298Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/crush-top-fabric-01.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-020.webp"
 price: 1850
 offer_price: 1500
 product_code: "ALIF-SET-020"

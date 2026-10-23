@@ -3,7 +3,7 @@ title: "Satin Co-ord & Tunic Set"
 date: "2026-10-22T08:13:59.537Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/white-dyed-satin-plain-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-024.webp"
 price: 550
 offer_price: 450
 product_code: "ALIF-SET-024"

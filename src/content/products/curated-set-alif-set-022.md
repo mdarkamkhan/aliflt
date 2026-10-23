@@ -3,7 +3,7 @@ title: "Wine Maroon Moss Crepe 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:13:59.293Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/crush-bottom-fabric-03.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-022.webp"
 price: 2100
 offer_price: 1750
 product_code: "ALIF-SET-022"

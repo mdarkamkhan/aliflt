@@ -3,7 +3,7 @@ title: "Terracotta Rust Fandy Silk 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:13:59.605Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/fandy-top-fabric-04.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-025.webp"
 price: 2450
 offer_price: 2050
 product_code: "ALIF-SET-025"
