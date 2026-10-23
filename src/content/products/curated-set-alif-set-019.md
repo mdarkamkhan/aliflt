@@ -3,7 +3,7 @@ title: "Champagne Gold Tissue Silk Kurti Dress Material"
 date: "2026-10-22T08:13:59.122Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/champagne-gold-plain-tissue-silk-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-019.webp"
 price: 950
 offer_price: 800
 product_code: "ALIF-SET-019"

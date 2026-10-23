@@ -3,7 +3,7 @@ title: "Teal Green Moss Crepe 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:13:59.040Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/crush-top-fabric-02.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-017.webp"
 price: 2000
 offer_price: 1650
 product_code: "ALIF-SET-017"

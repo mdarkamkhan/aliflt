@@ -3,7 +3,7 @@ title: "Pearl Ivory Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T08:13:58.943Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/pearl-ivory-plain-fandy-silk-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-015.webp"
 price: 1950
 offer_price: 1650
 product_code: "ALIF-SET-015"
