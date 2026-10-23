@@ -76,10 +76,35 @@ body {
     padding-top: 70px; 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
 }
 
+/* Eliminate 300ms mobile touch delay across all interactive elements */
+a,
+button,
+input,
+select,
+textarea,
+.product-card,
+.fc-card,
+.b-nav-item,
+.service-card,
+.route-card,
+.work-card,
+.design-card,
+.doodle-link,
+.carousel-card {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
 
-    font-weight: 400;
+/* Off-screen layout optimization: content-visibility for silky smooth frame rates */
+.reels-cards-section,
+.explore-alif-section,
+.store-routes-section,
+.site-footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 350px;
 }
 b, strong {
     font-weight: 500;

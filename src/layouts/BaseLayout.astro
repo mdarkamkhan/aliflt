@@ -35,6 +35,10 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
     <meta name="description" content={description}>
     <link rel="canonical" href={canonicalUrl}>
     <meta name="theme-color" content="#FBF9F6"/>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="alif.">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content={canonicalUrl}>
@@ -103,6 +107,77 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
 </head>
 
 <body>
+    <!-- Professional PWA App Launch Splash (Standalone Mode Feedback) -->
+    <div id="pwaAppLaunchSplash" class="pwa-launch-splash" aria-hidden="true">
+        <div class="pwa-splash-content">
+            <span class="pwa-splash-logo">alif.</span>
+            <span class="pwa-splash-sub">A CUSTOM CLOTHING STORE</span>
+            <div class="pwa-splash-bar"><span class="pwa-splash-progress"></span></div>
+        </div>
+    </div>
+
+    <!-- PWA Install Guide Bottom Sheet Modal (Universal fallback for Chrome & iOS Safari) -->
+    <div id="pwaInstallModal" class="pwa-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="pwa-modal-card">
+            <div class="pwa-modal-drag-pill" aria-hidden="true"></div>
+            <div class="pwa-modal-header">
+                <div class="pwa-modal-brand-badge">
+                    <img src="/android-chrome-192x192.png" alt="alif. icon" class="pwa-modal-icon" width="46" height="46" />
+                    <div>
+                        <div class="pwa-modal-title">alif. atelier app</div>
+                        <div class="pwa-modal-caption">Fast, offline-ready & standalone</div>
+                    </div>
+                </div>
+                <button type="button" class="pwa-modal-close-btn" id="closePwaModalBtn" aria-label="Close dialog">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="pwaModalPromptSection" class="pwa-modal-body" style="display:none;">
+                <p class="pwa-modal-desc">Install the official <strong>alif.</strong> app to your device for 1-tap booking, instant reel browsing, and full-screen luxury shopping.</p>
+                <button type="button" class="pwa-modal-action-btn" id="pwaTriggerNativePromptBtn">
+                    INSTALL NOW
+                </button>
+            </div>
+
+            <div id="pwaModalIosGuide" class="pwa-modal-body" style="display:none;">
+                <p class="pwa-modal-desc">Follow 2 quick steps to add <strong>alif.</strong> to your iPhone / iPad Home Screen:</p>
+                <ol class="pwa-modal-steps">
+                    <li>
+                        <span class="step-num">1</span>
+                        <span>Tap the <strong>Share</strong> button <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; display:inline-block;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> at the bottom of Safari.</span>
+                    </li>
+                    <li>
+                        <span class="step-num">2</span>
+                        <span>Scroll down and select <strong>"Add to Home Screen"</strong> <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; display:inline-block;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>.</span>
+                    </li>
+                </ol>
+                <button type="button" class="pwa-modal-action-btn secondary" id="pwaDismissIosBtn">
+                    GOT IT
+                </button>
+            </div>
+
+            <div id="pwaModalAndroidGuide" class="pwa-modal-body" style="display:none;">
+                <p class="pwa-modal-desc">To install <strong>alif.</strong> on Chrome or your mobile browser:</p>
+                <ol class="pwa-modal-steps">
+                    <li>
+                        <span class="step-num">1</span>
+                        <span>Tap your browser menu <strong>(⋮)</strong> in the top-right corner.</span>
+                    </li>
+                    <li>
+                        <span class="step-num">2</span>
+                        <span>Tap <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</span>
+                    </li>
+                </ol>
+                <button type="button" class="pwa-modal-action-btn secondary" id="pwaDismissAndroidBtn">
+                    GOT IT
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Fixed Background Canvas from ELEMENTS/BG -->
     <div id="fixed-bg-pattern" aria-hidden="true" transition:persist></div>
 
@@ -130,8 +205,8 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                 <span class="cart-count" id="cartCount">0</span>
             </a>
 
-            <button class="nav-toggle-btn" id="navToggleBtn" style="background:none; border:none; padding:5px; cursor:pointer; display:flex; align-items:center;" aria-label="Open menu">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color:#000;">
+            <button class="nav-toggle-btn" id="navToggleBtn" style="background:none; border:none; padding:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; touch-action:manipulation; -webkit-tap-highlight-color:transparent; min-width:44px; min-height:44px;" aria-label="Open menu" aria-controls="sidebarMenu" aria-expanded="false">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color:#000; pointer-events:none;">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -253,6 +328,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
         role="dialog"
         aria-modal="true"
         aria-hidden="true"
+        transition:persist
     >
         <!-- Signature Arabica Dotted Box Close Button -->
         <button 
@@ -495,107 +571,207 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
     <AIChatWidget client:idle transition:persist />
 
     <script is:inline>
-        // Minimalist Mobile Popup Drawer (From ELEMENTS/sidebar)
-        function initSidebar() {
-            const toggleBtn = document.getElementById('navToggleBtn');
-            const closeBtn = document.getElementById('sidebarCloseBtn');
+        // --- 1. GLOBAL PWA DEFERRED PROMPT (Captured immediately at earliest execution) ---
+        window._alifDeferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            window._alifDeferredPrompt = e;
+            window.dispatchEvent(new CustomEvent('pwa-prompt-available'));
+        });
+
+        // Track standalone PWA install status
+        window.addEventListener('appinstalled', () => {
+            window._alifDeferredPrompt = null;
+            const pwaBtn = document.getElementById('drawerInstallPwaBtn');
+            if (pwaBtn) {
+                pwaBtn.style.opacity = '0.5';
+                pwaBtn.innerText = 'INSTALLED';
+            }
+        });
+
+        // --- 2. PWA LAUNCH SPLASH (Smooth luxury transition when opening installed app) ---
+        function checkPwaLaunchSplash() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                                 window.navigator.standalone === true ||
+                                 document.referrer.includes('android-app://');
+            const splash = document.getElementById('pwaAppLaunchSplash');
+            if (!splash) return;
+
+            if (isStandalone && !sessionStorage.getItem('alif_splash_shown')) {
+                splash.classList.add('is-active');
+                sessionStorage.setItem('alif_splash_shown', 'true');
+                setTimeout(() => {
+                    splash.classList.add('is-fadeout');
+                    setTimeout(() => {
+                        splash.classList.remove('is-active', 'is-fadeout');
+                        splash.style.display = 'none';
+                    }, 350);
+                }, 600);
+            } else {
+                splash.style.display = 'none';
+            }
+        }
+
+        // --- 3. ROBUST SIDEBAR DRAWER CONTROLLER (Global Event Delegation) ---
+        function openSidebar(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             const drawer = document.getElementById('sidebarMenu');
-
-            function openSidebar(e) {
-                if (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-                if (drawer) {
-                    drawer.classList.add('is-open');
-                    drawer.setAttribute('aria-hidden', 'false');
-                    document.body.classList.add('sidebar-open');
-                    document.body.style.overflow = 'hidden';
-                }
-            }
-
-            function closeSidebar(e) {
-                if (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-                if (drawer) {
-                    drawer.classList.remove('is-open');
-                    drawer.setAttribute('aria-hidden', 'true');
-                    document.body.classList.remove('sidebar-open');
-                    document.body.style.overflow = '';
-                }
-            }
-
-            if (toggleBtn) {
-                toggleBtn.onclick = openSidebar;
-            }
-            if (closeBtn) {
-                closeBtn.onclick = closeSidebar;
-            }
-
-            // Close on escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeSidebar();
-            });
-
-            // Close when clicking any navigation link inside the drawer
+            const toggleBtn = document.getElementById('navToggleBtn');
             if (drawer) {
-                const navLinks = drawer.querySelectorAll('.drawer-nav a');
-                navLinks.forEach((link) => {
-                    link.addEventListener('click', () => closeSidebar());
-                });
+                drawer.classList.add('is-open');
+                drawer.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('sidebar-open');
+                document.body.style.overflow = 'hidden';
+                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
+            }
+        }
 
-                // Accordion toggle for hierarchical groups (Product, Services)
-                const groupBtns = drawer.querySelectorAll('.drawer-group-btn');
-                groupBtns.forEach((btn) => {
-                    btn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const group = btn.closest('.drawer-nav-group');
-                        if (group) {
-                            const isOpen = group.classList.toggle('is-open');
-                            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                        }
-                    });
-                });
+        function closeSidebar(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            const drawer = document.getElementById('sidebarMenu');
+            const toggleBtn = document.getElementById('navToggleBtn');
+            if (drawer) {
+                drawer.classList.remove('is-open');
+                drawer.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('sidebar-open');
+                document.body.style.overflow = '';
+                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+            }
+        }
 
-                const tooltipLinks = drawer.querySelectorAll('.doodle-tooltip');
-                tooltipLinks.forEach((link) => {
-                    link.addEventListener('click', () => {
-                        setTimeout(() => closeSidebar(), 200);
-                    });
-                });
+        // Persistent click delegation for sidebar actions across Astro navigations
+        if (!window._sidebarDelegated) {
+            window._sidebarDelegated = true;
 
-                // PWA Install Button Handler
-                let deferredInstallPrompt = null;
-                window.addEventListener('beforeinstallprompt', (e) => {
+            document.addEventListener('click', (e) => {
+                const target = e.target;
+                if (!target) return;
+
+                // 1. Hamburger Toggle Button click
+                if (target.closest('#navToggleBtn')) {
+                    openSidebar(e);
+                    return;
+                }
+
+                // 2. Sidebar Close Button click
+                if (target.closest('#sidebarCloseBtn')) {
+                    closeSidebar(e);
+                    return;
+                }
+
+                // 3. Navigation link click inside drawer -> close drawer smoothly
+                if (target.closest('.drawer-nav a')) {
+                    closeSidebar();
+                    return;
+                }
+
+                // 4. Group Accordion Button inside drawer (PRODUCT / SERVICES)
+                const groupBtn = target.closest('.drawer-group-btn');
+                if (groupBtn) {
                     e.preventDefault();
-                    deferredInstallPrompt = e;
-                });
+                    e.stopPropagation();
+                    const group = groupBtn.closest('.drawer-nav-group');
+                    if (group) {
+                        const isOpen = group.classList.toggle('is-open');
+                        groupBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                    }
+                    return;
+                }
 
-                const pwaBtn = document.getElementById('drawerInstallPwaBtn');
-                if (pwaBtn) {
-                    pwaBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        if (deferredInstallPrompt) {
-                            deferredInstallPrompt.prompt();
-                            deferredInstallPrompt.userChoice.then((choiceResult) => {
-                                if (choiceResult.outcome === 'accepted') {
+                // 5. Drawer Install Button click -> Open PWA flow
+                if (target.closest('#drawerInstallPwaBtn')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeSidebar();
+                    openPwaInstallModal();
+                    return;
+                }
+
+                // 6. Close PWA modal buttons
+                if (target.closest('#closePwaModalBtn') || target.closest('#pwaDismissIosBtn') || target.closest('#pwaDismissAndroidBtn')) {
+                    closePwaInstallModal();
+                    return;
+                }
+
+                // 7. Click outside PWA modal card to dismiss
+                if (target.classList && target.classList.contains('pwa-modal-backdrop')) {
+                    closePwaInstallModal();
+                    return;
+                }
+
+                // 8. Trigger native install prompt from modal button
+                if (target.closest('#pwaTriggerNativePromptBtn')) {
+                    e.preventDefault();
+                    if (window._alifDeferredPrompt) {
+                        window._alifDeferredPrompt.prompt();
+                        window._alifDeferredPrompt.userChoice.then((choiceResult) => {
+                            if (choiceResult.outcome === 'accepted') {
+                                const pwaBtn = document.getElementById('drawerInstallPwaBtn');
+                                if (pwaBtn) {
                                     pwaBtn.style.opacity = '0.5';
                                     pwaBtn.innerText = 'INSTALLED';
                                 }
-                                deferredInstallPrompt = null;
-                            });
-                        } else {
-                            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                            if (isIOS) {
-                                alert("To install alif. App:\n1. Tap the Share button in Safari\n2. Select 'Add to Home Screen'");
-                            } else {
-                                alert("To install alif. App:\nTap your browser menu (⋮) and select 'Install app' or 'Add to Home screen'.");
                             }
-                        }
-                    });
+                            window._alifDeferredPrompt = null;
+                            closePwaInstallModal();
+                        });
+                    }
+                    return;
+                }
+            }, { passive: false });
+
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeSidebar();
+                    closePwaInstallModal();
+                }
+            });
+        }
+
+        // --- 4. PWA INSTALL MODAL CONTROLLER ---
+        function openPwaInstallModal() {
+            const modal = document.getElementById('pwaInstallModal');
+            if (!modal) return;
+
+            const promptSec = document.getElementById('pwaModalPromptSection');
+            const iosSec = document.getElementById('pwaModalIosGuide');
+            const androidSec = document.getElementById('pwaModalAndroidGuide');
+
+            if (promptSec) promptSec.style.display = 'none';
+            if (iosSec) iosSec.style.display = 'none';
+            if (androidSec) androidSec.style.display = 'none';
+
+            // Check if native prompt is available
+            if (window._alifDeferredPrompt) {
+                if (promptSec) promptSec.style.display = 'block';
+            } else {
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                if (isIOS) {
+                    if (iosSec) iosSec.style.display = 'block';
+                } else {
+                    if (androidSec) androidSec.style.display = 'block';
+                }
+            }
+
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePwaInstallModal() {
+            const modal = document.getElementById('pwaInstallModal');
+            if (modal) {
+                modal.classList.remove('is-open');
+                modal.setAttribute('aria-hidden', 'true');
+                if (!document.body.classList.contains('sidebar-open')) {
+                    document.body.style.overflow = '';
                 }
             }
         }
@@ -855,7 +1031,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
         }
 
         function runPageInit() {
-            initSidebar();
+            checkPwaLaunchSplash();
             initDoodleSocial();
             updateBottomNavActive();
             updateCartBadges();
@@ -1380,6 +1556,270 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                 padding-top: 16px !important;
                 padding-bottom: calc(85px + env(safe-area-inset-bottom, 0px)) !important;
             }
+        }
+
+        /* --- PROFESSIONAL PWA LAUNCH SPLASH OVERLAY --- */
+        .pwa-launch-splash {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: #FBF9F6;
+            z-index: 10000000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .pwa-launch-splash.is-active {
+            display: flex;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .pwa-launch-splash.is-fadeout {
+            opacity: 0;
+        }
+
+        .pwa-splash-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            animation: pwaSplashPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes pwaSplashPop {
+            0% { transform: scale(0.92); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .pwa-splash-logo {
+            font-family: var(--font-body, 'Ubuntu', sans-serif);
+            font-size: 3rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #000000;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .pwa-splash-sub {
+            font-family: var(--font-body, 'Ubuntu', sans-serif);
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            color: #666666;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .pwa-splash-bar {
+            width: 72px;
+            height: 2px;
+            background: rgba(0, 0, 0, 0.08);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pwa-splash-progress {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 40%;
+            background: #000000;
+            animation: pwaSplashSlide 0.75s ease-in-out infinite alternate;
+        }
+
+        @keyframes pwaSplashSlide {
+            0% { transform: translateX(0); width: 30%; }
+            100% { transform: translateX(50px); width: 50%; }
+        }
+
+        /* --- PWA INSTALL BOTTOM SHEET MODAL --- */
+        .pwa-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 10000005;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .pwa-modal-backdrop.is-open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .pwa-modal-card {
+            width: 100%;
+            max-width: 440px;
+            background: #ffffff;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 16px 22px calc(24px + env(safe-area-inset-bottom, 0px)) 22px;
+            box-sizing: border-box;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(100%);
+            transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .pwa-modal-backdrop.is-open .pwa-modal-card {
+            transform: translateY(0);
+        }
+
+        .pwa-modal-drag-pill {
+            width: 36px;
+            height: 4px;
+            background: #d4d4d4;
+            border-radius: 4px;
+            margin: 0 auto 16px auto;
+        }
+
+        .pwa-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #f0ede6;
+        }
+
+        .pwa-modal-brand-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pwa-modal-icon {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .pwa-modal-title {
+            font-family: var(--font-body, 'Ubuntu', sans-serif);
+            font-size: 15px;
+            font-weight: 600;
+            color: #000000;
+            letter-spacing: 0.5px;
+        }
+
+        .pwa-modal-caption {
+            font-size: 11px;
+            color: #777777;
+            letter-spacing: 0.3px;
+        }
+
+        .pwa-modal-close-btn {
+            background: none;
+            border: none;
+            padding: 6px;
+            cursor: pointer;
+            color: #777777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s ease;
+        }
+
+        .pwa-modal-close-btn:hover {
+            background: #f4f2ee;
+            color: #000000;
+        }
+
+        .pwa-modal-desc {
+            font-size: 13px;
+            line-height: 1.55;
+            color: #333333;
+            margin: 0 0 16px 0;
+        }
+
+        .pwa-modal-steps {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pwa-modal-steps li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 13px;
+            line-height: 1.45;
+            color: #222222;
+        }
+
+        .pwa-modal-steps .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #111111;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 1px;
+        }
+
+        .pwa-modal-action-btn {
+            width: 100%;
+            padding: 13px 20px;
+            background: #111111;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-body, 'Ubuntu', sans-serif);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .pwa-modal-action-btn:hover,
+        .pwa-modal-action-btn:active {
+            background: #2a2a2a;
+            transform: translateY(-1px);
+        }
+
+        .pwa-modal-action-btn.secondary {
+            background: #f0ede6;
+            color: #111111;
+            box-shadow: none;
+        }
+
+        .pwa-modal-action-btn.secondary:hover,
+        .pwa-modal-action-btn.secondary:active {
+            background: #e5e1d8;
         }
     </style>
 </body>
