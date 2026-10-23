@@ -3,7 +3,7 @@ title: "Rani Pink Fandy Silk Kurti & Bottom Set"
 date: "2026-10-22T08:14:00.128Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/fandy-top-fabric-07.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-033.webp"
 price: 1000
 offer_price: 850
 product_code: "ALIF-SET-033"

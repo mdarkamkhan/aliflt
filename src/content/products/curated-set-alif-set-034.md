@@ -3,7 +3,7 @@ title: "Pearl Ivory Fandy Silk Kurti Dress Material"
 date: "2026-10-22T08:14:00.168Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/pearl-ivory-plain-fandy-silk-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-034.webp"
 price: 950
 offer_price: 800
 product_code: "ALIF-SET-034"

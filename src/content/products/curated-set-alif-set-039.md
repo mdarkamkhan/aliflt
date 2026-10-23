@@ -3,7 +3,7 @@ title: "Wine Fandy Silk 3-Piece Salwar Suit Set"
 date: "2026-10-22T08:14:00.353Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/white-dyed-satin-plain-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-039.webp"
 price: 1250
 offer_price: 1000
 product_code: "ALIF-SET-039"

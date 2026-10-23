@@ -3,7 +3,7 @@ title: "Pearl White Georgette Kurti & Bottom Set"
 date: "2026-10-22T08:14:00.245Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/pearl-white-plain-georgette-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-036.webp"
 price: 900
 offer_price: 750
 product_code: "ALIF-SET-036"

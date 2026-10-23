@@ -3,7 +3,7 @@ title: "Pearl Ivory Fandy Silk Co-ord & Tunic Set"
 date: "2026-10-22T08:14:00.616Z"
 layout: "product.liquid"
 tags: "product"
-image: "/uploads/fabrics/pearl-ivory-plain-fandy-silk-fabric.webp"
+image: "/uploads/curated-sets/curated-set-alif-set-038.webp"
 price: 700
 offer_price: 600
 product_code: "ALIF-SET-038"
