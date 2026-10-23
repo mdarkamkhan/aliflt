@@ -405,32 +405,7 @@ const comboPayload = isCombo ? {
           </button>
         </div>
 
-        <!-- Boutique Trust Badges -->
-        <div class="boutique-perks-row">
-          <div class="boutique-perk-item">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            <span>100% Authentic Fabric</span>
-          </div>
-          <div class="boutique-perk-item">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="1" y="3" width="15" height="13"></rect>
-              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-              <circle cx="5.5" cy="18.5" r="2.5"></circle>
-              <circle cx="18.5" cy="18.5" r="2.5"></circle>
-            </svg>
-            <span>Fast Sahibganj Delivery</span>
-          </div>
-          <div class="boutique-perk-item">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-              <line x1="12" y1="22.08" x2="12" y2="12"></line>
-            </svg>
-            <span>Bespoke Boutique Finish</span>
-          </div>
-        </div>
+
 
         <!-- Integrated Atelier Accordions -->
         <div class="product-accordion-container">
@@ -1516,17 +1491,15 @@ const comboPayload = isCombo ? {
 
     .product-delivery-promo {
       font-family: var(--font-body, 'Ubuntu', sans-serif);
-      font-size: 0.76rem;
-      font-weight: 500;
-      color: #2e7d32;
-      background: #f1f8e9;
-      border: 1px solid #dcedc8;
-      border-radius: 6px;
-      padding: 8px 12px;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: #666666;
+      margin-top: 4px;
+      margin-bottom: 22px;
+      padding: 0;
+      background: none;
+      border: none;
+      line-height: 1.4;
     }
 
     /* Action Buttons (Clean, Couture, Ergonomic) */
@@ -1534,7 +1507,7 @@ const comboPayload = isCombo ? {
       display: flex !important;
       flex-direction: column !important;
       gap: 10px !important;
-      margin-bottom: 22px !important;
+      margin-bottom: 24px !important;
       width: 100% !important;
     }
 
@@ -1589,37 +1562,6 @@ const comboPayload = isCombo ? {
       background: #000000 !important;
       color: #ffffff !important;
       transform: translateY(-1px) !important;
-    }
-
-    /* Boutique Trust Badges */
-    .boutique-perks-row {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
-      gap: 8px !important;
-      padding: 12px 8px !important;
-      background: #fbf9f6 !important;
-      border: 1px solid rgba(0, 0, 0, 0.06) !important;
-      border-radius: 8px !important;
-      margin-bottom: 24px !important;
-      box-sizing: border-box !important;
-    }
-
-    .boutique-perk-item {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      text-align: center !important;
-      gap: 5px !important;
-      color: #333333 !important;
-      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-      font-size: 0.65rem !important;
-      font-weight: 500 !important;
-      line-height: 1.25 !important;
-    }
-
-    .boutique-perk-item svg {
-      color: #111111 !important;
-      opacity: 0.85;
     }
 
     /* Minimalist Floating Reset to Set Pill */
@@ -2325,59 +2267,54 @@ const comboPayload = isCombo ? {
       white-space: pre-line;
     }
 
-    /* Haute Couture Structured Specifications Table */
+    /* Minimalist Atelier Specifications List */
     .spec-row-wrapper {
       display: flex !important;
       flex-direction: column !important;
       gap: 0 !important;
       width: 100% !important;
-      background: #fafafa !important;
-      border: 1px solid rgba(0, 0, 0, 0.06) !important;
-      border-radius: 6px !important;
-      overflow: hidden !important;
+      box-sizing: border-box !important;
+      background: transparent !important;
+      border: none !important;
     }
 
     .spec-row {
       display: flex !important;
-      align-items: flex-start !important;
-      padding: 9px 12px !important;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+      justify-content: space-between !important;
+      align-items: baseline !important;
+      padding: 10px 0 !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
       box-sizing: border-box !important;
       gap: 16px !important;
+      width: 100% !important;
+      background: transparent !important;
     }
 
     .spec-row:last-child {
       border-bottom: none !important;
     }
 
-    .spec-row:nth-child(even) {
-      background: #ffffff !important;
-    }
-
     .spec-label {
-      width: 110px !important;
-      min-width: 110px !important;
-      max-width: 110px !important;
-      flex-shrink: 0 !important;
       font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-      font-size: 0.72rem !important;
-      font-weight: 600 !important;
+      font-size: 0.74rem !important;
+      font-weight: 500 !important;
       text-transform: uppercase !important;
-      letter-spacing: 0.6px !important;
-      color: #666666 !important;
+      letter-spacing: 0.8px !important;
+      color: #777777 !important;
       line-height: 1.4 !important;
+      flex-shrink: 0 !important;
     }
 
     .spec-value {
-      flex: 1 !important;
       font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-      font-size: 0.78rem !important;
+      font-size: 0.82rem !important;
       font-weight: 500 !important;
       color: #111111 !important;
-      text-align: left !important;
+      text-align: right !important;
       word-break: break-word !important;
       overflow-wrap: break-word !important;
       line-height: 1.4 !important;
+      margin-left: auto !important;
     }
 
     /* =========================================================
