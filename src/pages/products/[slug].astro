@@ -381,7 +381,7 @@ const comboPayload = isCombo ? {
         </div>
 
         <!-- Clean, Standard Action Buttons (No clunky full text) -->
-        <div class="product-detail-actions" id="productDetailActions" style="margin-top: 25px; display: flex; flex-direction: column; gap: 12px;">
+        <div class="product-detail-actions" id="productDetailActions">
           <button 
             type="button"
             class="btn-cart" 
@@ -391,66 +391,93 @@ const comboPayload = isCombo ? {
             data-price={finalPrice}
             data-image={image}
             data-code={itemCode}
-            style="width: 100%; padding: 16px 0; background: #000; color: #fff; border: 1px solid #000; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease;"
           >
             Add to Cart
           </button>
 
           <button 
             type="button"
-            class="btn-buy"
+            class="btn-buy" 
             id="buyWhatsAppBtn"
             data-wapp-url={wappOrderLink}
-            style="display: block; width: 100%; padding: 16px 0; background: #fff; color: #000; border: 1px solid #000; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease;"
           >
             Buy Now on WhatsApp
           </button>
         </div>
+
+        <!-- Boutique Trust Badges -->
+        <div class="boutique-perks-row">
+          <div class="boutique-perk-item">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span>100% Authentic Fabric</span>
+          </div>
+          <div class="boutique-perk-item">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            <span>Fast Sahibganj Delivery</span>
+          </div>
+          <div class="boutique-perk-item">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            <span>Bespoke Boutique Finish</span>
+          </div>
+        </div>
+
+        <!-- Integrated Atelier Accordions -->
+        <div class="product-accordion-container">
+          {description && (
+            <details class="accordion-item" open>
+              <summary class="accordion-summary">
+                <h3 class="accordion-heading">Description & Atelier Notes</h3>
+                <span class="accordion-toggle-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </summary>
+              <div class="accordion-content">
+                <p class="accordion-description-text" id="displayDescriptionText">{description}</p>
+              </div>
+            </details>
+          )}
+
+          <details class="accordion-item" open>
+            <summary class="accordion-summary">
+              <h3 class="accordion-heading">Composition & Specifications</h3>
+              <span class="accordion-toggle-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </summary>
+            <div class="accordion-content">
+              <div class="spec-row-wrapper" id="displaySpecsWrapper">
+                <div class="spec-row"><span class="spec-label">Product Code</span><span class="spec-value" id="specProductCode">{itemCode}</span></div>
+                {size && <div class="spec-row"><span class="spec-label">Size / Cut</span><span class="spec-value">{size}</span></div>}
+                {colour && <div class="spec-row"><span class="spec-label">Colour</span><span class="spec-value">{colour}</span></div>}
+                {fabric && <div class="spec-row"><span class="spec-label">Fabric / Material</span><span class="spec-value">{fabric}</span></div>}
+                {pattern && <div class="spec-row"><span class="spec-label">Pattern</span><span class="spec-value">{pattern}</span></div>}
+                {ideal_for && <div class="spec-row"><span class="spec-label">Ideal For</span><span class="spec-value">{ideal_for}</span></div>}
+                {work && <div class="spec-row"><span class="spec-label">Craft & Work</span><span class="spec-value">{work}</span></div>}
+                <div class="spec-row"><span class="spec-label">Delivery Charges</span><span class="spec-value">{delivery_charges}</span></div>
+                <div class="spec-row"><span class="spec-label">Return Policy</span><span class="spec-value">{return_policy}</span></div>
+              </div>
+            </div>
+          </details>
+        </div>
+
       </div>
 
     </div>
-  </div>
-
-  <div class="product-accordion-container">
-    {description && (
-      <details class="accordion-item" open>
-        <summary class="accordion-summary">
-          <h3 class="accordion-heading">Description & Atelier Notes</h3>
-          <span class="accordion-toggle-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </span>
-        </summary>
-        <div class="accordion-content">
-          <p class="accordion-description-text" id="displayDescriptionText">{description}</p>
-        </div>
-      </details>
-    )}
-
-    <details class="accordion-item" open>
-      <summary class="accordion-summary">
-        <h3 class="accordion-heading">Composition & Specifications</h3>
-        <span class="accordion-toggle-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </span>
-      </summary>
-      <div class="accordion-content">
-        <div class="spec-row-wrapper" id="displaySpecsWrapper">
-          <div class="spec-row"><span class="spec-label">Product Code</span><span class="spec-value" id="specProductCode">{itemCode}</span></div>
-          {size && <div class="spec-row"><span class="spec-label">Size / Cut</span><span class="spec-value">{size}</span></div>}
-          {colour && <div class="spec-row"><span class="spec-label">Colour</span><span class="spec-value">{colour}</span></div>}
-          {fabric && <div class="spec-row"><span class="spec-label">Fabric / Material</span><span class="spec-value">{fabric}</span></div>}
-          {pattern && <div class="spec-row"><span class="spec-label">Pattern</span><span class="spec-value">{pattern}</span></div>}
-          {ideal_for && <div class="spec-row"><span class="spec-label">Ideal For</span><span class="spec-value">{ideal_for}</span></div>}
-          {work && <div class="spec-row"><span class="spec-label">Craft & Work</span><span class="spec-value">{work}</span></div>}
-          <div class="spec-row"><span class="spec-label">Delivery Charges</span><span class="spec-value">{delivery_charges}</span></div>
-          <div class="spec-row"><span class="spec-label">Return Policy</span><span class="spec-value">{return_policy}</span></div>
-        </div>
-      </div>
-    </details>
   </div>
 
   {similar && similar.length > 0 && (
@@ -1246,23 +1273,23 @@ const comboPayload = isCombo ? {
        ========================================================= */
     .container.section {
       width: 100% !important;
-      max-width: 1000px !important;
+      max-width: 1060px !important;
       margin: 0 auto !important;
-      padding: 12px 14px 40px 14px !important;
+      padding: 16px 16px 40px 16px !important;
       box-sizing: border-box !important;
       overflow-x: hidden !important;
     }
 
     @media (min-width: 768px) {
       .container.section {
-        padding: 30px 20px 50px 20px !important;
+        padding: 32px 24px 60px 24px !important;
       }
     }
 
     .product-detail-grid {
       display: grid !important;
       grid-template-columns: 100% !important;
-      gap: 20px !important;
+      gap: 24px !important;
       width: 100% !important;
       max-width: 100% !important;
       min-width: 0 !important;
@@ -1270,10 +1297,11 @@ const comboPayload = isCombo ? {
       box-sizing: border-box !important;
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 860px) {
       .product-detail-grid {
-        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr) !important;
-        gap: 40px !important;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+        gap: 48px !important;
+        align-items: start !important;
       }
     }
 
@@ -1423,61 +1451,175 @@ const comboPayload = isCombo ? {
       white-space: nowrap !important;
     }
 
-    /* Refined, Luxury Editorial Title & Pricing (Tokens Bound) */
+    /* Refined Luxury Product Header & Info Column */
+    .product-header-block {
+      margin-bottom: 14px;
+    }
+
+    .product-code-badge {
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.68rem;
+      color: #888888;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
     .product-detail-title {
-      font-family: var(--font-heading) !important;
-      font-size: var(--typo-h1-size) !important;
-      font-weight: var(--typo-h1-weight) !important;
-      line-height: 1.25 !important;
+      font-family: var(--font-heading, 'Playfair Display', serif) !important;
+      font-size: 1.45rem !important;
+      font-weight: 600 !important;
+      line-height: 1.28 !important;
       color: #111111 !important;
-      letter-spacing: var(--typo-h1-spacing) !important;
-      margin: 0 0 10px 0 !important;
+      letter-spacing: 0.2px !important;
+      margin: 0 !important;
+      word-break: break-word;
     }
 
     @media (min-width: 768px) {
       .product-detail-title {
-        font-size: var(--typo-h1-size-desktop) !important;
+        font-size: 1.75rem !important;
       }
     }
 
     .price-section-wrapper {
-      margin-bottom: 6px;
+      margin: 12px 0 16px 0;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     }
 
     .product-detail-price {
-      font-family: var(--font-body) !important;
-      font-size: var(--typo-price-size) !important;
-      font-weight: var(--typo-price-weight) !important;
-      color: #111111 !important;
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
       display: flex !important;
       align-items: baseline !important;
-      gap: 10px !important;
-      margin-bottom: 10px !important;
+      gap: 12px !important;
+      margin: 0 !important;
     }
 
-    .product-detail-price .offer-price {
-      font-size: var(--typo-price-size);
-      font-weight: var(--typo-price-weight);
-      color: #000000;
+    .product-detail-price .offer-price,
+    .product-detail-price .standard-price {
+      font-size: 1.5rem !important;
+      font-weight: 700 !important;
+      color: #000000 !important;
+      letter-spacing: -0.3px !important;
+      line-height: 1 !important;
     }
 
     .product-detail-price .original-price,
     .product-detail-price del {
-      font-size: var(--typo-price-del-size);
-      font-weight: 400;
-      color: var(--typo-price-del-color);
-      text-decoration: line-through;
+      font-size: 1.05rem !important;
+      font-weight: 400 !important;
+      color: #999999 !important;
+      text-decoration: line-through !important;
     }
 
     .product-delivery-promo {
-      font-family: var(--font-body);
-      font-size: var(--typo-body-size);
-      font-weight: 400;
-      color: #555555;
-      letter-spacing: 0.3px;
-      padding-top: 10px;
-      margin-top: 8px;
-      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      font-family: var(--font-body, 'Ubuntu', sans-serif);
+      font-size: 0.76rem;
+      font-weight: 500;
+      color: #2e7d32;
+      background: #f1f8e9;
+      border: 1px solid #dcedc8;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Action Buttons (Clean, Couture, Ergonomic) */
+    .product-detail-actions {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+      margin-bottom: 22px !important;
+      width: 100% !important;
+    }
+
+    .btn-cart {
+      width: 100% !important;
+      height: 48px !important;
+      background: #000000 !important;
+      color: #ffffff !important;
+      border: 1px solid #000000 !important;
+      border-radius: 6px !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1.8px !important;
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.82rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    .btn-cart:hover {
+      background: #1f1f1f !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22) !important;
+    }
+
+    .btn-buy {
+      width: 100% !important;
+      height: 48px !important;
+      background: #ffffff !important;
+      color: #000000 !important;
+      border: 1px solid #111111 !important;
+      border-radius: 6px !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1.8px !important;
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.82rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    .btn-buy:hover {
+      background: #000000 !important;
+      color: #ffffff !important;
+      transform: translateY(-1px) !important;
+    }
+
+    /* Boutique Trust Badges */
+    .boutique-perks-row {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 8px !important;
+      padding: 12px 8px !important;
+      background: #fbf9f6 !important;
+      border: 1px solid rgba(0, 0, 0, 0.06) !important;
+      border-radius: 8px !important;
+      margin-bottom: 24px !important;
+      box-sizing: border-box !important;
+    }
+
+    .boutique-perk-item {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      gap: 5px !important;
+      color: #333333 !important;
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.65rem !important;
+      font-weight: 500 !important;
+      line-height: 1.25 !important;
+    }
+
+    .boutique-perk-item svg {
+      color: #111111 !important;
+      opacity: 0.85;
     }
 
     /* Minimalist Floating Reset to Set Pill */
@@ -2090,37 +2232,30 @@ const comboPayload = isCombo ? {
     }
 
     /* =========================================================
-       PHASE 3: LUXURY MINIMALIST ACCORDIONS (ZARA / H&M LEVEL)
+       PHASE 3: LUXURY ATELIER ACCORDIONS & SPECIFICATIONS
        ========================================================= */
     .product-accordion-container {
       width: 100% !important;
-      max-width: 1000px !important;
-      margin: 35px auto 10px auto !important;
-      padding: 0 14px !important;
+      max-width: 100% !important;
+      margin: 10px 0 0 0 !important;
+      padding: 0 !important;
       box-sizing: border-box !important;
     }
 
-    @media (min-width: 768px) {
-      .product-accordion-container {
-        padding: 0 20px !important;
-        margin: 45px auto 25px auto !important;
-      }
-    }
-
     .accordion-item {
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
       box-sizing: border-box;
     }
 
     .accordion-item:last-child {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     }
 
     .accordion-summary {
       display: flex !important;
       justify-content: space-between !important;
       align-items: center !important;
-      padding: 18px 2px !important;
+      padding: 14px 0 !important;
       cursor: pointer !important;
       user-select: none !important;
       list-style: none !important;
@@ -2139,10 +2274,10 @@ const comboPayload = isCombo ? {
 
     .accordion-heading {
       font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-      font-size: 0.82rem !important;
-      font-weight: 500 !important;
+      font-size: 0.78rem !important;
+      font-weight: 600 !important;
       text-transform: uppercase !important;
-      letter-spacing: 1.6px !important;
+      letter-spacing: 1.2px !important;
       color: #111111 !important;
       margin: 0 !important;
     }
@@ -2151,9 +2286,9 @@ const comboPayload = isCombo ? {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      color: #111111;
-      width: 20px;
-      height: 20px;
+      color: #333333;
+      width: 18px;
+      height: 18px;
     }
 
     .accordion-toggle-icon svg {
@@ -2165,7 +2300,7 @@ const comboPayload = isCombo ? {
     }
 
     .accordion-content {
-      padding: 6px 2px 24px 2px;
+      padding: 4px 0 18px 0;
       box-sizing: border-box;
       animation: accordionFade 0.25s ease-out;
     }
@@ -2183,52 +2318,66 @@ const comboPayload = isCombo ? {
 
     .accordion-description-text {
       font-family: var(--font-body, 'Ubuntu', sans-serif);
-      font-size: 0.88rem;
-      line-height: 1.75;
+      font-size: 0.84rem;
+      line-height: 1.65;
       color: #444444;
       margin: 0;
       white-space: pre-line;
     }
 
-    /* Haute Couture 2-column Atelier Specifications */
+    /* Haute Couture Structured Specifications Table */
     .spec-row-wrapper {
-      display: grid !important;
-      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
       gap: 0 !important;
       width: 100% !important;
-    }
-
-    @media (min-width: 768px) {
-      .spec-row-wrapper {
-        grid-template-columns: repeat(2, 1fr) !important;
-        column-gap: 50px !important;
-      }
+      background: #fafafa !important;
+      border: 1px solid rgba(0, 0, 0, 0.06) !important;
+      border-radius: 6px !important;
+      overflow: hidden !important;
     }
 
     .spec-row {
       display: flex !important;
-      justify-content: space-between !important;
-      align-items: baseline !important;
-      padding: 10px 0 !important;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+      align-items: flex-start !important;
+      padding: 9px 12px !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
       box-sizing: border-box !important;
+      gap: 16px !important;
+    }
+
+    .spec-row:last-child {
+      border-bottom: none !important;
+    }
+
+    .spec-row:nth-child(even) {
+      background: #ffffff !important;
     }
 
     .spec-label {
+      width: 110px !important;
+      min-width: 110px !important;
+      max-width: 110px !important;
+      flex-shrink: 0 !important;
       font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-      font-size: 0.74rem !important;
-      font-weight: 500 !important;
+      font-size: 0.72rem !important;
+      font-weight: 600 !important;
       text-transform: uppercase !important;
-      letter-spacing: 0.8px !important;
-      color: #777777 !important;
+      letter-spacing: 0.6px !important;
+      color: #666666 !important;
+      line-height: 1.4 !important;
     }
 
     .spec-value {
+      flex: 1 !important;
       font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-      font-size: 0.82rem !important;
+      font-size: 0.78rem !important;
       font-weight: 500 !important;
       color: #111111 !important;
-      text-align: right !important;
+      text-align: left !important;
+      word-break: break-word !important;
+      overflow-wrap: break-word !important;
+      line-height: 1.4 !important;
     }
 
     /* =========================================================
