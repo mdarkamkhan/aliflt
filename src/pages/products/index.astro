@@ -78,10 +78,22 @@ const products = [...allProducts].reverse();
         const catLower = (category || '').toLowerCase();
         const isCuratedSet = catLower === 'curated sets' || catLower === 'curated set' || catLower === 'dress set' || (combo_items && combo_items.length > 0);
         return (
-          <a href={`/products/${item.id}/`} class="product-card" data-category={(category || '').toLowerCase()} data-has-video={item.data.reel_video ? "true" : "false"}>
+          <a href={`/products/${item.id}/`} class="product-card" data-category={(category || '').toLowerCase()} data-has-video={item.data.reel_video ? "true" : "false"} data-is-curated={isCuratedSet ? "true" : "false"}>
             <div class="product-card-image-wrapper">
-              <img src={image || '/icons/icon-512x512.png'} alt={title} loading="lazy" />
+              <img src={image || '/icons/icon-512x512.png'} alt={title} loading="lazy" class="product-card-cover-img" />
               {item.data.reel_video && (
+                <video 
+                  data-src={item.data.reel_video} 
+                  poster={image}
+                  loop 
+                  muted 
+                  playsinline 
+                  webkit-playsinline
+                  preload="none"
+                  class="product-grid-video"
+                ></video>
+              )}
+              {item.data.reel_video && !isCuratedSet && (
                 <span class="product-card-video-badge" title="Watch Atelier Reel Video">
                   <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor">
                     <path d="M8 5v14l11-7z"/>
@@ -170,6 +182,35 @@ const products = [...allProducts].reverse();
           }
         });
 
+        const isReelsMode = filterVal === 'video' || filterVal.includes('video') || filterVal.includes('reel') || catName.toLowerCase().includes('reel');
+        const grid = document.getElementById('productGrid');
+        if (grid) {
+          if (isReelsMode) {
+            grid.classList.add('mode-reels-outfit');
+            grid.setAttribute('data-active-category', 'reel-outfits');
+            setTimeout(() => {
+              document.querySelectorAll('.product-card:not(.hidden) .product-grid-video').forEach(v => {
+                const src = v.getAttribute('data-src');
+                if (src && !v.src) {
+                  v.src = src;
+                  v.load();
+                }
+                const rect = v.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                  v.play().catch(() => {});
+                }
+              });
+            }, 60);
+          } else {
+            grid.classList.remove('mode-reels-outfit');
+            grid.setAttribute('data-active-category', catName.toLowerCase().replace(/[\s_]+/g, '-'));
+            // Pause any running videos when switching away from Reel Outfits
+            document.querySelectorAll('.product-grid-video').forEach(v => {
+              if (v.src && !v.paused) v.pause();
+            });
+          }
+        }
+
         if (emptyMsg) {
           emptyMsg.style.display = visibleCount === 0 ? 'block' : 'none';
         }
@@ -208,7 +249,9 @@ const products = [...allProducts].reverse();
         const obs = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             const video = entry.target;
-            if (entry.isIntersecting) {
+            const grid = document.getElementById('productGrid');
+            const isReelsMode = grid && grid.classList.contains('mode-reels-outfit');
+            if (entry.isIntersecting && isReelsMode) {
               const src = video.getAttribute('data-src');
               if (src && !video.src) {
                 video.src = src;
@@ -353,6 +396,41 @@ const products = [...allProducts].reverse();
   .product-card.hidden {
     display: none !important;
   }
+  /* Default: Cover image is visible, video is hidden */
+  .product-grid-video {
+    display: none !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 2;
+  }
+  .product-card-cover-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Reel Outfits Mode: Show actual video reel as the cover */
+  .product-grid.mode-reels-outfit .product-grid-video {
+    display: block !important;
+  }
+  .product-grid.mode-reels-outfit .product-card-cover-img {
+    opacity: 0;
+  }
+  .product-grid.mode-reels-outfit .product-card-video-badge {
+    display: none !important;
+  }
+
+  /* Curated Sets category: NEVER show the reel badge */
+  .product-card[data-is-curated="true"] .product-card-video-badge,
+  .product-grid[data-active-category*="curated"] .product-card-video-badge {
+    display: none !important;
+  }
+
   .product-card-video-badge {
     position: absolute;
     top: 8px;

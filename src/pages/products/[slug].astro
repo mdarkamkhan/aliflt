@@ -260,9 +260,12 @@ const comboPayload = isCombo ? {
                   id="toggleReelMediaBtn" 
                   type="button" 
                   class="reel-media-toggle-pill"
+                  data-mode="cover"
                   title="Switch between fabric cover and outfit video"
                 >
-                  <span class="pill-icon">▶</span>
+                  <svg class="pill-svg" viewBox="0 0 24 24" width="10" height="10" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
                   <span class="pill-text">Watch Reel Video</span>
                 </button>
               )}
@@ -273,7 +276,11 @@ const comboPayload = isCombo ? {
                 style="display: none;"
                 title="Back to Full Curated Look"
               >
-                <span>↺</span> Back to Full Set Look
+                <svg class="pill-svg" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                  <path d="M3 3v5h5"/>
+                </svg>
+                <span class="pill-text">Full Set Look</span>
               </button>
             </>
           ) : (
@@ -737,10 +744,15 @@ const comboPayload = isCombo ? {
             mainImage.classList.add('active');
           }
           if (toggleReelBtn) {
+            toggleReelBtn.classList.remove('hidden-pill');
             toggleReelBtn.style.display = defaultSet.videoSrc ? 'inline-flex' : 'none';
-            toggleReelBtn.innerHTML = '<span class="pill-icon">▶</span><span class="pill-text">Watch Reel Video</span>';
+            toggleReelBtn.setAttribute('data-mode', 'cover');
+            toggleReelBtn.innerHTML = '<svg class="pill-svg" viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="pill-text">Watch Reel Video</span>';
           }
-          if (resetBtn) resetBtn.style.display = 'none';
+          if (resetBtn) {
+            resetBtn.classList.remove('visible');
+            resetBtn.style.display = 'none';
+          }
 
           if (displayTitle) displayTitle.innerText = defaultSet.title;
           if (previewBadge) previewBadge.style.display = 'none';
@@ -776,6 +788,7 @@ const comboPayload = isCombo ? {
             mainVideo.classList.add('hidden');
           }
           if (toggleReelBtn) {
+            toggleReelBtn.classList.add('hidden-pill');
             toggleReelBtn.style.display = 'none';
           }
           if (mainImage) {
@@ -784,7 +797,10 @@ const comboPayload = isCombo ? {
             mainImage.classList.remove('hidden');
             mainImage.classList.add('active');
           }
-          if (resetBtn) resetBtn.style.display = 'flex';
+          if (resetBtn) {
+            resetBtn.classList.add('visible');
+            resetBtn.style.display = 'inline-flex';
+          }
 
           if (displayTitle) displayTitle.innerText = item.title;
           if (previewBadge) {
@@ -1052,14 +1068,16 @@ const comboPayload = isCombo ? {
               mainVideo.classList.add('hidden');
               mainImage.classList.remove('hidden');
               mainImage.classList.add('active');
-              toggleReelBtn.innerHTML = '<span class="pill-icon">▶</span><span class="pill-text">Watch Reel Video</span>';
+              toggleReelBtn.setAttribute('data-mode', 'cover');
+              toggleReelBtn.innerHTML = '<svg class="pill-svg" viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="pill-text">Watch Reel Video</span>';
             } else {
               mainImage.classList.remove('active');
               mainImage.classList.add('hidden');
               mainVideo.classList.remove('hidden');
               mainVideo.classList.add('active');
               mainVideo.play().catch(() => {});
-              toggleReelBtn.innerHTML = '<span class="pill-icon">📷</span><span class="pill-text">View Fabric Cover</span>';
+              toggleReelBtn.setAttribute('data-mode', 'video');
+              toggleReelBtn.innerHTML = '<svg class="pill-svg" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 4-4 5 5"/></svg><span class="pill-text">View Fabric Cover</span>';
             }
           });
         }
@@ -1294,42 +1312,65 @@ const comboPayload = isCombo ? {
       z-index: 2 !important;
     }
 
+    /* Minimalist Floating Media Switcher (Matches alif. Couture Aesthetic) */
     .reel-media-toggle-pill {
       position: absolute !important;
-      bottom: 14px !important;
-      right: 14px !important;
+      bottom: 12px !important;
+      right: 12px !important;
       z-index: 10 !important;
-      display: inline-flex !important;
+      display: inline-flex;
       align-items: center !important;
-      gap: 6px !important;
-      background: rgba(18, 18, 18, 0.88) !important;
-      backdrop-filter: blur(10px) !important;
-      -webkit-backdrop-filter: blur(10px) !important;
-      color: #ffffff !important;
-      padding: 7px 14px !important;
-      border-radius: 999px !important;
-      border: 1px solid rgba(255, 255, 255, 0.25) !important;
+      gap: 7px !important;
+      background: rgba(255, 255, 255, 0.94) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      color: #111111 !important;
+      padding: 6px 12px !important;
+      border-radius: 4px !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
       font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-      font-size: 0.68rem !important;
+      font-size: 0.64rem !important;
       font-weight: 500 !important;
       letter-spacing: 0.8px !important;
       text-transform: uppercase !important;
       cursor: pointer !important;
-      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
       touch-action: manipulation !important;
     }
+
+    .reel-media-toggle-pill.hidden-pill {
+      display: none !important;
+    }
+
     .reel-media-toggle-pill:hover {
       background: #000000 !important;
-      transform: translateY(-1px) !important;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
+      color: #ffffff !important;
+      border-color: #000000 !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
     }
-    .reel-media-toggle-pill .pill-icon {
-      font-size: 0.72rem !important;
-      line-height: 1 !important;
+
+    .reel-media-toggle-pill[data-mode="video"] {
+      background: rgba(18, 18, 18, 0.85) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.25) !important;
     }
+
+    .reel-media-toggle-pill[data-mode="video"]:hover {
+      background: #000000 !important;
+      border-color: #ffffff !important;
+    }
+
+    .reel-media-toggle-pill .pill-svg {
+      width: 10px !important;
+      height: 10px !important;
+      flex-shrink: 0 !important;
+      display: block !important;
+    }
+
     .reel-media-toggle-pill .pill-text {
       line-height: 1 !important;
+      display: inline-block !important;
     }
 
     /* Refined, Luxury Editorial Title & Pricing (Tokens Bound) */
@@ -1389,33 +1430,48 @@ const comboPayload = isCombo ? {
       border-top: 1px solid rgba(0, 0, 0, 0.06);
     }
 
-    /* Floating Reset to Set Pill */
+    /* Minimalist Floating Reset to Set Pill */
     .reset-to-set-pill {
-      position: absolute;
-      bottom: 14px;
-      left: 14px;
-      background: rgba(0, 0, 0, 0.88);
-      color: #ffffff;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.6px;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      z-index: 6;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-      transition: all 0.2s ease;
+      position: absolute !important;
+      bottom: 12px !important;
+      left: 12px !important;
+      background: rgba(255, 255, 255, 0.94) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      color: #111111 !important;
+      padding: 6px 12px !important;
+      border-radius: 4px !important;
+      font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+      font-size: 0.64rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.8px !important;
+      text-transform: uppercase !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      cursor: pointer !important;
+      display: none !important;
+      align-items: center !important;
+      gap: 6px !important;
+      z-index: 6 !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+    }
+
+    .reset-to-set-pill.visible {
+      display: inline-flex !important;
     }
 
     .reset-to-set-pill:hover {
-      background: #000000;
-      transform: scale(1.03);
+      background: #000000 !important;
+      color: #ffffff !important;
+      border-color: #000000 !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    }
+
+    .reset-to-set-pill .pill-svg {
+      width: 10px !important;
+      height: 10px !important;
+      flex-shrink: 0 !important;
+      display: block !important;
     }
 
     /* Minimalist Inspecting Single Item Text (Unboxed) */
