@@ -66,35 +66,31 @@ if (collectionPreviewImages.length === 0) {
   }
 }
 
-// 4 Store Routes Guide (Images & Videos support)
+// 3 Store Routes Guide with authentic map pathways
 const storeRoutes = [
   {
     id: 'railway-station',
     title: 'Railway Station to alif.',
-    type: 'image', // 'video' or 'image'
+    from: 'Station Road',
+    type: 'image',
     video: null,
-    image: '/uploads/categories/dress-set.jpg',
+    image: '/uploads/routes/railway-station.webp',
   },
   {
     id: 'sahibganj-college',
     title: 'Sahibganj College to alif.',
-    type: 'image', // 'video' or 'image'
+    from: 'College Road',
+    type: 'image',
     video: null,
-    image: '/uploads/services/lehenga.webp',
-  },
-  {
-    id: 'daal-kuan',
-    title: 'Daal Kuan to alif.',
-    type: 'image', // 'video' or 'image'
-    video: null,
-    image: '/uploads/services/anarkali.webp',
+    image: '/uploads/routes/sahibganj-college.webp',
   },
   {
     id: 'ghaat-road',
-    title: 'Ghaat Road to alif.',
-    type: 'image', // 'video' or 'image'
+    title: 'Badi Durga Mandir to alif.',
+    from: 'Ghaat Road',
+    type: 'image',
     video: null,
-    image: '/uploads/services/sharara.webp',
+    image: '/uploads/routes/ghaat-road.webp',
   },
 ];
 
@@ -1946,25 +1942,23 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         transform: translateX(3px);
       }
 
-      /* 2x2 Grid aligned with global container */
+      /* Store Routes Grid: 3 columns on desktop, 1 on mobile / 3 on tablet */
       .store-routes-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
         width: 100%;
         margin-bottom: 32px;
       }
 
-      @media (min-width: 768px) {
+      @media (max-width: 768px) {
         .store-routes-grid {
-          gap: 16px;
-        }
-      }
-
-      @media (max-width: 600px) {
-        .store-routes-grid {
-          gap: 10px;
-          margin-bottom: 24px;
+          grid-template-columns: 1fr;
+          gap: 18px;
+          max-width: 420px;
+          margin-left: auto;
+          margin-right: auto;
+          margin-bottom: 28px;
         }
       }
 
