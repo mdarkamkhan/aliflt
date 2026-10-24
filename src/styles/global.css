@@ -1281,24 +1281,71 @@ details[open] .collapsible-content {
 .sidebar-socials .footer-socials { gap: 20px; }
 
 
-/* E-COMMERCE STYLES */
-.nav-actions { display: flex; align-items: center; gap: 10px; }
-.nav-cart-btn { position: relative; color: #333; padding: 5px; }
-.nav-cart-btn svg { width: 24px; height: 24px; stroke: #000; }
+/* E-COMMERCE & TOP NAV ACTIONS STYLES */
+.nav-actions { 
+    display: flex; 
+    align-items: center; 
+    gap: 4px; 
+}
+
+.nav-search-btn,
+.nav-cart-btn {
+    position: relative;
+    color: #111111;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 50%;
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.nav-search-btn:hover,
+.nav-cart-btn:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.nav-search-btn:active,
+.nav-cart-btn:active {
+    transform: scale(0.94);
+}
+
+.nav-search-btn svg,
+.nav-cart-btn svg { 
+    width: 22px; 
+    height: 22px; 
+    stroke: #111111; 
+    display: block;
+}
+
 .cart-count {
     position: absolute;
-    top: -5px;
-    right: -8px;
-    background-color: var(--accent-color);
-    color: white;
-    font-size: 11px;
-    font-weight: 400;
-    font-family: var(--font-body);
+    top: 4px;
+    right: 4px;
+    background-color: #111111;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 600;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
     line-height: 1;
-    border-radius: 50%;
-    padding: 4px 6px;
-    min-width: 10px;
-    text-align: center;
+    border-radius: 999px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1.5px solid rgba(251, 249, 246, 0.95);
+    pointer-events: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
 }
 .btn-cart, .btn-buy {
     font-family: var(--font-body);
