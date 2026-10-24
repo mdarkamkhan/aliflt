@@ -1,4 +1,5 @@
 ---
+image: "/uploads/services/kaftan.webp"
 title: "Kaftan"
 date: "2026-10-11T12:02:00.000Z"
 layout: "service.liquid"

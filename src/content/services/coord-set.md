@@ -1,4 +1,5 @@
 ---
+image: "/uploads/services/coord-set.webp"
 title: "Co-ord Set"
 date: "2026-10-11T12:03:00.000Z"
 layout: "service.liquid"

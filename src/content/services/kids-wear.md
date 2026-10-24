@@ -1,4 +1,5 @@
 ---
+image: "/uploads/services/kids-wear.webp"
 title: "Kids' Wear"
 date: "2026-10-11T12:01:00.000Z"
 layout: "service.liquid"

@@ -1,4 +1,5 @@
 ---
+image: "/uploads/services/western-dress.webp"
 title: "Western Dress"
 date: "2026-10-11T12:05:00.000Z"
 layout: "service.liquid"
