@@ -1378,7 +1378,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
         }
 
-        /* Doodle Social Section in Drawer (Left-Aligned) */
+        /* Social Section in Drawer */
         .drawer-doodle-social-wrapper {
             margin-top: 24px;
             display: flex;
@@ -1400,8 +1400,123 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
             text-align: left;
         }
 
-        .drawer-doodle-container {
+        /* ══════════════════════════════════════════════════════════
+           ELEMENTS/social-icons: Pill Container, Tooltip & Icons
+           ══════════════════════════════════════════════════════════ */
+        :global(ul.example-1) {
+            display: inline-flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+            justify-content: center !important;
+            list-style: none !important;
             margin: 0 !important;
+            padding: 8px 14px !important;
+            background-color: #000000 !important;
+            border-radius: 999px !important;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15) !important;
+            gap: 4px !important;
+            box-sizing: border-box !important;
+        }
+
+        :global(.example-1 .icon-content) {
+            margin: 0 !important;
+            padding: 0 !important;
+            position: relative !important;
+            list-style: none !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        :global(.example-1 .icon-content::before),
+        :global(.example-1 .icon-content::marker) {
+            display: none !important;
+            content: "" !important;
+        }
+
+        :global(.example-1 .icon-content .link) {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 50% !important;
+            color: #ffffff !important;
+            background-color: #000000 !important;
+            text-decoration: none !important;
+            border: none !important;
+            outline: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease-in-out !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+
+        :global(.example-1 .icon-content .link:hover) {
+            box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        :global(.example-1 .icon-content .link svg) {
+            width: 20px !important;
+            height: 20px !important;
+            max-width: 20px !important;
+            max-height: 20px !important;
+            fill: currentColor !important;
+            display: block !important;
+            transition: transform 0.2s ease, fill 0.2s ease, color 0.2s ease !important;
+        }
+
+        /* Tooltip (From ELEMENTS/social-icons) */
+        :global(.example-1 .icon-content .tooltip) {
+            position: absolute !important;
+            top: -20px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            padding: 4px 8px !important;
+            border-radius: 5px !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            font-size: 11px !important;
+            font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.5px !important;
+            white-space: nowrap !important;
+            transition: all 0.25s ease-in-out !important;
+            pointer-events: none !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25) !important;
+            z-index: 99 !important;
+        }
+
+        :global(.example-1 .icon-content:hover .tooltip) {
+            opacity: 1 !important;
+            visibility: visible !important;
+            top: -38px !important;
+        }
+
+        /* Brand Colors on Hover (From ELEMENTS/social-icons) */
+        :global(.example-1 .icon-content .link[data-social="instagram"]:hover) {
+            color: #ff007f !important;
+        }
+
+        :global(.example-1 .icon-content .link[data-social="snapchat"]:hover) {
+            color: #fffc00 !important;
+        }
+
+        :global(.example-1 .icon-content .link[data-social="facebook"]:hover) {
+            color: #1877f2 !important;
+        }
+
+        :global(.example-1 .icon-content .link[data-social="whatsapp"]:hover) {
+            color: #25d366 !important;
+        }
+
+        :global(.example-1 .icon-content .link[data-social="mail"]:hover) {
+            color: #00a2ff !important;
         }
 
         /* --- CONTINUOUS LUXURY MARQUEE TICKER STRIPE --- */
