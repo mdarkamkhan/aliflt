@@ -1,11 +1,10 @@
 /* Service Worker for ALiF PWA */
 
-const CACHE_NAME = 'alif-v4';
+const CACHE_NAME = 'alif-v5';
 
 // Core static assets
 const urlsToCache = [
   '/',
-  '/css/style.css',
   '/manifest.webmanifest',
   '/favicon.png'
 ];

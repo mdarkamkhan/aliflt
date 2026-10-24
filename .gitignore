@@ -1,17 +1,49 @@
+# Dependencies
 node_modules/
-_site/
+.pnp
+.pnp.js
+
+# Production Build Output
 dist/
+_site/
+
+# Astro Cache & Types
 .astro/
+
+# Environment Variables & Secrets
 .env
+.env.production
+.env.local
+*.env
+
+# Operating System Files
 .DS_Store
 Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# IDE & Editor Configurations
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# AI Agent Logs & Workspace Checkpoints
+/.gemini/
+*.log
+
+# Scratch & Backup Folders
 /scratch/
-/ELEMENTS/
+/archive/
+/_backup/
+aliflt-archive-backup/
+
+# Offline Raw Design & Media Folders (Root)
 /fabric/
 /lace/
 /tailoring metrial/
 /banner/
 !public/banner/
-/.gemini/
-*.log
-
+/ELEMENTS/
+/alifqr/
+Screenshot*.png

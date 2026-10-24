@@ -8,8 +8,7 @@ interface Props {
 }
 
 import { ClientRouter } from 'astro:transitions';
-import AIChatWidget from '../components/AIChatWidget';
-import SearchModal from '../components/SearchModal';
+import '../styles/global.css';
 
 const {
   title = "alif. ladies tailor",
@@ -30,6 +29,15 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {import.meta.env.DEV && (
+      <script is:inline type="module">
+        import RefreshRuntime from '/@react-refresh';
+        RefreshRuntime.injectIntoGlobalHook(window);
+        window.$RefreshReg$ = () => {};
+        window.$RefreshSig$ = () => () => {};
+        window.__vite_plugin_react_preamble_installed__ = true;
+      </script>
+    )}
     
     <title>{title} | alif.</title>
     <meta name="description" content={description}>
@@ -60,49 +68,14 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Non-blocking font load: preload as style, swap to stylesheet on load -->
     <link rel="preload" as="style"
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Ubuntu:wght@400;500;700&display=swap"
       onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Ubuntu:wght@400;500;700&display=swap">
     </noscript>
     {preloadImage && (
       <link rel="preload" as="image" href={preloadImage} type="image/webp" fetchpriority="high" />
     )}
-    <link rel="stylesheet" href="/css/style.css?v=perf20261022">
-    <style is:global>
-      /* Ensure brand logo 'alif.' is always pristine, minimal, non-bold, and never underlined */
-      .nav-logo,
-      a.nav-logo,
-      a.nav-logo:visited,
-      a.nav-logo:hover,
-      a.nav-logo:active,
-      a.nav-logo:focus,
-      .footer-logo,
-      a.footer-logo,
-      a.footer-logo:visited,
-      a.footer-logo:hover,
-      a.footer-logo:active,
-      a.footer-logo:focus,
-      .drawer-brand-title {
-        color: #000000 !important;
-        text-decoration: none !important;
-        font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-        font-weight: 400 !important;
-        text-transform: lowercase !important;
-        letter-spacing: 2px !important;
-        border: none !important;
-        outline: none !important;
-        box-shadow: none !important;
-      }
-      .footer-logo,
-      a.footer-logo {
-        letter-spacing: 4px !important;
-      }
-      a.nav-logo:hover,
-      a.footer-logo:hover {
-        opacity: 0.75;
-      }
-    </style>
     <ClientRouter />
 </head>
 
@@ -181,22 +154,22 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
     <!-- Fixed Background Canvas from ELEMENTS/BG -->
     <div id="fixed-bg-pattern" aria-hidden="true" transition:persist></div>
 
-    <!-- React Island: Search Overlay with Fuse.js & Typewriter -->
-    <SearchModal client:idle transition:persist />
+    <!-- React Island Root: Search Overlay (Loaded on-demand on search interaction) -->
+    <div id="search-modal-root" transition:persist></div>
 
     <!-- Fixed Top Nav -->
     <nav class="fixed-top-nav" transition:persist>
         <a href="/" class="nav-logo">alif.</a>
 
         <div class="nav-actions">
-            <button class="nav-search-btn" id="open-search" aria-label="Search">
+            <button class="nav-search-btn" id="open-search" type="button" aria-label="Search" style="background: transparent; border: none; outline: none; padding: 0; margin: 0; box-shadow: none; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 50%; width: 36px; height: 36px; -webkit-appearance: none; appearance: none;">
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
             </button>
 
-            <a href="/cart/" class="nav-cart-btn" id="cartIcon" aria-label="View Cart">
+            <a href="/cart/" class="nav-cart-btn" id="cartIcon" aria-label="View Cart" style="position: relative; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; text-decoration: none; color: #111111; background: transparent; border: none; outline: none;">
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -205,7 +178,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                 <span class="cart-count" id="cartCount">0</span>
             </a>
 
-            <button class="nav-toggle-btn" id="navToggleBtn" aria-label="Open menu" aria-controls="sidebarMenu" aria-expanded="false">
+            <button class="nav-toggle-btn" id="navToggleBtn" type="button" aria-label="Open menu" aria-controls="sidebarMenu" aria-expanded="false" style="background: transparent; border: none; outline: none; padding: 0; margin: 0; box-shadow: none; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 50%; width: 36px; height: 36px; -webkit-appearance: none; appearance: none;">
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -400,58 +373,49 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                 </button>
             </div>
 
-            <!-- Social Icons Section (ELEMENTS/social-icons style) -->
+            <!-- Social Icons Pill (from ELEMENTS/social-icons) -->
             <div class="drawer-doodle-social-wrapper">
                 <span class="drawer-social-heading">CONNECT WITH US</span>
                 <ul class="example-1 drawer-social-list">
-                    <!-- Instagram -->
                     <li class="icon-content">
                         <a href="https://instagram.com/alif_lstr" target="_blank" rel="noopener noreferrer" aria-label="Instagram" data-social="instagram" class="link">
-                            <svg version="1.1" viewBox="0 0 100 100">
-                                <path d="M60 45a15 15 0 1 0 -4.395 10.61A14.4 14.4 0 0 0 60 45.225l-0.004 -0.237zm8.1 0a23.006 23.006 0 1 1 -6.738 -16.347 22.2 22.2 0 0 1 6.742 15.96l-0.004 0.41v-0.02zm6.327 -24.022v0.008a5.4 5.4 0 1 1 -1.582 -3.818 5.177 5.177 0 0 1 1.556 3.705v0.11zm-29.4 -12.9 -4.482 -0.03q-4.072 -0.03 -6.184 0t-5.655 0.176a47.143 47.143 0 0 0 -6.312 0.638l0.273 -0.038a23.571 23.571 0 0 0 -4.362 1.136l0.16 -0.052a15.446 15.446 0 0 0 -8.52 8.452l-0.038 0.102a22.543 22.543 0 0 0 -1.065 4.062l-0.02 0.138a45 45 0 0 0 -0.597 5.96l-0.004 0.08q-0.147 3.548 -0.176 5.655t0 6.184 0.03 4.482 -0.03 4.482 0 6.184 0.176 5.655c0.075 2.193 0.292 4.275 0.638 6.312l-0.038 -0.273a23.571 23.571 0 0 0 1.136 4.362l-0.052 -0.16a15.446 15.446 0 0 0 8.452 8.52l0.102 0.038c1.192 0.446 2.606 0.82 4.062 1.065l0.138 0.02c1.758 0.308 3.84 0.525 5.955 0.597l0.08 0.004q3.548 0.147 5.655 0.176t6.184 0l4.455 -0.09 4.482 0.03q4.072 0.03 6.184 0t5.655 -0.176a47.143 47.143 0 0 0 6.312 -0.638l-0.273 0.038a23.571 23.571 0 0 0 4.362 -1.136l-0.16 0.052a15.446 15.446 0 0 0 8.52 -8.452l0.038 -0.102c0.446 -1.192 0.82 -2.606 1.065 -4.062l0.02 -0.138c0.308 -1.758 0.525 -3.84 0.597 -5.955l0.004 -0.08q0.147 -3.548 0.176 -5.655t0 -6.184 -0.03 -4.482 0.03 -4.482 0 -6.184 -0.176 -5.655a47.143 47.143 0 0 0 -0.638 -6.312l0.038 0.273a23.743 23.743 0 0 0 -1.136 -4.362l0.052 0.16a15.446 15.446 0 0 0 -8.452 -8.52l-0.102 -0.038a22.543 22.543 0 0 0 -4.062 -1.065l-0.138 -0.02a45 45 0 0 0 -5.955 -0.597l-0.08 -0.004q-3.548 -0.147 -5.655 -0.176t-6.184 0zM90 45q0 13.418 -0.3 18.574a24.9 24.9 0 0 1 -26.194 26.13l0.06 0.004q-5.157 0.3 -18.574 0.3t-18.574 -0.3A24.9 24.9 0 0 1 0.286 63.514l-0.004 0.06q-0.3 -5.157 -0.3 -18.574t0.3 -18.574A24.9 24.9 0 0 1 26.478 0.297l-0.058 -0.005q5.157 -0.3 18.574 -0.3t18.574 0.3a24.9 24.9 0 0 1 26.13 26.194l0.004 -0.06Q90 31.578 90 45" fill="currentColor" />
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                             </svg>
                         </a>
                         <div class="tooltip">Instagram</div>
                     </li>
-
-                    <!-- Snapchat -->
                     <li class="icon-content">
                         <a href="https://www.snapchat.com/add/alif_lstr" target="_blank" rel="noopener noreferrer" aria-label="Snapchat" data-social="snapchat" class="link">
-                            <svg viewBox="0 0 24 24" width="22" height="22">
-                                <path d="M12.001 2.2c-3.1 0-5.2 2.2-5.2 5 0 .9.3 2 .5 2.6-.3.1-.9.4-1.4.5-.4.1-.7.4-.7.8 0 .5.4.9.9 1 .4.1.8 0 1.2-.1.2.9.8 1.9 1.9 2.4-.2.4-.7.7-1.3.9-.7.2-1.4.5-1.4 1.3 0 .7.6 1.2 1.5 1.2.6 0 1.4-.2 2.1-.6.6.6 1.4.9 2 .9.6 0 1.4-.3 2-.9.7.4 1.5.6 2.1.6.9 0 1.5-.5 1.5-1.2 0-.8-.7-1.1-1.4-1.3-.6-.2-1.1-.5-1.3-.9 1.1-.5 1.7-1.5 1.9-2.4.4.1.8.2 1.2.1.5-.1.9-.5.9-1 0-.4-.3-.7-.7-.8-.5-.1-1.1-.4-1.4-.5.2-.6.5-1.7.5-2.6 0-2.8-2.1-5-5.2-5z" fill="currentColor"/>
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M12.001 2.2c-3.1 0-5.2 2.2-5.2 5 0 .9.3 2 .5 2.6-.3.1-.9.4-1.4.5-.4.1-.7.4-.7.8 0 .5.4.9.9 1 .4.1.8 0 1.2-.1.2.9.8 1.9 1.9 2.4-.2.4-.7.7-1.3.9-.7.2-1.4.5-1.4 1.3 0 .7.6 1.2 1.5 1.2.6 0 1.4-.2 2.1-.6.6.6 1.4.9 2 .9.6 0 1.4-.3 2-.9.7.4 1.5.6 2.1.6.9 0 1.5-.5 1.5-1.2 0-.8-.7-1.1-1.4-1.3-.6-.2-1.1-.5-1.3-.9 1.1-.5 1.7-1.5 1.9-2.4.4.1.8.2 1.2.1.5-.1.9-.5.9-1 0-.4-.3-.7-.7-.8-.5-.1-1.1-.4-1.4-.5.2-.6.5-1.7.5-2.6 0-2.8-2.1-5-5.2-5z"/>
                             </svg>
                         </a>
                         <div class="tooltip">Snapchat</div>
                     </li>
-
-                    <!-- Facebook -->
-                    <li class="icon-content">
-                        <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" data-social="facebook" class="link">
-                            <svg viewBox="0 0 24 24" width="20" height="20">
-                                <path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.5-.14-2.75-.14-2.76 0-4.75 1.68-4.75 4.75v2.75H7v4h3v10h4v-10z" fill="currentColor"/>
-                            </svg>
-                        </a>
-                        <div class="tooltip">Facebook</div>
-                    </li>
-
-                    <!-- WhatsApp -->
                     <li class="icon-content">
                         <a href="https://wa.me/7250470009" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" data-social="whatsapp" class="link">
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42 1.56 1.56 2.41 3.63 2.41 5.83 0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.85.84-.85 2.05 0 1.21.88 2.38 1 2.54.13.17 1.72 2.61 4.16 3.66.58.25 1.03.4 1.39.51.58.19 1.11.16 1.53.1.47-.07 1.45-.59 1.65-1.16.21-.57.21-1.05.14-1.16-.06-.11-.22-.17-.47-.3-.24-.12-1.45-.71-1.68-.8-.22-.08-.39-.12-.55.13-.16.25-.63.8-.78.97-.14.16-.29.18-.53.06-.25-.13-1.04-.39-1.98-1.23-.73-.65-1.22-1.46-1.37-1.7-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.26.25-.42.08-.17.04-.31-.02-.42-.06-.12-.53-1.27-.73-1.75-.19-.47-.39-.41-.54-.42-.14-.01-.29-.03-.44-.03z"/>
                             </svg>
                         </a>
                         <div class="tooltip">WhatsApp</div>
                     </li>
-
-                    <!-- Email -->
                     <li class="icon-content">
-                        <a href="mailto:alifladiestailor@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Mail" data-social="mail" class="link">
-                            <svg version="1.1" viewBox="0 0 100 100">
-                                <path d="M20 80A12 12 0 0 1 8 68v-40A12 12 0 0 1 20 16h56A12 12 0 0 1 88 28v40A12 12 0 0 1 76 80zm10.5 -47.12a4 4 0 1 0 -5.001 6.24l15.001 12.004a12 12 0 0 0 15.001 0l15.001 -12a4 4 0 1 0 -5.001 -6.247l-15.001 12a4 4 0 0 1 -5.001 0z" fill="currentColor" />
+                        <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" data-social="facebook" class="link">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.5-.14-2.75-.14-2.76 0-4.75 1.68-4.75 4.75v2.75H7v4h3v10h4v-10z"/>
                             </svg>
                         </a>
-                        <div class="tooltip">Mail</div>
+                        <div class="tooltip">Facebook</div>
+                    </li>
+                    <li class="icon-content">
+                        <a href="mailto:alifladiestailor@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email" data-social="mail" class="link">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                        </a>
+                        <div class="tooltip">Email</div>
                     </li>
                 </ul>
             </div>
@@ -505,58 +469,49 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                 </div>
             </div>
 
-            <!-- Social Icons Section (ELEMENTS/social-icons style) -->
+            <!-- Social Icons Pill (from ELEMENTS/social-icons) -->
             <div class="footer-doodle-social-wrapper">
                 <span class="footer-col-title doodle-social-heading">CONNECT WITH US</span>
                 <ul class="example-1 footer-social-list">
-                    <!-- Instagram -->
                     <li class="icon-content">
                         <a href="https://instagram.com/alif_lstr" target="_blank" rel="noopener noreferrer" aria-label="Instagram" data-social="instagram" class="link">
-                            <svg version="1.1" viewBox="0 0 100 100">
-                                <path d="M60 45a15 15 0 1 0 -4.395 10.61A14.4 14.4 0 0 0 60 45.225l-0.004 -0.237zm8.1 0a23.006 23.006 0 1 1 -6.738 -16.347 22.2 22.2 0 0 1 6.742 15.96l-0.004 0.41v-0.02zm6.327 -24.022v0.008a5.4 5.4 0 1 1 -1.582 -3.818 5.177 5.177 0 0 1 1.556 3.705v0.11zm-29.4 -12.9 -4.482 -0.03q-4.072 -0.03 -6.184 0t-5.655 0.176a47.143 47.143 0 0 0 -6.312 0.638l0.273 -0.038a23.571 23.571 0 0 0 -4.362 1.136l0.16 -0.052a15.446 15.446 0 0 0 -8.52 8.452l-0.038 0.102a22.543 22.543 0 0 0 -1.065 4.062l-0.02 0.138a45 45 0 0 0 -0.597 5.96l-0.004 0.08q-0.147 3.548 -0.176 5.655t0 6.184 0.03 4.482 -0.03 4.482 0 6.184 0.176 5.655c0.075 2.193 0.292 4.275 0.638 6.312l-0.038 -0.273a23.571 23.571 0 0 0 1.136 4.362l-0.052 -0.16a15.446 15.446 0 0 0 8.452 8.52l0.102 0.038c1.192 0.446 2.606 0.82 4.062 1.065l0.138 0.02c1.758 0.308 3.84 0.525 5.955 0.597l0.08 0.004q3.548 0.147 5.655 0.176t6.184 0l4.455 -0.09 4.482 0.03q4.072 0.03 6.184 0t5.655 -0.176a47.143 47.143 0 0 0 6.312 -0.638l-0.273 0.038a23.571 23.571 0 0 0 4.362 -1.136l-0.16 0.052a15.446 15.446 0 0 0 8.52 -8.452l-0.038 0.102c0.446 -1.192 0.82 -2.606 1.065 -4.062l0.02 -0.138c0.308 -1.758 0.525 -3.84 0.597 -5.955l0.004 -0.08q0.147 -3.548 0.176 -5.655t0 -6.184 -0.03 -4.482 0.03 -4.482 0 -6.184 -0.176 -5.655a47.143 47.143 0 0 0 -0.638 -6.312l0.038 0.273a23.743 23.743 0 0 0 -1.136 -4.362l0.052 0.16a15.446 15.446 0 0 0 -8.452 -8.52l-0.102 -0.038a22.543 22.543 0 0 0 -4.062 -1.065l-0.138 -0.02a45 45 0 0 0 -5.955 -0.597l-0.08 -0.004q-3.548 -0.147 -5.655 -0.176t-6.184 0zM90 45q0 13.418 -0.3 18.574a24.9 24.9 0 0 1 -26.194 26.13l0.06 0.004q-5.157 0.3 -18.574 0.3t-18.574 -0.3A24.9 24.9 0 0 1 0.286 63.514l-0.004 0.06q-0.3 -5.157 -0.3 -18.574t0.3 -18.574A24.9 24.9 0 0 1 26.478 0.297l-0.058 -0.005q5.157 -0.3 18.574 -0.3t18.574 0.3a24.9 24.9 0 0 1 26.13 26.194l0.004 -0.06Q90 31.578 90 45" fill="currentColor" />
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                             </svg>
                         </a>
                         <div class="tooltip">Instagram</div>
                     </li>
-
-                    <!-- Snapchat -->
                     <li class="icon-content">
                         <a href="https://www.snapchat.com/add/alif_lstr" target="_blank" rel="noopener noreferrer" aria-label="Snapchat" data-social="snapchat" class="link">
-                            <svg viewBox="0 0 24 24" width="22" height="22">
-                                <path d="M12.001 2.2c-3.1 0-5.2 2.2-5.2 5 0 .9.3 2 .5 2.6-.3.1-.9.4-1.4.5-.4.1-.7.4-.7.8 0 .5.4.9.9 1 .4.1.8 0 1.2-.1.2.9.8 1.9 1.9 2.4-.2.4-.7.7-1.3.9-.7.2-1.4.5-1.4 1.3 0 .7.6 1.2 1.5 1.2.6 0 1.4-.2 2.1-.6.6.6 1.4.9 2 .9.6 0 1.4-.3 2-.9.7.4 1.5.6 2.1.6.9 0 1.5-.5 1.5-1.2 0-.8-.7-1.1-1.4-1.3-.6-.2-1.1-.5-1.3-.9 1.1-.5 1.7-1.5 1.9-2.4.4.1.8.2 1.2.1.5-.1.9-.5.9-1 0-.4-.3-.7-.7-.8-.5-.1-1.1-.4-1.4-.5.2-.6.5-1.7.5-2.6 0-2.8-2.1-5-5.2-5z" fill="currentColor"/>
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M12.001 2.2c-3.1 0-5.2 2.2-5.2 5 0 .9.3 2 .5 2.6-.3.1-.9.4-1.4.5-.4.1-.7.4-.7.8 0 .5.4.9.9 1 .4.1.8 0 1.2-.1.2.9.8 1.9 1.9 2.4-.2.4-.7.7-1.3.9-.7.2-1.4.5-1.4 1.3 0 .7.6 1.2 1.5 1.2.6 0 1.4-.2 2.1-.6.6.6 1.4.9 2 .9.6 0 1.4-.3 2-.9.7.4 1.5.6 2.1.6.9 0 1.5-.5 1.5-1.2 0-.8-.7-1.1-1.4-1.3-.6-.2-1.1-.5-1.3-.9 1.1-.5 1.7-1.5 1.9-2.4.4.1.8.2 1.2.1.5-.1.9-.5.9-1 0-.4-.3-.7-.7-.8-.5-.1-1.1-.4-1.4-.5.2-.6.5-1.7.5-2.6 0-2.8-2.1-5-5.2-5z"/>
                             </svg>
                         </a>
                         <div class="tooltip">Snapchat</div>
                     </li>
-
-                    <!-- Facebook -->
-                    <li class="icon-content">
-                        <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" data-social="facebook" class="link">
-                            <svg viewBox="0 0 24 24" width="20" height="20">
-                                <path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.5-.14-2.75-.14-2.76 0-4.75 1.68-4.75 4.75v2.75H7v4h3v10h4v-10z" fill="currentColor"/>
-                            </svg>
-                        </a>
-                        <div class="tooltip">Facebook</div>
-                    </li>
-
-                    <!-- WhatsApp -->
                     <li class="icon-content">
                         <a href="https://wa.me/7250470009" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" data-social="whatsapp" class="link">
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42 1.56 1.56 2.41 3.63 2.41 5.83 0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.85.84-.85 2.05 0 1.21.88 2.38 1 2.54.13.17 1.72 2.61 4.16 3.66.58.25 1.03.4 1.39.51.58.19 1.11.16 1.53.1.47-.07 1.45-.59 1.65-1.16.21-.57.21-1.05.14-1.16-.06-.11-.22-.17-.47-.3-.24-.12-1.45-.71-1.68-.8-.22-.08-.39-.12-.55.13-.16.25-.63.8-.78.97-.14.16-.29.18-.53.06-.25-.13-1.04-.39-1.98-1.23-.73-.65-1.22-1.46-1.37-1.7-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.26.25-.42.08-.17.04-.31-.02-.42-.06-.12-.53-1.27-.73-1.75-.19-.47-.39-.41-.54-.42-.14-.01-.29-.03-.44-.03z"/>
                             </svg>
                         </a>
                         <div class="tooltip">WhatsApp</div>
                     </li>
-
-                    <!-- Email -->
                     <li class="icon-content">
-                        <a href="mailto:alifladiestailor@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Mail" data-social="mail" class="link">
-                            <svg version="1.1" viewBox="0 0 100 100">
-                                <path d="M20 80A12 12 0 0 1 8 68v-40A12 12 0 0 1 20 16h56A12 12 0 0 1 88 28v40A12 12 0 0 1 76 80zm10.5 -47.12a4 4 0 1 0 -5.001 6.24l15.001 12.004a12 12 0 0 0 15.001 0l15.001 -12a4 4 0 1 0 -5.001 -6.247l-15.001 12a4 4 0 0 1 -5.001 0z" fill="currentColor" />
+                        <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" data-social="facebook" class="link">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.5-.14-2.75-.14-2.76 0-4.75 1.68-4.75 4.75v2.75H7v4h3v10h4v-10z"/>
                             </svg>
                         </a>
-                        <div class="tooltip">Mail</div>
+                        <div class="tooltip">Facebook</div>
+                    </li>
+                    <li class="icon-content">
+                        <a href="mailto:alifladiestailor@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email" data-social="mail" class="link">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                        </a>
+                        <div class="tooltip">Email</div>
                     </li>
                 </ul>
             </div>
@@ -571,1375 +526,31 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
     </footer>
     )}
 
-    <!-- React Island: ALiF AI Assistant Widget (Hydrate on idle to keep initial load instant) -->
-    <AIChatWidget client:idle transition:persist />
-
-    <script is:inline>
-        // --- 1. GLOBAL PWA DEFERRED PROMPT (Captured immediately at earliest execution) ---
-        window._alifDeferredPrompt = null;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            window._alifDeferredPrompt = e;
-            window.dispatchEvent(new CustomEvent('pwa-prompt-available'));
-        });
-
-        // Track standalone PWA install status
-        window.addEventListener('appinstalled', () => {
-            window._alifDeferredPrompt = null;
-            const pwaBtn = document.getElementById('drawerInstallPwaBtn');
-            if (pwaBtn) {
-                pwaBtn.style.opacity = '0.5';
-                pwaBtn.innerText = 'INSTALLED';
-            }
-        });
-
-        // --- 2. PWA LAUNCH SPLASH (Smooth luxury transition when opening installed app) ---
-        function checkPwaLaunchSplash() {
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
-                                 window.navigator.standalone === true ||
-                                 document.referrer.includes('android-app://');
-            const splash = document.getElementById('pwaAppLaunchSplash');
-            if (!splash) return;
-
-            if (isStandalone && !sessionStorage.getItem('alif_splash_shown')) {
-                splash.classList.add('is-active');
-                sessionStorage.setItem('alif_splash_shown', 'true');
-                setTimeout(() => {
-                    splash.classList.add('is-fadeout');
-                    setTimeout(() => {
-                        splash.classList.remove('is-active', 'is-fadeout');
-                        splash.style.display = 'none';
-                    }, 350);
-                }, 600);
-            } else {
-                splash.style.display = 'none';
-            }
-        }
-
-        // --- 3. ROBUST SIDEBAR DRAWER CONTROLLER (Global Event Delegation) ---
-        function openSidebar(e) {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            const drawer = document.getElementById('sidebarMenu');
-            const toggleBtn = document.getElementById('navToggleBtn');
-            if (drawer) {
-                drawer.classList.add('is-open');
-                drawer.setAttribute('aria-hidden', 'false');
-                document.body.classList.add('sidebar-open');
-                document.body.style.overflow = 'hidden';
-                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
-            }
-        }
-
-        function closeSidebar(e) {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            const drawer = document.getElementById('sidebarMenu');
-            const toggleBtn = document.getElementById('navToggleBtn');
-            if (drawer) {
-                drawer.classList.remove('is-open');
-                drawer.setAttribute('aria-hidden', 'true');
-                document.body.classList.remove('sidebar-open');
-                document.body.style.overflow = '';
-                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
-            }
-        }
-
-        // Persistent click delegation for sidebar actions across Astro navigations
-        if (!window._sidebarDelegated) {
-            window._sidebarDelegated = true;
-
-            document.addEventListener('click', (e) => {
-                const target = e.target;
-                if (!target) return;
-
-                // 1. Hamburger Toggle Button click
-                if (target.closest('#navToggleBtn')) {
-                    openSidebar(e);
-                    return;
-                }
-
-                // 2. Sidebar Close Button click
-                if (target.closest('#sidebarCloseBtn')) {
-                    closeSidebar(e);
-                    return;
-                }
-
-                // 3. Navigation link click inside drawer -> close drawer smoothly
-                if (target.closest('.drawer-nav a')) {
-                    closeSidebar();
-                    return;
-                }
-
-                // 4. Group Accordion Button inside drawer (PRODUCT / SERVICES)
-                const groupBtn = target.closest('.drawer-group-btn');
-                if (groupBtn) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const group = groupBtn.closest('.drawer-nav-group');
-                    if (group) {
-                        const isOpen = group.classList.toggle('is-open');
-                        groupBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                    }
-                    return;
-                }
-
-                // 5. Drawer Install Button click -> Open PWA flow
-                if (target.closest('#drawerInstallPwaBtn')) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    closeSidebar();
-                    openPwaInstallModal();
-                    return;
-                }
-
-                // 6. Close PWA modal buttons
-                if (target.closest('#closePwaModalBtn') || target.closest('#pwaDismissIosBtn') || target.closest('#pwaDismissAndroidBtn')) {
-                    closePwaInstallModal();
-                    return;
-                }
-
-                // 7. Click outside PWA modal card to dismiss
-                if (target.classList && target.classList.contains('pwa-modal-backdrop')) {
-                    closePwaInstallModal();
-                    return;
-                }
-
-                // 8. Trigger native install prompt from modal button
-                if (target.closest('#pwaTriggerNativePromptBtn')) {
-                    e.preventDefault();
-                    if (window._alifDeferredPrompt) {
-                        window._alifDeferredPrompt.prompt();
-                        window._alifDeferredPrompt.userChoice.then((choiceResult) => {
-                            if (choiceResult.outcome === 'accepted') {
-                                const pwaBtn = document.getElementById('drawerInstallPwaBtn');
-                                if (pwaBtn) {
-                                    pwaBtn.style.opacity = '0.5';
-                                    pwaBtn.innerText = 'INSTALLED';
-                                }
-                            }
-                            window._alifDeferredPrompt = null;
-                            closePwaInstallModal();
-                        });
-                    }
-                    return;
-                }
-            }, { passive: false });
-
-            // Close on escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeSidebar();
-                    closePwaInstallModal();
-                }
-            });
-        }
-
-        // --- 4. PWA INSTALL MODAL CONTROLLER ---
-        function openPwaInstallModal() {
-            const modal = document.getElementById('pwaInstallModal');
-            if (!modal) return;
-
-            const promptSec = document.getElementById('pwaModalPromptSection');
-            const iosSec = document.getElementById('pwaModalIosGuide');
-            const androidSec = document.getElementById('pwaModalAndroidGuide');
-
-            if (promptSec) promptSec.style.display = 'none';
-            if (iosSec) iosSec.style.display = 'none';
-            if (androidSec) androidSec.style.display = 'none';
-
-            // Check if native prompt is available
-            if (window._alifDeferredPrompt) {
-                if (promptSec) promptSec.style.display = 'block';
-            } else {
-                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                if (isIOS) {
-                    if (iosSec) iosSec.style.display = 'block';
-                } else {
-                    if (androidSec) androidSec.style.display = 'block';
-                }
-            }
-
-            modal.classList.add('is-open');
-            modal.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closePwaInstallModal() {
-            const modal = document.getElementById('pwaInstallModal');
-            if (modal) {
-                modal.classList.remove('is-open');
-                modal.setAttribute('aria-hidden', 'true');
-                if (!document.body.classList.contains('sidebar-open')) {
-                    document.body.style.overflow = '';
-                }
-            }
-        }
-
-        // Interactive Doodle Social Icons: click icon to wiggle, click speech bubble tooltip to open link
-        function initDoodleSocial() {
-            const doodleButtons = document.querySelectorAll('.doodle-link');
-            if (!doodleButtons.length) return;
-
-            doodleButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    const isWiggling = this.classList.contains('is-wiggling');
-                    const parent = this.closest('.doodle-icon-content');
-
-                    // Reset any other icon
-                    doodleButtons.forEach(other => {
-                        other.classList.remove('is-wiggling');
-                        const otherParent = other.closest('.doodle-icon-content');
-                        if (otherParent) otherParent.classList.remove('is-wiggling');
-                    });
-
-                    if (!isWiggling) {
-                        // Activate wiggle on this icon & display its speech bubble tooltip
-                        this.classList.add('is-wiggling');
-                        if (parent) parent.classList.add('is-wiggling');
-                    } else {
-                        // Toggle off if clicked again
-                        this.classList.remove('is-wiggling');
-                        if (parent) parent.classList.remove('is-wiggling');
-                    }
-                });
-            });
-
-            // Prevent tooltip clicks from bubbling to container or closing early
-            const tooltips = document.querySelectorAll('.doodle-tooltip');
-            tooltips.forEach(tooltip => {
-                tooltip.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
-            });
-
-            // Dismiss wiggling when clicking anywhere outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.doodle-container')) {
-                    doodleButtons.forEach(btn => {
-                        btn.classList.remove('is-wiggling');
-                        const parent = btn.closest('.doodle-icon-content');
-                        if (parent) parent.classList.remove('is-wiggling');
-                    });
-                }
-            });
-        }
-
-        function updateBottomNavActive() {
-            const currentPath = window.location.pathname;
-            const bNavItems = document.querySelectorAll('.b-nav-item');
-            bNavItems.forEach(item => {
-                const href = item.getAttribute('href');
-                if (!href) return;
-                const isHome = href === '/' && (currentPath === '/' || currentPath === '');
-                const isSub = href !== '/' && currentPath.startsWith(href);
-                if (isHome || isSub) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
-            });
-        }
-
-        function updateCartBadges() {
-            try {
-                const savedCart = JSON.parse(localStorage.getItem('alif_cart') || '[]');
-                const count = savedCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-                const badge1 = document.getElementById('cartCount');
-                const badge2 = document.getElementById('cartCountMobile');
-                if (badge1) badge1.innerText = count;
-                if (badge2) badge2.innerText = count;
-            } catch(e) {}
-        }
-
-        // Instagram-Style Minimalist Floating Edge Swipe Navigation (Home <-> Reels)
-        function initInstagramSwipeNavigation() {
-            if (window._instaSwipeBound) return;
-            window._instaSwipeBound = true;
-
-            let touchStartX = 0;
-            let touchStartY = 0;
-            let touchCurrentX = 0;
-            let touchCurrentY = 0;
-            let isTrackingSwipe = false;
-            let swipeDirection = null; // 'to-reels' or 'to-home'
-            let indicatorEl = null;
-
-            function getOrCreateIndicator() {
-                let el = document.getElementById('instaSwipeIndicator');
-                if (!el) {
-                    el = document.createElement('div');
-                    el.id = 'instaSwipeIndicator';
-                    el.className = 'insta-swipe-indicator';
-                    el.innerHTML = `
-                        <div class="indicator-reels-box" style="display:none; align-items:center; gap:7px;">
-                            <span class="swipe-text">REELS</span>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                                <rect x="2.5" y="2.5" width="19" height="19" rx="4.5" fill="none" stroke="currentColor" stroke-width="2"/>
-                                <polygon points="10 9 15 12 10 15" fill="currentColor"/>
-                            </svg>
-                        </div>
-                        <div class="indicator-home-box" style="display:none; align-items:center; gap:7px;">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="15 18 9 12 15 6"></polyline>
-                            </svg>
-                            <span class="swipe-text">HOME</span>
-                        </div>
-                    `;
-                    document.body.appendChild(el);
-                }
-                return el;
-            }
-
-            function isCarouselOrInteractive(target) {
-                if (!target) return false;
-                return Boolean(target.closest(
-                    '#top-banner, .banner-carousel, .reels-cards-track, .reels-cards-viewport, ' +
-                    '.collection-cards-track, .collection-cards-viewport, .fc-grid, ' +
-                    '.arabica-clone-drawer, #sidebarMenu, #chat-widget, #searchModal, ' +
-                    'input, textarea, select, button, a'
-                ));
-            }
-
-            window.addEventListener('touchstart', (e) => {
-                if (!e.touches || e.touches.length !== 1) return;
-                const touch = e.touches[0];
-                const target = e.target;
-
-                if (isCarouselOrInteractive(target)) {
-                    isTrackingSwipe = false;
-                    return;
-                }
-
-                const rawPath = window.location.pathname.replace(/\/$/, '') || '/';
-                const isHome = rawPath === '/' || rawPath === '';
-                const isReels = rawPath === '/reels';
-
-                if (!isHome && !isReels) {
-                    isTrackingSwipe = false;
-                    return;
-                }
-
-                touchStartX = touch.clientX;
-                touchStartY = touch.clientY;
-                touchCurrentX = touch.clientX;
-                touchCurrentY = touch.clientY;
-
-                // STRICT EDGE DETECTION: Only activate on far edges (within 45px) so middle 90% is 100% native
-                if (isHome) {
-                    if (touchStartX >= window.innerWidth - 45) {
-                        isTrackingSwipe = true;
-                        swipeDirection = 'to-reels';
-                    } else {
-                        isTrackingSwipe = false;
-                    }
-                } else if (isReels) {
-                    if (touchStartX <= 45) {
-                        isTrackingSwipe = true;
-                        swipeDirection = 'to-home';
-                    } else {
-                        isTrackingSwipe = false;
-                    }
-                }
-            }, { passive: true });
-
-            window.addEventListener('touchmove', (e) => {
-                if (!isTrackingSwipe || !e.touches || e.touches.length !== 1) return;
-                const touch = e.touches[0];
-                touchCurrentX = touch.clientX;
-                touchCurrentY = touch.clientY;
-
-                const diffX = touchCurrentX - touchStartX;
-                const diffY = touchCurrentY - touchStartY;
-
-                // Cancel if vertical scroll is dominant
-                if (Math.abs(diffY) > 20 && Math.abs(diffY) > Math.abs(diffX)) {
-                    isTrackingSwipe = false;
-                    if (indicatorEl) indicatorEl.classList.remove('visible');
-                    return;
-                }
-
-                // Home -> Reels (dragging from right edge towards left)
-                if (swipeDirection === 'to-reels' && diffX < -15) {
-                    const pull = Math.min(Math.abs(diffX), 120);
-                    indicatorEl = getOrCreateIndicator();
-                    indicatorEl.className = 'insta-swipe-indicator right-edge visible';
-                    const reelsBox = indicatorEl.querySelector('.indicator-reels-box');
-                    const homeBox = indicatorEl.querySelector('.indicator-home-box');
-                    if (reelsBox) reelsBox.style.display = 'inline-flex';
-                    if (homeBox) homeBox.style.display = 'none';
-                    const opacity = Math.min(pull / 65, 1);
-                    indicatorEl.style.transform = `translateY(-50%) translateX(${Math.max(60 - pull * 0.7, 0)}px)`;
-                    indicatorEl.style.opacity = opacity;
-                }
-                // Reels -> Home (dragging from left edge towards right)
-                else if (swipeDirection === 'to-home' && diffX > 15) {
-                    const pull = Math.min(diffX, 120);
-                    indicatorEl = getOrCreateIndicator();
-                    indicatorEl.className = 'insta-swipe-indicator left-edge visible';
-                    const reelsBox = indicatorEl.querySelector('.indicator-reels-box');
-                    const homeBox = indicatorEl.querySelector('.indicator-home-box');
-                    if (reelsBox) reelsBox.style.display = 'none';
-                    if (homeBox) homeBox.style.display = 'inline-flex';
-                    const opacity = Math.min(pull / 65, 1);
-                    indicatorEl.style.transform = `translateY(-50%) translateX(${Math.min(-60 + pull * 0.7, 0)}px)`;
-                    indicatorEl.style.opacity = opacity;
-                }
-            }, { passive: true });
-
-            window.addEventListener('touchend', () => {
-                if (!isTrackingSwipe) return;
-                isTrackingSwipe = false;
-
-                const diffX = touchCurrentX - touchStartX;
-                const diffY = touchCurrentY - touchStartY;
-                const isHorizontal = Math.abs(diffX) > Math.abs(diffY) * 1.3;
-
-                if (indicatorEl) {
-                    indicatorEl.classList.remove('visible');
-                    indicatorEl.style.opacity = '0';
-                }
-
-                // Trigger threshold: 50px horizontal swipe
-                if (isHorizontal) {
-                    if (swipeDirection === 'to-reels' && diffX < -50) {
-                        if (navigator.vibrate) {
-                            try { navigator.vibrate(15); } catch(_) {}
-                        }
-                        const reelsBtn = document.getElementById('bNavReels');
-                        if (reelsBtn) {
-                            reelsBtn.click();
-                        } else {
-                            window.location.assign('/reels/');
-                        }
-                    } else if (swipeDirection === 'to-home' && diffX > 50) {
-                        if (navigator.vibrate) {
-                            try { navigator.vibrate(15); } catch(_) {}
-                        }
-                        const homeBtn = document.getElementById('bNavHome');
-                        if (homeBtn) {
-                            homeBtn.click();
-                        } else {
-                            window.location.assign('/');
-                        }
-                    }
-                }
-            }, { passive: true });
-        }
-
-        function runPageInit() {
-            checkPwaLaunchSplash();
-            initDoodleSocial();
-            updateBottomNavActive();
-            updateCartBadges();
-            initInstagramSwipeNavigation();
-        }
-
-        // Run on Astro SPA navigations
-        document.addEventListener('astro:page-load', runPageInit);
-
-        // ALSO run immediately on first hard page load
-        // (astro:page-load doesn't fire on initial visit)
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', runPageInit);
-        } else {
-            runPageInit();
-        }
-
-        document.addEventListener('astro:before-swap', () => {
-            const drawer = document.getElementById('sidebarMenu') || document.getElementById('minimalistSidebar');
-            if (drawer) {
-                drawer.classList.remove('is-open');
-                drawer.setAttribute('aria-hidden', 'true');
-                document.body.classList.remove('sidebar-open');
-                document.body.style.overflow = '';
-            }
-        });
-
-        // Service Worker Registration & Cache Busting
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').then(reg => {
-                reg.update();
-            }).catch(() => {});
-        }
-    </script>
-
-    <!-- Scoped Styles from ELEMENTS/sidebar (% ARABICA signature design) -->
-    <style is:global>
-        /* Instagram-Style Minimalist Floating Edge Swipe Indicator */
-        .insta-swipe-indicator {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 9999999;
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 9px 16px;
-            background: rgba(18, 18, 18, 0.9);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            color: #ffffff;
-            font-family: var(--font-body, 'Ubuntu', sans-serif);
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 1.4px;
-            border-radius: 30px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            pointer-events: none;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.18s ease, transform 0.15s ease-out, visibility 0.18s;
-            will-change: transform, opacity;
-        }
-
-        .insta-swipe-indicator.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .insta-swipe-indicator.right-edge {
-            right: 12px;
-        }
-
-        .insta-swipe-indicator.left-edge {
-            left: 12px;
-        }
-
-        @media (min-width: 1025px) {
-            .insta-swipe-indicator {
-                display: none !important;
-            }
-        }
-
-        .arabica-clone-drawer {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
-            background-color: #ffffff;
-            z-index: 999999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.35s ease;
-        }
-
-        .arabica-clone-drawer.is-open {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-
-        /* Signature Arabica Dotted Box Close Button */
-        .drawer-close-btn {
-            position: fixed;
-            top: 22px;
-            right: 22px;
-            width: 36px;
-            height: 36px;
-            border: 1px dotted rgba(0, 0, 0, 0.5);
-            background: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: #000000;
-            padding: 0;
-            transition: all 0.25s ease;
-            z-index: 1000000;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .drawer-close-btn:hover {
-            border-color: #000000;
-            border-style: solid;
-            transform: scale(1.08);
-        }
-
-        /* Left-Aligned Luxury Inner Wrapper */
-        .drawer-inner {
-            margin: auto 0;
-            width: 100%;
-            max-width: 440px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
-            padding: 3.2rem 2.2rem 2.5rem 2.2rem;
-            box-sizing: border-box;
-            text-align: left;
-        }
-
-        /* Brand Logo Area (Left-Aligned) */
-        .drawer-logo {
-            margin-bottom: 34px;
-            text-align: left;
-            width: 100%;
-        }
-
-        .drawer-brand-title {
-            font-family: var(--font-heading, 'Playfair Display', serif);
-            font-size: 32px;
-            font-weight: 400;
-            letter-spacing: 4px;
-            text-transform: lowercase;
-            color: #000000;
-            margin: 0 0 5px 0;
-            line-height: 1;
-            text-align: left;
-        }
-
-        .drawer-brand-sub {
-            font-family: var(--font-body, 'Ubuntu', sans-serif);
-            font-size: 9.5px;
-            font-weight: 400;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: #777777;
-            display: block;
-            text-align: left;
-        }
-
-        /* Navigation Links Hierarchy (Left-Aligned) */
-        .drawer-nav {
-            width: 100%;
-        }
-
-        .drawer-main-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            align-items: flex-start;
-            width: 100%;
-        }
-
-        .drawer-nav-item {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .drawer-top-link,
-        button.drawer-group-btn {
-            all: unset !important;
-            box-sizing: border-box !important;
-            cursor: pointer !important;
-            font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-            font-size: 24px !important;
-            font-weight: 500 !important;
-            text-transform: uppercase !important;
-            letter-spacing: 2.2px !important;
-            color: #000000 !important;
-            display: block !important;
-            width: 100% !important;
-            text-align: left !important;
-            line-height: 1.25 !important;
-            padding: 4px 0 !important;
-            margin: 0 !important;
-            background: transparent !important;
-            border: none !important;
-            outline: none !important;
-            box-shadow: none !important;
-            transition: opacity 0.2s ease, transform 0.2s ease !important;
-            -webkit-appearance: none !important;
-            appearance: none !important;
-            -webkit-tap-highlight-color: transparent !important;
-        }
-
-        .drawer-top-link:hover,
-        button.drawer-group-btn:hover {
-            opacity: 0.55 !important;
-            transform: translateX(4px) !important;
-        }
-
-        button.drawer-group-btn:focus,
-        button.drawer-group-btn:active,
-        button.drawer-group-btn:focus-visible {
-            outline: none !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-
-        .drawer-nav-group.is-open button.drawer-group-btn {
-            font-weight: 500 !important;
-            color: #000000 !important;
-        }
-
-        /* Submenu container (Indented Left-Aligned Haute Couture Guide Line) */
-        .drawer-submenu {
-            display: none !important;
-            list-style: none !important;
-            padding: 4px 0 6px 16px !important;
-            margin: 10px 0 12px 4px !important;
-            border-left: 2px solid #111111 !important;
-            width: 100% !important;
-            box-sizing: border-box !important;
-        }
-
-        .drawer-nav-group.is-open .drawer-submenu {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 12px !important;
-            animation: drawerSubmenuSlide 0.22s ease-out forwards;
-        }
-
-        @keyframes drawerSubmenuSlide {
-            0% {
-                opacity: 0;
-                transform: translateY(-5px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .drawer-submenu li {
-            width: 100% !important;
-            list-style: none !important;
-            text-align: left !important;
-        }
-
-        .drawer-sub-link {
-            font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-            font-size: 16.5px !important;
-            font-weight: 500 !important;
-            text-transform: uppercase !important;
-            letter-spacing: 1.8px !important;
-            color: #444444 !important;
-            text-decoration: none !important;
-            display: inline-block !important;
-            line-height: 1.3 !important;
-            transition: all 0.2s ease !important;
-            text-align: left !important;
-            -webkit-tap-highlight-color: transparent !important;
-        }
-
-        .drawer-sub-link:hover,
-        .drawer-sub-link:active {
-            color: #000000 !important;
-            transform: translateX(6px) !important;
-        }
-
-        /* Highlighted PWA Install App Button */
-        .drawer-install-wrapper {
-            margin-top: 28px;
-            width: 100%;
-        }
-
-        .drawer-install-btn {
-            width: 100%;
-            max-width: 320px;
-            padding: 13px 20px;
-            background: #111111;
-            color: #ffffff;
-            border: 1px solid #111111;
-            border-radius: 6px;
-            font-family: var(--font-body, 'Ubuntu', sans-serif);
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 2.2px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
-            transition: all 0.22s ease;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .drawer-install-btn:hover,
-        .drawer-install-btn:active {
-            background: #2a2a2a;
-            border-color: #2a2a2a;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-        }
-
-        /* Social Section in Drawer */
-        .drawer-doodle-social-wrapper {
-            margin-top: 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
-            width: 100%;
-        }
-
-        .drawer-social-heading {
-            font-family: var(--font-body, 'Ubuntu', sans-serif);
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: #888888;
-            margin-bottom: 14px;
-            display: block;
-            text-align: left;
-        }
-
-        /* ══════════════════════════════════════════════════════════
-           ELEMENTS/social-icons: Pill Container, Tooltip & Icons
-           ══════════════════════════════════════════════════════════ */
-        :global(ul.example-1) {
-            display: inline-flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            align-items: center !important;
-            justify-content: center !important;
-            list-style: none !important;
-            margin: 0 !important;
-            padding: 8px 14px !important;
-            background-color: #000000 !important;
-            border-radius: 999px !important;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15) !important;
-            gap: 4px !important;
-            box-sizing: border-box !important;
-        }
-
-        :global(.example-1 .icon-content) {
-            margin: 0 !important;
-            padding: 0 !important;
-            position: relative !important;
-            list-style: none !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-        }
-
-        :global(.example-1 .icon-content::before),
-        :global(.example-1 .icon-content::marker) {
-            display: none !important;
-            content: "" !important;
-        }
-
-        :global(.example-1 .icon-content .link) {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: 38px !important;
-            height: 38px !important;
-            border-radius: 50% !important;
-            color: #ffffff !important;
-            background-color: #000000 !important;
-            text-decoration: none !important;
-            border: none !important;
-            outline: none !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            cursor: pointer !important;
-            transition: all 0.3s ease-in-out !important;
-            -webkit-tap-highlight-color: transparent !important;
-        }
-
-        :global(.example-1 .icon-content .link:hover) {
-            box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25) !important;
-            transform: translateY(-2px) !important;
-        }
-
-        :global(.example-1 .icon-content .link svg) {
-            width: 20px !important;
-            height: 20px !important;
-            max-width: 20px !important;
-            max-height: 20px !important;
-            fill: currentColor !important;
-            display: block !important;
-            transition: transform 0.2s ease, fill 0.2s ease, color 0.2s ease !important;
-        }
-
-        /* Tooltip (From ELEMENTS/social-icons) */
-        :global(.example-1 .icon-content .tooltip) {
-            position: absolute !important;
-            top: -20px !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            background-color: #ffffff !important;
-            color: #000000 !important;
-            padding: 4px 8px !important;
-            border-radius: 5px !important;
-            opacity: 0 !important;
-            visibility: hidden !important;
-            font-size: 11px !important;
-            font-family: var(--font-body, 'Ubuntu', sans-serif) !important;
-            font-weight: 700 !important;
-            letter-spacing: 0.5px !important;
-            white-space: nowrap !important;
-            transition: all 0.25s ease-in-out !important;
-            pointer-events: none !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25) !important;
-            z-index: 99 !important;
-        }
-
-        :global(.example-1 .icon-content:hover .tooltip) {
-            opacity: 1 !important;
-            visibility: visible !important;
-            top: -38px !important;
-        }
-
-        /* Brand Colors on Hover (From ELEMENTS/social-icons) */
-        :global(.example-1 .icon-content .link[data-social="instagram"]:hover) {
-            color: #ff007f !important;
-        }
-
-        :global(.example-1 .icon-content .link[data-social="snapchat"]:hover) {
-            color: #fffc00 !important;
-        }
-
-        :global(.example-1 .icon-content .link[data-social="facebook"]:hover) {
-            color: #1877f2 !important;
-        }
-
-        :global(.example-1 .icon-content .link[data-social="whatsapp"]:hover) {
-            color: #25d366 !important;
-        }
-
-        :global(.example-1 .icon-content .link[data-social="mail"]:hover) {
-            color: #00a2ff !important;
-        }
-
-        /* --- CONTINUOUS LUXURY MARQUEE TICKER STRIPE --- */
-        .marquee-container {
-            overflow: hidden !important;
-            white-space: nowrap !important;
-            background: #111111;
-            color: #ffffff;
-            font-family: var(--font-body, 'Ubuntu', sans-serif);
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            padding: 0;
-            height: 36px;
-            display: flex !important;
-            align-items: center !important;
-            position: relative;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            z-index: 100;
-            box-sizing: border-box;
-            width: 100%;
-        }
-
-        .marquee-track {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            align-items: center !important;
-            width: max-content !important;
-            height: 100% !important;
-            animation: continuousMarquee 32s linear infinite !important;
-            will-change: transform;
-        }
-
-        .marquee-container:hover .marquee-track {
-            animation-play-state: paused;
-        }
-
-        @keyframes continuousMarquee {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-33.333%, 0, 0); }
-        }
-
-        .marquee-group {
-            display: inline-flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            align-items: center !important;
-            flex-shrink: 0 !important;
-            height: 100% !important;
-        }
-
-        .marquee-item {
-            display: inline-flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            white-space: nowrap !important;
-            flex-shrink: 0 !important;
-            gap: 8px;
-            padding: 0 20px;
-            color: rgba(255, 255, 255, 0.92);
-            line-height: 1;
-        }
-
-        .marquee-sep {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.82rem;
-            line-height: 1;
-            user-select: none;
-            padding: 0 4px;
-        }
-
-        @media (max-width: 600px) {
-            .marquee-container {
-                font-size: 0.62rem;
-                letter-spacing: 1.6px;
-                height: 32px;
-            }
-            .marquee-item {
-                padding: 0 16px;
-                gap: 6px;
-            }
-        }
-
-        /* --- BOTTOM NAV CONTRAST & HIGHLIGHTED ACTIVE PILL (INSTA/MODERN STYLE) --- */
-        .b-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: #000000 !important;
-            font-size: 10px !important;
-            font-weight: 500 !important;
-            opacity: 1 !important;
-            flex: 1;
-            height: 100%;
-            font-family: var(--font-body);
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            position: relative;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .b-nav-icon-box {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 28px;
-            border-radius: 14px;
-            background: transparent;
-            transition: background 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.2s ease;
-            margin-bottom: 2px;
-        }
-
-        .b-nav-item svg {
-            width: 20px;
-            height: 20px;
-            stroke: #000000 !important;
-            color: #000000 !important;
-            stroke-width: 1.9 !important;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            transition: stroke 0.2s ease, color 0.2s ease;
-        }
-
-        .b-nav-label {
-            color: #000000 !important;
-            font-size: 9.5px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            line-height: 1;
-            transition: font-weight 0.2s ease;
-        }
-
-        /* Active Item: Black Capsule with White Icon (Instagram style) */
-        .b-nav-item.active .b-nav-icon-box {
-            background: #000000 !important;
-        }
-
-        .b-nav-item.active svg {
-            stroke: #ffffff !important;
-            color: #ffffff !important;
-            stroke-width: 2.1 !important;
-        }
-
-        .b-nav-item.active .b-nav-label {
-            font-weight: 500 !important;
-            color: #000000 !important;
-        }
-
-        @media (max-width: 768px) {
-            .footer-bottom {
-                padding-top: 16px !important;
-                padding-bottom: calc(85px + env(safe-area-inset-bottom, 0px)) !important;
-            }
-        }
-
-        /* --- PROFESSIONAL PWA LAUNCH SPLASH OVERLAY --- */
-        .pwa-launch-splash {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
-            background: #FBF9F6;
-            z-index: 10000000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-            pointer-events: none;
-        }
-
-        .pwa-launch-splash.is-active {
-            display: flex;
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .pwa-launch-splash.is-fadeout {
-            opacity: 0;
-        }
-
-        .pwa-splash-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            animation: pwaSplashPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes pwaSplashPop {
-            0% { transform: scale(0.92); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .pwa-splash-logo {
-            font-family: var(--font-body, 'Ubuntu', sans-serif);
-            font-size: 3rem;
-            font-weight: 400;
-            letter-spacing: 4px;
-            color: #000000;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .pwa-splash-sub {
-            font-family: var(--font-body, 'Ubuntu', sans-serif);
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 3px;
-            color: #666666;
-            text-transform: uppercase;
-            margin-bottom: 24px;
-        }
-
-        .pwa-splash-bar {
-            width: 72px;
-            height: 2px;
-            background: rgba(0, 0, 0, 0.08);
-            border-radius: 2px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .pwa-splash-progress {
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 40%;
-            background: #000000;
-            animation: pwaSplashSlide 0.75s ease-in-out infinite alternate;
-        }
-
-        @keyframes pwaSplashSlide {
-            0% { transform: translateX(0); width: 30%; }
-            100% { transform: translateX(50px); width: 50%; }
-        }
-
-        /* --- PWA INSTALL BOTTOM SHEET MODAL --- */
-        .pwa-modal-backdrop {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            z-index: 10000005;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .pwa-modal-backdrop.is-open {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-
-        .pwa-modal-card {
-            width: 100%;
-            max-width: 440px;
-            background: #ffffff;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            padding: 16px 22px calc(24px + env(safe-area-inset-bottom, 0px)) 22px;
-            box-sizing: border-box;
-            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
-            transform: translateY(100%);
-            transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .pwa-modal-backdrop.is-open .pwa-modal-card {
-            transform: translateY(0);
-        }
-
-        .pwa-modal-drag-pill {
-            width: 36px;
-            height: 4px;
-            background: #d4d4d4;
-            border-radius: 4px;
-            margin: 0 auto 16px auto;
-        }
-
-        .pwa-modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid #f0ede6;
-        }
-
-        .pwa-modal-brand-badge {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .pwa-modal-icon {
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(0, 0, 0, 0.06);
-        }
-
-        .pwa-modal-title {
-            font-family: var(--font-body, 'Ubuntu', sans-serif);
-            font-size: 15px;
-            font-weight: 600;
-            color: #000000;
-            letter-spacing: 0.5px;
-        }
-
-        .pwa-modal-caption {
-            font-size: 11px;
-            color: #777777;
-            letter-spacing: 0.3px;
-        }
-
-        .pwa-modal-close-btn {
-            background: none;
-            border: none;
-            padding: 6px;
-            cursor: pointer;
-            color: #777777;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background 0.2s ease;
-        }
-
-        .pwa-modal-close-btn:hover {
-            background: #f4f2ee;
-            color: #000000;
-        }
-
-        .pwa-modal-desc {
-            font-size: 13px;
-            line-height: 1.55;
-            color: #333333;
-            margin: 0 0 16px 0;
-        }
-
-        .pwa-modal-steps {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .pwa-modal-steps li {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            font-size: 13px;
-            line-height: 1.45;
-            color: #222222;
-        }
-
-        .pwa-modal-steps .step-num {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: #111111;
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: 600;
-            margin-top: 1px;
-        }
-
-        .pwa-modal-action-btn {
-            width: 100%;
-            padding: 13px 20px;
-            background: #111111;
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            font-family: var(--font-body, 'Ubuntu', sans-serif);
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .pwa-modal-action-btn:hover,
-        .pwa-modal-action-btn:active {
-            background: #2a2a2a;
-            transform: translateY(-1px);
-        }
-
-        .pwa-modal-action-btn.secondary {
-            background: #f0ede6;
-            color: #111111;
-            box-shadow: none;
-        }
-
-        .pwa-modal-action-btn.secondary:hover,
-        .pwa-modal-action-btn.secondary:active {
-            background: #e5e1d8;
-        }
-    </style>
+    <!-- Floating AI Assistant Widget Root (Loaded on-demand on chat interaction) -->
+    <div id="ai-chat-root" transition:persist>
+        <div id="chat-widget">
+            <button
+                id="chat-button"
+                type="button"
+                title="Chat with alif. AI"
+                aria-label="Open Chat"
+            >
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script src="../scripts/app.js"></script>
 </body>
 </html>

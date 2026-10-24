@@ -89,6 +89,13 @@ const reelsList = (reelsData || []).map((r, index) => {
     curatedSet: curatedSet
   };
 });
+
+const reelsCatalogForClient = reelsList.map((r) => ({
+  id: r.id,
+  category: r.category,
+  style: r.style,
+  tags: r.tags
+}));
 ---
 
 <BaseLayout 
@@ -101,17 +108,33 @@ const reelsList = (reelsData || []).map((r, index) => {
     <!-- 1 Card at a Time Focused Feed with Native Instagram / Shorts Snap -->
     <div class="reels-feed-container">
       <div class="reels-feed" id="reelsFeed" tabindex="0" role="region" aria-label="Reels Video Feed">
+        <!-- Reusable SVG Symbol Sprite Sheet -->
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;" aria-hidden="true">
+          <symbol id="icon-vol-on" viewBox="0 0 24 24">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+          </symbol>
+          <symbol id="icon-vol-mute" viewBox="0 0 24 24">
+            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+          </symbol>
+          <symbol id="icon-pause" viewBox="0 0 24 24">
+            <rect x="7" y="5" width="2.5" height="14" rx="1.2" />
+            <rect x="14.5" y="5" width="2.5" height="14" rx="1.2" />
+          </symbol>
+          <symbol id="icon-play" viewBox="0 0 24 24">
+            <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86a1 1 0 0 0-1.5.86z"/>
+          </symbol>
+          <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </symbol>
+        </svg>
+
         {reelsList.length > 0 ? (
           reelsList.map((item) => (
             <div 
               class="atelier-reel-card" 
               data-reel-id={item.id} 
               id={`reel-${item.id}`}
-              data-category={item.category}
-              data-style={item.style}
-              data-tags={JSON.stringify(item.tags)}
-              data-service={item.linked_service || ''}
-              data-products={JSON.stringify(item.linked_products)}
             >
               <!-- Edge-to-Edge Reel Video (lazy-loaded: src set by IntersectionObserver) -->
               <video 
@@ -131,13 +154,11 @@ const reelsList = (reelsData || []).map((r, index) => {
                 <div class="reel-top-row">
                   <h3 class="reel-top-title">{item.title}</h3>
                   <button type="button" class="reel-audio-pill sound-muted" aria-label="Toggle Sound" onclick="event.stopPropagation();" title="Toggle Sound">
-                    <!-- Sound ON Icon -->
                     <svg class="audio-icon icon-vol-on" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                      <use href="#icon-vol-on"></use>
                     </svg>
-                    <!-- Sound OFF (Muted) Icon -->
                     <svg class="audio-icon icon-vol-mute" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                      <use href="#icon-vol-mute"></use>
                     </svg>
                   </button>
                 </div>
@@ -150,18 +171,14 @@ const reelsList = (reelsData || []).map((r, index) => {
 
               <!-- Center Audio & Play/Pause Controller -->
               <button type="button" class="reel-center-ctrl state-mute" aria-label="Audio and Playback Control">
-                <!-- Mute Icon -->
                 <svg class="center-icon icon-mute" viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
-                  <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                  <use href="#icon-vol-mute"></use>
                 </svg>
-                <!-- Pause Icon -->
                 <svg class="center-icon icon-pause" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-                  <rect x="7" y="5" width="2.5" height="14" rx="1.2" />
-                  <rect x="14.5" y="5" width="2.5" height="14" rx="1.2" />
+                  <use href="#icon-pause"></use>
                 </svg>
-                <!-- Play Icon -->
                 <svg class="center-icon icon-play" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                  <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86a1 1 0 0 0-1.5.86z"/>
+                  <use href="#icon-play"></use>
                 </svg>
               </button>
 
@@ -197,8 +214,7 @@ const reelsList = (reelsData || []).map((r, index) => {
                     <span class="rc-action-btn">
                       <span>SHOW PRODUCT</span>
                       <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
+                        <use href="#icon-arrow-right"></use>
                       </svg>
                     </span>
                   </div>
@@ -235,7 +251,7 @@ const reelsList = (reelsData || []).map((r, index) => {
   </div>
 
   <!-- Embedded Catalog Data for Client-Side Personalization Engine -->
-  <script id="reels-catalog-data" type="application/json" set:html={JSON.stringify(reelsList)} />
+  <script id="reels-catalog-data" type="application/json" set:html={JSON.stringify(reelsCatalogForClient)} />
 
   <script>
     import {

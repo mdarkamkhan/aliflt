@@ -141,7 +141,7 @@ const products = [...allProducts].reverse();
 
   </div>
 
-  <script is:inline>
+  <script>
     // Smooth Category Filtering logic with live counter
     function initProductFilters() {
       const tabs = document.querySelectorAll('.editorial-tab-btn');
@@ -389,6 +389,8 @@ const products = [...allProducts].reverse();
 
   /* --- Product Card Enhancements (Option 1: Category Left, Price Right) --- */
   .product-card {
+    content-visibility: auto;
+    contain-intrinsic-size: 280px;
     transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
                 box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
                 opacity 0.25s ease !important;

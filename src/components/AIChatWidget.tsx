@@ -32,8 +32,8 @@ const QUICK_CHIPS = [
   { label: 'WhatsApp Support', msg: 'WhatsApp contact number kya hai?' },
 ];
 
-export default function AIChatWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+export default function AIChatWidget({ initialOpen = false, initialMessage = '' }: { initialOpen?: boolean; initialMessage?: string }) {
+  const [isOpen, setIsOpen] = useState(initialOpen);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome-1',
@@ -207,6 +207,10 @@ export default function AIChatWidget() {
 
     (window as any).openALiFChat = triggerOpen;
     window.addEventListener('open-alif-chat', handleCustomEvent);
+
+    if (initialOpen && initialMessage) {
+      triggerOpen(initialMessage, true);
+    }
 
     return () => {
       window.removeEventListener('open-alif-chat', handleCustomEvent);

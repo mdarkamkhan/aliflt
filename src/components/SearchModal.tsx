@@ -25,8 +25,8 @@ const TYPEWRITER_WORDS = [
   'Diamond Work...',
 ];
 
-export default function SearchModal() {
-  const [isOpen, setIsOpen] = useState(false);
+export default function SearchModal({ initialOpen = false }: { initialOpen?: boolean }) {
+  const [isOpen, setIsOpen] = useState(initialOpen);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchItem[]>([]);
   const [placeholder, setPlaceholder] = useState('Search...');
