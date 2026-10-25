@@ -6,6 +6,76 @@ export async function getStaticPaths() {
   const products = await getCollection('products');
   const productsMap = new Map(products.map((p) => [p.id, p]));
 
+  // ─── Multi-Attribute Similarity Scorer ───────────────────────────────────
+  // Tokenises a string field into lowercase word tokens for overlap scoring
+  function tokenise(str = '') {
+    return str.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(Boolean);
+  }
+
+  // Jaccard-like overlap: shared tokens / (union tokens)
+  function tokenOverlap(a = '', b = '') {
+    const ta = new Set(tokenise(a));
+    const tb = new Set(tokenise(b));
+    if (!ta.size && !tb.size) return 0;
+    let shared = 0;
+    ta.forEach((t) => { if (tb.has(t)) shared++; });
+    return shared / Math.max(ta.size, tb.size, 1);
+  }
+
+  // Price bucket: log-scaled so ₹80 vs ₹100 is not same as ₹80 vs ₹800
+  function priceBucket(price) {
+    const p = Number(price) || 0;
+    if (p <= 0) return 0;
+    return Math.floor(Math.log10(p + 1) * 10);
+  }
+
+  /**
+   * Score how similar candidate `c` is to the current entry `e`.
+   *
+   * Weights (total max ≈ 120):
+   *   fabric        30  – highest signal for fabric store
+   *   category      20  – same category = strong indicator
+   *   colour        20  – colour-family harmony
+   *   ideal_for     15  – same occasion/garment end-use
+   *   work          15  – embroidery / print / plain technique
+   *   pattern       10  – solid / floral / geometric motif
+   *   price          10  – similar price bracket
+   */
+  function scoreProduct(e, c) {
+    let score = 0;
+    const ed = e.data;
+    const cd = c.data;
+
+    // 1. Fabric match (30 pts)
+    score += tokenOverlap(ed.fabric, cd.fabric) * 30;
+
+    // 2. Category match (20 pts)
+    const ec = (ed.category || '').toLowerCase();
+    const cc = (cd.category || '').toLowerCase();
+    if (ec && cc && ec === cc) score += 20;
+
+    // 3. Colour family overlap (20 pts)
+    score += tokenOverlap(ed.colour, cd.colour) * 20;
+
+    // 4. ideal_for / occasion overlap (15 pts)
+    score += tokenOverlap(ed.ideal_for, cd.ideal_for) * 15;
+
+    // 5. Work / technique overlap (15 pts)
+    score += tokenOverlap(ed.work, cd.work) * 15;
+
+    // 6. Pattern overlap (10 pts)
+    score += tokenOverlap(ed.pattern, cd.pattern) * 10;
+
+    // 7. Price proximity (10 pts — max when identical bucket)
+    const ep = priceBucket(ed.offer_price ?? ed.price);
+    const cp = priceBucket(cd.offer_price ?? cd.price);
+    const priceDiff = Math.abs(ep - cp);
+    score += Math.max(0, 10 - priceDiff * 2);
+
+    return score;
+  }
+  // ─────────────────────────────────────────────────────────────────────────
+
   return products.map((entry) => {
     const currentCategory = (entry.data.category || '').toLowerCase();
     const isEntryCombo = currentCategory === 'curated sets' || currentCategory === 'curated set' || currentCategory === 'dress set' || (entry.data.combo_products && entry.data.combo_products.length > 0) || (entry.data.combo_items && entry.data.combo_items.length > 0);
@@ -13,28 +83,43 @@ export async function getStaticPaths() {
     let similar = [];
     let ymal = [];
 
+    const COMBO_CATS = new Set(['curated sets', 'curated set', 'dress set']);
+
     if (isEntryCombo) {
-      // ONLY other combo / curated set products!
+      // Combo: only other combos, scored by colour/occasion overlap
       similar = products
         .filter((p) => {
           const c = (p.data.category || '').toLowerCase();
-          return p.id !== entry.id && (c === 'curated sets' || c === 'curated set' || c === 'dress set' || (p.data.combo_products && p.data.combo_products.length > 0));
+          return p.id !== entry.id && (COMBO_CATS.has(c) || (p.data.combo_products && p.data.combo_products.length > 0));
         })
-        .slice(0, 10);
+        .map((p) => ({ p, score: scoreProduct(entry, p) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10)
+        .map(({ p }) => p);
       ymal = [];
     } else {
+      // Similar: same category, ranked by multi-attribute score
       similar = products
         .filter((p) => {
           const c = (p.data.category || '').toLowerCase();
-          return p.id !== entry.id && c === currentCategory && c !== 'dress set' && c !== 'curated sets' && c !== 'curated set';
+          return p.id !== entry.id && c === currentCategory && !COMBO_CATS.has(c);
         })
-        .slice(0, 8);
+        .map((p) => ({ p, score: scoreProduct(entry, p) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 8)
+        .map(({ p }) => p);
+
+      // YMAL: cross-category, but ranked by highest attribute overlap
+      // (fabric/occasion/work similarity even across categories)
       ymal = products
         .filter((p) => {
           const c = (p.data.category || '').toLowerCase();
-          return p.id !== entry.id && c !== currentCategory && c !== 'dress set' && c !== 'curated sets' && c !== 'curated set';
+          return p.id !== entry.id && c !== currentCategory && !COMBO_CATS.has(c);
         })
-        .slice(0, 8);
+        .map((p) => ({ p, score: scoreProduct(entry, p) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 8)
+        .map(({ p }) => p);
     }
 
     // Resolve combo actual products if present
