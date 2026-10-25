@@ -4,7 +4,49 @@ import { getCollection } from 'astro:content';
 import categoryFilters from '../../data/categoryFilters.json';
 
 const allProducts = await getCollection('products');
-const products = [...allProducts].reverse();
+
+// ─── Build-Time Smart Shuffle ────────────────────────────────────────────────
+// Goal: category-interleaved order so the grid never clusters identical items.
+// A per-build deterministic jitter (based on build timestamp) ensures every
+// Netlify deploy produces a meaningfully different base ordering.
+
+// 1. Bucket products by category (newest-first within each bucket via date desc)
+const byCategory: Record<string, typeof allProducts> = {};
+for (const p of allProducts) {
+  const cat = (p.data.category || 'other').toLowerCase();
+  if (!byCategory[cat]) byCategory[cat] = [];
+  byCategory[cat].push(p);
+}
+
+// Sort within each bucket newest → oldest so fresh stock surfaces first
+for (const cat of Object.keys(byCategory)) {
+  byCategory[cat].sort((a, b) => {
+    const da = a.data.date ? new Date(a.data.date).getTime() : 0;
+    const db = b.data.date ? new Date(b.data.date).getTime() : 0;
+    return db - da;
+  });
+}
+
+// 2. Per-build seed so each deploy rotates the starting category
+const BUILD_SEED = Date.now();
+const catKeys = Object.keys(byCategory).sort(); // stable sort
+const startOffset = BUILD_SEED % catKeys.length;
+const rotatedCats = [...catKeys.slice(startOffset), ...catKeys.slice(0, startOffset)];
+
+// 3. Round-robin interleave across all categories
+const products: typeof allProducts = [];
+const queues = rotatedCats.map(k => byCategory[k]);
+let hasMore = true;
+while (hasMore) {
+  hasMore = false;
+  for (const queue of queues) {
+    if (queue.length > 0) {
+      products.push(queue.shift()!);
+      hasMore = true;
+    }
+  }
+}
+// ─────────────────────────────────────────────────────────────────────────────
 ---
 
 <BaseLayout 
@@ -77,8 +119,17 @@ const products = [...allProducts].reverse();
         const { title, price, offer_price, image, category, combo_items } = item.data;
         const catLower = (category || '').toLowerCase();
         const isCuratedSet = catLower === 'curated sets' || catLower === 'curated set' || catLower === 'dress set' || (combo_items && combo_items.length > 0);
+        // Affinity tokens baked into HTML so client JS can score without extra fetch
+        const affinityTokens = [
+          item.data.fabric,
+          item.data.colour,
+          item.data.work,
+          item.data.pattern,
+          category,
+          ...(item.data.ideal_for ? item.data.ideal_for.split(/[,\/]/) : [])
+        ].filter(Boolean).map(t => t.toLowerCase().trim()).join(' ');
         return (
-          <a href={`/products/${item.id}/`} class="product-card" data-category={(category || '').toLowerCase()} data-has-video={item.data.reel_video ? "true" : "false"} data-is-curated={isCuratedSet ? "true" : "false"}>
+          <a href={`/products/${item.id}/`} class="product-card" data-category={(category || '').toLowerCase()} data-has-video={item.data.reel_video ? "true" : "false"} data-is-curated={isCuratedSet ? "true" : "false"} data-affinity-tokens={affinityTokens}>
             <div class="product-card-image-wrapper">
               <img src={image || '/icons/icon-512x512.png'} alt={title} loading="lazy" class="product-card-cover-img" />
               {item.data.reel_video && (
@@ -142,6 +193,84 @@ const products = [...allProducts].reverse();
   </div>
 
   <script>
+    // ─── Client-Side Affinity Ranker ────────────────────────────────────────
+    // Reads user's unified affinity profile (shared with reels engine) and
+    // re-sorts product cards so items matching the user's taste float to top.
+    // Runs once per page load, before the user sees any content.
+    function applyAffinityRanking() {
+      let affinity = {};
+      try {
+        // Merge both storage keys: reels affinity + product affinity
+        const reelsAff = JSON.parse(localStorage.getItem('alif_reels_affinity') || '{}');
+        const prodAff  = JSON.parse(localStorage.getItem('alif_product_affinity') || '{}');
+        // Union: sum scores for shared keys
+        affinity = { ...reelsAff };
+        for (const [k, v] of Object.entries(prodAff)) {
+          affinity[k] = (affinity[k] || 0) + Number(v);
+        }
+      } catch (_) { return; } // no data yet — keep build-time order
+
+      // If profile is empty, nothing to personalise
+      const totalSignal = Object.values(affinity).reduce((s, v) => s + Math.abs(Number(v)), 0);
+      if (totalSignal < 5) return;
+
+      const grid = document.getElementById('productGrid');
+      if (!grid) return;
+
+      const cards = Array.from(grid.querySelectorAll('.product-card'));
+      if (!cards.length) return;
+
+      // Score each card against affinity profile using token overlap
+      const scored = cards.map(card => {
+        const tokens = (card.getAttribute('data-affinity-tokens') || '').split(' ').filter(Boolean);
+        let score = 0;
+        for (const token of tokens) {
+          if (affinity[token]) score += Number(affinity[token]);
+        }
+        return { card, score };
+      });
+
+      // Only reorder if at least one card has a meaningful positive score
+      const maxScore = Math.max(...scored.map(s => s.score));
+      if (maxScore < 5) return;
+
+      // Sort: high affinity first, ties keep their build-time order (stable)
+      scored.sort((a, b) => b.score - a.score);
+
+      // Re-insert cards into grid in new order (no layout shift — done before paint)
+      const fragment = document.createDocumentFragment();
+      for (const { card } of scored) fragment.appendChild(card);
+      // Keep non-card children (empty message divs)
+      grid.querySelectorAll(':scope > :not(.product-card)').forEach(el => fragment.appendChild(el));
+      grid.appendChild(fragment);
+    }
+
+    // Track product page views — write to alif_product_affinity
+    // (called from [slug].astro via postMessage, or directly from this page)
+    function trackProductView(tokens) {
+      if (!tokens || !tokens.length) return;
+      try {
+        const aff = JSON.parse(localStorage.getItem('alif_product_affinity') || '{}');
+        for (const token of tokens) {
+          const k = token.toLowerCase().trim();
+          if (!k) continue;
+          aff[k] = Math.min(150, (aff[k] || 0) + 5);
+        }
+        localStorage.setItem('alif_product_affinity', JSON.stringify(aff));
+      } catch (_) {}
+    }
+
+    // Listen for signals from product detail pages (cross-page postMessage via BroadcastChannel)
+    if (typeof BroadcastChannel !== 'undefined') {
+      const ch = new BroadcastChannel('alif_product_signals');
+      ch.onmessage = (e) => {
+        if (e.data && e.data.type === 'product_view') {
+          trackProductView(e.data.tokens);
+        }
+      };
+    }
+    // ────────────────────────────────────────────────────────────────────────
+
     // Smooth Category Filtering logic with live counter
     function initProductFilters() {
       const tabs = document.querySelectorAll('.editorial-tab-btn');
@@ -271,6 +400,8 @@ const products = [...allProducts].reverse();
     }
 
     function initProductsPage() {
+      // Affinity ranking runs first (re-sorts cards before any filter is applied)
+      applyAffinityRanking();
       initProductFilters();
       initProductVideos();
     }

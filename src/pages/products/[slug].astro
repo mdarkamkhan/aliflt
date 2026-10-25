@@ -2777,4 +2777,36 @@ const comboPayload = isCombo ? {
       text-decoration: line-through !important;
     }
   </style>
+
+  <script define:vars={{ fabric, colour, work, pattern, category, ideal_for }}>
+    // Emit product affinity signal when detail page is viewed
+    (function emitProductSignal() {
+      const tokens = [fabric, colour, work, pattern, category,
+        ...(ideal_for ? ideal_for.split(/[,/]/) : [])
+      ].filter(Boolean).map(t => t.toLowerCase().trim());
+
+      if (!tokens.length) return;
+
+      // 1. Write directly to localStorage (persists across tabs)
+      try {
+        const aff = JSON.parse(localStorage.getItem('alif_product_affinity') || '{}');
+        for (const t of tokens) {
+          if (!t) continue;
+          aff[t] = Math.min(150, (aff[t] || 0) + 5);
+        }
+        localStorage.setItem('alif_product_affinity', JSON.stringify(aff));
+      } catch (_) {}
+
+      // 2. Broadcast to listing page if open in another tab
+      try {
+        if (typeof BroadcastChannel !== 'undefined') {
+          const ch = new BroadcastChannel('alif_product_signals');
+          ch.postMessage({ type: 'product_view', tokens });
+          ch.close();
+        }
+      } catch (_) {}
+    })();
+  </script>
 </BaseLayout>
+
+
