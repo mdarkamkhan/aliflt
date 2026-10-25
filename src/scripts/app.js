@@ -282,6 +282,52 @@
             } catch(e) {}
         }
 
+        // --- ULTRA-FAST MOBILE PAGE NAVIGATION ACCELERATOR ---
+        if (!window._mobileNavAcceleratorBound) {
+            window._mobileNavAcceleratorBound = true;
+
+            // 1. Instant Touch Feedback & Network Prefetch on touchstart
+            document.addEventListener('touchstart', (e) => {
+                const link = e.target.closest('a[href]');
+                if (!link) return;
+                const href = link.getAttribute('href');
+                if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:')) return;
+
+                // Instant bottom nav visual reaction on touch (0ms latency feedback)
+                const bNavItem = link.closest('.b-nav-item');
+                if (bNavItem) {
+                    document.querySelectorAll('.b-nav-item').forEach(el => el.classList.remove('active'));
+                    bNavItem.classList.add('active');
+                }
+
+                // Give network fetch a 150-300ms head start before click fires
+                if (!link._prefetched) {
+                    link._prefetched = true;
+                    const prefetchEl = document.createElement('link');
+                    prefetchEl.rel = 'prefetch';
+                    prefetchEl.href = href;
+                    prefetchEl.as = 'document';
+                    document.head.appendChild(prefetchEl);
+                }
+            }, { passive: true, capture: true });
+
+            // 2. Also prefetch on pointerdown for any interactive links
+            document.addEventListener('pointerdown', (e) => {
+                const link = e.target.closest('a[href]');
+                if (!link) return;
+                const href = link.getAttribute('href');
+                if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:')) return;
+                if (!link._prefetched) {
+                    link._prefetched = true;
+                    const prefetchEl = document.createElement('link');
+                    prefetchEl.rel = 'prefetch';
+                    prefetchEl.href = href;
+                    prefetchEl.as = 'document';
+                    document.head.appendChild(prefetchEl);
+                }
+            }, { passive: true, capture: true });
+        }
+
         // Instagram-Style Minimalist Floating Edge Swipe Navigation (Home <-> Reels)
         function initInstagramSwipeNavigation() {
             if (window._instaSwipeBound) return;

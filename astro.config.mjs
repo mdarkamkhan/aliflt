@@ -5,8 +5,10 @@ import { curateApiVitePlugin } from './scripts/curate-vite-plugin.mjs';
 // https://astro.build/config
 export default defineConfig({
   integrations: [react()],
-  output: 'static',
-  prefetch: true,
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport'
+  },
   build: {
     format: 'directory' // outputs /services/blouse/index.html to match existing Eleventy URLs exactly
   },

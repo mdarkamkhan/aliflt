@@ -3719,43 +3719,35 @@ button.drawer-group-btn:focus-visible {
 }
 
 /* =========================================
-   LUXURY SMOOTH PAGE VIEW TRANSITIONS
+   LUXURY ULTRA-FAST PAGE VIEW TRANSITIONS
 ========================================= */
-html {
-    scroll-behavior: smooth;
-}
-
 @view-transition {
     navigation: auto;
 }
 
 ::view-transition-old(root) {
-    animation: 0.22s cubic-bezier(0.4, 0, 1, 1) both luxuryPageFadeOut;
+    animation: 70ms ease-out both luxuryPageFadeOut;
 }
 
 ::view-transition-new(root) {
-    animation: 0.28s cubic-bezier(0, 0, 0.2, 1) both luxuryPageFadeIn;
+    animation: 95ms ease-out both luxuryPageFadeIn;
 }
 
 @keyframes luxuryPageFadeOut {
-    0% {
+    from {
         opacity: 1;
-        transform: translateY(0);
     }
-    100% {
+    to {
         opacity: 0;
-        transform: translateY(-4px);
     }
 }
 
 @keyframes luxuryPageFadeIn {
-    0% {
+    from {
         opacity: 0;
-        transform: translateY(6px);
     }
-    100% {
+    to {
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
@@ -3978,13 +3970,31 @@ a.luxury-product-card, a.service-luxury-card {
     }
 }
 
-/* Tap active state feedback on cards */
+/* Tap active state feedback on cards (excluding reels to prevent gaps) */
 .luxury-product-card:active, .service-luxury-card:active,
-.reel-card:active, .atelier-reel-card:active,
 .rc-mini-card:active, .combo-interactive-card:active {
     opacity: 0.88;
     transform: scale(0.985);
     transition: transform 0.1s ease, opacity 0.1s ease;
+}
+
+/* Reels Cards: strictly NO scale/popup/gap on tap, active, or hover */
+.reel-card,
+.reel-card:active,
+.reel-card:hover,
+.reel-card:focus,
+.reel-card:focus-visible,
+.atelier-reel-card,
+.atelier-reel-card:active,
+.atelier-reel-card:hover,
+.atelier-reel-card:focus,
+.atelier-reel-card:focus-visible,
+.reel-media-inner,
+.reel-video,
+.reel-video-element {
+    transform: none !important;
+    -webkit-transform: none !important;
+    transition: none !important;
 }
 
 /* =========================================

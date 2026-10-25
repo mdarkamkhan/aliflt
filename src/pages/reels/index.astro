@@ -308,6 +308,18 @@ const reelsCatalogForClient = reelsList.map((r) => ({
 
       // Global Audio State (Persists across reels once user turns sound on)
       let isAudioGloballyActive = false;
+      try {
+        isAudioGloballyActive = sessionStorage.getItem('alif_reels_audio') === '1';
+      } catch (_) {}
+
+      function setGlobalAudio(active) {
+        isAudioGloballyActive = Boolean(active);
+        try {
+          sessionStorage.setItem('alif_reels_audio', isAudioGloballyActive ? '1' : '0');
+        } catch (_) {}
+        updateSoundUI();
+      }
+
       let activeCard = null;
       let activeStartTime = 0;
       let activeReelItem = null;
@@ -347,9 +359,11 @@ const reelsCatalogForClient = reelsList.map((r) => ({
             if (isAudioGloballyActive) {
               soundPill.classList.add('sound-active');
               soundPill.classList.remove('sound-muted');
+              soundPill.setAttribute('aria-label', 'Sound On (Tap to Mute)');
             } else {
               soundPill.classList.add('sound-muted');
               soundPill.classList.remove('sound-active');
+              soundPill.setAttribute('aria-label', 'Sound Off (Tap to Unmute)');
             }
           }
 
@@ -416,6 +430,20 @@ const reelsCatalogForClient = reelsList.map((r) => ({
           appendNextInfiniteLoop();
         }
 
+        // HARD PERFORMANCE + AUDIO FIX: Preload next 2 reels immediately so audio tracks & video frames are ready BEFORE user scrolls to them
+        for (let i = 1; i <= 2; i++) {
+          const nextCard = cards[activeIdx + i];
+          if (nextCard) {
+            const nv = nextCard.querySelector('video');
+            const nSrc = nextCard.dataset.lazySrc || nv?.getAttribute('data-src');
+            if (nv && nSrc && (!nv.src || nv.src === '')) {
+              nv.src = nSrc;
+              nv.preload = 'metadata';
+              nextCard.dataset.lazySrc = '';
+            }
+          }
+        }
+
         // Hard rule: Pause and mute every other video immediately
         pauseAllExcept(targetCard);
 
@@ -438,27 +466,16 @@ const reelsCatalogForClient = reelsList.map((r) => ({
 
         if (!video) return;
 
-        // --- Phase 6: Lazy-load video src on first activation ---
+        // Lazy-load active video src if not yet set
         const lazySrc = targetCard.dataset.lazySrc || video.getAttribute('data-src');
-        if (lazySrc && !video.src && video.src !== lazySrc) {
+        if (lazySrc && (!video.src || video.src === '')) {
           video.src = lazySrc;
           targetCard.dataset.lazySrc = '';
           video.load();
         }
 
-        // Apply persistent sound state strictly to target card
-        video.muted = !isAudioGloballyActive;
-
-        if (centerBtn) {
-          centerBtn.classList.remove('state-paused');
-          if (isAudioGloballyActive) {
-            centerBtn.classList.remove('state-mute');
-            centerBtn.classList.add('fade-hidden');
-          } else {
-            centerBtn.classList.add('state-mute');
-            centerBtn.classList.remove('fade-hidden');
-          }
-        }
+        // Update Sound UI immediately so pill reflects persistent state
+        updateSoundUI();
 
         // Attach telemetry progress handler on active video & real-time progress bar
         if (!video._telemetryBound) {
@@ -481,17 +498,54 @@ const reelsCatalogForClient = reelsList.map((r) => ({
           });
         }
 
-        // Play single active video
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            video.muted = true;
-            video.play().catch(() => {});
-            if (centerBtn) {
-              centerBtn.classList.add('state-mute');
-              centerBtn.classList.remove('fade-hidden');
-            }
-          });
+        // ROBUST PLAYBACK WITH AUDIO PERSISTENCE:
+        const attemptPlay = () => {
+          if (activeCard !== targetCard) return;
+          video.muted = !isAudioGloballyActive;
+
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              if (isAudioGloballyActive) {
+                video.muted = false;
+                if (centerBtn) {
+                  centerBtn.classList.remove('state-mute', 'state-paused');
+                  centerBtn.classList.add('fade-hidden');
+                }
+              }
+              updateSoundUI();
+            }).catch(() => {
+              // If browser autoplay policy blocks unmuted audio on mobile,
+              // play muted as fallback BUT KEEP isAudioGloballyActive = true!
+              video.muted = true;
+              video.play().catch(() => {});
+              if (centerBtn) {
+                if (!isAudioGloballyActive) {
+                  centerBtn.classList.add('state-mute');
+                  centerBtn.classList.remove('fade-hidden');
+                }
+              }
+              // Unmute on the very next user tap anywhere
+              const unmuteUserAction = () => {
+                if (isAudioGloballyActive && activeCard === targetCard) {
+                  video.muted = false;
+                  updateSoundUI();
+                }
+                window.removeEventListener('touchstart', unmuteUserAction);
+                window.removeEventListener('click', unmuteUserAction);
+              };
+              window.addEventListener('touchstart', unmuteUserAction, { once: true, passive: true });
+              window.addEventListener('click', unmuteUserAction, { once: true });
+            });
+          }
+        };
+
+        if (video.readyState >= 2) {
+          attemptPlay();
+        } else {
+          video.addEventListener('canplay', attemptPlay, { once: true });
+          video.addEventListener('loadeddata', attemptPlay, { once: true });
+          setTimeout(attemptPlay, 100);
         }
       }
 
@@ -566,15 +620,17 @@ const reelsCatalogForClient = reelsList.map((r) => ({
 
       // Global Audio Toggle
       function toggleAudioGlobal() {
-        isAudioGloballyActive = !isAudioGloballyActive;
-        updateSoundUI();
+        setGlobalAudio(!isAudioGloballyActive);
         if (isAudioGloballyActive && activeReelItem) {
           trackReelInteraction(activeReelItem, 'audio_unmute');
         }
         if (activeCard) {
           const video = activeCard.querySelector('video');
-          if (video && video.paused) {
-            video.play().catch(() => {});
+          if (video) {
+            video.muted = !isAudioGloballyActive;
+            if (video.paused) {
+              video.play().catch(() => {});
+            }
           }
         }
       }
@@ -608,22 +664,20 @@ const reelsCatalogForClient = reelsList.map((r) => ({
             e.stopPropagation();
 
             if (card !== activeCard) {
-              isAudioGloballyActive = true;
+              setGlobalAudio(true);
               activateCard(card, true);
               return;
             }
 
             if (video.paused) {
-              isAudioGloballyActive = true;
+              setGlobalAudio(true);
               pauseAllExcept(card);
               video.muted = false;
               video.play().catch(() => {});
-              updateSoundUI();
               centerBtn.classList.remove('state-paused', 'state-mute');
               centerBtn.classList.add('fade-hidden');
             } else if (video.muted) {
-              isAudioGloballyActive = true;
-              updateSoundUI();
+              setGlobalAudio(true);
               video.muted = false;
               centerBtn.classList.remove('state-mute');
               centerBtn.classList.add('fade-hidden');
@@ -660,27 +714,31 @@ const reelsCatalogForClient = reelsList.map((r) => ({
           if (e.target.closest('button') || e.target.closest('a')) return;
 
           if (card !== activeCard) {
-            isAudioGloballyActive = true;
+            setGlobalAudio(true);
             activateCard(card, true);
             return;
           }
 
           if (video.paused) {
-            isAudioGloballyActive = true;
             pauseAllExcept(card);
-            video.muted = false;
+            video.muted = !isAudioGloballyActive;
             video.play().catch(() => {
               video.muted = true;
               video.play().catch(() => {});
             });
             updateSoundUI();
             if (centerBtn) {
-              centerBtn.classList.remove('state-paused', 'state-mute');
-              centerBtn.classList.add('fade-hidden');
+              centerBtn.classList.remove('state-paused');
+              if (isAudioGloballyActive) {
+                centerBtn.classList.remove('state-mute');
+                centerBtn.classList.add('fade-hidden');
+              } else {
+                centerBtn.classList.add('state-mute');
+                centerBtn.classList.remove('fade-hidden');
+              }
             }
           } else if (video.muted) {
-            isAudioGloballyActive = true;
-            updateSoundUI();
+            setGlobalAudio(true);
             video.muted = false;
             if (centerBtn) {
               centerBtn.classList.remove('state-mute');
@@ -907,9 +965,26 @@ const reelsCatalogForClient = reelsList.map((r) => ({
       touch-action: pan-y;
       user-select: none;
       -webkit-user-select: none;
+      transform: none !important;
+      transition: none !important;
     }
 
-    @media (min-width: 601px) {
+    .atelier-reel-card:hover,
+    .atelier-reel-card:active,
+    .atelier-reel-card:focus,
+    .atelier-reel-card:focus-visible {
+      transform: none !important;
+      transition: none !important;
+      outline: none !important;
+      border: none !important;
+    }
+
+    .atelier-reel-card .reel-video-element {
+      transform: none !important;
+      transition: none !important;
+    }
+
+    @media (min-width: 769px) {
       .atelier-reel-card {
         border-radius: 16px;
         height: calc(100% - 16px);
@@ -1392,18 +1467,23 @@ const reelsCatalogForClient = reelsList.map((r) => ({
       }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       .reels-page-container {
         padding: 0;
         height: calc(100dvh - 122px);
+        max-width: 100%;
       }
       .reels-feed {
         padding: 0;
       }
       .atelier-reel-card {
-        border-radius: 0;
-        max-width: 100%;
-        height: 100%;
+        border-radius: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 100% !important;
+        max-height: 100% !important;
+        margin: 0 !important;
       }
       .reel-top-bar {
         padding: 12px 14px 22px 14px;
