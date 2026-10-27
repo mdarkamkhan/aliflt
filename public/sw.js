@@ -1,6 +1,6 @@
 /* Service Worker for ALiF PWA */
 
-const CACHE_NAME = 'alif-v5';
+const CACHE_NAME = 'alif-v6';
 
 // Core static assets
 const urlsToCache = [
@@ -26,7 +26,6 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Clearing old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -36,19 +35,30 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+
   const reqUrl = new URL(event.request.url);
-  // Never cache studio / admin routes or localhost:4322 API calls
-  if (reqUrl.pathname.startsWith('/curate') || reqUrl.port === '4322') {
+
+  // Never intercept studio/admin routes, API functions, or video/media range streams
+  if (
+    reqUrl.pathname.startsWith('/curate') ||
+    reqUrl.pathname.startsWith('/.netlify/') ||
+    reqUrl.port === '4322' ||
+    event.request.headers.has('range') ||
+    reqUrl.pathname.endsWith('.mp4') ||
+    reqUrl.pathname.endsWith('.webm') ||
+    reqUrl.hostname.includes('cloudinary.com')
+  ) {
     return;
   }
 
-  // Navigation / HTML requests: Fast Network-first with 500ms timeout fallback to cache
-  if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept')?.includes('text/html'))) {
+  // Navigation / HTML requests: Fast Network-first with 600ms timeout fallback to cache
+  if (event.request.mode === 'navigate' || event.request.headers.get('accept')?.includes('text/html')) {
     event.respondWith(
       (async () => {
         try {
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 500);
+          const timeoutId = setTimeout(() => controller.abort(), 600);
           const networkResponse = await fetch(event.request, { signal: controller.signal });
           clearTimeout(timeoutId);
 
@@ -58,12 +68,11 @@ self.addEventListener('fetch', event => {
             return networkResponse;
           }
         } catch (_err) {
-          // Network took >500ms or offline: immediately fall through to cache
+          // Network took >600ms or offline: immediately fall through to cache
         }
 
         const cachedResponse = await caches.match(event.request);
         if (cachedResponse) {
-          // Background revalidation
           fetch(event.request).then(async (freshResponse) => {
             if (freshResponse && freshResponse.status === 200) {
               const cache = await caches.open(CACHE_NAME);
@@ -79,11 +88,37 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Other assets: Stale-While-Revalidate or Cache-First with Network fallback
+  // Immutable hashed bundles & static image assets: Pure Cache-First (eliminates duplicate background re-fetches)
+  const isStaticAsset =
+    reqUrl.pathname.startsWith('/_astro/') ||
+    reqUrl.pathname.startsWith('/thumbs/') ||
+    reqUrl.pathname.startsWith('/uploads/') ||
+    reqUrl.pathname.startsWith('/banner/') ||
+    reqUrl.pathname.startsWith('/icons/') ||
+    reqUrl.hostname.includes('fonts.gstatic.com');
+
+  if (isStaticAsset) {
+    event.respondWith(
+      caches.match(event.request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        return fetch(event.request).then(networkResponse => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+          }
+          return networkResponse;
+        });
+      })
+    );
+    return;
+  }
+
+  // Other GET assets (e.g., search.json, font CSS): Stale-While-Revalidate
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {
       if (cachedResponse) {
-        // Fetch in background to revalidate cache
         fetch(event.request).then(networkResponse => {
           if (networkResponse && networkResponse.status === 200) {
             caches.open(CACHE_NAME).then(cache => cache.put(event.request, networkResponse));
@@ -101,4 +136,3 @@ self.addEventListener('fetch', event => {
     })
   );
 });
-

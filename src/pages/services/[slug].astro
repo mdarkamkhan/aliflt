@@ -1,6 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import {
+  getDetailImageAttrs,
+  getCardImageAttrs,
+  getThumbUrl,
+} from '../../utils/imagePerf';
 
 export async function getStaticPaths() {
   const services = await getCollection('services');
@@ -70,12 +75,16 @@ function parseServiceInfo(infoText?: string): ServiceSection[] {
 }
 
 const serviceSections = parseServiceInfo(service_information);
+const mainImgAttrs = image ? getDetailImageAttrs(image) : null;
 ---
 
 <BaseLayout 
   title={`${title} Custom Stitching`} 
   description={description || `Book custom boutique tailoring for ${title} at alif. ladies tailor, Sahibganj.`}
   image={image}
+  preloadImage={mainImgAttrs?.src}
+  preloadImageSrcset={mainImgAttrs?.srcset}
+  preloadImageSizes={mainImgAttrs?.sizes}
 >
   <div class="container section">
     <div class="product-detail-grid">
@@ -84,7 +93,7 @@ const serviceSections = parseServiceInfo(service_information);
       <div class="product-detail-image">
         <div class="swapper-container product-swapper" id="mainMediaContainer">
           {image ? (
-            <img class="active" src={image} alt={title} />
+            <img class="active" {...getDetailImageAttrs(image)} width="768" height="960" fetchpriority="high" decoding="async" alt={title} />
           ) : (
             <div class="luxury-fallback-media">
               <span class="luxury-fallback-brand">alif.</span>
@@ -227,7 +236,7 @@ const serviceSections = parseServiceInfo(service_information);
           <a href={`/services/${item.id}/`} class="luxury-product-card">
             <div class="luxury-card-media">
               {item.data.image ? (
-                <img src={item.data.image} alt={item.data.title} loading="lazy" />
+                <img {...getCardImageAttrs(item.data.image, '(max-width: 600px) 160px, 190px')} alt={item.data.title} width="320" height="400" loading="lazy" decoding="async" />
               ) : (
                 <div class="luxury-card-fallback">
                   <span class="fallback-logo">alif.</span>
@@ -261,7 +270,7 @@ const serviceSections = parseServiceInfo(service_information);
           <a href={`/services/${item.id}/`} class="luxury-product-card">
             <div class="luxury-card-media">
               {item.data.image ? (
-                <img src={item.data.image} alt={item.data.title} loading="lazy" />
+                <img {...getCardImageAttrs(item.data.image, '(max-width: 600px) 160px, 190px')} alt={item.data.title} width="320" height="400" loading="lazy" decoding="async" />
               ) : (
                 <div class="luxury-card-fallback">
                   <span class="fallback-logo">alif.</span>
@@ -289,8 +298,12 @@ const serviceSections = parseServiceInfo(service_information);
         {image ? (
           <img 
             id="stickyThumb" 
-            src={image} 
+            src={getThumbUrl(image)} 
             alt={title} 
+            width="44"
+            height="44"
+            loading="lazy"
+            decoding="async"
             class="sticky-thumb-img" 
           />
         ) : (
@@ -321,7 +334,8 @@ const serviceSections = parseServiceInfo(service_information);
     // Sticky Quick-Buy Bar Scroll Sync (Exact match to product page)
     function initStickyBuyBar() {
       const stickyBar = document.getElementById('stickyMobileBuyBar');
-      if (!stickyBar) return;
+      if (!stickyBar || stickyBar._scrollBound) return;
+      stickyBar._scrollBound = true;
 
       let lastScrollY = window.scrollY;
       let ticking = false;
@@ -357,11 +371,6 @@ const serviceSections = parseServiceInfo(service_information);
       }, { passive: true });
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initStickyBuyBar);
-    } else {
-      initStickyBuyBar();
-    }
     document.addEventListener('astro:page-load', initStickyBuyBar);
   </script>
 

@@ -1,14 +1,21 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { getCardImageAttrs } from '../../utils/imagePerf';
 
 const allServices = await getCollection('services');
 const services = [...allServices].reverse();
+const firstServiceAttrs = services.length > 0 && services[0].data.image
+  ? getCardImageAttrs(services[0].data.image, '(max-width: 767px) 46vw, (max-width: 1023px) 30vw, 240px')
+  : null;
 ---
 
 <BaseLayout 
   title="Tailoring Services" 
   description="Custom blouse stitching, designer suits, bridal lehengas, and boutique tailoring services in Sahibganj by alif. ladies tailor."
+  preloadImage={firstServiceAttrs?.src}
+  preloadImageSrcset={firstServiceAttrs?.srcset}
+  preloadImageSizes={firstServiceAttrs?.sizes}
 >
   <div class="container section fade-in-section services-page-wrapper">
     <div class="services-hero-header">
@@ -19,14 +26,18 @@ const services = [...allServices].reverse();
     </div>
 
     <div class="services-luxury-grid">
-      {services.map((item) => (
+      {services.map((item, index) => (
         <a href={`/services/${item.id}/`} class="service-luxury-card" aria-label={item.data.title}>
           <div class="service-card-media">
             {item.data.image ? (
               <img 
-                src={item.data.image} 
+                {...getCardImageAttrs(item.data.image, '(max-width: 767px) 46vw, (max-width: 1023px) 30vw, 240px')}
                 alt={item.data.title} 
-                loading="lazy" 
+                width="384"
+                height="480"
+                loading={index < 4 ? "eager" : "lazy"} 
+                fetchpriority={index < 2 ? "high" : "auto"}
+                decoding="async"
               />
             ) : (
               <div class="service-fallback-art">
@@ -160,6 +171,8 @@ const services = [...allServices].reverse();
 
     /* High-Fashion Service Card */
     .service-luxury-card {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 260px;
       display: flex;
       flex-direction: column;
       text-decoration: none;
@@ -207,9 +220,7 @@ const services = [...allServices].reverse();
       position: absolute;
       top: 8px;
       left: 8px;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.78);
       color: #ffffff;
       font-family: var(--font-body, 'Ubuntu', sans-serif);
       font-size: 0.58rem;

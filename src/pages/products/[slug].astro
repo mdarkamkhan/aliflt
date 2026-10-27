@@ -1,77 +1,64 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import {
+  getDetailImageAttrs,
+  getCardImageAttrs,
+  getThumbUrl,
+} from '../../utils/imagePerf';
 
 export async function getStaticPaths() {
   const products = await getCollection('products');
   const productsMap = new Map(products.map((p) => [p.id, p]));
 
-  // ─── Multi-Attribute Similarity Scorer ───────────────────────────────────
-  // Tokenises a string field into lowercase word tokens for overlap scoring
-  function tokenise(str = '') {
-    return str.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(Boolean);
+  // ─── Pre-Computed Multi-Attribute Similarity Scorer ──────────────────────
+  function tokenSet(str = '') {
+    const arr = str.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(Boolean);
+    return new Set(arr);
   }
 
-  // Jaccard-like overlap: shared tokens / (union tokens)
-  function tokenOverlap(a = '', b = '') {
-    const ta = new Set(tokenise(a));
-    const tb = new Set(tokenise(b));
+  function setOverlap(ta, tb) {
     if (!ta.size && !tb.size) return 0;
     let shared = 0;
     ta.forEach((t) => { if (tb.has(t)) shared++; });
     return shared / Math.max(ta.size, tb.size, 1);
   }
 
-  // Price bucket: log-scaled so ₹80 vs ₹100 is not same as ₹80 vs ₹800
   function priceBucket(price) {
     const p = Number(price) || 0;
     if (p <= 0) return 0;
     return Math.floor(Math.log10(p + 1) * 10);
   }
 
-  /**
-   * Score how similar candidate `c` is to the current entry `e`.
-   *
-   * Weights (total max ≈ 120):
-   *   fabric        30  – highest signal for fabric store
-   *   category      20  – same category = strong indicator
-   *   colour        20  – colour-family harmony
-   *   ideal_for     15  – same occasion/garment end-use
-   *   work          15  – embroidery / print / plain technique
-   *   pattern       10  – solid / floral / geometric motif
-   *   price          10  – similar price bracket
-   */
+  // Pre-compute token sets once per product (331x instead of >1,000,000x)
+  const metaMap = new Map();
+  for (const p of products) {
+    const d = p.data;
+    metaMap.set(p.id, {
+      fabric: tokenSet(d.fabric),
+      category: (d.category || '').toLowerCase(),
+      colour: tokenSet(d.colour),
+      ideal_for: tokenSet(d.ideal_for),
+      work: tokenSet(d.work),
+      pattern: tokenSet(d.pattern),
+      priceB: priceBucket(d.offer_price ?? d.price),
+    });
+  }
+
   function scoreProduct(e, c) {
+    const em = metaMap.get(e.id);
+    const cm = metaMap.get(c.id);
+    if (!em || !cm) return 0;
+
     let score = 0;
-    const ed = e.data;
-    const cd = c.data;
-
-    // 1. Fabric match (30 pts)
-    score += tokenOverlap(ed.fabric, cd.fabric) * 30;
-
-    // 2. Category match (20 pts)
-    const ec = (ed.category || '').toLowerCase();
-    const cc = (cd.category || '').toLowerCase();
-    if (ec && cc && ec === cc) score += 20;
-
-    // 3. Colour family overlap (20 pts)
-    score += tokenOverlap(ed.colour, cd.colour) * 20;
-
-    // 4. ideal_for / occasion overlap (15 pts)
-    score += tokenOverlap(ed.ideal_for, cd.ideal_for) * 15;
-
-    // 5. Work / technique overlap (15 pts)
-    score += tokenOverlap(ed.work, cd.work) * 15;
-
-    // 6. Pattern overlap (10 pts)
-    score += tokenOverlap(ed.pattern, cd.pattern) * 10;
-
-    // 7. Price proximity (10 pts — max when identical bucket)
-    const ep = priceBucket(ed.offer_price ?? ed.price);
-    const cp = priceBucket(cd.offer_price ?? cd.price);
-    const priceDiff = Math.abs(ep - cp);
+    score += setOverlap(em.fabric, cm.fabric) * 30;
+    if (em.category && cm.category && em.category === cm.category) score += 20;
+    score += setOverlap(em.colour, cm.colour) * 20;
+    score += setOverlap(em.ideal_for, cm.ideal_for) * 15;
+    score += setOverlap(em.work, cm.work) * 15;
+    score += setOverlap(em.pattern, cm.pattern) * 10;
+    const priceDiff = Math.abs(em.priceB - cm.priceB);
     score += Math.max(0, 10 - priceDiff * 2);
-
     return score;
   }
   // ─────────────────────────────────────────────────────────────────────────
@@ -306,13 +293,16 @@ const comboPayload = isCombo ? {
   }))
 } : null;
 
+const mainImgAttrs = getDetailImageAttrs(image);
 ---
 
 <BaseLayout 
   title={title} 
   description={description || `${title} available at alif. ladies tailor, Sahibganj.`}
   image={image}
-  preloadImage={image}
+  preloadImage={mainImgAttrs.src}
+  preloadImageSrcset={mainImgAttrs.srcset}
+  preloadImageSizes={mainImgAttrs.sizes}
 >
   <div class="container section">
     <div class="product-detail-grid">
@@ -324,8 +314,8 @@ const comboPayload = isCombo ? {
             <video 
               id="comboMainVideo"
               class="hidden"
-              src={reel_video} 
-              poster={image}
+              data-src={reel_video}
+              preload="none"
               loop 
               muted 
               playsinline 
@@ -335,7 +325,11 @@ const comboPayload = isCombo ? {
           <img 
             id="comboMainImage"
             class="active"
-            src={image || '/icons/icon-512x512.png'} 
+            {...mainImgAttrs}
+            width="768"
+            height="960"
+            fetchpriority="high"
+            decoding="async"
             alt={title} 
           />
           {reel_video && (
@@ -399,7 +393,7 @@ const comboPayload = isCombo ? {
                 id="card-full-set"
               >
                 <div class="combo-card-thumb">
-                  <img src={image || '/icons/icon-512x512.png'} alt="Full Look" />
+                  <img src={getThumbUrl(image)} alt="Full Look" width="120" height="120" loading="lazy" decoding="async" />
                 </div>
                 <div class="combo-card-body">
                   <span class="combo-card-category">Complete Set</span>
@@ -418,7 +412,7 @@ const comboPayload = isCombo ? {
                   id={`card-item-${idx}`}
                 >
                   <div class="combo-card-thumb">
-                    <img src={ci.image} alt={ci.title} loading="lazy" />
+                    <img src={getThumbUrl(ci.image)} alt={ci.title} width="120" height="120" loading="lazy" decoding="async" />
                   </div>
                   <div class="combo-card-body">
                     <span class="combo-card-category">{ci.category || 'Piece'}</span>
@@ -557,25 +551,15 @@ const comboPayload = isCombo ? {
           return (
             <a href={`/products/${item.id}/`} class="luxury-product-card">
               <div class="luxury-card-media">
-                {itemIsCombo && item.data.reel_video ? (
-                  <>
-                    <video 
-                      src={item.data.reel_video} 
-                      poster={item.data.image}
-                      loop 
-                      muted 
-                      playsinline 
-                      webkit-playsinline
-                      preload="none"
-                    ></video>
-                    <span class="luxury-card-combo-badge">Full Set</span>
-                  </>
-                ) : (
-                  <>
-                    <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} loading="lazy" />
-                    {itemIsCombo && <span class="luxury-card-combo-badge">Full Set</span>}
-                  </>
-                )}
+                <img
+                  {...getCardImageAttrs(item.data.image, '(max-width: 600px) 160px, 190px')}
+                  alt={item.data.title}
+                  width="320"
+                  height="400"
+                  loading="lazy"
+                  decoding="async"
+                />
+                {itemIsCombo && <span class="luxury-card-combo-badge">Full Set</span>}
               </div>
               <div class="luxury-card-body">
                 <span class="luxury-card-category">{item.data.category || 'Atelier'}</span>
@@ -607,7 +591,14 @@ const comboPayload = isCombo ? {
           return (
             <a href={`/products/${item.id}/`} class="luxury-product-card">
               <div class="luxury-card-media">
-                <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} loading="lazy" />
+                <img
+                  {...getCardImageAttrs(item.data.image, '(max-width: 600px) 160px, 190px')}
+                  alt={item.data.title}
+                  width="320"
+                  height="400"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div class="luxury-card-body">
                 <span class="luxury-card-category">{item.data.category || 'Atelier'}</span>
@@ -677,7 +668,7 @@ const comboPayload = isCombo ? {
                   data-url={ci.url}
                 />
                 <div class="piece-thumb">
-                  <img src={ci.image} alt={ci.title} loading="lazy" />
+                  <img src={getThumbUrl(ci.image)} alt={ci.title} width="48" height="48" loading="lazy" decoding="async" />
                 </div>
                 <div class="piece-info">
                   <span class="piece-cat">{ci.category || 'PIECE'}{ci.size ? ` • ${ci.size}` : ''}</span>
@@ -712,8 +703,12 @@ const comboPayload = isCombo ? {
       <div class="sticky-bar-product">
         <img 
           id="stickyThumb" 
-          src={image || '/icons/icon-512x512.png'} 
+          src={getThumbUrl(image)} 
           alt={title} 
+          width="44"
+          height="44"
+          loading="lazy"
+          decoding="async"
           class="sticky-thumb-img" 
         />
         <div class="sticky-product-meta">
@@ -755,6 +750,9 @@ const comboPayload = isCombo ? {
   <script is:inline>
     // Combo Data & Switcher Logic
     function initProductActions() {
+      const mediaRoot = document.getElementById('mainMediaContainer');
+      if (!mediaRoot || mediaRoot._actionsBound) return;
+      mediaRoot._actionsBound = true;
       const comboDataEl = document.getElementById('combo-data');
       if (comboDataEl) {
         try {
@@ -845,6 +843,7 @@ const comboPayload = isCombo ? {
             mainVideo.classList.add('hidden');
           }
           if (mainImage) {
+            mainImage.removeAttribute('srcset');
             mainImage.src = defaultSet.image;
             mainImage.classList.remove('hidden');
             mainImage.classList.add('active');
@@ -897,6 +896,7 @@ const comboPayload = isCombo ? {
             toggleReelBtn.style.display = 'none';
           }
           if (mainImage) {
+            mainImage.removeAttribute('srcset');
             mainImage.src = item.image;
             mainImage.alt = item.title;
             mainImage.classList.remove('hidden');
@@ -1242,6 +1242,12 @@ const comboPayload = isCombo ? {
           mainVideo.classList.remove('hidden');
           mainVideo.classList.add('active');
 
+          // Lazy-load video source on first click of Watch Video
+          const vSrc = mainVideo.getAttribute('data-src');
+          if (vSrc && (!mainVideo.src || mainVideo.src === '')) {
+            mainVideo.src = vSrc;
+            mainVideo.load();
+          }
           // Ensure video is unmuted & plays on user gesture
           mainVideo.muted = true; // start muted for zero-rejection policy on iOS/Android
           const playPromise = mainVideo.play();
@@ -1343,11 +1349,6 @@ const comboPayload = isCombo ? {
       initStickyBuyBar();
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initProductDetailPage);
-    } else {
-      initProductDetailPage();
-    }
     document.addEventListener('astro:page-load', initProductDetailPage);
   </script>
 

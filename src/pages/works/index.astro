@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { getCardImageAttrs } from '../../utils/imagePerf';
 
 const allWorks = await getCollection('works');
 const works = [...allWorks].reverse();
@@ -17,10 +18,19 @@ const works = [...allWorks].reverse();
     </div>
 
     <div class="product-grid">
-      {works.map((item) => (
-        <div class="product-card">
+      {works.map((item, index) => (
+        <div class="product-card" style="content-visibility: auto; contain-intrinsic-size: auto 260px;">
           <div class="product-card-image-wrapper" style="aspect-ratio: 4 / 5; overflow: hidden; position: relative; background: #f8f8f8;">
-            <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'Our Work'} style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; transition: transform 0.5s ease;" loading="lazy" />
+            <img
+              {...getCardImageAttrs(item.data.image, '(max-width: 600px) 46vw, (max-width: 1024px) 30vw, 220px')}
+              alt={item.data.title || 'Our Work'}
+              width="384"
+              height="480"
+              style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; transition: transform 0.5s ease;"
+              loading={index < 4 ? "eager" : "lazy"}
+              fetchpriority={index < 2 ? "high" : "auto"}
+              decoding="async"
+            />
           </div>
 
           <div class="product-card-name" style="padding: 12px 14px 16px;">

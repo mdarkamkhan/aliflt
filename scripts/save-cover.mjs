@@ -17,16 +17,28 @@ async function run() {
   }
 
   const outDir = path.join('public', 'uploads', 'curated-sets');
+  const thumbDir = path.join('public', 'thumbs', 'uploads', 'curated-sets');
   if (!fs.existsSync(outDir)) {
     fs.mkdirSync(outDir, { recursive: true });
   }
+  if (!fs.existsSync(thumbDir)) {
+    fs.mkdirSync(thumbDir, { recursive: true });
+  }
 
   const destFile = path.join(outDir, `${setId}.webp`);
+  const thumbFile = path.join(thumbDir, `${setId}.webp`);
+
   await sharp(cleanInput)
-    .webp({ quality: 92 })
+    .resize({ width: 900, withoutEnlargement: true })
+    .webp({ quality: 82 })
     .toFile(destFile);
 
-  console.log(`Saved WebP cover to: ${destFile}`);
+  await sharp(cleanInput)
+    .resize({ width: 400, withoutEnlargement: true })
+    .webp({ quality: 80 })
+    .toFile(thumbFile);
+
+  console.log(`Saved WebP cover to: ${destFile} and thumbnail to: ${thumbFile}`);
 
   // Update markdown file
   const mdFile = path.join('src', 'content', 'products', `${setId}.md`);

@@ -30,7 +30,6 @@ export default function SearchModal({ initialOpen = false }: { initialOpen?: boo
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchItem[]>([]);
   const [placeholder, setPlaceholder] = useState('Search...');
-  const [catalog, setCatalog] = useState<SearchItem[]>([]);
   const fuseRef = useRef<Fuse<SearchItem> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -41,7 +40,6 @@ export default function SearchModal({ initialOpen = false }: { initialOpen?: boo
     fetch('/search.json')
       .then((res) => res.json())
       .then((data: SearchItem[]) => {
-        setCatalog(data);
         fuseRef.current = new Fuse(data, {
           keys: [
             { name: 'code', weight: 0.5 },
@@ -147,7 +145,7 @@ export default function SearchModal({ initialOpen = false }: { initialOpen?: boo
     return () => clearTimeout(timeoutId);
   }, [isOpen]);
 
-  // Search execution
+  // Search execution (capped at top 30 matches to keep mobile DOM updates instantaneous)
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setQuery(val);
@@ -158,7 +156,7 @@ export default function SearchModal({ initialOpen = false }: { initialOpen?: boo
     }
 
     if (fuseRef.current) {
-      const searchResults = fuseRef.current.search(val);
+      const searchResults = fuseRef.current.search(val, { limit: 30 });
       setResults(searchResults.map((r) => r.item));
     }
   };
@@ -191,7 +189,7 @@ export default function SearchModal({ initialOpen = false }: { initialOpen?: boo
       <div id="search-results">
         {results.map((item, idx) => (
           <a
-            key={idx}
+            key={item.url + '-' + idx}
             href={item.url}
             className="search-item"
             onClick={handleClose}
@@ -199,7 +197,10 @@ export default function SearchModal({ initialOpen = false }: { initialOpen?: boo
             <img
               src={item.image || '/icons/icon-512x512.png'}
               alt={item.title}
+              width={60}
+              height={80}
               loading="lazy"
+              decoding="async"
             />
             <div>
               <h4>{item.title}</h4>

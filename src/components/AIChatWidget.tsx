@@ -325,7 +325,10 @@ export default function AIChatWidget({ initialOpen = false, initialMessage = '' 
                           <img
                             src={item.image || '/icons/icon-512x512.png'}
                             alt={item.title}
+                            width={105}
+                            height={140}
                             loading="lazy"
+                            decoding="async"
                           />
                         </div>
                         <div className="chat-catalog-info">

@@ -2,6 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import reelsData from '../data/reels.json';
+import {
+  getBannerImageAttrs,
+  getCardImageAttrs,
+  getThumbUrl,
+  getCloudinaryPosterThumb,
+} from '../utils/imagePerf';
 
 const products = await getCollection('products');
 const services = await getCollection('services');
@@ -264,30 +270,47 @@ for (let i = 0; i < homeMax; i++) {
 }
 
 const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice(0, 8) : fallbackReels;
-
-
+const firstBannerAttrs = getBannerImageAttrs(topBanners[0].image);
 ---
 
-<BaseLayout title="Home" description="Custom bridal blouses, lehengas, gowns — premium ladies tailoring in Sahibganj.">
+<BaseLayout
+  title="Home"
+  description="Custom bridal blouses, lehengas, gowns — premium ladies tailoring in Sahibganj."
+  preloadImage={firstBannerAttrs.thumbSrc}
+  preloadImageSrcset={firstBannerAttrs.srcset}
+  preloadImageSizes={firstBannerAttrs.sizes}
+>
     <!-- Top Editorial Banners with Thin Navigation (< >) & No Auto Slide -->
     <div id="top-banner" class="top-banner-wrapper">
         <div class="banner-carousel" id="mainBannerCarousel">
-            {topBanners.map((item, index) => (
+            {topBanners.map((item, index) => {
+                const bAttrs = getBannerImageAttrs(item.image);
+                return (
                 <div class={`banner-slide-item ${index === 0 ? 'active' : ''}`} data-index={index}>
                     <picture>
-                      <source srcset={item.image} type="image/webp" />
+                      <source
+                        srcset={index === 0 ? bAttrs.srcset : undefined}
+                        data-srcset={index > 0 ? bAttrs.srcset : undefined}
+                        sizes={bAttrs.sizes}
+                        type="image/webp"
+                      />
                       <img 
-                        src={item.image} 
+                        src={index === 0 ? bAttrs.thumbSrc : undefined}
+                        data-src={index > 0 ? bAttrs.thumbSrc : undefined}
+                        srcset={index === 0 ? bAttrs.srcset : undefined}
+                        data-srcset={index > 0 ? bAttrs.srcset : undefined}
+                        sizes={bAttrs.sizes}
                         alt={item.title} 
-                        width="1400"
-                        height="1980"
+                        width="640"
+                        height="905"
                         decoding="async"
                         loading={index === 0 ? "eager" : "lazy"} 
-                        fetchpriority={index === 0 ? "high" : "auto"}
+                        fetchpriority={index === 0 ? "high" : "low"}
                       />
                     </picture>
                 </div>
-            ))}
+                );
+            })}
         </div>
 
         <!-- Thin Slide Navigation Buttons (< >) -->
@@ -329,7 +352,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         <div class="reels-header">
             <div class="reels-title-row">
                 <h2 class="reels-title">TRENDING REELS</h2>
-                <a href="/reels/" data-astro-prefetch="viewport" class="reels-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
+                <a href="/reels/" data-astro-prefetch="tap" class="reels-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
             </div>
         </div>
 
@@ -384,7 +407,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                             {item.curatedSet ? (
                                 <a 
                                     href={item.curatedSet.url}
-                                    data-astro-prefetch="viewport"
+                                    data-astro-prefetch="tap"
                                     class="reel-curated-strip" 
                                     onclick="event.stopPropagation();"
                                     aria-label={`View Curated Set - ${item.curatedSet.title}`}
@@ -394,7 +417,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                                         {item.curatedSet.items.map((piece) => (
                                             <div class="rc-mini-card" title={piece.title}>
                                                 {piece.image ? (
-                                                    <img src={piece.image} alt={piece.title} loading="lazy" />
+                                                    <img src={getThumbUrl(piece.image)} alt={piece.title} width="52" height="70" loading="lazy" decoding="async" />
                                                 ) : (
                                                     <div class="rc-mini-fallback">
                                                         <span>{piece.category}</span>
@@ -423,7 +446,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                                 <div class="reel-bottom-bar">
                                     <a 
                                         href={`/reels/#reel-${item.id}`} 
-                                        data-astro-prefetch="viewport"
+                                        data-astro-prefetch="tap"
                                         class="reel-minimal-cta" 
                                         onclick="event.stopPropagation();"
                                         aria-label={`Watch All Reels - ${item.internalTitle || item.title}`}
@@ -441,7 +464,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 ))}
 
                 <!-- 9-Grid Blurred Reel Watch All Card -->
-                <a href="/reels/" data-astro-prefetch="viewport" class="reel-card reel-watch-all-card" aria-label="Watch All Reels">
+                <a href="/reels/" data-astro-prefetch="tap" class="reel-card reel-watch-all-card" aria-label="Watch All Reels">
                     <div class="reel-media-inner">
                         <div class="reel-grid-9">
                             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n, i) => {
@@ -450,9 +473,12 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                                     <div class="mini-reel-cell">
                                         {gridReel ? (
                                             <img 
-                                                src={gridReel.poster || gridReel.image || '/icons/icon-512x512.png'} 
+                                                src={getCloudinaryPosterThumb(gridReel.poster || gridReel.image, 160)} 
                                                 alt="" 
+                                                width="120"
+                                                height="180"
                                                 loading="lazy" 
+                                                decoding="async"
                                                 class="mini-reel-img" 
                                                 style="width: 100%; height: 100%; object-fit: cover; display: block;"
                                             />
@@ -500,7 +526,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         <div class="fc-grid">
             <a href="/products/?category=curated-sets" class="fc-card" aria-label="Curated Sets">
                 <div class="fc-img-wrap">
-                    <img src="/uploads/curated-sets/curated-set-alif-set-027.webp" alt="Curated Sets" loading="lazy" />
+                    <img {...getCardImageAttrs("/uploads/curated-sets/curated-set-alif-set-027.webp", "(max-width: 600px) 30vw, 320px")} alt="Curated Sets" width="300" height="400" loading="lazy" decoding="async" />
                 </div>
                 <div class="fc-label">
                     <span>Curated Sets</span>
@@ -509,7 +535,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
 
             <a href="/products/?category=lace" class="fc-card" aria-label="Lace">
                 <div class="fc-img-wrap">
-                    <img src="/uploads/1763903002752-1000026096.webp" alt="Lace" loading="lazy" />
+                    <img {...getCardImageAttrs("/uploads/1763903002752-1000026096.webp", "(max-width: 600px) 30vw, 320px")} alt="Lace" width="300" height="400" loading="lazy" decoding="async" />
                 </div>
                 <div class="fc-label">
                     <span>Lace</span>
@@ -518,7 +544,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
 
             <a href="/products/?category=latkan" class="fc-card" aria-label="Latkan">
                 <div class="fc-img-wrap">
-                    <img src="/uploads/1765454981174-main-1000028658.webp" alt="Latkan" loading="lazy" />
+                    <img {...getCardImageAttrs("/uploads/1765454981174-main-1000028658.webp", "(max-width: 600px) 30vw, 320px")} alt="Latkan" width="300" height="400" loading="lazy" decoding="async" />
                 </div>
                 <div class="fc-label">
                     <span>Latkan</span>
@@ -527,7 +553,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
 
             <a href="/products/?category=fabrics" class="fc-card" aria-label="Fabrics">
                 <div class="fc-img-wrap">
-                    <img src="/uploads/fabrics/black-champagne-paisley-heavy-sequin-net-fabric.webp" alt="Fabrics" loading="lazy" />
+                    <img {...getCardImageAttrs("/uploads/fabrics/black-champagne-paisley-heavy-sequin-net-fabric.webp", "(max-width: 600px) 30vw, 320px")} alt="Fabrics" width="300" height="400" loading="lazy" decoding="async" />
                 </div>
                 <div class="fc-label">
                     <span>Fabrics</span>
@@ -536,7 +562,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
 
             <a href="/products/?category=plain-fabrics" class="fc-card" aria-label="Plain Fabrics">
                 <div class="fc-img-wrap">
-                    <img src="/uploads/fabrics/soft-pink-plain-satin-fabric.webp" alt="Plain Fabrics" loading="lazy" />
+                    <img {...getCardImageAttrs("/uploads/fabrics/soft-pink-plain-satin-fabric.webp", "(max-width: 600px) 30vw, 320px")} alt="Plain Fabrics" width="300" height="400" loading="lazy" decoding="async" />
                 </div>
                 <div class="fc-label">
                     <span>Plain Fabrics</span>
@@ -545,7 +571,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
 
             <a href="/products/?category=tailoring-material" class="fc-card" aria-label="Tailoring Material">
                 <div class="fc-img-wrap">
-                    <img src="/uploads/tailoring-material/astar-deluxe-lining-50.webp" alt="Tailoring Material" loading="lazy" />
+                    <img {...getCardImageAttrs("/uploads/tailoring-material/astar-deluxe-lining-50.webp", "(max-width: 600px) 30vw, 320px")} alt="Tailoring Material" width="300" height="400" loading="lazy" decoding="async" />
                 </div>
                 <div class="fc-label">
                     <span>Tailoring Material</span>
@@ -559,7 +585,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         <div class="collection-header">
             <div class="collection-title-row">
                 <h2 class="collection-title">LATEST COLLECTION</h2>
-                <a href="/products/" data-astro-prefetch="viewport" class="collection-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
+                <a href="/products/" data-astro-prefetch="tap" class="collection-view-all">View&nbsp;All&nbsp;<span class="view-all-arrow">→</span></a>
             </div>
         </div>
 
@@ -573,12 +599,12 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                     const displayPrice = offerPrice || origPrice;
 
                     return (
-                        <a href={`/products/${item.id}/`} data-astro-prefetch="viewport" class="product-card collection-product-card" aria-label={item.data.title}>
+                        <a href={`/products/${item.id}/`} data-astro-prefetch="tap" class="product-card collection-product-card" aria-label={item.data.title}>
                             <div class="product-card-image-wrapper">
                                 {hasDiscount && (
                                     <span class="product-discount-pill">-{discountPercent}%</span>
                                 )}
-                                <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title} loading={index < 3 ? "eager" : "lazy"} />
+                                <img {...getCardImageAttrs(item.data.image, "(max-width: 600px) 165px, 205px")} alt={item.data.title} width="330" height="412" loading="lazy" decoding="async" />
                             </div>
                             <div class="product-card-name">
                                 <div class="product-card-title">{item.data.title}</div>
@@ -603,12 +629,12 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 })}
 
                 <!-- Standardized View All Card (Matches Product Cards) -->
-                <a href="/products/" data-astro-prefetch="viewport" class="product-card collection-product-card collection-view-all-card" aria-label="View All Products">
+                <a href="/products/" data-astro-prefetch="tap" class="product-card collection-product-card collection-view-all-card" aria-label="View All Products">
                     <div class="product-card-image-wrapper collection-view-all-media">
                         <div class="product-grid-9">
                             {collectionPreviewImages.map((imgSrc, i) => (
                                 <div class="mini-prod-cell">
-                                    <img src={imgSrc} alt={`Collection item ${i + 1}`} loading="lazy" />
+                                    <img src={getThumbUrl(imgSrc)} alt={`Collection item ${i + 1}`} width="100" height="125" loading="lazy" decoding="async" />
                                 </div>
                             ))}
                         </div>
@@ -653,7 +679,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
             {atelierDirectoryCards.map((card) => (
                 <a href={card.url} class="fc-card" id={card.id || undefined} aria-label={card.title}>
                     <div class="fc-img-wrap">
-                        <img src={card.image} alt={card.title} loading="lazy" />
+                        <img {...getCardImageAttrs(card.image, "(max-width: 600px) 30vw, 320px")} alt={card.title} width="300" height="400" loading="lazy" decoding="async" />
                     </div>
                     <div class="fc-label">
                         <span>{card.title}</span>
@@ -679,9 +705,12 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
             <a href={`/services/${lehengaService.id}/`} class="se-poster" aria-label={lehengaService.data.title}>
                 <div class="se-poster-img-wrap">
                     <img 
-                        src={lehengaService.data.image || '/uploads/services/lehenga.webp'} 
+                        {...getCardImageAttrs(lehengaService.data.image || '/uploads/services/lehenga.webp', '(max-width: 600px) 92vw, 720px')}
                         alt={lehengaService.data.title} 
+                        width="640"
+                        height="800"
                         loading="lazy" 
+                        decoding="async"
                     />
                 </div>
                 <div class="se-poster-overlay">
@@ -696,9 +725,12 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 <a href={`/services/${anarkaliService.id}/`} class="se-card" aria-label={anarkaliService.data.title}>
                     <div class="se-card-img-wrap">
                         <img 
-                            src={anarkaliService.data.image || '/uploads/services/anarkali.webp'} 
+                            {...getCardImageAttrs(anarkaliService.data.image || '/uploads/services/anarkali.webp', '(max-width: 600px) 45vw, 340px')}
                             alt={anarkaliService.data.title} 
+                            width="360"
+                            height="480"
                             loading="lazy" 
+                            decoding="async"
                         />
                     </div>
                     <div class="se-card-overlay">
@@ -709,9 +741,12 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 <a href={`/services/${shararaService.id}/`} class="se-card" aria-label={shararaService.data.title}>
                     <div class="se-card-img-wrap">
                         <img 
-                            src={shararaService.data.image || '/uploads/services/sharara.webp'} 
+                            {...getCardImageAttrs(shararaService.data.image || '/uploads/services/sharara.webp', '(max-width: 600px) 45vw, 340px')}
                             alt={shararaService.data.title} 
+                            width="360"
+                            height="480"
                             loading="lazy" 
+                            decoding="async"
                         />
                     </div>
                     <div class="se-card-overlay">
@@ -759,9 +794,12 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                                 ></video>
                             ) : (
                                 <img 
-                                    src={route.image} 
+                                    {...getCardImageAttrs(route.image, '(max-width: 600px) 45vw, 340px')}
                                     alt={route.title} 
+                                    width="360"
+                                    height="480"
                                     loading="lazy" 
+                                    decoding="async"
                                     class="store-card-img"
                                 />
                             )}
@@ -842,7 +880,43 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
 
             let currentIndex = 0;
 
+            function hydrateBannerSlide(slide) {
+                if (!slide || slide._hydrated) return;
+                slide._hydrated = true;
+                const source = slide.querySelector('source[data-srcset]');
+                if (source) {
+                    source.srcset = source.getAttribute('data-srcset');
+                    source.removeAttribute('data-srcset');
+                }
+                const img = slide.querySelector('img');
+                if (img) {
+                    const dSrcset = img.getAttribute('data-srcset');
+                    const dSrc = img.getAttribute('data-src');
+                    if (dSrcset) {
+                        img.srcset = dSrcset;
+                        img.removeAttribute('data-srcset');
+                    }
+                    if (dSrc) {
+                        img.src = dSrc;
+                        img.removeAttribute('data-src');
+                    }
+                }
+            }
+
+            function hydrateAllBannerSlides() {
+                slides.forEach(s => hydrateBannerSlide(s));
+            }
+
+            // Hydrate remaining banner slides during browser idle time after initial load
+            if ('requestIdleCallback' in window) {
+                window.requestIdleCallback(hydrateAllBannerSlides, { timeout: 2500 });
+            } else {
+                setTimeout(hydrateAllBannerSlides, 1800);
+            }
+
             function showSlide(index) {
+                hydrateBannerSlide(slides[index]);
+                hydrateBannerSlide(slides[(index + 1) % slides.length]);
                 slides.forEach((slide, i) => {
                     if (i === index) {
                         slide.classList.add('active');
@@ -987,9 +1061,11 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 if (!targetCard) return;
                 if (targetCard === activeCard && !forcePlay) return;
 
-                // Preload next 2 reels
+                // Preload next 1 reel (skip if Data Saver is enabled)
+                const saveData = navigator.connection && navigator.connection.saveData;
+                const preloadCount = saveData ? 0 : 1;
                 const activeIdx = cards.indexOf(targetCard);
-                for (let i = 1; i <= 2; i++) {
+                for (let i = 1; i <= preloadCount; i++) {
                     const nextCard = cards[activeIdx + i];
                     if (nextCard) {
                         const nv = nextCard.querySelector('video');
@@ -1235,7 +1311,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                 });
             });
 
-            // Pause all videos initially
+            // Pause all videos initially; IntersectionObserver activates cards[0] when #reelsSection nears viewport
             cards.forEach(c => {
                 const v = c.querySelector('video');
                 if (v) {
@@ -1244,9 +1320,6 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
                     v.muted = true;
                 }
             });
-            if (cards.length > 0) {
-                activateCard(cards[0]);
-            }
         }
 
         // Route Map Full-Screen Lightbox Modal
@@ -1255,6 +1328,7 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
             const backdrop = document.getElementById('routeMapBackdrop');
             const closeBtn = document.getElementById('routeMapCloseBtn');
             const modalImg = document.getElementById('routeMapModalImg');
+            const modalTitle = document.getElementById('routeMapModalTitle');
             const routeCards = document.querySelectorAll('.store-routes-grid .store-route-item, .store-routes-grid .store-route-card');
 
             if (!modal || !modalImg || routeCards.length === 0) return;
@@ -1350,12 +1424,6 @@ const homepageReelItems = uploadedReelsList.length > 0 ? uploadedReelsList.slice
         }
 
         document.addEventListener('astro:page-load', initHomePage);
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initHomePage);
-        } else {
-            initHomePage();
-        }
     </script>
 
     <style>

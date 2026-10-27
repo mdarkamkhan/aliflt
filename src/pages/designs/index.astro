@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { getCardImageAttrs } from '../../utils/imagePerf';
 
 const allDesigns = await getCollection('designs');
 const designs = [...allDesigns].reverse();
@@ -14,10 +15,19 @@ const designs = [...allDesigns].reverse();
     </div>
 
     <div class="product-grid">
-      {designs.map((item) => (
-        <div class="product-card">
+      {designs.map((item, index) => (
+        <div class="product-card" style="content-visibility: auto; contain-intrinsic-size: auto 260px;">
           <div class="product-card-image-wrapper" style="aspect-ratio: 4 / 5; overflow: hidden; position: relative; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-            <img src={item.data.image || '/icons/icon-512x512.png'} alt={item.data.title || 'alif. Design'} style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;" loading="lazy" />
+            <img
+              {...getCardImageAttrs(item.data.image, '(max-width: 600px) 46vw, (max-width: 1024px) 30vw, 220px')}
+              alt={item.data.title || 'alif. Design'}
+              width="384"
+              height="480"
+              style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;"
+              loading={index < 4 ? "eager" : "lazy"}
+              fetchpriority={index < 2 ? "high" : "auto"}
+              decoding="async"
+            />
           </div>
 
           <div class="product-card-name">

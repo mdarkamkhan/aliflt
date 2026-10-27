@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import reelsData from '../../data/reels.json';
+import { getThumbUrl } from '../../utils/imagePerf';
 
 const products = await getCollection('products');
 const productsMap = new Map(products.map((p) => [p.id, p]));
@@ -139,13 +140,12 @@ const reelsCatalogForClient = reelsList.map((r) => ({
               <!-- Edge-to-Edge Reel Video (lazy-loaded: src set by IntersectionObserver) -->
               <video 
                 data-src={item.video}
-                src={reelsList.indexOf(item) < 2 ? item.video : undefined}
                 poster={item.image}
                 loop 
                 muted 
                 playsinline 
                 webkit-playsinline
-                preload={reelsList.indexOf(item) < 2 ? 'metadata' : 'none'}
+                preload="none"
                 class="reel-video-element"
               ></video>
 
@@ -185,7 +185,7 @@ const reelsCatalogForClient = reelsList.map((r) => ({
               {item.curatedSet ? (
                 <a 
                   href={item.curatedSet.url}
-                  data-astro-prefetch="viewport"
+                  data-astro-prefetch="tap"
                   class="reel-curated-strip" 
                   onclick="event.stopPropagation();"
                   aria-label={`View Curated Set - ${item.curatedSet.title}`}
@@ -195,7 +195,7 @@ const reelsCatalogForClient = reelsList.map((r) => ({
                     {item.curatedSet.items.map((piece) => (
                       <div class="rc-mini-card" title={piece.title}>
                         {piece.image ? (
-                          <img src={piece.image} alt={piece.title} loading="lazy" />
+                          <img src={getThumbUrl(piece.image)} alt={piece.title} width="52" height="70" loading="lazy" decoding="async" />
                         ) : (
                           <div class="rc-mini-fallback">
                             <span>{piece.category}</span>
@@ -301,8 +301,9 @@ const reelsCatalogForClient = reelsList.map((r) => ({
 
       if (cards.length === 0) return;
 
-      // Base template cards for never-ending infinite looping
-      const baseCards = cards.map(c => c.cloneNode(true));
+      // Lazily snapshot base template cards only when user approaches end of feed (saves 54 video + 216 img clones on load)
+      const initialCardCount = cards.length;
+      let baseCards = null;
       let loopBatchCounter = 1;
       let isAppendingLoop = false;
 
@@ -392,7 +393,11 @@ const reelsCatalogForClient = reelsList.map((r) => ({
 
       // Append Next Infinite Loop Batch (Never-ending Reels Feed)
       function appendNextInfiniteLoop() {
-        if (!baseCards.length || isAppendingLoop) return;
+        if (isAppendingLoop) return;
+        if (!baseCards) {
+          baseCards = cards.slice(0, initialCardCount).map(c => c.cloneNode(true));
+        }
+        if (!baseCards.length) return;
         isAppendingLoop = true;
         const frag = document.createDocumentFragment();
         const batchNum = loopBatchCounter++;
@@ -430,8 +435,10 @@ const reelsCatalogForClient = reelsList.map((r) => ({
           appendNextInfiniteLoop();
         }
 
-        // HARD PERFORMANCE + AUDIO FIX: Preload next 2 reels immediately so audio tracks & video frames are ready BEFORE user scrolls to them
-        for (let i = 1; i <= 2; i++) {
+        // Preload next 1 reel (or 0 if Data Saver is active) so bandwidth focuses on active video
+        const saveData = navigator.connection && navigator.connection.saveData;
+        const preloadCount = saveData ? 0 : 1;
+        for (let i = 1; i <= preloadCount; i++) {
           const nextCard = cards[activeIdx + i];
           if (nextCard) {
             const nv = nextCard.querySelector('video');
@@ -869,13 +876,6 @@ const reelsCatalogForClient = reelsList.map((r) => ({
     });
 
     document.addEventListener('astro:page-load', initReelInteractions);
-
-    // Also run on hard page load (astro:page-load doesn't fire on first visit)
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initReelInteractions);
-    } else {
-      initReelInteractions();
-    }
   </script>
 
   <style>

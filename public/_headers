@@ -1,2 +1,21 @@
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/thumbs/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+/banner/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/uploads/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/icons/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+/search.json
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
 /manifest.webmanifest
-Content-Type: application/manifest+json
+  Content-Type: application/manifest+json
+  Cache-Control: public, max-age=86400

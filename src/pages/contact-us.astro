@@ -658,11 +658,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       initPillarSystem();
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initContactPage);
-    } else {
-      initContactPage();
-    }
     document.addEventListener('astro:page-load', initContactPage);
   </script>
 
