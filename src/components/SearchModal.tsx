@@ -97,14 +97,28 @@ export default function SearchModal({ initialOpen = false }: { initialOpen?: boo
     };
   }, [isOpen]);
 
-  // Focus input when opened
+  // Focus input & push history state when opened
   useEffect(() => {
     if (isOpen) {
+      if (!window.history.state?.alifSearch) {
+        window.history.pushState({ alifSearch: true }, '', window.location.href);
+      }
       setTimeout(() => inputRef.current?.focus(), 120);
     } else {
       setQuery('');
       setResults([]);
     }
+  }, [isOpen]);
+
+  // Handle device/browser back button to close search overlay
+  useEffect(() => {
+    const handlePopState = () => {
+      if (isOpen) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, [isOpen]);
 
   // Typewriter placeholder effect (only runs when modal is open to prevent idle background re-renders)
@@ -162,7 +176,11 @@ export default function SearchModal({ initialOpen = false }: { initialOpen?: boo
   };
 
   const handleClose = () => {
-    setIsOpen(false);
+    if (window.history.state?.alifSearch) {
+      window.history.back();
+    } else {
+      setIsOpen(false);
+    }
   };
 
   return (

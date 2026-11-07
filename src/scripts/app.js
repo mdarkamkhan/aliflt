@@ -40,7 +40,7 @@ function checkPwaLaunchSplash() {
 }
 
 // --- 3. ROBUST SIDEBAR DRAWER CONTROLLER (Global Event Delegation) ---
-function openSidebar(e) {
+function openSidebar(e, pushHistory = true) {
     if (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -53,10 +53,15 @@ function openSidebar(e) {
         document.body.classList.add('sidebar-open');
         document.body.style.overflow = 'hidden';
         if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
+
+        if (pushHistory && !window._alifSidebarInHistory) {
+            window._alifSidebarInHistory = true;
+            window.history.pushState({ alifSidebar: true }, '', window.location.href);
+        }
     }
 }
 
-function closeSidebar(e) {
+function closeSidebar(e, isUserDismiss = false) {
     if (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -69,6 +74,13 @@ function closeSidebar(e) {
         document.body.classList.remove('sidebar-open');
         document.body.style.overflow = '';
         if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    if (isUserDismiss && window._alifSidebarInHistory) {
+        window._alifSidebarInHistory = false;
+        window.history.back();
+    } else {
+        window._alifSidebarInHistory = false;
     }
 }
 
@@ -88,7 +100,7 @@ if (!window._sidebarDelegated) {
 
         // 2. Sidebar Close Button click
         if (target.closest('#sidebarCloseBtn')) {
-            closeSidebar(e);
+            closeSidebar(e, true);
             return;
         }
 
@@ -156,8 +168,16 @@ if (!window._sidebarDelegated) {
     // Close on escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            closeSidebar();
+            closeSidebar(null, true);
             closePwaInstallModal();
+        }
+    });
+
+    // Close on browser/device back navigation
+    window.addEventListener('popstate', () => {
+        const sidebar = document.getElementById('sidebarMenu');
+        if (sidebar && sidebar.classList.contains('is-open')) {
+            closeSidebar(null, false);
         }
     });
 }

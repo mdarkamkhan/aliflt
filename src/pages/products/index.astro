@@ -653,7 +653,10 @@ const firstCardAttrs = products.length > 0
         offersOnly: false,
       };
 
-      function openDrawer() {
+      // Drawer History Tracking
+      let isDrawerInHistory = false;
+
+      function openDrawer(pushHistory = true) {
         const drawer = document.getElementById('filterDrawer');
         const backdrop = document.getElementById('filterBackdrop');
         if (!drawer || !backdrop) return;
@@ -662,17 +665,32 @@ const firstCardAttrs = products.length > 0
         drawer.setAttribute('aria-hidden', 'false');
         backdrop.setAttribute('aria-hidden', 'false');
         document.body.classList.add('drawer-locked');
+
+        if (pushHistory && !isDrawerInHistory) {
+          isDrawerInHistory = true;
+          window.history.pushState({ alifFilterDrawer: true }, '', window.location.href);
+        }
       }
 
-      function closeDrawer() {
+      function closeDrawer(isUserDismiss = false) {
         const drawer = document.getElementById('filterDrawer');
         const backdrop = document.getElementById('filterBackdrop');
-        if (!drawer || !backdrop) return;
-        drawer.classList.remove('is-open');
-        backdrop.classList.remove('is-open');
-        drawer.setAttribute('aria-hidden', 'true');
-        backdrop.setAttribute('aria-hidden', 'true');
+        if (drawer) {
+          drawer.classList.remove('is-open');
+          drawer.setAttribute('aria-hidden', 'true');
+        }
+        if (backdrop) {
+          backdrop.classList.remove('is-open');
+          backdrop.setAttribute('aria-hidden', 'true');
+        }
         document.body.classList.remove('drawer-locked');
+
+        if (isUserDismiss && isDrawerInHistory) {
+          isDrawerInHistory = false;
+          window.history.back();
+        } else {
+          isDrawerInHistory = false;
+        }
       }
 
       function updateActiveBadge() {
@@ -781,7 +799,7 @@ const firstCardAttrs = products.length > 0
           state.offersOnly = false;
           if (offersCheckbox) offersCheckbox.checked = false;
         }
-        applyFiltersAndSort();
+        applyFiltersAndSort(true);
       }
 
       function resetAllDrawerFilters() {
@@ -800,10 +818,10 @@ const firstCardAttrs = products.length > 0
         const defRadio = document.querySelector('input[name="productSortRadio"][value="default"]') as HTMLInputElement;
         if (defRadio) defRadio.checked = true;
 
-        applyFiltersAndSort();
+        applyFiltersAndSort(true);
       }
 
-      function syncUrlParams() {
+      function syncUrlParams(push: boolean = true) {
         const url = new URL(window.location.href);
         // Category
         if (state.categoryVal && state.categoryVal !== 'all') {
@@ -849,10 +867,23 @@ const firstCardAttrs = products.length > 0
           url.searchParams.delete('sale');
         }
 
-        window.history.replaceState(null, '', url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : ''));
+        const newSearch = url.searchParams.toString() ? '?' + url.searchParams.toString() : '';
+        const currentSearch = window.location.search;
+        const newUrl = url.pathname + newSearch;
+
+        // If query hasn't changed at all, avoid redundant history pushes
+        if (newSearch === currentSearch) {
+          return;
+        }
+
+        if (push) {
+          window.history.pushState({ alifFilter: true, search: newSearch }, '', newUrl);
+        } else {
+          window.history.replaceState({ alifFilter: true, search: newSearch }, '', newUrl);
+        }
       }
 
-      function applyFiltersAndSort() {
+      function applyFiltersAndSort(pushHistory: boolean = false) {
         const isAll = state.categoryVal === 'all';
         const isVideoFilter = !isAll && (state.categoryVal === 'video' || state.categoryVal.includes('video') || state.categoryVal.includes('reel') || state.categoryName.toLowerCase().includes('reel'));
         const isCuratedFilter = !isAll && (state.categoryVal.includes('curated') || state.categoryName.toLowerCase().includes('curated'));
@@ -1042,7 +1073,7 @@ const firstCardAttrs = products.length > 0
 
         updateActiveBadge();
         renderActiveChips();
-        syncUrlParams();
+        syncUrlParams(pushHistory);
       }
 
       function activateTab(tab: HTMLElement) {
@@ -1057,7 +1088,7 @@ const firstCardAttrs = products.length > 0
         state.categoryVal = tab.getAttribute('data-filter-values') || 'all';
         state.categoryName = tab.getAttribute('data-category-name') || 'Products';
 
-        applyFiltersAndSort();
+        applyFiltersAndSort(true);
       }
 
       // Event Listeners: Category tabs
@@ -1068,15 +1099,18 @@ const firstCardAttrs = products.length > 0
       });
 
       // Drawer Open / Close buttons
-      openFilterBtn?.addEventListener('click', openDrawer);
-      closeFilterBtn?.addEventListener('click', closeDrawer);
-      filterBackdrop?.addEventListener('click', closeDrawer);
-      drawerApplyBtn?.addEventListener('click', closeDrawer);
+      openFilterBtn?.addEventListener('click', () => openDrawer(true));
+      closeFilterBtn?.addEventListener('click', () => closeDrawer(true));
+      filterBackdrop?.addEventListener('click', () => closeDrawer(true));
+      drawerApplyBtn?.addEventListener('click', () => {
+        closeDrawer(false);
+        syncUrlParams(true);
+      });
 
       // Escape key to close
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && filterDrawer?.classList.contains('is-open')) {
-          closeDrawer();
+          closeDrawer(true);
         }
       });
 
@@ -1090,7 +1124,7 @@ const firstCardAttrs = products.length > 0
         radio.addEventListener('change', () => {
           if (radio.checked) {
             state.sort = radio.value;
-            applyFiltersAndSort();
+            applyFiltersAndSort(true);
           }
         });
       });
@@ -1107,7 +1141,7 @@ const firstCardAttrs = products.length > 0
             state.colors.add(color);
             btn.classList.add('active');
           }
-          applyFiltersAndSort();
+          applyFiltersAndSort(true);
         });
       });
 
@@ -1123,7 +1157,7 @@ const firstCardAttrs = products.length > 0
             state.fabrics.add(fabric);
             btn.classList.add('active');
           }
-          applyFiltersAndSort();
+          applyFiltersAndSort(true);
         });
       });
 
@@ -1139,7 +1173,7 @@ const firstCardAttrs = products.length > 0
             state.works.add(work);
             btn.classList.add('active');
           }
-          applyFiltersAndSort();
+          applyFiltersAndSort(true);
         });
       });
 
@@ -1155,99 +1189,137 @@ const firstCardAttrs = products.length > 0
             state.prices.add(range);
             btn.classList.add('active');
           }
-          applyFiltersAndSort();
+          applyFiltersAndSort(true);
         });
       });
 
       // Offers toggle checkbox
       offersCheckbox?.addEventListener('change', () => {
         state.offersOnly = !!offersCheckbox.checked;
-        applyFiltersAndSort();
+        applyFiltersAndSort(true);
       });
 
-      // URL parameters initial hydration
-      const urlParams = new URLSearchParams(window.location.search);
-      const catParam = (urlParams.get('category') || '').toLowerCase().trim();
-      if (catParam) {
-        const matchingTab = tabs.find(t => {
-          const vals = (t.getAttribute('data-filter-values') || '').toLowerCase();
-          const name = (t.getAttribute('data-category-name') || '').toLowerCase().replace(/[\s_]+/g, '-');
-          return vals.split(',').map(v => v.trim()).includes(catParam) || name === catParam || vals.includes(catParam);
+      // Unified URL hydration function (used for initial load, popstate, and page swaps)
+      function hydrateFromUrl(searchString = window.location.search) {
+        const urlParams = new URLSearchParams(searchString);
+
+        // 1. Reset state
+        state.sort = 'default';
+        state.colors.clear();
+        state.fabrics.clear();
+        state.works.clear();
+        state.prices.clear();
+        state.offersOnly = false;
+
+        // Reset UI inputs
+        sortRadios.forEach(r => { r.checked = (r.value === 'default'); });
+        colorBtns.forEach(b => b.classList.remove('active'));
+        fabricBtns.forEach(b => b.classList.remove('active'));
+        workBtns.forEach(b => b.classList.remove('active'));
+        priceBtns.forEach(b => b.classList.remove('active'));
+        if (offersCheckbox) offersCheckbox.checked = false;
+
+        // 2. Hydrate Category
+        const catParam = (urlParams.get('category') || '').toLowerCase().trim();
+        let matchingTab: HTMLElement | null = null;
+        if (catParam && catParam !== 'all') {
+          matchingTab = tabs.find(t => {
+            if (t.tagName === 'A') return false;
+            const vals = (t.getAttribute('data-filter-values') || '').toLowerCase();
+            const name = (t.getAttribute('data-category-name') || '').toLowerCase().replace(/[\s_]+/g, '-');
+            return vals.split(',').map(v => v.trim()).includes(catParam) || name === catParam || vals.includes(catParam);
+          }) || null;
+        }
+        if (!matchingTab) {
+          matchingTab = tabs.find(t => (t.getAttribute('data-filter-values') || '').toLowerCase() === 'all') || tabs[0];
+        }
+
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
         });
         if (matchingTab) {
-          tabs.forEach(t => {
-            t.classList.remove('active');
-            t.setAttribute('aria-selected', 'false');
-          });
           matchingTab.classList.add('active');
           matchingTab.setAttribute('aria-selected', 'true');
           state.categoryVal = matchingTab.getAttribute('data-filter-values') || 'all';
-          state.categoryName = matchingTab.getAttribute('data-category-name') || 'Products';
+          state.categoryName = matchingTab.getAttribute('data-category-name') || 'All Products';
         }
+
+        // 3. Hydrate Sort
+        const sortParam = urlParams.get('sort');
+        if (sortParam && ['price-asc', 'price-desc', 'newest'].includes(sortParam)) {
+          state.sort = sortParam;
+          const matchingRadio = sortRadios.find(r => r.value === sortParam);
+          if (matchingRadio) matchingRadio.checked = true;
+        }
+
+        // 4. Hydrate Colors
+        const colorParam = urlParams.get('color');
+        if (colorParam) {
+          colorParam.split(',').forEach(c => {
+            const trimmed = c.trim().toLowerCase();
+            if (trimmed) {
+              state.colors.add(trimmed);
+              const btn = colorBtns.find(b => b.getAttribute('data-color') === trimmed);
+              if (btn) btn.classList.add('active');
+            }
+          });
+        }
+
+        // 5. Hydrate Fabrics
+        const fabricParam = urlParams.get('fabric');
+        if (fabricParam) {
+          fabricParam.split(',').forEach(f => {
+            const trimmed = f.trim().toLowerCase();
+            if (trimmed) {
+              state.fabrics.add(trimmed);
+              const btn = fabricBtns.find(b => b.getAttribute('data-fabric') === trimmed);
+              if (btn) btn.classList.add('active');
+            }
+          });
+        }
+
+        // 6. Hydrate Works
+        const workParam = urlParams.get('work');
+        if (workParam) {
+          workParam.split(',').forEach(w => {
+            const trimmed = w.trim().toLowerCase();
+            if (trimmed) {
+              state.works.add(trimmed);
+              const btn = workBtns.find(b => b.getAttribute('data-work') === trimmed);
+              if (btn) btn.classList.add('active');
+            }
+          });
+        }
+
+        // 7. Hydrate Prices
+        const priceParam = urlParams.get('price');
+        if (priceParam) {
+          priceParam.split(',').forEach(p => {
+            const trimmed = p.trim().toLowerCase();
+            if (trimmed) {
+              state.prices.add(trimmed);
+              const btn = priceBtns.find(b => b.getAttribute('data-price-range') === trimmed);
+              if (btn) btn.classList.add('active');
+            }
+          });
+        }
+
+        // 8. Hydrate Offers/Sale
+        if (urlParams.get('sale') === '1') {
+          state.offersOnly = true;
+          if (offersCheckbox) offersCheckbox.checked = true;
+        }
+
+        // Apply filters without pushing redundant duplicate history entry
+        applyFiltersAndSort(false);
       }
 
-      const sortParam = urlParams.get('sort');
-      if (sortParam && ['price-asc', 'price-desc', 'newest'].includes(sortParam)) {
-        state.sort = sortParam;
-        const matchingRadio = sortRadios.find(r => r.value === sortParam);
-        if (matchingRadio) matchingRadio.checked = true;
-      }
+      // Initial run from current URL
+      hydrateFromUrl(window.location.search);
 
-      const colorParam = urlParams.get('color');
-      if (colorParam) {
-        colorParam.split(',').forEach(c => {
-          const trimmed = c.trim().toLowerCase();
-          if (trimmed) {
-            state.colors.add(trimmed);
-            const btn = colorBtns.find(b => b.getAttribute('data-color') === trimmed);
-            if (btn) btn.classList.add('active');
-          }
-        });
-      }
-
-      const fabricParam = urlParams.get('fabric');
-      if (fabricParam) {
-        fabricParam.split(',').forEach(f => {
-          const trimmed = f.trim().toLowerCase();
-          if (trimmed) {
-            state.fabrics.add(trimmed);
-            const btn = fabricBtns.find(b => b.getAttribute('data-fabric') === trimmed);
-            if (btn) btn.classList.add('active');
-          }
-        });
-      }
-
-      const workParam = urlParams.get('work');
-      if (workParam) {
-        workParam.split(',').forEach(w => {
-          const trimmed = w.trim().toLowerCase();
-          if (trimmed) {
-            state.works.add(trimmed);
-            const btn = workBtns.find(b => b.getAttribute('data-work') === trimmed);
-            if (btn) btn.classList.add('active');
-          }
-        });
-      }
-
-      const priceParam = urlParams.get('price');
-      if (priceParam) {
-        priceParam.split(',').forEach(p => {
-          const trimmed = p.trim().toLowerCase();
-          if (trimmed) {
-            state.prices.add(trimmed);
-            const btn = priceBtns.find(b => b.getAttribute('data-price-range') === trimmed);
-            if (btn) btn.classList.add('active');
-          }
-        });
-      }
-
-      if (urlParams.get('sale') === '1') {
-        state.offersOnly = true;
-        if (offersCheckbox) offersCheckbox.checked = true;
-      }
-
-      // Initial run
-      applyFiltersAndSort();
+      // Expose to window for global popstate listener
+      (window as any)._alifHydrateProductFilters = hydrateFromUrl;
     }
 
     // Delegated click handler on document so button ALWAYS responds immediately
@@ -1260,19 +1332,35 @@ const firstCardAttrs = products.length > 0
       drawer.setAttribute('aria-hidden', 'false');
       backdrop.setAttribute('aria-hidden', 'false');
       document.body.classList.add('drawer-locked');
+
+      if (!(window as any)._alifDrawerInHistory) {
+        (window as any)._alifDrawerInHistory = true;
+        window.history.pushState({ alifFilterDrawer: true }, '', window.location.href);
+      }
     }
 
-    function globalCloseDrawer() {
+    function globalCloseDrawer(isUserDismiss = false) {
       const drawer = document.getElementById('filterDrawer');
       const backdrop = document.getElementById('filterBackdrop');
-      if (!drawer || !backdrop) return;
-      drawer.classList.remove('is-open');
-      backdrop.classList.remove('is-open');
-      drawer.setAttribute('aria-hidden', 'true');
-      backdrop.setAttribute('aria-hidden', 'true');
+      if (drawer) {
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+      }
+      if (backdrop) {
+        backdrop.classList.remove('is-open');
+        backdrop.setAttribute('aria-hidden', 'true');
+      }
       document.body.classList.remove('drawer-locked');
+
+      if (isUserDismiss && (window as any)._alifDrawerInHistory) {
+        (window as any)._alifDrawerInHistory = false;
+        window.history.back();
+      } else {
+        (window as any)._alifDrawerInHistory = false;
+      }
     }
 
+    // Global Delegated click and Popstate listeners (attached once)
     if (!(window as any)._alifFilterDelegated) {
       (window as any)._alifFilterDelegated = true;
       document.addEventListener('click', (e) => {
@@ -1281,14 +1369,34 @@ const firstCardAttrs = products.length > 0
         if (target.closest('#openFilterBtn')) {
           e.preventDefault();
           globalOpenDrawer();
-        } else if (target.closest('#closeFilterBtn') || target.closest('#filterBackdrop') || target.closest('#drawerApplyBtn')) {
-          globalCloseDrawer();
+        } else if (target.closest('#closeFilterBtn') || target.closest('#filterBackdrop')) {
+          globalCloseDrawer(true);
+        } else if (target.closest('#drawerApplyBtn')) {
+          globalCloseDrawer(false);
         }
       });
 
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-          globalCloseDrawer();
+          globalCloseDrawer(true);
+        }
+      });
+
+      // Browser Back & Forward Popstate Handler
+      window.addEventListener('popstate', (e) => {
+        const drawer = document.getElementById('filterDrawer');
+        const backdrop = document.getElementById('filterBackdrop');
+        if (drawer && drawer.classList.contains('is-open')) {
+          drawer.classList.remove('is-open');
+          if (backdrop) backdrop.classList.remove('is-open');
+          document.body.classList.remove('drawer-locked');
+          (window as any)._alifDrawerInHistory = false;
+          return;
+        }
+
+        // Exact one-step back filter state hydration
+        if (typeof (window as any)._alifHydrateProductFilters === 'function') {
+          (window as any)._alifHydrateProductFilters(window.location.search);
         }
       });
     }
