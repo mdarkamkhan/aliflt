@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-silk-dupatta-01.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-001"
 category: "dupatta"
 description: "Lustrous teal green crush silk dupatta fabric embellished with fine golden sequin floral bootis and an ornate scalloped cutwork border for timeless festive elegance."

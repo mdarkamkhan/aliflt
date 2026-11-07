@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-bottom-fabric-03.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-020"
 category: "fabric"
 description: "Striking magenta rani pink fandy silk bottom fabric decorated with regal golden zari floral bootas and an architectural tiered scalloped border."

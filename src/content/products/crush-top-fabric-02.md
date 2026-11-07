@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-top-fabric-02.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-011"
 category: "fabric"
 description: "Vibrant teal peacock blue crush silk top fabric featuring luminous golden sequin floral vines with pearl-embossed centers for festive tops and kurtis."

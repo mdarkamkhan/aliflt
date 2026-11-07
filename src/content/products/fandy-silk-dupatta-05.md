@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-silk-dupatta-05.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-010"
 category: "dupatta"
 description: "Auspicious vermillion red fandy silk dupatta fabric designed with ornate leafy arch cutwork, sparkling sequin bootis, and subtle eyelash fringe detailing."

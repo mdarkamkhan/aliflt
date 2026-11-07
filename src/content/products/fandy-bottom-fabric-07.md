@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-bottom-fabric-07.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-024"
 category: "fabric"
 description: "Auspicious scarlet red fandy silk bottom fabric covered in delicate gold zari floral creepers with a dense sequin scalloped border finish."

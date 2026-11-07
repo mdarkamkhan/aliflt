@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-02.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-026"
 category: "fabric"
 description: "Refreshing aqua turquoise fandy silk top fabric sparkling with rainbow holographic sequin vines and a soft designer fringed selvedge."

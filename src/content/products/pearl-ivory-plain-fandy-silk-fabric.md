@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/pearl-ivory-plain-fandy-silk-fabric.webp"
 is_ad: false
-price: 139
+price: 140
 product_code: "ALIF-FB-041"
 category: "plain fabric"
 description: "Elegantly radiant pearl ivory plain fandy silk fabric boasting a pearlescent sheen and crisp drape for bespoke bridal blouses, kurtis, and designer wear."

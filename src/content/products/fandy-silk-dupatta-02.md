@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-silk-dupatta-02.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-007"
 category: "dupatta"
 description: "Striking scarlet red fandy silk dupatta fabric featuring festive mirror rosettes and a dramatic arched scalloped hem lined with gold zari."

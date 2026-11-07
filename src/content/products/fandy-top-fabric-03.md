@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-03.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-027"
 category: "fabric"
 description: "Rich royal emerald green fandy silk top fabric detailed with copper rose gold sequin floral jaal branches and a tonal fringed border."

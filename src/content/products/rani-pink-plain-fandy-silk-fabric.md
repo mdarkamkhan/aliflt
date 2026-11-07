@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/rani-pink-plain-fandy-silk-fabric.webp"
 is_ad: false
-price: 139
+price: 140
 product_code: "ALIF-FB-042"
 category: "plain fabric"
 description: "Dazzling rani pink plain fandy silk fabric offering a rich festive texture and supple hand-feel, ideal for custom party-wear blouses, kurtas, and festive bottoms."

@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-top-fabric-04.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-013"
 category: "fabric"
 description: "Warm antique cream beige crush silk top fabric delicately embroidered with swirling paisley motifs and fine sequined vine work for subtle luxury styling."

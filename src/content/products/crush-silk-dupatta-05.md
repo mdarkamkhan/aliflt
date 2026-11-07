@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-silk-dupatta-05.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-005"
 category: "dupatta"
 description: "Regal wine maroon crush silk dupatta fabric accented with opulent golden zari embroidery and a graceful scalloped border for evening allure."

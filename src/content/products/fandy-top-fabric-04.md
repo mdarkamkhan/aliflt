@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-04.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-028"
 category: "fabric"
 description: "Warm sunset orange fandy silk top fabric decorated with silver zari sunburst floral medallions and delicate branching embroidery."

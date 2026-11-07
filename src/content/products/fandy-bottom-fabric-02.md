@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-bottom-fabric-02.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-019"
 category: "fabric"
 description: "Warm terracotta rust fandy silk bottom fabric enriched with sparkling silver zari and sequin floral bouquets along a graceful scalloped edge."

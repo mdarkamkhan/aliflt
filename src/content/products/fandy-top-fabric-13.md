@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-13.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-037"
 category: "fabric"
 description: "Subtle champagne beige fandy silk top fabric detailed with opulent rose gold sequin botanical floral jaal and blooming vine embroidery."

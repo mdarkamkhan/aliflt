@@ -1,6 +1,7 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import sharp from 'sharp';
 
 const PORT = 4322;
 const CWD = process.cwd();
@@ -28,7 +29,7 @@ const server = http.createServer((req, res) => {
       for (const file of files) {
         if (!file.endsWith('.md')) continue;
         const content = fs.readFileSync(path.join(productsDir, file), 'utf8');
-        if (content.includes('category: "Curated Sets"') || content.includes("category: 'Curated Sets'")) {
+        if (/category:\s*["']?(Curated Sets|Reels Outfit)["']?/i.test(content)) {
           const slug = file.replace(/\.md$/, '');
           const titleMatch = content.match(/title:\s*["']([^"']+)["']/);
           const reelMatch = content.match(/linked_reel_id:\s*["']([^"']+)["']/);
@@ -38,10 +39,13 @@ const server = http.createServer((req, res) => {
           const imageMatch = content.match(/image:\s*["']([^"']+)["']/);
           const comboMatches = Array.from(content.matchAll(/-\s*["']([^"']+)["']/g)).map(m => m[1]);
 
+          const reelId = (reelMatch && reelMatch[1] && reelMatch[1].trim()) ? reelMatch[1].trim() : null;
+
           sets.push({
             slug,
             title: titleMatch ? titleMatch[1] : slug,
-            reel_id: reelMatch ? reelMatch[1] : null,
+            reel_id: reelId,
+            is_standalone: !reelId,
             product_code: codeMatch ? codeMatch[1] : null,
             price: priceMatch ? Number(priceMatch[1]) : 0,
             offer_price: offerMatch ? Number(offerMatch[1]) : null,
@@ -57,6 +61,53 @@ const server = http.createServer((req, res) => {
       res.statusCode = 500;
       return res.end(JSON.stringify({ error: e.message }));
     }
+  }
+
+  // POST: /api/upload-cover
+  if (req.method === 'POST' && url.pathname === '/api/upload-cover') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const { slug, dataUrl } = JSON.parse(body);
+        if (!slug || !dataUrl) {
+          res.statusCode = 400;
+          return res.end(JSON.stringify({ error: 'Missing slug or dataUrl' }));
+        }
+        const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+        if (!match) {
+          res.statusCode = 400;
+          return res.end(JSON.stringify({ error: 'Invalid data URL format' }));
+        }
+        const buffer = Buffer.from(match[2], 'base64');
+        const outDir = path.resolve(CWD, 'public/uploads/curated-sets');
+        const thumbDir = path.resolve(CWD, 'public/thumbs/uploads/curated-sets');
+        if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+        if (!fs.existsSync(thumbDir)) fs.mkdirSync(thumbDir, { recursive: true });
+
+        const cleanSlug = slug.toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+        const destFile = path.join(outDir, `${cleanSlug}.webp`);
+        const thumbFile = path.join(thumbDir, `${cleanSlug}.webp`);
+
+        await sharp(buffer)
+          .resize({ width: 900, withoutEnlargement: true })
+          .webp({ quality: 82 })
+          .toFile(destFile);
+
+        await sharp(buffer)
+          .resize({ width: 400, withoutEnlargement: true })
+          .webp({ quality: 80 })
+          .toFile(thumbFile);
+
+        const imageRel = `/uploads/curated-sets/${cleanSlug}.webp`;
+        res.setHeader('Content-Type', 'application/json');
+        return res.end(JSON.stringify({ success: true, image: imageRel }));
+      } catch (err) {
+        res.statusCode = 500;
+        return res.end(JSON.stringify({ error: err.message }));
+      }
+    });
+    return;
   }
 
   // POST: Save or Delete Curated Set
@@ -115,6 +166,9 @@ const server = http.createServer((req, res) => {
           })
           .join('\n');
 
+        const hasReelVideo = Boolean(data.reel_video && String(data.reel_video).trim());
+        const hasReelId = Boolean(data.reel_id && String(data.reel_id).trim());
+
         const content = `---
 title: "${(data.title || '').replace(/"/g, '\\"')}"
 date: "${new Date().toISOString()}"
@@ -123,10 +177,8 @@ tags: "product"
 image: "${data.image || '/icons/icon-512x512.png'}"
 price: ${Number(data.price) || 0}
 ${data.offer_price ? `offer_price: ${Number(data.offer_price)}\n` : ''}product_code: "${data.product_code || 'ALIF-SET'}"
-category: "Curated Sets"
-reel_video: "${data.reel_video || ''}"
-linked_reel_id: "${data.reel_id || ''}"
-combo_products:
+category: "${(data.category || (hasReelVideo ? 'Reels Outfit' : 'Curated Sets')).replace(/"/g, '\\"')}"
+${hasReelVideo ? `reel_video: "${data.reel_video}"\n` : ''}${hasReelId ? `linked_reel_id: "${data.reel_id}"\n` : ''}combo_products:
 ${comboListYaml}
 description: "${(data.description || '').replace(/"/g, '\\"')}"
 colour: "${(data.colour || '').replace(/"/g, '\\"')}"
@@ -136,13 +188,13 @@ delivery_charges: "Free"
 return_policy: "7 days exchange (at store)"
 ---
 
-${data.custom_notes || 'Handcrafted bespoke ensemble curated directly from our trending boutique reel.'}
+${data.custom_notes || (hasReelId ? 'Handcrafted bespoke ensemble curated directly from our trending boutique reel.' : 'Handcrafted bespoke ensemble combining matching designer fabrics and trims from Alif boutique Sahibganj.')}
 `;
 
         fs.writeFileSync(filePath, content, 'utf8');
 
-        // Update reels.json
-        if (data.reel_id) {
+        // Update reels.json ONLY if reel_id is present
+        if (hasReelId) {
           try {
             const reelsPath = path.resolve(CWD, 'src/data/reels.json');
             const reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
@@ -162,7 +214,6 @@ ${data.custom_notes || 'Handcrafted bespoke ensemble curated directly from our t
             console.error('Error updating reels.json:', reelErr);
           }
         }
-
 
         res.setHeader('Content-Type', 'application/json');
         return res.end(JSON.stringify({ success: true, slug: data.slug, path: filePath }));

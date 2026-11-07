@@ -65,19 +65,24 @@ export async function getStaticPaths() {
 
   return products.map((entry) => {
     const currentCategory = (entry.data.category || '').toLowerCase();
-    const isEntryCombo = currentCategory === 'curated sets' || currentCategory === 'curated set' || currentCategory === 'dress set' || (entry.data.combo_products && entry.data.combo_products.length > 0) || (entry.data.combo_items && entry.data.combo_items.length > 0);
+    const isEntryCombo = currentCategory === 'curated sets' || currentCategory === 'curated set' || currentCategory === 'reels outfit' || currentCategory === 'reel outfit' || currentCategory === 'dress set' || (entry.data.combo_products && entry.data.combo_products.length > 0) || (entry.data.combo_items && entry.data.combo_items.length > 0);
 
     let similar = [];
     let ymal = [];
 
-    const COMBO_CATS = new Set(['curated sets', 'curated set', 'dress set']);
+    const COMBO_CATS = new Set(['curated sets', 'curated set', 'dress set', 'reels outfit', 'reel outfit', 'reels outfits', 'reel outfits']);
 
     if (isEntryCombo) {
       // Combo: only other combos, scored by colour/occasion overlap
+      // Curated Sets only show other Curated Sets (no video)
+      // Reel Outfits only show other Reel Outfits (with video)
+      const entryHasVideo = !!entry.data.reel_video;
       similar = products
         .filter((p) => {
           const c = (p.data.category || '').toLowerCase();
-          return p.id !== entry.id && (COMBO_CATS.has(c) || (p.data.combo_products && p.data.combo_products.length > 0));
+          const pHasVideo = !!p.data.reel_video;
+          const isPCombo = COMBO_CATS.has(c) || (p.data.combo_products && p.data.combo_products.length > 0);
+          return p.id !== entry.id && isPCombo && (pHasVideo === entryHasVideo);
         })
         .map((p) => ({ p, score: scoreProduct(entry, p) }))
         .sort((a, b) => b.score - a.score)
@@ -234,14 +239,15 @@ const discountPercent = offer_price && price ? Math.round(((Number(price) - Numb
 const itemCode = product_code || `ALIF-${product.id.replace(/[^a-zA-Z0-9]/g, '-').toUpperCase()}`;
 
 const catLower = (category || '').toLowerCase();
-const isCombo = (catLower === 'curated sets' || catLower === 'curated set' || catLower === 'dress set' || (resolvedComboItems && resolvedComboItems.length > 0));
+const isCombo = (catLower === 'curated sets' || catLower === 'curated set' || catLower === 'reels outfit' || catLower === 'reel outfit' || catLower === 'dress set' || (resolvedComboItems && resolvedComboItems.length > 0));
 
 const comboCutsSummary = (isCombo && resolvedComboItems.length > 0)
   ? resolvedComboItems.map(i => `${i.title} (${i.size || `${i.meters}m`})`).join(' + ')
   : '';
 
+const itemCategoryLabel = catLower.includes('reel') ? 'Reel Outfit' : 'Curated Set';
 const wappOrderText = (isCombo && comboCutsSummary)
-  ? `Hello alif., I want to purchase Curated Set '${title}' [Code: ${itemCode}] (Price: ₹${finalPrice}). Includes: ${comboCutsSummary}.`
+  ? `Hello alif., I want to purchase ${itemCategoryLabel} '${title}' [Code: ${itemCode}] (Price: ₹${finalPrice}). Includes: ${comboCutsSummary}.`
   : `Hello alif., I want to purchase '${title}' [Code: ${itemCode}] (Price: ₹${finalPrice}).`;
 const wappOrderLink = `https://wa.me/7250470009?text=${encodeURIComponent(wappOrderText)}`;
 

@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-01.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-025"
 category: "fabric"
 description: "Striking hot rani pink fandy silk top fabric woven with radiant golden sequin floral vines and blossom sprigs across a shimmering texture."

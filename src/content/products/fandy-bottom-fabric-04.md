@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-bottom-fabric-04.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-021"
 category: "fabric"
 description: "Graceful mauve dusty rose fandy silk bottom fabric embellished with rose gold sequin rose clusters and fine scalloped edge work."

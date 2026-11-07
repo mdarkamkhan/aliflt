@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-14.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-038"
 category: "fabric"
 description: "Mysterious charcoal aubergine fandy silk top fabric accented with delicate golden rainbow sequin vine trails and a refined fringed selvedge."

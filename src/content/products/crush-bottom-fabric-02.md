@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-bottom-fabric-02.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-007"
 category: "fabric"
 description: "Elegantly textured pearl off-white crush silk bottom fabric highlighted with rose gold sequin floral vines and an intricate diamond cutwork scalloped hem."

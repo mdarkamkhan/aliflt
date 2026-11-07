@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-10.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-034"
 category: "fabric"
 description: "Elegant dusty mauve fandy silk top fabric embroidered with warm copper sequin sunburst floral motifs and finished with a tonal fringe."

@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-bottom-fabric-03.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-008"
 category: "fabric"
 description: "Deep wine maroon crush silk bottom fabric featuring luminous gold zari floral vines and a grand scalloped cutwork border for ceremonial bottom wear."

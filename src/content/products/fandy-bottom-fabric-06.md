@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-bottom-fabric-06.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-023"
 category: "fabric"
 description: "Bright haldi yellow fandy silk bottom fabric detailed with silver zari floral medallions and an ornate peaked scalloped cutwork border."

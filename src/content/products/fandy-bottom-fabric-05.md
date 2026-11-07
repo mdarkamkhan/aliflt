@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-bottom-fabric-05.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-022"
 category: "fabric"
 description: "Rich crimson red fandy silk bottom fabric featuring dense holographic sequin embroidery and an ornate multi-tiered scalloped hem."

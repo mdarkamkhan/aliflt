@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-07.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-031"
 category: "fabric"
 description: "Auspicious scarlet red fandy silk top fabric highlighting gleaming silver zari floral sprays and curving vine creepers for festive occasion tops."

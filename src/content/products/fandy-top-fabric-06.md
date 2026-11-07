@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-06.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-030"
 category: "fabric"
 description: "Pristine pearl ivory fandy silk top fabric draped in delicate rainbow holographic sequined vines and finished with a feathered fringe hem."

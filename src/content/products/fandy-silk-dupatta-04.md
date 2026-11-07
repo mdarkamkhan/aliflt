@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-silk-dupatta-04.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-009"
 category: "dupatta"
 description: "Charming dusty rose fandy silk dupatta fabric accented with soft antique zari floral sprigs and a gracefully waved scalloped border."

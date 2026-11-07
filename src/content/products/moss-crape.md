@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/moss-crape-plain-fabric.webp"
 is_ad: false
-price: 49
+price: 50
 product_code: "ALIF-FB-049"
 category: "plain fabric"
 description: "Premium smooth moss crape plain fabric featuring a lightweight, soft-textured feel with elegant drape and rich color vibrancy. Perfect for crafting stylish kurtis, suits, dresses, tops, dupattas, and designer lining work. Available in an extensive spectrum of vibrant shades."

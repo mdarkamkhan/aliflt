@@ -22,7 +22,7 @@ for (const file of existingFiles) {
   if (!file.endsWith('.md')) continue;
   try {
     const content = fs.readFileSync(path.join(productsDir, file), 'utf8');
-    if (content.includes('category: "Curated Sets"') || content.includes("category: 'Curated Sets'")) {
+    if (content.includes('category: "Curated Sets"') || content.includes("category: 'Curated Sets'") || content.includes('category: "Reels Outfit"') || content.includes("category: 'Reels Outfit'")) {
       const slug = file.replace(/\.md$/, '');
       const reelMatch = content.match(/linked_reel_id:\s*["']([^"']+)["']/);
       const titleMatch = content.match(/title:\s*["']([^"']+)["']/);
@@ -62,14 +62,21 @@ for (const file of existingFiles) {
         }
       }
 
+      const reelId = (reelMatch && reelMatch[1] && reelMatch[1].trim()) ? reelMatch[1].trim() : null;
+      const descMatch = content.match(/description:\s*["']([^"']+)["']/);
+      const idealMatch = content.match(/ideal_for:\s*["']([^"']+)["']/);
+
       existingSets.push({
         slug,
         title: titleMatch ? titleMatch[1] : slug,
-        reel_id: reelMatch ? reelMatch[1] : null,
+        reel_id: reelId,
+        is_standalone: !reelId,
         product_code: codeMatch ? codeMatch[1] : null,
         price: priceMatch ? Number(priceMatch[1]) : 0,
         offer_price: offerMatch ? Number(offerMatch[1]) : null,
         image: imageMatch ? imageMatch[1] : null,
+        description: descMatch ? descMatch[1] : '',
+        ideal_for: idealMatch ? idealMatch[1] : '',
         combo_products: comboMatches,
       });
     }
@@ -1404,6 +1411,337 @@ const servicesList = allServices.map(s => ({
       transform: translateY(0);
       opacity: 1;
     }
+
+    /* Studio Mode Switcher Tabs */
+    .studio-mode-switcher {
+      display: flex;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 3px;
+      margin-left: 10px;
+    }
+    .mode-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .mode-tab-btn:hover {
+      color: var(--text-main);
+    }
+    .mode-tab-btn.active {
+      background: var(--gold);
+      color: #12151b;
+      box-shadow: 0 2px 8px var(--gold-glow);
+    }
+    .mode-count-badge {
+      background: rgba(0, 0, 0, 0.25);
+      color: inherit;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+    .mode-tab-btn.active .mode-count-badge {
+      background: rgba(18, 21, 27, 0.2);
+      color: #12151b;
+    }
+
+    .btn-new-standalone-header {
+      background: rgba(212, 163, 115, 0.12);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-new-standalone-header:hover {
+      background: var(--gold);
+      color: #12151b;
+      box-shadow: 0 4px 12px var(--gold-glow);
+      transform: translateY(-1px);
+    }
+
+    /* Standalone Mode UI */
+    .standalone-mode-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: 100%;
+    }
+    .standalone-cover-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .standalone-cover-preview-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3/4;
+      max-height: 400px;
+      background: #090b0e;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .standalone-cover-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .standalone-cover-preview:hover {
+      transform: scale(1.02);
+    }
+    .standalone-cover-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(15, 17, 21, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(212, 163, 115, 0.4);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .cover-upload-loading {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 17, 21, 0.92);
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 10;
+    }
+    .cover-spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid rgba(212, 163, 115, 0.2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .standalone-cover-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .btn-cover-upload, .btn-cover-from-piece {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-cover-upload:hover, .btn-cover-from-piece:hover {
+      background: rgba(212, 163, 115, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .cover-url-input-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cover-field-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .cover-url-input {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      color: var(--text-main);
+      padding: 6px 10px;
+      font-family: var(--font-body);
+      font-size: 12px;
+    }
+    .cover-url-input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    .standalone-info-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .standalone-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .meta-tag.gold {
+      background: rgba(212, 163, 115, 0.15);
+      color: var(--gold);
+      border: 1px solid rgba(212, 163, 115, 0.3);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .standalone-explainer {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: rgba(212, 163, 115, 0.08);
+      border: 1px solid rgba(212, 163, 115, 0.2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .standalone-explainer strong {
+      color: var(--text-main);
+    }
+    .standalone-explainer em {
+      color: var(--gold);
+      font-style: normal;
+    }
+    .btn-set-as-cover {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-set-as-cover:hover {
+      background: rgba(212, 163, 115, 0.2);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .cover-indicator-badge {
+      background: rgba(212, 163, 115, 0.22);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    .builder-cover-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+    }
+    .builder-cover-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+    .builder-cover-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .builder-cover-thumb {
+      width: 28px;
+      height: 38px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+      background: #000;
+      flex-shrink: 0;
+    }
+    .builder-cover-text {
+      font-size: 12px;
+      color: var(--text-main);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
+    }
+    .btn-builder-cover-action {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-builder-cover-action:hover {
+      background: rgba(212, 163, 115, 0.15);
+      border-color: var(--gold);
+    }
   </style>
 </head>
 <body>
@@ -1413,10 +1751,20 @@ const servicesList = allServices.map(s => ({
     <div class="brand-wrap">
       <h1 class="brand-title">alif.</h1>
       <span class="brand-badge">Curated Sets Studio</span>
+
+      <!-- Studio Mode Switcher Tabs -->
+      <div class="studio-mode-switcher" id="studioModeSwitcher">
+        <button id="tabModeReels" class="mode-tab-btn active" type="button" title="Curate sets from boutique reels">
+          🎬 Reel Outfits <span class="mode-count-badge">${reelsData.length}</span>
+        </button>
+        <button id="tabModeStandalone" class="mode-tab-btn" type="button" title="Curate standalone product combos without reels">
+          🛍️ Standalone Sets <span id="standaloneCountBadge" class="mode-count-badge">0</span>
+        </button>
+      </div>
     </div>
 
     <div class="header-center">
-      <button id="btnPrevReel" class="reel-nav-btn" title="Previous Reel (Left Arrow)">
+      <button id="btnPrevReel" class="reel-nav-btn" title="Previous Item (Left Arrow)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         Prev
       </button>
@@ -1425,16 +1773,21 @@ const servicesList = allServices.map(s => ({
         <!-- populated by JS -->
       </select>
 
-      <button id="btnNextReel" class="reel-nav-btn" title="Next Reel (Right Arrow)">
+      <button id="btnNextReel" class="reel-nav-btn" title="Next Item (Right Arrow)">
         Next
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
 
     <div class="header-actions">
+      <button id="btnNewStandaloneSet" type="button" class="btn-new-standalone-header" title="Create a new Curated Set without reel">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>+ New Standalone Set</span>
+      </button>
+
       <div id="progressPill" class="progress-pill">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-        <span id="progressCount">0 / {reelsData.length} Done</span>
+        <span id="progressCount">0 / ${reelsData.length} Done</span>
       </div>
 
       <button id="btnSaveAllDraftsHeader" class="btn-save-all-header" style="display:none;" title="Save all pending drafts to disk at once">
@@ -1452,7 +1805,7 @@ const servicesList = allServices.map(s => ({
 
   <!-- Mobile / Tablet Tab Switcher -->
   <nav class="mobile-tab-bar">
-    <button class="mobile-tab-btn active" data-tab="col-reel">🎬 1. Reel</button>
+    <button id="mobileTabMedia" class="mobile-tab-btn active" data-tab="col-reel">🎬 1. Reel</button>
     <button class="mobile-tab-btn" data-tab="col-builder">🛍️ 2. Set Details</button>
     <button class="mobile-tab-btn" data-tab="col-catalog">🔍 3. Pick Pieces</button>
   </nav>
@@ -1460,63 +1813,116 @@ const servicesList = allServices.map(s => ({
   <!-- Studio Main Layout -->
   <main class="studio-container">
     
-    <!-- 1. Left: Reel Video Player -->
+    <!-- 1. Left: Reel Video Player OR Standalone Cover Studio -->
     <section class="col-reel tab-active">
-      <div class="video-frame-wrap">
-        <video id="reelVideoPlayer" class="reel-video-el" loop playsinline muted preload="auto"></video>
-        <div class="video-overlay-controls">
-          <button id="btnTogglePlay" class="video-ctrl-btn">
-            <svg id="playIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            <span id="playLabel">Play</span>
+      <!-- A. Reels Mode Player -->
+      <div id="reelsModeWrapper" class="reels-mode-wrapper">
+        <div class="video-frame-wrap">
+          <video id="reelVideoPlayer" class="reel-video-el" loop playsinline muted preload="auto"></video>
+          <div class="video-overlay-controls">
+            <button id="btnTogglePlay" class="video-ctrl-btn">
+              <svg id="playIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span id="playLabel">Play</span>
+            </button>
+            <button id="btnToggleSound" class="video-ctrl-btn">
+              <svg id="soundIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+              <span id="soundLabel">Unmute</span>
+            </button>
+          </div>
+        </div>
 
-          </button>
-          <button id="btnToggleSound" class="video-ctrl-btn">
-            <svg id="soundIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-            <span id="soundLabel">Unmute</span>
-          </button>
+        <div class="reel-info-box">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span id="reelIndexTag" class="meta-tag highlight">Reel 1 of {reelsData.length}</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span id="reelSaveFeedback" class="cat-save-feedback">✓ Saved</span>
+              <span id="reelStatusBadge" class="status-badge pending">Pending</span>
+            </div>
+          </div>
+
+          <!-- Editable Reel Title -->
+          <div class="reel-title-edit-wrap">
+            <input id="reelTitleInput" class="reel-title-input" type="text" placeholder="Reel Title..." />
+            <button id="btnSaveReelTitle" type="button" class="reel-title-save-btn" title="Save Title">✓</button>
+          </div>
+
+          <!-- 1-Click Primary Category Selection -->
+          <div class="reel-cat-section">
+            <div class="cat-section-header">
+              <span class="cat-section-label">1-Click Category</span>
+              <span id="currentCatBadge" class="cat-current-badge">Trending</span>
+            </div>
+            <div id="primaryCatPills" class="reel-cat-pills">
+              <!-- 1-Click buttons populated by JS -->
+            </div>
+          </div>
+
+          <!-- Multi-Tag Vibe Pills -->
+          <div class="reel-cat-section">
+            <div class="cat-section-header">
+              <span class="cat-section-label">Tags & Vibe</span>
+              <span style="font-size:10px; color:var(--text-muted);">Multi-select</span>
+            </div>
+            <div id="tagPillsContainer" class="reel-tag-pills">
+              <!-- Tag pills populated by JS -->
+            </div>
+
+            <!-- Add Custom Category / Tag -->
+            <div class="add-custom-tag-row">
+              <input id="customTagInput" class="custom-tag-input" type="text" placeholder="+ Add category or tag..." />
+              <button id="btnAddCustomTag" type="button" class="btn-add-custom-tag">+ Add</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="reel-info-box">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span id="reelIndexTag" class="meta-tag highlight">Reel 1 of {reelsData.length}</span>
-          <div style="display:flex; align-items:center; gap:6px;">
-            <span id="reelSaveFeedback" class="cat-save-feedback">✓ Saved</span>
-            <span id="reelStatusBadge" class="status-badge pending">Pending</span>
+      <!-- B. Standalone Mode Studio (No Reel) -->
+      <div id="standaloneModeWrapper" class="standalone-mode-wrapper" style="display:none;">
+        <div class="standalone-cover-card">
+          <div class="standalone-cover-preview-wrap">
+            <img id="standaloneCoverImg" src="/icons/icon-512x512.png" alt="Curated Set Cover Preview" class="standalone-cover-preview" />
+            <div class="standalone-cover-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              <span>Cover Preview</span>
+            </div>
+            <div id="coverUploadLoading" class="cover-upload-loading" style="display:none;">
+              <div class="cover-spinner"></div>
+              <span>Optimizing Cover WebP...</span>
+            </div>
+          </div>
+
+          <div class="standalone-cover-actions">
+            <input type="file" id="standaloneCoverFileInput" accept="image/png,image/jpeg,image/webp" style="display:none;" />
+            <button id="btnUploadStandaloneCover" type="button" class="btn-cover-upload">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Upload Cover</span>
+            </button>
+            <button id="btnCoverFromFirstComp" type="button" class="btn-cover-from-piece" title="Use primary piece image as cover">
+              <span>Use 1st Piece Image</span>
+            </button>
+          </div>
+
+          <div class="cover-url-input-wrap">
+            <label class="cover-field-label" for="standaloneCoverUrlInput">Cover Image Path</label>
+            <input id="standaloneCoverUrlInput" class="cover-url-input" type="text" placeholder="/uploads/curated-sets/... or /uploads/..." />
           </div>
         </div>
 
-        <!-- Editable Reel Title -->
-        <div class="reel-title-edit-wrap">
-          <input id="reelTitleInput" class="reel-title-input" type="text" placeholder="Reel Title..." />
-          <button id="btnSaveReelTitle" type="button" class="reel-title-save-btn" title="Save Title">✓</button>
-        </div>
-
-        <!-- 1-Click Primary Category Selection -->
-        <div class="reel-cat-section">
-          <div class="cat-section-header">
-            <span class="cat-section-label">1-Click Category</span>
-            <span id="currentCatBadge" class="cat-current-badge">Trending</span>
+        <div class="standalone-info-box">
+          <div class="standalone-badge-row">
+            <span class="meta-tag gold">🛍️ Pure Product Combo</span>
+            <span id="standaloneStatusBadge" class="status-badge pending">New Set</span>
           </div>
-          <div id="primaryCatPills" class="reel-cat-pills">
-            <!-- 1-Click buttons populated by JS -->
-          </div>
-        </div>
-
-        <!-- Multi-Tag Vibe Pills -->
-        <div class="reel-cat-section">
-          <div class="cat-section-header">
-            <span class="cat-section-label">Tags & Vibe</span>
-            <span style="font-size:10px; color:var(--text-muted);">Multi-select</span>
-          </div>
-          <div id="tagPillsContainer" class="reel-tag-pills">
-            <!-- Tag pills populated by JS -->
+          <div class="standalone-explainer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>This set has <strong>no reel video</strong>. It will be showcased exclusively under <em>Products &gt; Curated Sets</em> and will not appear in Reels.</span>
           </div>
 
-          <!-- Add Custom Category / Tag -->
-          <div class="add-custom-tag-row">
-            <input id="customTagInput" class="custom-tag-input" type="text" placeholder="+ Add category or tag..." />
-            <button id="btnAddCustomTag" type="button" class="btn-add-custom-tag">+ Add</button>
+          <div class="standalone-occasion-section">
+            <label class="form-label" style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Occasion / Vibe Tags</label>
+            <div id="standaloneOccasionPills" class="reel-tag-pills" style="margin-top:6px;">
+              <!-- Occasion preset pills -->
+            </div>
           </div>
         </div>
       </div>
@@ -1527,6 +1933,16 @@ const servicesList = allServices.map(s => ({
       <div class="builder-section-title">
         <span>Selected Components</span>
         <span id="selectedCountText" style="color:var(--text-muted); font-size:12px;">0 items picked</span>
+      </div>
+
+      <!-- Active Cover Indicator in Builder -->
+      <div id="builderCoverRow" class="builder-cover-row">
+        <div class="builder-cover-left">
+          <span class="builder-cover-label">Cover:</span>
+          <img id="builderCoverThumb" src="/icons/icon-512x512.png" alt="Cover" class="builder-cover-thumb" />
+          <span id="builderCoverName" class="builder-cover-text">Auto (1st Piece)</span>
+        </div>
+        <button id="btnQuickCoverChange" type="button" class="btn-builder-cover-action">Change Cover</button>
       </div>
 
       <div id="selectedItemsContainer" class="selected-items-card">
@@ -1659,9 +2075,49 @@ const servicesList = allServices.map(s => ({
   <script define:vars={{ reelsData, clientProducts, existingSets }}>
     // Studio State
     let currentReelIndex = -1;
+    let studioMode = 'reels'; // 'reels' | 'standalone'
+    let currentStandaloneSlug = null; // '__new__' or slug of active standalone set
+    let currentCoverImage = '/icons/icon-512x512.png';
+
     // Map of selected components: key = pid, value = { id, meters, unit, type }
     let selectedComponentsMap = new Map();
-    let existingSetsMap = new Map(existingSets.map(s => [s.reel_id || s.slug, s]));
+    let existingSetsMap = new Map();
+    existingSets.forEach(s => {
+      existingSetsMap.set(s.slug, s);
+      if (s.reel_id) existingSetsMap.set(s.reel_id, s);
+    });
+
+    // Helper: get standalone sets
+    function getStandaloneSets() {
+      const standaloneMap = new Map();
+      for (const s of existingSetsMap.values()) {
+        if (s.is_standalone || !s.reel_id) {
+          standaloneMap.set(s.slug, s);
+        }
+      }
+      return Array.from(standaloneMap.values());
+    }
+
+    function updateStandaloneBadge() {
+      const badge = document.getElementById('standaloneCountBadge');
+      if (badge) {
+        badge.textContent = getStandaloneSets().length;
+      }
+    }
+
+    function getNextStandaloneCode() {
+      let maxNum = 0;
+      for (const s of existingSetsMap.values()) {
+        const code = s.product_code || '';
+        const m = code.match(/ALIF-SET-(\d+)/i);
+        if (m) {
+          const n = parseInt(m[1], 10);
+          if (n > maxNum) maxNum = n;
+        }
+      }
+      const nextNum = Math.max(maxNum + 1, reelsData.length + 1, 74);
+      return `ALIF-SET-${String(nextNum).padStart(3, '0')}`;
+    }
 
     // Working Drafts Map (Key = reel.id, Value = Draft Object)
     let draftsMap = new Map();
@@ -1738,6 +2194,46 @@ const servicesList = allServices.map(s => ({
     const progressCount = document.getElementById('progressCount');
     const toastPopup = document.getElementById('toastPopup');
     const toastMessage = document.getElementById('toastMessage');
+
+    // Standalone Studio Elements
+    const tabModeReels = document.getElementById('tabModeReels');
+    const tabModeStandalone = document.getElementById('tabModeStandalone');
+    const standaloneCountBadge = document.getElementById('standaloneCountBadge');
+    const btnNewStandaloneSet = document.getElementById('btnNewStandaloneSet');
+    const reelsModeWrapper = document.getElementById('reelsModeWrapper');
+    const standaloneModeWrapper = document.getElementById('standaloneModeWrapper');
+    const standaloneCoverImg = document.getElementById('standaloneCoverImg');
+    const standaloneCoverFileInput = document.getElementById('standaloneCoverFileInput');
+    const btnUploadStandaloneCover = document.getElementById('btnUploadStandaloneCover');
+    const btnCoverFromFirstComp = document.getElementById('btnCoverFromFirstComp');
+    const standaloneCoverUrlInput = document.getElementById('standaloneCoverUrlInput');
+    const coverUploadLoading = document.getElementById('coverUploadLoading');
+    const standaloneStatusBadge = document.getElementById('standaloneStatusBadge');
+    const standaloneOccasionPills = document.getElementById('standaloneOccasionPills');
+    const builderCoverThumb = document.getElementById('builderCoverThumb');
+    const builderCoverName = document.getElementById('builderCoverName');
+    const btnQuickCoverChange = document.getElementById('btnQuickCoverChange');
+    const mobileTabMedia = document.getElementById('mobileTabMedia');
+
+    function updateBuilderCoverRow() {
+      if (!builderCoverThumb || !builderCoverName) return;
+      builderCoverThumb.src = currentCoverImage;
+      const comps = Array.from(selectedComponentsMap.values());
+      const matchedComp = comps.find(c => {
+        const p = clientProducts.find(x => x.id === c.id);
+        return p && p.image === currentCoverImage;
+      });
+      if (matchedComp) {
+        const p = clientProducts.find(x => x.id === matchedComp.id);
+        builderCoverName.textContent = p ? `Piece: ${p.title}` : 'Selected Piece';
+      } else if (currentCoverImage.includes('/curated-sets/')) {
+        builderCoverName.textContent = 'Custom WebP Cover';
+      } else if (currentCoverImage === '/icons/icon-512x512.png') {
+        builderCoverName.textContent = comps.length > 0 ? 'Auto (1st Piece)' : 'No cover set';
+      } else {
+        builderCoverName.textContent = currentCoverImage.split('/').pop() || 'Custom Cover';
+      }
+    }
 
     // Real Boutique Reels Categories with alias matching
     let categoriesList = [
@@ -1816,52 +2312,104 @@ const servicesList = allServices.map(s => ({
       return { meters: 1, unit: 'mtr', type: 'other' };
     }
 
-    // Initialize Dropdown
+    // Switch studio mode: 'reels' | 'standalone'
+    function switchStudioMode(mode, targetSlug) {
+      studioMode = mode;
+      if (mode === 'reels') {
+        if (tabModeReels) tabModeReels.classList.add('active');
+        if (tabModeStandalone) tabModeStandalone.classList.remove('active');
+        if (reelsModeWrapper) reelsModeWrapper.style.display = 'block';
+        if (standaloneModeWrapper) standaloneModeWrapper.style.display = 'none';
+        if (mobileTabMedia) mobileTabMedia.textContent = '🎬 1. Reel';
+        populateDropdown();
+        loadReel(currentReelIndex >= 0 ? currentReelIndex : 0);
+      } else {
+        if (tabModeStandalone) tabModeStandalone.classList.add('active');
+        if (tabModeReels) tabModeReels.classList.remove('active');
+        if (reelsModeWrapper) reelsModeWrapper.style.display = 'none';
+        if (standaloneModeWrapper) standaloneModeWrapper.style.display = 'flex';
+        if (mobileTabMedia) mobileTabMedia.textContent = '🖼️ 1. Cover & Vibe';
+        try {
+          if (reelVideoPlayer) reelVideoPlayer.pause();
+        } catch (_) {}
+        populateDropdown();
+        loadStandaloneSet(targetSlug || currentStandaloneSlug || '__new__');
+      }
+    }
+
+    // Initialize Dropdown (Handles both Reels mode and Standalone mode)
     function populateDropdown() {
       const curVal = reelSelectDropdown.value;
       reelSelectDropdown.innerHTML = '';
-      reelsData.forEach((reel, idx) => {
-        const opt = document.createElement('option');
-        opt.value = idx;
-        const isDone = existingSetsMap.has(reel.id);
-        const isDraft = draftsMap.has(reel.id);
-        const catTag = (reel.category || 'pending').toUpperCase();
-        
-        let statusBadge = '';
-        if (isDraft) {
-          statusBadge = ' [✎ Draft]';
-        } else if (isDone) {
-          statusBadge = ' [✓ Saved]';
+
+      if (studioMode === 'reels') {
+        reelsData.forEach((reel, idx) => {
+          const opt = document.createElement('option');
+          opt.value = idx;
+          const isDone = existingSetsMap.has(reel.id);
+          const isDraft = draftsMap.has(reel.id);
+          const catTag = (reel.category || 'pending').toUpperCase();
+          
+          let statusBadge = '';
+          if (isDraft) {
+            statusBadge = ' [✎ Draft]';
+          } else if (isDone) {
+            statusBadge = ' [✓ Saved]';
+          }
+          
+          opt.textContent = `${idx + 1}. [${catTag}] ${reel.title}${statusBadge}`;
+          reelSelectDropdown.appendChild(opt);
+        });
+        if (curVal !== undefined && curVal !== '' && !isNaN(parseInt(curVal, 10))) {
+          reelSelectDropdown.value = curVal;
         }
-        
-        opt.textContent = `${idx + 1}. [${catTag}] ${reel.title}${statusBadge}`;
-        reelSelectDropdown.appendChild(opt);
-      });
-      if (curVal !== undefined && curVal !== '') {
-        reelSelectDropdown.value = curVal;
+      } else {
+        // Standalone Sets Dropdown
+        const optNew = document.createElement('option');
+        optNew.value = '__new__';
+        optNew.textContent = '✨ + Create New Standalone Set';
+        reelSelectDropdown.appendChild(optNew);
+
+        const standaloneList = getStandaloneSets();
+        standaloneList.forEach((s, idx) => {
+          const opt = document.createElement('option');
+          opt.value = s.slug;
+          opt.textContent = `${idx + 1}. [STANDALONE] ${s.title} [✓ Saved]`;
+          reelSelectDropdown.appendChild(opt);
+        });
+
+        if (curVal && (curVal === '__new__' || existingSetsMap.has(curVal))) {
+          reelSelectDropdown.value = curVal;
+        } else {
+          reelSelectDropdown.value = currentStandaloneSlug || '__new__';
+        }
       }
+
       updateProgressCount();
+      updateStandaloneBadge();
     }
 
     function updateDropdownDraftBadges() {
-      const curVal = reelSelectDropdown.value;
-      Array.from(reelSelectDropdown.options).forEach((opt, idx) => {
-        const reel = reelsData[idx];
-        if (!reel) return;
-        const isDone = existingSetsMap.has(reel.id);
-        const isDraft = draftsMap.has(reel.id);
-        const catTag = (reel.category || 'pending').toUpperCase();
-        
-        let statusBadge = '';
-        if (isDraft) {
-          statusBadge = ' [✎ Draft]';
-        } else if (isDone) {
-          statusBadge = ' [✓ Saved]';
+      if (studioMode === 'reels') {
+        const curVal = reelSelectDropdown.value;
+        Array.from(reelSelectDropdown.options).forEach((opt, idx) => {
+          const reel = reelsData[idx];
+          if (!reel) return;
+          const isDone = existingSetsMap.has(reel.id);
+          const isDraft = draftsMap.has(reel.id);
+          const catTag = (reel.category || 'pending').toUpperCase();
+          
+          let statusBadge = '';
+          if (isDraft) {
+            statusBadge = ' [✎ Draft]';
+          } else if (isDone) {
+            statusBadge = ' [✓ Saved]';
+          }
+          opt.textContent = `${idx + 1}. [${catTag}] ${reel.title}${statusBadge}`;
+        });
+        if (curVal !== undefined && curVal !== '') {
+          reelSelectDropdown.value = curVal;
         }
-        opt.textContent = `${idx + 1}. [${catTag}] ${reel.title}${statusBadge}`;
-      });
-      if (curVal !== undefined && curVal !== '') {
-        reelSelectDropdown.value = curVal;
       }
     }
 
@@ -2047,6 +2595,7 @@ const servicesList = allServices.map(s => ({
               <div class="item-sub">
                 <span>${p.code}</span>
                 <span class="item-unit-rate">₹${unitRate}/${comp.unit}</span>
+                ${(currentCoverImage === p.image) ? `<span class="cover-indicator-badge">★ Active Cover</span>` : `<button type="button" class="btn-set-as-cover" data-cover-img="${p.image}">Set as Cover</button>`}
               </div>
             </div>
             <div class="item-calc-price">
@@ -2088,6 +2637,23 @@ const servicesList = allServices.map(s => ({
           toggleProductSelection(pid);
         });
 
+        // Set as cover listener
+        const coverBtn = row.querySelector('.btn-set-as-cover');
+        if (coverBtn) {
+          coverBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const img = coverBtn.dataset.coverImg;
+            if (img) {
+              currentCoverImage = img;
+              if (standaloneCoverImg) standaloneCoverImg.src = img;
+              if (standaloneCoverUrlInput) standaloneCoverUrlInput.value = img;
+              updateBuilderCoverRow();
+              updateSelectedComponentsUI();
+              showToast(`Cover set to "${p.title}"`);
+            }
+          });
+        }
+
         // Stepper down
         row.querySelector('.step-down').addEventListener('click', (e) => {
           e.stopPropagation();
@@ -2126,6 +2692,18 @@ const servicesList = allServices.map(s => ({
 
         selectedItemsContainer.appendChild(row);
       });
+
+      // Auto-set cover to 1st piece if no cover is selected
+      if ((currentCoverImage === '/icons/icon-512x512.png' || !currentCoverImage) && selectedComponentsMap.size > 0) {
+        const firstEntry = Array.from(selectedComponentsMap.values())[0];
+        const firstP = clientProducts.find(x => x.id === firstEntry.id);
+        if (firstP && firstP.image) {
+          currentCoverImage = firstP.image;
+          if (standaloneCoverImg) standaloneCoverImg.src = firstP.image;
+          if (standaloneCoverUrlInput) standaloneCoverUrlInput.value = firstP.image;
+        }
+      }
+      updateBuilderCoverRow();
 
       calculatedTotalVal.textContent = `₹${totalPiecesPrice}`;
       
@@ -2254,8 +2832,84 @@ const servicesList = allServices.map(s => ({
       persistDrafts();
     }
 
+    // Load standalone set into editor
+    function loadStandaloneSet(slugOrId) {
+      if (studioMode !== 'standalone') {
+        switchStudioMode('standalone', slugOrId);
+        return;
+      }
+
+      currentStandaloneSlug = slugOrId || '__new__';
+      reelSelectDropdown.value = currentStandaloneSlug;
+
+      selectedComponentsMap.clear();
+
+      if (currentStandaloneSlug === '__new__' || !existingSetsMap.has(currentStandaloneSlug)) {
+        standaloneStatusBadge.className = 'status-badge pending';
+        standaloneStatusBadge.textContent = '✨ New Set';
+
+        const nextCode = getNextStandaloneCode();
+        setCodeInput.value = nextCode;
+        setTitleInput.value = '';
+        setPriceInput.value = '';
+        setOfferPriceInput.value = '';
+        setPriceInput.dataset.autoFilled = 'true';
+        setOfferPriceInput.dataset.manuallyEdited = 'false';
+        setDescriptionInput.value = 'Handcrafted bespoke ensemble combining matching designer fabrics and trims from Alif boutique Sahibganj.';
+        setServiceSelect.value = 'blouse';
+
+        currentCoverImage = '/icons/icon-512x512.png';
+        if (standaloneCoverImg) standaloneCoverImg.src = currentCoverImage;
+        if (standaloneCoverUrlInput) standaloneCoverUrlInput.value = '';
+
+        btnDiscardDraft.style.display = 'none';
+        btnViewCuratedPage.style.display = 'none';
+        btnDeleteCuratedSet.style.display = 'none';
+        saveBtnLabel.textContent = 'Save Curated Set (Ctrl + Enter)';
+      } else {
+        const existing = existingSetsMap.get(currentStandaloneSlug);
+        standaloneStatusBadge.className = 'status-badge created';
+        standaloneStatusBadge.textContent = '✓ Saved Set';
+
+        setTitleInput.value = existing.title || '';
+        setCodeInput.value = existing.product_code || '';
+        setPriceInput.value = existing.price || '';
+        setOfferPriceInput.value = existing.offer_price || '';
+        setPriceInput.dataset.autoFilled = 'false';
+        setOfferPriceInput.dataset.manuallyEdited = Boolean(existing.offer_price) ? 'true' : 'false';
+        setDescriptionInput.value = existing.description || '';
+
+        currentCoverImage = existing.image || '/icons/icon-512x512.png';
+        if (standaloneCoverImg) standaloneCoverImg.src = currentCoverImage;
+        if (standaloneCoverUrlInput) standaloneCoverUrlInput.value = existing.image || '';
+
+        (existing.combo_products || []).forEach(item => {
+          const pid = typeof item === 'string' ? item : item.id;
+          const meters = (typeof item === 'object' && item.meters) ? Number(item.meters) : 1;
+          const unit = (typeof item === 'object' && item.unit) ? item.unit : 'mtr';
+          const p = clientProducts.find(x => x.id === pid);
+          const def = getDefaultMetersAndUnit(p);
+          selectedComponentsMap.set(pid, { id: pid, meters, unit: unit || def.unit, type: def.type });
+        });
+
+        btnDiscardDraft.style.display = 'none';
+        btnViewCuratedPage.style.display = 'inline-flex';
+        btnViewCuratedPage.href = `/products/${existing.slug}/`;
+        btnDeleteCuratedSet.style.display = 'inline-flex';
+        saveBtnLabel.textContent = 'Update Curated Set (Ctrl + Enter)';
+      }
+
+      updateBuilderCoverRow();
+      updateSelectedComponentsUI();
+      renderCatalog();
+    }
+
     // Load reel into editor
     function loadReel(index) {
+      if (studioMode !== 'reels') {
+        switchStudioMode('reels');
+      }
+
       if (index < 0) index = 0;
       if (index >= reelsData.length) index = reelsData.length - 1;
 
@@ -2424,6 +3078,9 @@ const servicesList = allServices.map(s => ({
         }
       }
 
+      currentCoverImage = (existing && existing.image) ? existing.image : (reel.poster || '/icons/icon-512x512.png');
+      updateBuilderCoverRow();
+
       updateSelectedComponentsUI();
       renderCatalog();
     }
@@ -2437,9 +3094,11 @@ const servicesList = allServices.map(s => ({
       return await fetch(`http://localhost:4322${endpoint}`, options);
     }
 
-    // Save Curated Set Action
+    // Save Curated Set Action (Supports both Reels and Standalone modes)
     async function saveCuratedSet() {
-      const reel = reelsData[currentReelIndex];
+      const isStandalone = (studioMode === 'standalone');
+      const reel = isStandalone ? null : reelsData[currentReelIndex];
+
       const title = setTitleInput.value.trim();
       if (!title) {
         alert('Please enter a Title for this Curated Set.');
@@ -2454,26 +3113,41 @@ const servicesList = allServices.map(s => ({
 
       const price = Number(setPriceInput.value) || 0;
       const offer_price = setOfferPriceInput.value ? Number(setOfferPriceInput.value) : null;
-      const product_code = setCodeInput.value.trim() || `ALIF-SET-${String(currentReelIndex + 1).padStart(3, '0')}`;
+      const product_code = setCodeInput.value.trim() || (isStandalone ? getNextStandaloneCode() : `ALIF-SET-${String(currentReelIndex + 1).padStart(3, '0')}`);
       
       // Slug generation
-      const slug = `curated-set-${product_code.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+      const slug = (isStandalone && currentStandaloneSlug && currentStandaloneSlug !== '__new__')
+        ? currentStandaloneSlug
+        : `curated-set-${product_code.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
 
       const comboProductsArray = Array.from(selectedComponentsMap.values());
       const firstCompId = comboProductsArray[0].id;
       const firstComp = clientProducts.find(p => p.id === firstCompId);
-      const image = (firstComp && firstComp.image) ? firstComp.image : (reel.poster || '/icons/icon-512x512.png');
+
+      // Resolve cover image
+      let image = currentCoverImage;
+      if (!image || image === '/icons/icon-512x512.png') {
+        if (standaloneCoverUrlInput && standaloneCoverUrlInput.value.trim()) {
+          image = standaloneCoverUrlInput.value.trim();
+        } else if (firstComp && firstComp.image) {
+          image = firstComp.image;
+        } else if (reel && reel.poster) {
+          image = reel.poster;
+        } else {
+          image = '/icons/icon-512x512.png';
+        }
+      }
 
       const payload = {
         title,
         slug,
-        reel_id: reel.id,
-        reel_video: reel.video || reel.raw_url,
+        reel_id: isStandalone ? null : reel.id,
+        reel_video: isStandalone ? null : (reel.video || reel.raw_url),
         product_code,
         price,
         offer_price,
         image,
-        category: 'Curated Sets',
+        category: isStandalone ? 'Curated Sets' : 'Reels Outfit',
         combo_products: comboProductsArray,
         description: setDescriptionInput.value.trim(),
         ideal_for: `${setServiceSelect.options[setServiceSelect.selectedIndex].text}, Festive, Party Wear`,
@@ -2494,29 +3168,46 @@ const servicesList = allServices.map(s => ({
 
         const data = await res.json();
         if (data.success) {
-          draftsMap.delete(reel.id);
-          persistDrafts();
-          existingSetsMap.set(reel.id, {
+          const savedObj = {
             slug,
             title,
-            reel_id: reel.id,
+            reel_id: isStandalone ? null : reel.id,
+            is_standalone: isStandalone,
             product_code,
             price,
             offer_price,
             image,
+            description: payload.description,
+            ideal_for: payload.ideal_for,
             combo_products: comboProductsArray
-          });
+          };
 
+          existingSetsMap.set(slug, savedObj);
+          if (!isStandalone) {
+            existingSetsMap.set(reel.id, savedObj);
+            draftsMap.delete(reel.id);
+          } else {
+            draftsMap.delete('standalone:' + slug);
+            draftsMap.delete('standalone:new');
+          }
+          persistDrafts();
+
+          updateStandaloneBadge();
           populateDropdown();
+
           showToast(`Curated Set saved! Created ${slug}.md`);
 
-          // Auto-advance to next reel if available
-          if (currentReelIndex < reelsData.length - 1) {
-            setTimeout(() => {
-              loadReel(currentReelIndex + 1);
-            }, 800);
+          if (isStandalone) {
+            currentStandaloneSlug = slug;
+            loadStandaloneSet(slug);
           } else {
-            loadReel(currentReelIndex);
+            if (currentReelIndex < reelsData.length - 1) {
+              setTimeout(() => {
+                loadReel(currentReelIndex + 1);
+              }, 800);
+            } else {
+              loadReel(currentReelIndex);
+            }
           }
         } else {
           alert('Save failed: ' + (data.error || 'Unknown error'));
@@ -2525,21 +3216,38 @@ const servicesList = allServices.map(s => ({
         alert('Error saving set: ' + err.message);
       } finally {
         btnSaveCuratedSet.disabled = false;
-        saveBtnLabel.textContent = 'Save Curated Set (Ctrl + Enter)';
+        saveBtnLabel.textContent = (isStandalone && currentStandaloneSlug && currentStandaloneSlug !== '__new__')
+          ? 'Update Curated Set (Ctrl + Enter)'
+          : 'Save Curated Set (Ctrl + Enter)';
       }
     }
 
-
-    // Delete Curated Set Action
+    // Delete Curated Set Action (Supports both Reels and Standalone modes)
     async function deleteCuratedSet() {
-      const reel = reelsData[currentReelIndex];
-      const existing = existingSetsMap.get(reel.id);
-      if (!existing) return;
+      const isStandalone = (studioMode === 'standalone');
+      let slugToDelete = null;
+      let reelIdToDelete = null;
+      let titleToDelete = '';
 
-      if (!confirm(`Are you sure you want to delete Curated Set "${existing.title}"?`)) return;
+      if (isStandalone) {
+        if (!currentStandaloneSlug || currentStandaloneSlug === '__new__') return;
+        const existing = existingSetsMap.get(currentStandaloneSlug);
+        if (!existing) return;
+        slugToDelete = existing.slug;
+        titleToDelete = existing.title;
+      } else {
+        const reel = reelsData[currentReelIndex];
+        const existing = existingSetsMap.get(reel.id);
+        if (!existing) return;
+        slugToDelete = existing.slug;
+        reelIdToDelete = reel.id;
+        titleToDelete = existing.title;
+      }
+
+      if (!confirm(`Are you sure you want to delete Curated Set "${titleToDelete}"?`)) return;
 
       try {
-        const delPayload = { action: 'delete', slug: existing.slug, reel_id: reel.id };
+        const delPayload = { action: 'delete', slug: slugToDelete, reel_id: reelIdToDelete };
         const res = await curateApiFetch('/api/save-curated-set', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -2547,14 +3255,23 @@ const servicesList = allServices.map(s => ({
         });
         const data = await res.json();
 
-
         if (data.success) {
-          draftsMap.delete(reel.id);
+          existingSetsMap.delete(slugToDelete);
+          if (reelIdToDelete) {
+            existingSetsMap.delete(reelIdToDelete);
+            draftsMap.delete(reelIdToDelete);
+          } else {
+            draftsMap.delete('standalone:' + slugToDelete);
+          }
           persistDrafts();
-          existingSetsMap.delete(reel.id);
+          updateStandaloneBadge();
           populateDropdown();
           showToast(`Curated Set removed.`);
-          loadReel(currentReelIndex);
+          if (isStandalone) {
+            loadStandaloneSet('__new__');
+          } else {
+            loadReel(currentReelIndex);
+          }
         }
       } catch (err) {
         alert('Error deleting set: ' + err.message);
@@ -2675,7 +3392,7 @@ const servicesList = allServices.map(s => ({
               price,
               offer_price,
               image,
-              category: 'Curated Sets',
+              category: isStandalone ? 'Curated Sets' : 'Reels Outfit',
               combo_products: comboProducts,
               description: (draft.description || '').trim(),
               ideal_for: draft.service ? `${draft.service}, Festive, Party Wear` : 'Bespoke Tailoring & Styling',
@@ -2916,16 +3633,151 @@ const servicesList = allServices.map(s => ({
     }
 
     // Event Listeners
+    if (tabModeReels) {
+      tabModeReels.addEventListener('click', () => switchStudioMode('reels'));
+    }
+    if (tabModeStandalone) {
+      tabModeStandalone.addEventListener('click', () => switchStudioMode('standalone'));
+    }
+    if (btnNewStandaloneSet) {
+      btnNewStandaloneSet.addEventListener('click', () => switchStudioMode('standalone', '__new__'));
+    }
+    if (btnQuickCoverChange) {
+      btnQuickCoverChange.addEventListener('click', () => {
+        if (studioMode !== 'standalone') {
+          switchStudioMode('standalone');
+        }
+        if (btnUploadStandaloneCover) btnUploadStandaloneCover.click();
+      });
+    }
+
+    if (btnUploadStandaloneCover && standaloneCoverFileInput) {
+      btnUploadStandaloneCover.addEventListener('click', () => {
+        standaloneCoverFileInput.click();
+      });
+
+      standaloneCoverFileInput.addEventListener('change', async (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async (ev) => {
+          const dataUrl = ev.target.result;
+          if (standaloneCoverImg) standaloneCoverImg.src = dataUrl;
+          if (coverUploadLoading) coverUploadLoading.style.display = 'flex';
+
+          try {
+            const tempCode = setCodeInput.value.trim() || getNextStandaloneCode();
+            const tempSlug = `curated-set-${tempCode.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+
+            const res = await curateApiFetch('/api/upload-cover', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ slug: tempSlug, dataUrl })
+            });
+            const json = await res.json();
+            if (json.success) {
+              currentCoverImage = json.image;
+              if (standaloneCoverImg) standaloneCoverImg.src = json.image;
+              if (standaloneCoverUrlInput) standaloneCoverUrlInput.value = json.image;
+              updateBuilderCoverRow();
+              updateSelectedComponentsUI();
+              showToast('Cover photo WebP saved and optimized!');
+            } else {
+              alert('Upload failed: ' + (json.error || 'Unknown error'));
+            }
+          } catch (err) {
+            alert('Upload error: ' + err.message);
+          } finally {
+            if (coverUploadLoading) coverUploadLoading.style.display = 'none';
+            standaloneCoverFileInput.value = '';
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    if (btnCoverFromFirstComp) {
+      btnCoverFromFirstComp.addEventListener('click', () => {
+        const comps = Array.from(selectedComponentsMap.values());
+        if (comps.length === 0) {
+          alert('Pick at least one component from the catalog first!');
+          return;
+        }
+        const p = clientProducts.find(x => x.id === comps[0].id);
+        if (p && p.image) {
+          currentCoverImage = p.image;
+          if (standaloneCoverImg) standaloneCoverImg.src = p.image;
+          if (standaloneCoverUrlInput) standaloneCoverUrlInput.value = p.image;
+          updateBuilderCoverRow();
+          updateSelectedComponentsUI();
+          showToast(`Cover set to primary piece (${p.title})`);
+        }
+      });
+    }
+
+    if (standaloneCoverUrlInput) {
+      standaloneCoverUrlInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        if (val) {
+          currentCoverImage = val;
+          if (standaloneCoverImg) standaloneCoverImg.src = val;
+          updateBuilderCoverRow();
+        }
+      });
+    }
+
+    const occasionPresets = [
+      'Party Wear', 'Bridal Special', 'Festive Collection', 'Designer Ensemble', 'Velvet Luxury', 'Pure Cotton', 'Zari & Sequin', 'Bespoke Suit'
+    ];
+    if (standaloneOccasionPills) {
+      standaloneOccasionPills.innerHTML = '';
+      occasionPresets.forEach(tag => {
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = 'reel-tag-pill';
+        pill.textContent = tag;
+        pill.addEventListener('click', () => {
+          pill.classList.toggle('active');
+          const curDesc = setDescriptionInput.value.trim();
+          if (!curDesc.includes(tag)) {
+            setDescriptionInput.value = curDesc ? `${curDesc} Ideal for ${tag}.` : `Handcrafted boutique ensemble ideal for ${tag}.`;
+          }
+        });
+        standaloneOccasionPills.appendChild(pill);
+      });
+    }
+
     reelSelectDropdown.addEventListener('change', (e) => {
-      loadReel(parseInt(e.target.value, 10));
+      if (studioMode === 'standalone') {
+        loadStandaloneSet(e.target.value);
+      } else {
+        loadReel(parseInt(e.target.value, 10));
+      }
     });
 
     document.getElementById('btnPrevReel').addEventListener('click', () => {
-      if (currentReelIndex > 0) loadReel(currentReelIndex - 1);
+      if (studioMode === 'standalone') {
+        const sel = reelSelectDropdown;
+        if (sel.selectedIndex > 0) {
+          sel.selectedIndex--;
+          loadStandaloneSet(sel.value);
+        }
+      } else {
+        if (currentReelIndex > 0) loadReel(currentReelIndex - 1);
+      }
     });
 
     document.getElementById('btnNextReel').addEventListener('click', () => {
-      if (currentReelIndex < reelsData.length - 1) loadReel(currentReelIndex + 1);
+      if (studioMode === 'standalone') {
+        const sel = reelSelectDropdown;
+        if (sel.selectedIndex < sel.options.length - 1) {
+          sel.selectedIndex++;
+          loadStandaloneSet(sel.value);
+        }
+      } else {
+        if (currentReelIndex < reelsData.length - 1) loadReel(currentReelIndex + 1);
+      }
     });
 
     btnTogglePlay.addEventListener('click', () => {
@@ -3049,13 +3901,31 @@ const servicesList = allServices.map(s => ({
 
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        if (currentReelIndex > 0) loadReel(currentReelIndex - 1);
+        if (studioMode === 'standalone') {
+          const sel = reelSelectDropdown;
+          if (sel.selectedIndex > 0) {
+            sel.selectedIndex--;
+            loadStandaloneSet(sel.value);
+          }
+        } else {
+          if (currentReelIndex > 0) loadReel(currentReelIndex - 1);
+        }
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
-        if (currentReelIndex < reelsData.length - 1) loadReel(currentReelIndex + 1);
+        if (studioMode === 'standalone') {
+          const sel = reelSelectDropdown;
+          if (sel.selectedIndex < sel.options.length - 1) {
+            sel.selectedIndex++;
+            loadStandaloneSet(sel.value);
+          }
+        } else {
+          if (currentReelIndex < reelsData.length - 1) loadReel(currentReelIndex + 1);
+        }
       } else if (e.key === ' ') {
-        e.preventDefault();
-        btnTogglePlay.click();
+        if (studioMode === 'reels') {
+          e.preventDefault();
+          btnTogglePlay.click();
+        }
       }
     });
 

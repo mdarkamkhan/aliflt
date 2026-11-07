@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-silk-dupatta-01.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-006"
 category: "dupatta"
 description: "Bright haldi yellow fandy silk dupatta fabric adorned with sparkling mirror-work medallions and a distinctive fan-scalloped golden zari border."

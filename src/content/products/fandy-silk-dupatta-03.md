@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-silk-dupatta-03.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-008"
 category: "dupatta"
 description: "Lush emerald green fandy silk dupatta fabric richly crafted with golden sequin floral vines, delicate butterfly bootis, and a scalloped embroidered hem."

@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-silk-dupatta-03.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-003"
 category: "dupatta"
 description: "Ethereal pearl ivory crush silk dupatta fabric highlighted with shimmering gold sequin florets and an exquisite scalloped embroidered border."

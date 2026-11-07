@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-silk-dupatta-08.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-013"
 category: "dupatta"
 description: "Vivid magenta rani fandy silk dupatta fabric highlighted with golden sequin coin medallions and a delicate scalloped cutwork hem for celebratory grace."

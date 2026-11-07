@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-11.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-035"
 category: "fabric"
 description: "Deep bottle green fandy silk top fabric laced with intricate rainbow sequined vines that catch the light with subtle brilliance."

@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-top-fabric-01.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-010"
 category: "fabric"
 description: "Deep wine maroon crush silk top fabric richly embroidered with golden sequin floral creepers and circular bloom medallions for statement kurti and blouse styling."

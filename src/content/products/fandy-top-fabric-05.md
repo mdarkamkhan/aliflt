@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-05.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-029"
 category: "fabric"
 description: "Deep mustard gold fandy silk top fabric adorned with silver zari circular floral bootis and meandering leafy vine creepers."

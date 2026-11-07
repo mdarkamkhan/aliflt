@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-top-fabric-05.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-014"
 category: "fabric"
 description: "Ethereal pearl ivory champagne crush silk top fabric embellished with sparkling rose gold floral clusters and delicate botanical leaf embroidery."

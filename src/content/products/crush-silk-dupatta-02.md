@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-silk-dupatta-02.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-002"
 category: "dupatta"
 description: "Sophisticated champagne sage crush silk dupatta fabric with delicate rose gold sequin sprays and a scalloped floral border, ideal for subtle luxury."

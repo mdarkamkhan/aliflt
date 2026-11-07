@@ -7,9 +7,20 @@
         "curated sets",
         "curated set",
         "curated-sets",
-        "dress set",
-        "dress-set",
-        "dress"
+        "curated"
+      ]
+    },
+    {
+      "name": "Reel Outfits",
+      "icon": "reels.png",
+      "values": [
+        "reels outfit",
+        "reel outfit",
+        "reels outfits",
+        "reel outfits",
+        "reel-outfits",
+        "reel-outfit",
+        "video"
       ]
     },
     {

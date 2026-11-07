@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-bottom-fabric-01.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-006"
 category: "fabric"
 description: "Lustrous champagne gold crush silk bottom fabric embellished with all-over delicate sequin motifs and parallel embroidered border rows for bottoms and skirts."

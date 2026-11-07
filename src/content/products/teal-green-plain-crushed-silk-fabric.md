@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/teal-green-plain-crushed-silk-fabric.webp"
 is_ad: false
-price: 139
+price: 180
 product_code: "ALIF-FB-048"
 category: "plain fabric"
 description: "Premium teal green plain crushed silk fabric featuring an elegant crinkled texture and lustrous fluid drape, perfect for crafting custom ethnic ensembles, tops, and bottoms."

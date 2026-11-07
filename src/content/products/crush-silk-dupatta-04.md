@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/crush-silk-dupatta-04.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-004"
 category: "dupatta"
 description: "Vibrant rani pink crush silk dupatta fabric framed with radiant golden sequin floral bootis and a celebratory scalloped arch border."

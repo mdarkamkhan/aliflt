@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-silk-dupatta-07.webp"
 is_ad: false
-price: 249
+price: 230
 product_code: "ALIF-DP-012"
 category: "dupatta"
 description: "Deep burgundy wine fandy silk dupatta fabric highlighted by a dense golden sequin wave border and gleaming circular floral rosettes."

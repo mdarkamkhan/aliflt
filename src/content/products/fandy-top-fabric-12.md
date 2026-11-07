@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-12.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-036"
 category: "fabric"
 description: "Warm golden amber fandy silk top fabric styled with flowing rainbow sequin vine curves and a dual-tone contrasting fringed hem."

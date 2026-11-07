@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/champagne-gold-plain-tissue-silk-fabric.webp"
 is_ad: false
-price: 299
+price: 210
 product_code: "ALIF-FB-005"
 category: "tissue silk"
 description: "Translucent champagne gold plain tissue silk fabric woven with luminous metallic zari threads and finished with delicate fringe edging, ideal for regal dupattas, overlays, and festive blouses."

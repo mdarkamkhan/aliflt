@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-08.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-032"
 category: "fabric"
 description: "Vivid fuchsia rani fandy silk top fabric enriched with golden sunburst medallions and delicate vine creepers with a matching fringed border."

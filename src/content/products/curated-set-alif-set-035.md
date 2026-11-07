@@ -7,7 +7,7 @@ image: "/uploads/curated-sets/curated-set-alif-set-035.webp"
 price: 1600
 offer_price: 1350
 product_code: "ALIF-SET-035"
-category: "Curated Sets"
+category: "Reels Outfit"
 reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336461/alif-reels/reel_35.mp4"
 linked_reel_id: "reel-35"
 combo_products:

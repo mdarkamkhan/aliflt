@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/sunshine-yellow-plain-fandy-silk-fabric.webp"
 is_ad: false
-price: 139
+price: 140
 product_code: "ALIF-FB-046"
 category: "plain fabric"
 description: "Vibrant sunshine yellow plain fandy silk fabric with subtle slub texture and brilliant festive luster, ideal for tailored traditional blouses, kurtas, and skirts."

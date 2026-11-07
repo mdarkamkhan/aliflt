@@ -5,7 +5,7 @@ layout: "product.liquid"
 tags: "product"
 image: "/uploads/fabrics/fandy-top-fabric-09.webp"
 is_ad: false
-price: 349
+price: 290
 product_code: "ALIF-FB-033"
 category: "fabric"
 description: "Luminous haldi yellow fandy silk top fabric featuring flowing silver sequin paisley vines and an artisan fringed edge for celebratory tops."

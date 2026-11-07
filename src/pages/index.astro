@@ -120,7 +120,7 @@ const trendingProductReels = sortedProductsByDate
   .filter((p) => {
     const cat = (p.data.category || '').toLowerCase();
     const hasCombo = p.data.combo_items && p.data.combo_items.length > 0;
-    return cat === 'curated sets' || cat === 'curated set' || cat === 'dress set' || hasCombo || p.data.reel_video;
+    return (cat === 'reels outfit' || cat === 'reel outfit' || cat === 'curated sets' || cat === 'curated set' || cat === 'dress set' || hasCombo || p.data.reel_video) && p.data.reel_video;
   })
   .slice(0, 4)
   .map((p) => {
@@ -184,7 +184,7 @@ const productsByCode = new Map(products.map((p) => [p.data.product_code, p]));
 const curatedSetsByReelId = new Map();
 products.forEach((p) => {
   const cat = (p.data.category || '').toLowerCase();
-  if (cat === 'curated sets' || cat === 'curated set' || cat === 'dress set') {
+  if (cat === 'curated sets' || cat === 'curated set' || cat === 'reels outfit' || cat === 'reel outfit' || cat === 'dress set' || p.data.linked_reel_id) {
     if (p.data.linked_reel_id) {
       curatedSetsByReelId.set(p.data.linked_reel_id, p);
     }
@@ -526,7 +526,7 @@ const firstBannerAttrs = getBannerImageAttrs(topBanners[0].image);
         <div class="fc-grid">
             <a href="/products/?category=curated-sets" class="fc-card" aria-label="Curated Sets">
                 <div class="fc-img-wrap">
-                    <img {...getCardImageAttrs("/uploads/curated-sets/curated-set-alif-set-027.webp", "(max-width: 600px) 30vw, 320px")} alt="Curated Sets" width="300" height="400" loading="lazy" decoding="async" />
+                    <img {...getCardImageAttrs("/uploads/curated-sets/curated-set-alif-set-080.webp", "(max-width: 600px) 30vw, 320px")} alt="Curated Sets" width="300" height="400" loading="lazy" decoding="async" />
                 </div>
                 <div class="fc-label">
                     <span>Curated Sets</span>
@@ -3259,10 +3259,10 @@ const firstBannerAttrs = getBannerImageAttrs(topBanners[0].image);
       }
 
       .rc-mini-card {
-        width: 52px;
-        height: 70px; /* 3:4 elegant portrait ratio */
-        min-width: 52px;
-        border-radius: 8px;
+        width: 58px;
+        height: 77px; /* 3:4 portrait ratio - 10% boosted for enhanced product clarity */
+        min-width: 58px;
+        border-radius: 9px;
         border: none; /* Outlines removed */
         outline: none;
         overflow: hidden;
@@ -3448,13 +3448,13 @@ const firstBannerAttrs = getBannerImageAttrs(topBanners[0].image);
           gap: 7px;
         }
         .rc-mini-card {
-          width: 48px;
-          height: 66px;
-          min-width: 48px;
-          border-radius: 7px;
+          width: 53px;
+          height: 73px;
+          min-width: 53px;
+          border-radius: 8px;
         }
         .rc-strip-divider {
-          height: 42px;
+          height: 46px;
           margin: 0 3px;
         }
         .rc-set-tag {

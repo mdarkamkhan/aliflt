@@ -11,7 +11,7 @@ const productsByCode = new Map(products.map((p) => [p.data.product_code, p]));
 const curatedSetsByReelId = new Map();
 products.forEach((p) => {
   const cat = (p.data.category || '').toLowerCase();
-  if (cat === 'curated sets' || cat === 'curated set' || cat === 'dress set') {
+  if (cat === 'curated sets' || cat === 'curated set' || cat === 'reels outfit' || cat === 'reel outfit' || cat === 'dress set' || p.data.linked_reel_id) {
     if (p.data.linked_reel_id) {
       curatedSetsByReelId.set(p.data.linked_reel_id, p);
     }
@@ -1309,10 +1309,10 @@ const reelsCatalogForClient = reelsList.map((r) => ({
     }
 
     .rc-mini-card {
-      width: 52px;
-      height: 70px; /* 3:4 elegant portrait ratio */
-      min-width: 52px;
-      border-radius: 8px;
+      width: 58px;
+      height: 77px; /* 3:4 portrait ratio - 10% boosted for enhanced product clarity */
+      min-width: 58px;
+      border-radius: 9px;
       border: none; /* Outlines removed */
       outline: none;
       overflow: hidden;
@@ -1359,7 +1359,7 @@ const reelsCatalogForClient = reelsList.map((r) => ({
     /* Vertical Divider */
     .rc-strip-divider {
       width: 1px;
-      height: 40px;
+      height: 45px;
       background: rgba(255, 255, 255, 0.15);
       flex-shrink: 0;
       margin: 0 4px;
@@ -1440,18 +1440,18 @@ const reelsCatalogForClient = reelsList.map((r) => ({
         gap: 7px;
       }
       .rc-mini-card {
-        width: 48px;
-        height: 66px;
-        min-width: 48px;
-        border-radius: 7px;
+        width: 53px;
+        height: 73px;
+        min-width: 53px;
+        border-radius: 8px;
         border: none;
       }
       .rc-mini-card img,
       .rc-mini-fallback {
-        border-radius: 7px;
+        border-radius: 8px;
       }
       .rc-strip-divider {
-        height: 42px;
+        height: 46px;
         margin: 0 3px;
       }
       .rc-set-tag {

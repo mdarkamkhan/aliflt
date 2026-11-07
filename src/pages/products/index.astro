@@ -90,17 +90,6 @@ const firstCardAttrs = products.length > 0
           </button>
         ))}
 
-        <button 
-          type="button"
-          class="editorial-tab-btn" 
-          data-filter-values="video,reel-outfits,reel outfits" 
-          data-category-name="Reel Outfits"
-          role="tab"
-          aria-selected="false"
-        >
-          <span class="tab-label">Reel Outfits</span>
-        </button>
-
         <a 
           href="/reels/" 
           class="editorial-tab-btn reels-direct-link"
@@ -113,12 +102,28 @@ const firstCardAttrs = products.length > 0
       </div>
     </div>
 
-    <!-- Product Status Bar (Live Count & Exclusive Designs) -->
+    <!-- Product Status Bar (Live Count & Minimalist Filter Trigger) -->
     <div class="product-status-bar" id="productStatusBar">
       <div class="status-left">
         <span class="status-count-label" id="productCountLabel">All Products ({products.length})</span>
       </div>
-      <span class="status-brand-tag">EXCLUSIVE DESIGNS</span>
+      <div class="status-right">
+        <button type="button" class="minimal-filter-btn" id="openFilterBtn" aria-label="Open Filter and Sort Drawer">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="7" y1="12" x2="17" y2="12"></line>
+            <line x1="10" y1="18" x2="14" y2="18"></line>
+          </svg>
+          <span>Filter &amp; Sort</span>
+          <span class="filter-count-badge" id="activeFilterBadge" style="display: none;">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Filter Chips Bar (Dismissible Pills) -->
+    <div class="active-filters-bar" id="activeFiltersBar" style="display: none;">
+      <div class="active-chips-track" id="activeChipsTrack"></div>
+      <button type="button" class="clear-all-filters-btn" id="clearAllFiltersBtn">Clear All</button>
     </div>
 
     <!-- Product Grid -->
@@ -126,7 +131,8 @@ const firstCardAttrs = products.length > 0
       {products.map((item, index) => {
         const { title, price, offer_price, image, category, combo_items } = item.data;
         const catLower = (category || '').toLowerCase();
-        const isCuratedSet = catLower === 'curated sets' || catLower === 'curated set' || catLower === 'dress set' || (combo_items && combo_items.length > 0);
+        const hasVideo = !!item.data.reel_video;
+        const isCuratedSet = (catLower === 'curated sets' || catLower === 'curated set' || catLower === 'curated') && !hasVideo;
         // Affinity tokens baked into HTML so client JS can score without extra fetch
         const affinityTokens = [
           item.data.fabric,
@@ -137,8 +143,28 @@ const firstCardAttrs = products.length > 0
           ...(item.data.ideal_for ? item.data.ideal_for.split(/[,\/]/) : [])
         ].filter(Boolean).map(t => t.toLowerCase().trim()).join(' ');
         const imgAttrs = getCardImageAttrs(image, '(max-width: 600px) 46vw, (max-width: 1024px) 30vw, 220px');
+        const numPrice = Number(offer_price || price || 0);
+        const hasOffer = Boolean(offer_price && Number(offer_price) < Number(price));
+        const itemDate = item.data.date ? new Date(item.data.date).getTime() : 0;
+        const fabricLower = (item.data.fabric || '').toLowerCase();
+        const colourLower = (item.data.colour || '').toLowerCase();
+        const workLower = (item.data.work || '').toLowerCase();
         return (
-          <a href={`/products/${item.id}/`} class="product-card" data-category={catLower} data-has-video={item.data.reel_video ? "true" : "false"} data-is-curated={isCuratedSet ? "true" : "false"} data-affinity-tokens={affinityTokens}>
+          <a 
+            href={`/products/${item.id}/`} 
+            class="product-card" 
+            data-category={catLower} 
+            data-has-video={item.data.reel_video ? "true" : "false"} 
+            data-is-curated={isCuratedSet ? "true" : "false"} 
+            data-affinity-tokens={affinityTokens}
+            data-price={numPrice}
+            data-has-offer={hasOffer ? "true" : "false"}
+            data-date={itemDate}
+            data-fabric={fabricLower}
+            data-colour={colourLower}
+            data-work={workLower}
+            data-original-index={index}
+          >
             <div class="product-card-image-wrapper">
               <img
                 {...imgAttrs}
@@ -205,9 +231,193 @@ const firstCardAttrs = products.length > 0
         <p style="font-family: var(--font-body); font-size: 1rem; color: #555; margin: 0 0 8px 0; letter-spacing: 0.5px;">New collection arriving soon.</p>
         <p style="font-size: 0.82rem; color: #999; margin: 0;">We are currently curating exclusive designs for this category.</p>
       </div>
+
+      <div id="filterEmptyMessage" class="filter-empty-state" style="display: none;">
+        <p class="filter-empty-title">No matching pieces found</p>
+        <p class="filter-empty-desc">Try clearing or adjusting some of your selected filters to view more items.</p>
+        <button type="button" class="filter-empty-reset-btn" id="emptyResetBtn">Reset All Filters</button>
+      </div>
     </div>
 
   </div>
+
+  <!-- Minimalist Filter & Sort Drawer (Idea 1 + Idea 3: Visual Swatches & Tactile Chips) -->
+  <div class="filter-drawer-backdrop" id="filterBackdrop" aria-hidden="true"></div>
+
+  <aside class="filter-drawer" id="filterDrawer" aria-label="Filter and sort products" aria-hidden="true">
+    <div class="drawer-drag-pill" aria-hidden="true"></div>
+
+    <div class="drawer-header">
+      <div class="drawer-header-left">
+        <h2 class="drawer-title">Filter &amp; Sort</h2>
+        <span class="drawer-subtitle" id="drawerLiveCount">{products.length} Products</span>
+      </div>
+      <button type="button" class="drawer-close-btn" id="closeFilterBtn" aria-label="Close Filter Drawer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <!-- Section 1: Sort By -->
+      <div class="drawer-section">
+        <div class="section-label-row">
+          <span class="section-label">Sort By</span>
+        </div>
+        <div class="sort-options-grid">
+          <label class="sort-pill-label">
+            <input type="radio" name="productSortRadio" value="default" checked />
+            <span class="pill-text">Featured</span>
+          </label>
+          <label class="sort-pill-label">
+            <input type="radio" name="productSortRadio" value="price-asc" />
+            <span class="pill-text">Price: Low to High</span>
+          </label>
+          <label class="sort-pill-label">
+            <input type="radio" name="productSortRadio" value="price-desc" />
+            <span class="pill-text">Price: High to Low</span>
+          </label>
+          <label class="sort-pill-label">
+            <input type="radio" name="productSortRadio" value="newest" />
+            <span class="pill-text">Newest First</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Section 2: Color Palette (Idea 3: Visual Swatches) -->
+      <div class="drawer-section">
+        <div class="section-label-row">
+          <span class="section-label">Color Palette</span>
+          <span class="section-badge-count" id="activeColorCount" style="display: none;">0</span>
+        </div>
+        <div class="color-swatches-grid" id="colorSwatchesGrid">
+          <button type="button" class="color-swatch-btn" data-color="wine" aria-label="Wine Maroon">
+            <span class="swatch-circle" style="background-color: #6A1A24;"></span>
+            <span class="swatch-label">Wine</span>
+          </button>
+          <button type="button" class="color-swatch-btn" data-color="teal" aria-label="Teal Peacock">
+            <span class="swatch-circle" style="background-color: #0B6477;"></span>
+            <span class="swatch-label">Teal</span>
+          </button>
+          <button type="button" class="color-swatch-btn" data-color="rani" aria-label="Rani Pink">
+            <span class="swatch-circle" style="background-color: #D81B60;"></span>
+            <span class="swatch-label">Rani Pink</span>
+          </button>
+          <button type="button" class="color-swatch-btn" data-color="yellow" aria-label="Haldi Yellow">
+            <span class="swatch-circle" style="background-color: #E6A100;"></span>
+            <span class="swatch-label">Haldi</span>
+          </button>
+          <button type="button" class="color-swatch-btn" data-color="ivory" aria-label="Pearl Ivory">
+            <span class="swatch-circle swatch-light" style="background-color: #F8F6F0;"></span>
+            <span class="swatch-label">Ivory</span>
+          </button>
+          <button type="button" class="color-swatch-btn" data-color="green" aria-label="Emerald Green">
+            <span class="swatch-circle" style="background-color: #185338;"></span>
+            <span class="swatch-label">Emerald</span>
+          </button>
+          <button type="button" class="color-swatch-btn" data-color="gold" aria-label="Metallic Gold">
+            <span class="swatch-circle" style="background-color: #C5A059;"></span>
+            <span class="swatch-label">Gold</span>
+          </button>
+          <button type="button" class="color-swatch-btn" data-color="black" aria-label="Jet Black">
+            <span class="swatch-circle" style="background-color: #111111;"></span>
+            <span class="swatch-label">Black</span>
+          </button>
+          <button type="button" class="color-swatch-btn" data-color="red" aria-label="Scarlet Red">
+            <span class="swatch-circle" style="background-color: #C62828;"></span>
+            <span class="swatch-label">Red</span>
+          </button>
+          <button type="button" class="color-swatch-btn" data-color="rust" aria-label="Sunset Rust">
+            <span class="swatch-circle" style="background-color: #D35400;"></span>
+            <span class="swatch-label">Rust</span>
+          </button>
+          <button type="button" class="color-swatch-btn" data-color="mauve" aria-label="Dusty Mauve">
+            <span class="swatch-circle" style="background-color: #A36B79;"></span>
+            <span class="swatch-label">Mauve</span>
+          </button>
+          <button type="button" class="color-swatch-btn" data-color="blue" aria-label="Royal Turquoise Blue">
+            <span class="swatch-circle" style="background-color: #1565C0;"></span>
+            <span class="swatch-label">Blue</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Section 3: Fabric Type (Idea 3: Tactile Fabric Chips) -->
+      <div class="drawer-section">
+        <div class="section-label-row">
+          <span class="section-label">Fabric Type</span>
+          <span class="section-badge-count" id="activeFabricCount" style="display: none;">0</span>
+        </div>
+        <div class="chips-flex-wrap" id="fabricChipsGroup">
+          <button type="button" class="filter-chip-btn" data-fabric="crush">Crush Silk</button>
+          <button type="button" class="filter-chip-btn" data-fabric="fandy">Fandy Silk</button>
+          <button type="button" class="filter-chip-btn" data-fabric="tissue">Tissue Silk</button>
+          <button type="button" class="filter-chip-btn" data-fabric="organza">Organza</button>
+          <button type="button" class="filter-chip-btn" data-fabric="georgette">Georgette</button>
+          <button type="button" class="filter-chip-btn" data-fabric="velvet">Velvet</button>
+          <button type="button" class="filter-chip-btn" data-fabric="satin">Satin</button>
+          <button type="button" class="filter-chip-btn" data-fabric="cotton">Pure Cotton</button>
+          <button type="button" class="filter-chip-btn" data-fabric="net">Net</button>
+          <button type="button" class="filter-chip-btn" data-fabric="crape">Moss Crape</button>
+        </div>
+      </div>
+
+      <!-- Section 4: Work & Craft -->
+      <div class="drawer-section">
+        <div class="section-label-row">
+          <span class="section-label">Work &amp; Craft</span>
+          <span class="section-badge-count" id="activeWorkCount" style="display: none;">0</span>
+        </div>
+        <div class="chips-flex-wrap" id="workChipsGroup">
+          <button type="button" class="filter-chip-btn" data-work="zari">Zari Work</button>
+          <button type="button" class="filter-chip-btn" data-work="sequin">Sequin Jaal</button>
+          <button type="button" class="filter-chip-btn" data-work="scallop">Scallop Cutwork</button>
+          <button type="button" class="filter-chip-btn" data-work="floral">Floral Embroidery</button>
+          <button type="button" class="filter-chip-btn" data-work="mirror">Mirror Work</button>
+          <button type="button" class="filter-chip-btn" data-work="plain">Plain Solid</button>
+        </div>
+      </div>
+
+      <!-- Section 5: Price Range -->
+      <div class="drawer-section">
+        <div class="section-label-row">
+          <span class="section-label">Price Range</span>
+          <span class="section-badge-count" id="activePriceCount" style="display: none;">0</span>
+        </div>
+        <div class="chips-flex-wrap" id="priceChipsGroup">
+          <button type="button" class="filter-chip-btn" data-price-range="under-500">Under ₹500</button>
+          <button type="button" class="filter-chip-btn" data-price-range="500-1000">₹500 – ₹1,000</button>
+          <button type="button" class="filter-chip-btn" data-price-range="1000-2000">₹1,000 – ₹2,000</button>
+          <button type="button" class="filter-chip-btn" data-price-range="above-2000">Above ₹2,000</button>
+        </div>
+      </div>
+
+      <!-- Section 6: Offers & Special Pricing -->
+      <div class="drawer-section drawer-section-compact">
+        <div class="drawer-toggle-row">
+          <div class="toggle-text-block">
+            <span class="toggle-label-main">Sale &amp; Special Offers</span>
+            <span class="toggle-label-sub">Show pieces with promotional discount</span>
+          </div>
+          <label class="minimal-switch-label" for="offersOnlyCheckbox">
+            <input type="checkbox" id="offersOnlyCheckbox" class="switch-native-input" />
+            <span class="switch-custom-track"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drawer Sticky Footer -->
+    <div class="drawer-footer">
+      <button type="button" class="drawer-reset-action-btn" id="drawerResetBtn">Reset</button>
+      <button type="button" class="drawer-apply-action-btn" id="drawerApplyBtn">
+        <span>View Products</span>
+        <span class="apply-count" id="drawerApplyCount">({products.length})</span>
+      </button>
+    </div>
+  </aside>
 
   <script>
     // ─── Client-Side Affinity Ranker ────────────────────────────────────────
@@ -304,63 +514,479 @@ const firstCardAttrs = products.length > 0
       document.querySelectorAll('.product-grid-video').forEach(v => videoObserver!.observe(v));
     }
 
-    // Smooth Category Filtering logic with pre-cached card metadata
+    // ─── Minimalist Filter & Sort Engine (Idea 1 + Idea 3) ───────────────────
+    const COLOR_KEYWORDS: Record<string, string[]> = {
+      wine: ['wine', 'maroon', 'burgundy', 'aubergine', 'plum', 'cherry'],
+      teal: ['teal', 'peacock', 'turquoise', 'aqua'],
+      rani: ['rani', 'pink', 'magenta', 'fuchsia', 'rose'],
+      yellow: ['yellow', 'haldi', 'mustard', 'ochre', 'amber'],
+      ivory: ['ivory', 'white', 'cream', 'champagne', 'off white', 'off-white'],
+      green: ['green', 'emerald', 'bottle green', 'forest emerald', 'sage'],
+      gold: ['gold', 'golden', 'bronze', 'copper'],
+      black: ['black', 'charcoal'],
+      red: ['red', 'scarlet', 'crimson', 'vermillion'],
+      rust: ['rust', 'terracotta', 'orange'],
+      mauve: ['mauve', 'dusty rose', 'lilac', 'lavender', 'levender'],
+      blue: ['blue', 'navy', 'royal']
+    };
+
+    const FABRIC_KEYWORDS: Record<string, string[]> = {
+      crush: ['crush', 'crushed'],
+      fandy: ['fandy'],
+      tissue: ['tissue'],
+      organza: ['organza'],
+      georgette: ['georgette', 'jorget'],
+      velvet: ['velvet'],
+      satin: ['satin', 'saten'],
+      cotton: ['cotton'],
+      net: ['net'],
+      crape: ['crape', 'crepe', 'moss']
+    };
+
+    const WORK_KEYWORDS: Record<string, string[]> = {
+      zari: ['zari', 'jari'],
+      sequin: ['sequin', 'sequence'],
+      scallop: ['scallop'],
+      floral: ['floral', 'resham', 'dhaga', 'embroidery', 'flower', 'bootis', 'bootas'],
+      mirror: ['mirror', 'abhla'],
+      plain: ['plain', 'solid']
+    };
+
+    const CHIP_LABELS: Record<string, string> = {
+      wine: 'Color: Wine',
+      teal: 'Color: Teal',
+      rani: 'Color: Rani Pink',
+      yellow: 'Color: Haldi',
+      ivory: 'Color: Ivory',
+      green: 'Color: Emerald',
+      gold: 'Color: Gold',
+      black: 'Color: Black',
+      red: 'Color: Red',
+      rust: 'Color: Rust',
+      mauve: 'Color: Mauve',
+      blue: 'Color: Blue',
+      crush: 'Fabric: Crush Silk',
+      fandy: 'Fabric: Fandy Silk',
+      tissue: 'Fabric: Tissue Silk',
+      organza: 'Fabric: Organza',
+      georgette: 'Fabric: Georgette',
+      velvet: 'Fabric: Velvet',
+      satin: 'Fabric: Satin',
+      cotton: 'Fabric: Cotton',
+      net: 'Fabric: Net',
+      crape: 'Fabric: Moss Crape',
+      zari: 'Work: Zari',
+      sequin: 'Work: Sequin Jaal',
+      scallop: 'Work: Scallop',
+      floral: 'Work: Floral',
+      mirror: 'Work: Mirror',
+      plain: 'Work: Plain Solid',
+      'under-500': 'Price: < ₹500',
+      '500-1000': 'Price: ₹500 - ₹1,000',
+      '1000-2000': 'Price: ₹1,000 - ₹2,000',
+      'above-2000': 'Price: > ₹2,000',
+      'price-asc': 'Sort: Low to High',
+      'price-desc': 'Sort: High to Low',
+      'newest': 'Sort: Newest',
+      'offers': 'Special Offers Only'
+    };
+
     function initProductFilters() {
       const grid = document.getElementById('productGrid') as any;
       if (!grid || grid._filtersBound) return;
       grid._filtersBound = true;
 
-      const tabs = document.querySelectorAll('.editorial-tab-btn');
-      const cards = Array.from(grid.querySelectorAll('.product-card')) as HTMLElement[];
+      const tabs = Array.from(document.querySelectorAll('.editorial-tab-btn')) as HTMLElement[];
       const countLabel = document.getElementById('productCountLabel');
-      const emptyMsg = document.getElementById('categoryEmptyMessage');
+      const categoryEmptyMsg = document.getElementById('categoryEmptyMessage');
+      const filterEmptyMsg = document.getElementById('filterEmptyMessage');
+      const openFilterBtn = document.getElementById('openFilterBtn');
+      const closeFilterBtn = document.getElementById('closeFilterBtn');
+      const filterDrawer = document.getElementById('filterDrawer');
+      const filterBackdrop = document.getElementById('filterBackdrop');
+      const drawerLiveCount = document.getElementById('drawerLiveCount');
+      const drawerApplyCount = document.getElementById('drawerApplyCount');
+      const drawerResetBtn = document.getElementById('drawerResetBtn');
+      const drawerApplyBtn = document.getElementById('drawerApplyBtn');
+      const emptyResetBtn = document.getElementById('emptyResetBtn');
+      const clearAllFiltersBtn = document.getElementById('clearAllFiltersBtn');
+      const activeFiltersBar = document.getElementById('activeFiltersBar');
+      const activeChipsTrack = document.getElementById('activeChipsTrack');
+      const activeFilterBadge = document.getElementById('activeFilterBadge');
+      const colorBtns = Array.from(document.querySelectorAll('.color-swatch-btn')) as HTMLElement[];
+      const fabricBtns = Array.from(document.querySelectorAll('#fabricChipsGroup .filter-chip-btn')) as HTMLElement[];
+      const workBtns = Array.from(document.querySelectorAll('#workChipsGroup .filter-chip-btn')) as HTMLElement[];
+      const priceBtns = Array.from(document.querySelectorAll('#priceChipsGroup .filter-chip-btn')) as HTMLElement[];
+      const offersCheckbox = document.getElementById('offersOnlyCheckbox') as HTMLInputElement | null;
+      const sortRadios = Array.from(document.querySelectorAll('input[name="productSortRadio"]')) as HTMLInputElement[];
 
-      // Pre-cache category and video flags once to avoid repeated DOM attribute parsing on every filter tap
-      const cardMeta = cards.map(card => ({
+      // Section count indicators
+      const activeColorCount = document.getElementById('activeColorCount');
+      const activeFabricCount = document.getElementById('activeFabricCount');
+      const activeWorkCount = document.getElementById('activeWorkCount');
+      const activePriceCount = document.getElementById('activePriceCount');
+
+      const cards = Array.from(grid.querySelectorAll('.product-card')) as HTMLElement[];
+      const cardMeta = cards.map((card, idx) => ({
         card,
+        initialIndex: idx,
         cat: (card.getAttribute('data-category') || '').toLowerCase().trim(),
-        hasVideo: card.getAttribute('data-has-video') === 'true'
+        hasVideo: card.getAttribute('data-has-video') === 'true',
+        price: Number(card.getAttribute('data-price') || 0),
+        hasOffer: card.getAttribute('data-has-offer') === 'true',
+        date: Number(card.getAttribute('data-date') || 0),
+        fabric: (card.getAttribute('data-fabric') || '').toLowerCase(),
+        colour: (card.getAttribute('data-colour') || '').toLowerCase(),
+        work: (card.getAttribute('data-work') || '').toLowerCase(),
+        tokens: (card.getAttribute('data-affinity-tokens') || '').toLowerCase()
       }));
 
-      function activateTab(tab: Element) {
-        if (tab.tagName === 'A') return;
-        tabs.forEach(t => {
-          t.classList.remove('active');
-          t.setAttribute('aria-selected', 'false');
-        });
-        tab.classList.add('active');
-        tab.setAttribute('aria-selected', 'true');
+      // Internal State
+      const state = {
+        categoryVal: 'all',
+        categoryName: 'All Products',
+        sort: 'default',
+        colors: new Set<string>(),
+        fabrics: new Set<string>(),
+        works: new Set<string>(),
+        prices: new Set<string>(),
+        offersOnly: false,
+      };
 
-        const filterVal = tab.getAttribute('data-filter-values') || 'all';
-        const catName = tab.getAttribute('data-category-name') || 'Products';
-        const isAll = filterVal === 'all';
-        const isVideoFilter = !isAll && (filterVal === 'video' || filterVal.includes('video') || filterVal.includes('reel'));
-        const allowedSet = (!isAll && !isVideoFilter)
-          ? new Set(filterVal.split(',').map(s => s.trim().toLowerCase()))
+      function openDrawer() {
+        const drawer = document.getElementById('filterDrawer');
+        const backdrop = document.getElementById('filterBackdrop');
+        if (!drawer || !backdrop) return;
+        drawer.classList.add('is-open');
+        backdrop.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+        backdrop.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('drawer-locked');
+      }
+
+      function closeDrawer() {
+        const drawer = document.getElementById('filterDrawer');
+        const backdrop = document.getElementById('filterBackdrop');
+        if (!drawer || !backdrop) return;
+        drawer.classList.remove('is-open');
+        backdrop.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+        backdrop.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('drawer-locked');
+      }
+
+      function updateActiveBadge() {
+        const count = state.colors.size + state.fabrics.size + state.works.size + state.prices.size + (state.offersOnly ? 1 : 0) + (state.sort !== 'default' ? 1 : 0);
+        if (activeFilterBadge) {
+          if (count > 0) {
+            activeFilterBadge.textContent = String(count);
+            activeFilterBadge.style.display = 'inline-flex';
+          } else {
+            activeFilterBadge.style.display = 'none';
+          }
+        }
+        // Section badges
+        if (activeColorCount) {
+          activeColorCount.textContent = String(state.colors.size);
+          activeColorCount.style.display = state.colors.size > 0 ? 'inline-block' : 'none';
+        }
+        if (activeFabricCount) {
+          activeFabricCount.textContent = String(state.fabrics.size);
+          activeFabricCount.style.display = state.fabrics.size > 0 ? 'inline-block' : 'none';
+        }
+        if (activeWorkCount) {
+          activeWorkCount.textContent = String(state.works.size);
+          activeWorkCount.style.display = state.works.size > 0 ? 'inline-block' : 'none';
+        }
+        if (activePriceCount) {
+          activePriceCount.textContent = String(state.prices.size);
+          activePriceCount.style.display = state.prices.size > 0 ? 'inline-block' : 'none';
+        }
+      }
+
+      function renderActiveChips() {
+        if (!activeChipsTrack || !activeFiltersBar) return;
+        const totalFilterCount = state.colors.size + state.fabrics.size + state.works.size + state.prices.size + (state.offersOnly ? 1 : 0) + (state.sort !== 'default' ? 1 : 0);
+
+        if (totalFilterCount === 0) {
+          activeFiltersBar.style.display = 'none';
+          activeChipsTrack.innerHTML = '';
+          return;
+        }
+
+        activeFiltersBar.style.display = 'flex';
+        activeChipsTrack.innerHTML = '';
+
+        function createChip(type: string, value: string, label: string) {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'active-filter-chip';
+          chip.setAttribute('data-type', type);
+          chip.setAttribute('data-val', value);
+          chip.innerHTML = `<span>${label}</span><svg class="chip-remove-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+          chip.addEventListener('click', () => {
+            removeFilter(type, value);
+          });
+          return chip;
+        }
+
+        // Sort chip
+        if (state.sort !== 'default') {
+          activeChipsTrack.appendChild(createChip('sort', state.sort, CHIP_LABELS[state.sort] || state.sort));
+        }
+        // Color chips
+        for (const c of state.colors) {
+          activeChipsTrack.appendChild(createChip('color', c, CHIP_LABELS[c] || `Color: ${c}`));
+        }
+        // Fabric chips
+        for (const f of state.fabrics) {
+          activeChipsTrack.appendChild(createChip('fabric', f, CHIP_LABELS[f] || `Fabric: ${f}`));
+        }
+        // Work chips
+        for (const w of state.works) {
+          activeChipsTrack.appendChild(createChip('work', w, CHIP_LABELS[w] || `Work: ${w}`));
+        }
+        // Price chips
+        for (const p of state.prices) {
+          activeChipsTrack.appendChild(createChip('price', p, CHIP_LABELS[p] || `Price: ${p}`));
+        }
+        // Offers chip
+        if (state.offersOnly) {
+          activeChipsTrack.appendChild(createChip('offers', 'offers', CHIP_LABELS['offers']));
+        }
+      }
+
+      function removeFilter(type: string, value: string) {
+        if (type === 'sort') {
+          state.sort = 'default';
+          const defRadio = document.querySelector('input[name="productSortRadio"][value="default"]') as HTMLInputElement;
+          if (defRadio) defRadio.checked = true;
+        } else if (type === 'color') {
+          state.colors.delete(value);
+          const btn = colorBtns.find(b => b.getAttribute('data-color') === value);
+          if (btn) btn.classList.remove('active');
+        } else if (type === 'fabric') {
+          state.fabrics.delete(value);
+          const btn = fabricBtns.find(b => b.getAttribute('data-fabric') === value);
+          if (btn) btn.classList.remove('active');
+        } else if (type === 'work') {
+          state.works.delete(value);
+          const btn = workBtns.find(b => b.getAttribute('data-work') === value);
+          if (btn) btn.classList.remove('active');
+        } else if (type === 'price') {
+          state.prices.delete(value);
+          const btn = priceBtns.find(b => b.getAttribute('data-price-range') === value);
+          if (btn) btn.classList.remove('active');
+        } else if (type === 'offers') {
+          state.offersOnly = false;
+          if (offersCheckbox) offersCheckbox.checked = false;
+        }
+        applyFiltersAndSort();
+      }
+
+      function resetAllDrawerFilters() {
+        state.sort = 'default';
+        state.colors.clear();
+        state.fabrics.clear();
+        state.works.clear();
+        state.prices.clear();
+        state.offersOnly = false;
+
+        colorBtns.forEach(b => b.classList.remove('active'));
+        fabricBtns.forEach(b => b.classList.remove('active'));
+        workBtns.forEach(b => b.classList.remove('active'));
+        priceBtns.forEach(b => b.classList.remove('active'));
+        if (offersCheckbox) offersCheckbox.checked = false;
+        const defRadio = document.querySelector('input[name="productSortRadio"][value="default"]') as HTMLInputElement;
+        if (defRadio) defRadio.checked = true;
+
+        applyFiltersAndSort();
+      }
+
+      function syncUrlParams() {
+        const url = new URL(window.location.href);
+        // Category
+        if (state.categoryVal && state.categoryVal !== 'all') {
+          const tabName = state.categoryName.toLowerCase().replace(/[\s_]+/g, '-');
+          url.searchParams.set('category', tabName);
+        } else {
+          url.searchParams.delete('category');
+        }
+        // Sort
+        if (state.sort !== 'default') {
+          url.searchParams.set('sort', state.sort);
+        } else {
+          url.searchParams.delete('sort');
+        }
+        // Colors
+        if (state.colors.size > 0) {
+          url.searchParams.set('color', Array.from(state.colors).join(','));
+        } else {
+          url.searchParams.delete('color');
+        }
+        // Fabrics
+        if (state.fabrics.size > 0) {
+          url.searchParams.set('fabric', Array.from(state.fabrics).join(','));
+        } else {
+          url.searchParams.delete('fabric');
+        }
+        // Works
+        if (state.works.size > 0) {
+          url.searchParams.set('work', Array.from(state.works).join(','));
+        } else {
+          url.searchParams.delete('work');
+        }
+        // Prices
+        if (state.prices.size > 0) {
+          url.searchParams.set('price', Array.from(state.prices).join(','));
+        } else {
+          url.searchParams.delete('price');
+        }
+        // Offers
+        if (state.offersOnly) {
+          url.searchParams.set('sale', '1');
+        } else {
+          url.searchParams.delete('sale');
+        }
+
+        window.history.replaceState(null, '', url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : ''));
+      }
+
+      function applyFiltersAndSort() {
+        const isAll = state.categoryVal === 'all';
+        const isVideoFilter = !isAll && (state.categoryVal === 'video' || state.categoryVal.includes('video') || state.categoryVal.includes('reel') || state.categoryName.toLowerCase().includes('reel'));
+        const isCuratedFilter = !isAll && (state.categoryVal.includes('curated') || state.categoryName.toLowerCase().includes('curated'));
+        const allowedSet = (!isAll && !isVideoFilter && !isCuratedFilter)
+          ? new Set(state.categoryVal.split(',').map(s => s.trim().toLowerCase()))
           : null;
 
         let visibleCount = 0;
-        for (let i = 0; i < cardMeta.length; i++) {
-          const { card, cat, hasVideo } = cardMeta[i];
-          const match = isAll
-            ? true
-            : isVideoFilter
-              ? hasVideo
-              : (allowedSet !== null && allowedSet.has(cat));
 
-          if (match) {
-            if (card.classList.contains('hidden')) {
-              card.style.display = '';
-              card.classList.remove('hidden');
-            }
-            visibleCount++;
-          } else if (!card.classList.contains('hidden')) {
-            card.style.display = 'none';
-            card.classList.add('hidden');
+        for (let i = 0; i < cardMeta.length; i++) {
+          const m = cardMeta[i];
+          // 1. Category check
+          let matchCat = false;
+          if (isAll) {
+            matchCat = true;
+          } else if (isVideoFilter) {
+            matchCat = m.hasVideo || m.cat === 'reels outfit' || m.cat === 'reel outfits' || m.cat === 'reel outfit';
+          } else if (isCuratedFilter) {
+            matchCat = (m.cat === 'curated sets' || m.cat === 'curated set' || m.cat === 'curated') && !m.hasVideo;
+          } else {
+            matchCat = allowedSet !== null && allowedSet.has(m.cat);
           }
+
+          if (!matchCat) {
+            m.card.classList.add('hidden');
+            m.card.style.display = 'none';
+            continue;
+          }
+
+          // 2. Color check
+          let matchColor = true;
+          if (state.colors.size > 0) {
+            matchColor = false;
+            const fullText = m.colour + ' ' + m.tokens;
+            for (const c of state.colors) {
+              const kwList = COLOR_KEYWORDS[c] || [c];
+              if (kwList.some(k => fullText.includes(k))) {
+                matchColor = true;
+                break;
+              }
+            }
+          }
+          if (!matchColor) {
+            m.card.classList.add('hidden');
+            m.card.style.display = 'none';
+            continue;
+          }
+
+          // 3. Fabric check
+          let matchFabric = true;
+          if (state.fabrics.size > 0) {
+            matchFabric = false;
+            const fullText = m.fabric + ' ' + m.tokens;
+            for (const f of state.fabrics) {
+              const kwList = FABRIC_KEYWORDS[f] || [f];
+              if (kwList.some(k => fullText.includes(k))) {
+                matchFabric = true;
+                break;
+              }
+            }
+          }
+          if (!matchFabric) {
+            m.card.classList.add('hidden');
+            m.card.style.display = 'none';
+            continue;
+          }
+
+          // 4. Work check
+          let matchWork = true;
+          if (state.works.size > 0) {
+            matchWork = false;
+            const fullText = m.work + ' ' + m.tokens;
+            for (const w of state.works) {
+              const kwList = WORK_KEYWORDS[w] || [w];
+              if (kwList.some(k => fullText.includes(k))) {
+                matchWork = true;
+                break;
+              }
+            }
+          }
+          if (!matchWork) {
+            m.card.classList.add('hidden');
+            m.card.style.display = 'none';
+            continue;
+          }
+
+          // 5. Price check
+          let matchPrice = true;
+          if (state.prices.size > 0) {
+            matchPrice = false;
+            for (const pr of state.prices) {
+              if (pr === 'under-500' && m.price > 0 && m.price < 500) { matchPrice = true; break; }
+              if (pr === '500-1000' && m.price >= 500 && m.price <= 1000) { matchPrice = true; break; }
+              if (pr === '1000-2000' && m.price > 1000 && m.price <= 2000) { matchPrice = true; break; }
+              if (pr === 'above-2000' && m.price > 2000) { matchPrice = true; break; }
+            }
+          }
+          if (!matchPrice) {
+            m.card.classList.add('hidden');
+            m.card.style.display = 'none';
+            continue;
+          }
+
+          // 6. Offers check
+          if (state.offersOnly && !m.hasOffer) {
+            m.card.classList.add('hidden');
+            m.card.style.display = 'none';
+            continue;
+          }
+
+          // Product matches all active filters!
+          m.card.classList.remove('hidden');
+          m.card.style.display = '';
+          visibleCount++;
         }
 
-        const isReelsMode = isVideoFilter || catName.toLowerCase().includes('reel');
+        // Sorting
+        const sortedMeta = [...cardMeta].sort((a, b) => {
+          if (state.sort === 'price-asc') return a.price - b.price;
+          if (state.sort === 'price-desc') return b.price - a.price;
+          if (state.sort === 'newest') return b.date - a.date;
+          return a.initialIndex - b.initialIndex;
+        });
+
+        const fragment = document.createDocumentFragment();
+        for (const item of sortedMeta) {
+          fragment.appendChild(item.card);
+        }
+        if (categoryEmptyMsg) fragment.appendChild(categoryEmptyMsg);
+        if (filterEmptyMsg) fragment.appendChild(filterEmptyMsg);
+        grid.appendChild(fragment);
+
+        // Reel videos mode handling
+        const isReelsMode = isVideoFilter || state.categoryName.toLowerCase().includes('reel');
         if (isReelsMode) {
           grid.classList.add('mode-reels-outfit');
           grid.setAttribute('data-active-category', 'reel-outfits');
@@ -381,46 +1007,301 @@ const firstCardAttrs = products.length > 0
           }, 50);
         } else {
           grid.classList.remove('mode-reels-outfit');
-          grid.setAttribute('data-active-category', catName.toLowerCase().replace(/[\s_]+/g, '-'));
+          grid.setAttribute('data-active-category', state.categoryName.toLowerCase().replace(/[\s_]+/g, '-'));
           document.querySelectorAll('.product-grid-video').forEach(el => {
             const v = el as HTMLVideoElement;
             if (v.src && !v.paused) v.pause();
           });
         }
 
-        if (emptyMsg) {
-          emptyMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+        // Empty state handling
+        const hasDrawerFilters = state.colors.size > 0 || state.fabrics.size > 0 || state.works.size > 0 || state.prices.size > 0 || state.offersOnly;
+        if (visibleCount === 0) {
+          if (hasDrawerFilters) {
+            if (filterEmptyMsg) filterEmptyMsg.style.display = 'block';
+            if (categoryEmptyMsg) categoryEmptyMsg.style.display = 'none';
+          } else {
+            if (filterEmptyMsg) filterEmptyMsg.style.display = 'none';
+            if (categoryEmptyMsg) categoryEmptyMsg.style.display = 'block';
+          }
+        } else {
+          if (filterEmptyMsg) filterEmptyMsg.style.display = 'none';
+          if (categoryEmptyMsg) categoryEmptyMsg.style.display = 'none';
         }
 
+        // Count labels
         if (countLabel) {
-          countLabel.textContent = isAll ? `All Products (${visibleCount})` : `${catName} (${visibleCount})`;
+          countLabel.textContent = isAll ? `All Products (${visibleCount})` : `${state.categoryName} (${visibleCount})`;
         }
+        if (drawerLiveCount) {
+          drawerLiveCount.textContent = `${visibleCount} Products`;
+        }
+        if (drawerApplyCount) {
+          drawerApplyCount.textContent = `(${visibleCount})`;
+        }
+
+        updateActiveBadge();
+        renderActiveChips();
+        syncUrlParams();
       }
 
+      function activateTab(tab: HTMLElement) {
+        if (tab.tagName === 'A') return;
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        state.categoryVal = tab.getAttribute('data-filter-values') || 'all';
+        state.categoryName = tab.getAttribute('data-category-name') || 'Products';
+
+        applyFiltersAndSort();
+      }
+
+      // Event Listeners: Category tabs
       tabs.forEach(tab => {
         if (tab.tagName !== 'A') {
           tab.addEventListener('click', () => activateTab(tab));
         }
       });
 
-      // Handle ?category= query param from homepage Featured Categories
+      // Drawer Open / Close buttons
+      openFilterBtn?.addEventListener('click', openDrawer);
+      closeFilterBtn?.addEventListener('click', closeDrawer);
+      filterBackdrop?.addEventListener('click', closeDrawer);
+      drawerApplyBtn?.addEventListener('click', closeDrawer);
+
+      // Escape key to close
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && filterDrawer?.classList.contains('is-open')) {
+          closeDrawer();
+        }
+      });
+
+      // Reset buttons
+      drawerResetBtn?.addEventListener('click', resetAllDrawerFilters);
+      emptyResetBtn?.addEventListener('click', resetAllDrawerFilters);
+      clearAllFiltersBtn?.addEventListener('click', resetAllDrawerFilters);
+
+      // Sort radio listeners
+      sortRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          if (radio.checked) {
+            state.sort = radio.value;
+            applyFiltersAndSort();
+          }
+        });
+      });
+
+      // Color swatches listeners
+      colorBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const color = btn.getAttribute('data-color');
+          if (!color) return;
+          if (state.colors.has(color)) {
+            state.colors.delete(color);
+            btn.classList.remove('active');
+          } else {
+            state.colors.add(color);
+            btn.classList.add('active');
+          }
+          applyFiltersAndSort();
+        });
+      });
+
+      // Fabric chips listeners
+      fabricBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const fabric = btn.getAttribute('data-fabric');
+          if (!fabric) return;
+          if (state.fabrics.has(fabric)) {
+            state.fabrics.delete(fabric);
+            btn.classList.remove('active');
+          } else {
+            state.fabrics.add(fabric);
+            btn.classList.add('active');
+          }
+          applyFiltersAndSort();
+        });
+      });
+
+      // Work chips listeners
+      workBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const work = btn.getAttribute('data-work');
+          if (!work) return;
+          if (state.works.has(work)) {
+            state.works.delete(work);
+            btn.classList.remove('active');
+          } else {
+            state.works.add(work);
+            btn.classList.add('active');
+          }
+          applyFiltersAndSort();
+        });
+      });
+
+      // Price range chips listeners
+      priceBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const range = btn.getAttribute('data-price-range');
+          if (!range) return;
+          if (state.prices.has(range)) {
+            state.prices.delete(range);
+            btn.classList.remove('active');
+          } else {
+            state.prices.add(range);
+            btn.classList.add('active');
+          }
+          applyFiltersAndSort();
+        });
+      });
+
+      // Offers toggle checkbox
+      offersCheckbox?.addEventListener('change', () => {
+        state.offersOnly = !!offersCheckbox.checked;
+        applyFiltersAndSort();
+      });
+
+      // URL parameters initial hydration
       const urlParams = new URLSearchParams(window.location.search);
       const catParam = (urlParams.get('category') || '').toLowerCase().trim();
       if (catParam) {
-        const matchingTab = Array.from(tabs).find(t => {
+        const matchingTab = tabs.find(t => {
           const vals = (t.getAttribute('data-filter-values') || '').toLowerCase();
           const name = (t.getAttribute('data-category-name') || '').toLowerCase().replace(/[\s_]+/g, '-');
           return vals.split(',').map(v => v.trim()).includes(catParam) || name === catParam || vals.includes(catParam);
         });
         if (matchingTab) {
-          activateTab(matchingTab);
+          tabs.forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          matchingTab.classList.add('active');
+          matchingTab.setAttribute('aria-selected', 'true');
+          state.categoryVal = matchingTab.getAttribute('data-filter-values') || 'all';
+          state.categoryName = matchingTab.getAttribute('data-category-name') || 'Products';
         }
       }
+
+      const sortParam = urlParams.get('sort');
+      if (sortParam && ['price-asc', 'price-desc', 'newest'].includes(sortParam)) {
+        state.sort = sortParam;
+        const matchingRadio = sortRadios.find(r => r.value === sortParam);
+        if (matchingRadio) matchingRadio.checked = true;
+      }
+
+      const colorParam = urlParams.get('color');
+      if (colorParam) {
+        colorParam.split(',').forEach(c => {
+          const trimmed = c.trim().toLowerCase();
+          if (trimmed) {
+            state.colors.add(trimmed);
+            const btn = colorBtns.find(b => b.getAttribute('data-color') === trimmed);
+            if (btn) btn.classList.add('active');
+          }
+        });
+      }
+
+      const fabricParam = urlParams.get('fabric');
+      if (fabricParam) {
+        fabricParam.split(',').forEach(f => {
+          const trimmed = f.trim().toLowerCase();
+          if (trimmed) {
+            state.fabrics.add(trimmed);
+            const btn = fabricBtns.find(b => b.getAttribute('data-fabric') === trimmed);
+            if (btn) btn.classList.add('active');
+          }
+        });
+      }
+
+      const workParam = urlParams.get('work');
+      if (workParam) {
+        workParam.split(',').forEach(w => {
+          const trimmed = w.trim().toLowerCase();
+          if (trimmed) {
+            state.works.add(trimmed);
+            const btn = workBtns.find(b => b.getAttribute('data-work') === trimmed);
+            if (btn) btn.classList.add('active');
+          }
+        });
+      }
+
+      const priceParam = urlParams.get('price');
+      if (priceParam) {
+        priceParam.split(',').forEach(p => {
+          const trimmed = p.trim().toLowerCase();
+          if (trimmed) {
+            state.prices.add(trimmed);
+            const btn = priceBtns.find(b => b.getAttribute('data-price-range') === trimmed);
+            if (btn) btn.classList.add('active');
+          }
+        });
+      }
+
+      if (urlParams.get('sale') === '1') {
+        state.offersOnly = true;
+        if (offersCheckbox) offersCheckbox.checked = true;
+      }
+
+      // Initial run
+      applyFiltersAndSort();
+    }
+
+    // Delegated click handler on document so button ALWAYS responds immediately
+    function globalOpenDrawer() {
+      const drawer = document.getElementById('filterDrawer');
+      const backdrop = document.getElementById('filterBackdrop');
+      if (!drawer || !backdrop) return;
+      drawer.classList.add('is-open');
+      backdrop.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      backdrop.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('drawer-locked');
+    }
+
+    function globalCloseDrawer() {
+      const drawer = document.getElementById('filterDrawer');
+      const backdrop = document.getElementById('filterBackdrop');
+      if (!drawer || !backdrop) return;
+      drawer.classList.remove('is-open');
+      backdrop.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      backdrop.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('drawer-locked');
+    }
+
+    if (!(window as any)._alifFilterDelegated) {
+      (window as any)._alifFilterDelegated = true;
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+        if (target.closest('#openFilterBtn')) {
+          e.preventDefault();
+          globalOpenDrawer();
+        } else if (target.closest('#closeFilterBtn') || target.closest('#filterBackdrop') || target.closest('#drawerApplyBtn')) {
+          globalCloseDrawer();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          globalCloseDrawer();
+        }
+      });
     }
 
     function initProductsPage() {
       applyAffinityRanking();
       initProductFilters();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initProductsPage);
+    } else {
+      initProductsPage();
     }
 
     document.addEventListener('astro:page-load', initProductsPage);
@@ -679,4 +1560,580 @@ const firstCardAttrs = products.length > 0
       font-size: 0.74rem;
     }
   }
+
+  /* --- Minimalist Filter & Sort Drawer System (Idea 1 + Idea 3) --- */
+  .status-right {
+    display: flex;
+    align-items: center;
+  }
+  .minimal-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #ffffff;
+    border: 1px solid #111111;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #111111;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+  .minimal-filter-btn * {
+    pointer-events: none;
+  }
+  .minimal-filter-btn:hover {
+    background: #111111;
+    color: #ffffff;
+  }
+  .filter-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    background: #111111;
+    color: #ffffff;
+    border-radius: 10px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    line-height: 1;
+    transition: all 0.2s ease;
+  }
+  .minimal-filter-btn:hover .filter-count-badge {
+    background: #ffffff;
+    color: #111111;
+  }
+
+  /* Active Filters Bar */
+  .active-filters-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 2px 2px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .active-filters-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .active-chips-track {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .active-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f4f4f4;
+    border: 1px solid #e2e2e2;
+    border-radius: 20px;
+    padding: 5px 11px;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.68rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #111111;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    outline: none;
+  }
+  .active-filter-chip:hover {
+    background: #e6e6e6;
+    border-color: #111111;
+  }
+  .chip-remove-icon {
+    stroke: #777777;
+    transition: stroke 0.15s ease;
+    flex-shrink: 0;
+  }
+  .active-filter-chip:hover .chip-remove-icon {
+    stroke: #111111;
+  }
+  .clear-all-filters-btn {
+    background: transparent;
+    border: none;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.68rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #777777;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 4px 6px;
+    transition: color 0.2s ease;
+  }
+  .clear-all-filters-btn:hover {
+    color: #111111;
+  }
+
+  /* Drawer Backdrop */
+  .filter-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 9999990;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .filter-drawer-backdrop.is-open,
+  :global(.filter-drawer-backdrop.is-open) {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Drawer Container (Desktop: Right slide; Mobile: Bottom sheet) */
+  .filter-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 440px;
+    max-width: 92vw;
+    background: #ffffff;
+    z-index: 9999995;
+    box-shadow: -10px 0 35px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .filter-drawer.is-open,
+  :global(.filter-drawer.is-open) {
+    transform: translateX(0) !important;
+  }
+  .drawer-drag-pill {
+    display: none;
+    width: 40px;
+    height: 4px;
+    background: #d0d0d0;
+    border-radius: 2px;
+    margin: 10px auto 4px auto;
+  }
+  .drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px 16px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+  }
+  .drawer-title {
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 1.08rem;
+    font-weight: 500;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #111111;
+    margin: 0;
+  }
+  .drawer-subtitle {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #888888;
+    margin-top: 2px;
+  }
+  .drawer-close-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #111111;
+    border-radius: 50%;
+    transition: background 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+  .drawer-close-btn:hover {
+    background: #f0f0f0;
+  }
+
+  /* Drawer Body */
+  .drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 20px 24px;
+    scrollbar-width: thin;
+  }
+  .drawer-section {
+    padding-bottom: 22px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  }
+  .drawer-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 10px;
+  }
+  .section-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .section-label {
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #111111;
+  }
+  .section-badge-count {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 600;
+    background: #111111;
+    color: #ffffff;
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+
+  /* Sort Options Grid */
+  .sort-options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .sort-pill-label {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    margin: 0;
+  }
+  .sort-pill-label input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .sort-pill-label .pill-text {
+    display: block;
+    text-align: center;
+    padding: 9px 8px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.73rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #444444;
+    transition: all 0.18s ease;
+    background: #ffffff;
+  }
+  .sort-pill-label:hover .pill-text {
+    border-color: #111111;
+    color: #111111;
+  }
+  .sort-pill-label input:checked + .pill-text {
+    background: #111111;
+    border-color: #111111;
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+  /* Color Swatches Grid (Idea 3: Visual Swatches) */
+  .color-swatches-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px 6px;
+  }
+  .color-swatch-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 4px;
+    border-radius: 6px;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s ease;
+  }
+  .color-swatch-btn:active {
+    transform: scale(0.95);
+  }
+  .swatch-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.14);
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .swatch-circle.swatch-light {
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22);
+  }
+  .color-swatch-btn.active .swatch-circle {
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #111111;
+    transform: scale(0.92);
+  }
+  .swatch-label {
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.65rem;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #666666;
+    transition: color 0.18s ease;
+    text-align: center;
+  }
+  .color-swatch-btn.active .swatch-label {
+    color: #111111;
+    font-weight: 500;
+  }
+
+  /* Fabric & Work & Price Chips (Idea 3: Tactile Fabric Chips) */
+  .chips-flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .filter-chip-btn {
+    background: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 20px;
+    padding: 7px 13px;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.73rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #333333;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .filter-chip-btn:hover {
+    border-color: #111111;
+    color: #111111;
+  }
+  .filter-chip-btn.active {
+    background: #111111;
+    border-color: #111111;
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+  /* Compact Offers Section with Luxury Switch */
+  .drawer-section-compact {
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+  .drawer-toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 4px 0;
+  }
+  .toggle-text-block {
+    display: flex;
+    flex-direction: column;
+  }
+  .toggle-label-main {
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #111111;
+  }
+  .toggle-label-sub {
+    font-size: 0.68rem;
+    color: #777777;
+    margin-top: 3px;
+  }
+  .minimal-switch-label {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: inline-block;
+  }
+  .switch-native-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .switch-custom-track {
+    position: absolute;
+    inset: 0;
+    background: #e0e0e0;
+    border-radius: 24px;
+    transition: background 0.25s ease;
+  }
+  .switch-custom-track::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .switch-native-input:checked + .switch-custom-track {
+    background: #111111;
+  }
+  .switch-native-input:checked + .switch-custom-track::after {
+    transform: translateX(20px);
+  }
+
+  /* Drawer Sticky Footer */
+  .drawer-footer {
+    display: flex;
+    gap: 12px;
+    padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)) 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+    flex-shrink: 0;
+  }
+  .drawer-reset-action-btn {
+    flex: 1;
+    padding: 13px 14px;
+    background: transparent;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.74rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #555555;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .drawer-reset-action-btn:hover {
+    border-color: #111111;
+    color: #111111;
+  }
+  .drawer-apply-action-btn {
+    flex: 2;
+    padding: 13px 18px;
+    background: #111111;
+    border: 1px solid #111111;
+    border-radius: 4px;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 0.18s ease;
+  }
+  .drawer-apply-action-btn:hover {
+    background: #2b2b2b;
+  }
+
+  /* Empty State for Filters */
+  .filter-empty-state {
+    width: 100%;
+    text-align: center;
+    padding: 70px 20px;
+    grid-column: 1 / -1;
+  }
+  .filter-empty-title {
+    font-family: var(--font-heading, 'Ubuntu', sans-serif);
+    font-size: 1.05rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #111111;
+    margin: 0 0 8px 0;
+  }
+  .filter-empty-desc {
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.82rem;
+    color: #777777;
+    margin: 0 0 18px 0;
+  }
+  .filter-empty-reset-btn {
+    background: #111111;
+    border: 1px solid #111111;
+    color: #ffffff;
+    padding: 10px 22px;
+    border-radius: 4px;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.74rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.18s ease;
+  }
+  .filter-empty-reset-btn:hover {
+    background: #333333;
+  }
+
+  :global(body.drawer-locked) {
+    overflow: hidden !important;
+  }
+
+  /* Mobile Media Query for Bottom Sheet Experience */
+  @media (max-width: 768px) {
+    .filter-drawer {
+      top: auto;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      max-width: 100%;
+      max-height: 86vh;
+      border-radius: 20px 20px 0 0;
+      transform: translateY(100%);
+    }
+    .filter-drawer.is-open,
+    :global(.filter-drawer.is-open) {
+      transform: translateY(0) !important;
+    }
+    .drawer-drag-pill {
+      display: block;
+    }
+    .drawer-header {
+      padding: 14px 20px 14px 20px;
+    }
+    .drawer-body {
+      padding: 16px 20px;
+    }
+    .color-swatches-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px 4px;
+    }
+    .drawer-footer {
+      padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px)) 20px;
+    }
+  }
+
 </style>
