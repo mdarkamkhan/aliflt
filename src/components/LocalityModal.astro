@@ -1,0 +1,481 @@
+---
+// src/components/LocalityModal.astro
+// Smart Locality Selector & High-Precision GPS Geolocation for Sahibganj
+---
+
+<div id="localityModal" class="alif-locality-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="localityModalTitle">
+    <div class="alif-locality-backdrop" id="localityBackdrop"></div>
+    <div class="alif-locality-card">
+        <div class="alif-locality-drag-pill" aria-hidden="true"></div>
+        
+        <div class="alif-locality-header">
+            <div>
+                <span class="alif-locality-tag">LOCAL SERVICES & DELIVERY</span>
+                <h3 id="localityModalTitle" class="alif-locality-title">Select Your Locality</h3>
+            </div>
+            <button type="button" class="alif-locality-close-btn" id="closeLocalityModalBtn" aria-label="Close dialog">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+            </button>
+        </div>
+
+        <p class="alif-locality-subtitle">
+            Choose your area in Sahibganj to check doorstep measurements, order delivery estimates, and custom tailoring availability.
+        </p>
+
+        <!-- GPS Detection Primary CTA -->
+        <div class="alif-gps-box">
+            <button type="button" id="detectGpsBtn" class="alif-gps-btn">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg>
+                <span>DETECT MY LOCALITY (GPS)</span>
+            </button>
+            <div id="gpsStatusMessage" class="alif-gps-status" style="display:none;"></div>
+        </div>
+
+        <div class="alif-locality-divider">
+            <span>OR CHOOSE MANUALLY</span>
+        </div>
+
+        <!-- Sahibganj Localities Quick Grid -->
+        <div class="alif-locality-grid">
+            <button type="button" class="alif-area-chip" data-locality="Sakrugarh">Sakrugarh</button>
+            <button type="button" class="alif-area-chip" data-locality="Rasulpur Dahla">Rasulpur Dahla</button>
+            <button type="button" class="alif-area-chip" data-locality="Patel Chowk">Patel Chowk</button>
+            <button type="button" class="alif-area-chip" data-locality="College Road">College Road</button>
+            <button type="button" class="alif-area-chip" data-locality="Station Road">Station Road</button>
+            <button type="button" class="alif-area-chip" data-locality="Chowk Bazar">Chowk Bazar</button>
+            <button type="button" class="alif-area-chip" data-locality="Kelabari">Kelabari</button>
+            <button type="button" class="alif-area-chip" data-locality="Purani Sahibganj">Purani Sahibganj</button>
+            <button type="button" class="alif-area-chip" data-locality="Rampur">Rampur</button>
+            <button type="button" class="alif-area-chip" data-locality="Rajmahal">Rajmahal</button>
+            <button type="button" class="alif-area-chip" data-locality="Borio">Borio</button>
+            <button type="button" class="alif-area-chip" data-locality="Barharwa">Barharwa</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .alif-locality-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 9995;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s;
+    }
+
+    @media (min-width: 768px) {
+        .alif-locality-modal {
+            align-items: center;
+        }
+    }
+
+    .alif-locality-modal.is-open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .alif-locality-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(12, 12, 14, 0.65);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+    }
+
+    .alif-locality-card {
+        position: relative;
+        background: #18181B;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        border-radius: 20px 20px 0 0;
+        width: 100%;
+        max-width: 480px;
+        max-height: 85vh;
+        overflow-y: auto;
+        padding: 22px 20px 28px;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.45);
+        color: #FBF9F6;
+        transform: translateY(100%);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @media (min-width: 768px) {
+        .alif-locality-card {
+            border-radius: 18px;
+            transform: translateY(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+    }
+
+    .alif-locality-modal.is-open .alif-locality-card {
+        transform: translateY(0);
+    }
+
+    .alif-locality-drag-pill {
+        width: 36px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+        margin: 0 auto 16px;
+    }
+
+    @media (min-width: 768px) {
+        .alif-locality-drag-pill {
+            display: none;
+        }
+    }
+
+    .alif-locality-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+
+    .alif-locality-tag {
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #D4AF37;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .alif-locality-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 20px;
+        font-weight: 600;
+        color: #FFFFFF;
+        margin: 0;
+    }
+
+    .alif-locality-close-btn {
+        background: transparent;
+        border: none;
+        color: #A1A1AA;
+        padding: 4px;
+        cursor: pointer;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .alif-locality-close-btn:hover {
+        color: #FFFFFF;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .alif-locality-subtitle {
+        font-size: 12.5px;
+        color: #A1A1AA;
+        line-height: 1.5;
+        margin: 0 0 18px;
+    }
+
+    .alif-gps-box {
+        margin-bottom: 18px;
+    }
+
+    .alif-gps-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 13px 16px;
+        background: #D4AF37;
+        color: #121212;
+        border: 1px solid #D4AF37;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .alif-gps-btn:hover {
+        background: #E5C358;
+        border-color: #E5C358;
+    }
+
+    .alif-gps-status {
+        font-size: 11.5px;
+        color: #E4E4E7;
+        text-align: center;
+        margin-top: 8px;
+        padding: 6px 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+    }
+
+    .alif-locality-divider {
+        position: relative;
+        text-align: center;
+        margin: 16px 0;
+    }
+
+    .alif-locality-divider::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.12);
+    }
+
+    .alif-locality-divider span {
+        position: relative;
+        background: #18181B;
+        padding: 0 10px;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        color: #71717A;
+        font-weight: 600;
+    }
+
+    .alif-locality-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+
+    @media (min-width: 480px) {
+        .alif-locality-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    .alif-area-chip {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 10px 12px;
+        color: #D4D4D8;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s ease;
+    }
+
+    .alif-area-chip:hover {
+        background: rgba(212, 175, 55, 0.12);
+        border-color: rgba(212, 175, 55, 0.5);
+        color: #FBF9F6;
+    }
+
+    .alif-area-chip.active {
+        background: rgba(212, 175, 55, 0.2);
+        border-color: #D4AF37;
+        color: #D4AF37;
+        font-weight: 600;
+    }
+</style>
+
+<script is:inline>
+(function() {
+    const SAHIBGANJ_LOCALITIES = [
+        { name: "Sakrugarh", lat: 25.2440, lng: 87.6405 },
+        { name: "Chowk Bazar", lat: 25.2435, lng: 87.6420 },
+        { name: "Rasulpur Dahla", lat: 25.2395, lng: 87.6430 },
+        { name: "Patel Chowk", lat: 25.2470, lng: 87.6350 },
+        { name: "College Road", lat: 25.2480, lng: 87.6375 },
+        { name: "Station Road", lat: 25.2485, lng: 87.6475 },
+        { name: "Kelabari", lat: 25.2350, lng: 87.6480 },
+        { name: "Purani Sahibganj", lat: 25.2530, lng: 87.6320 },
+        { name: "Rampur", lat: 25.2400, lng: 87.6550 },
+        { name: "Rajmahal", lat: 25.0500, lng: 87.8300 },
+        { name: "Borio", lat: 25.0400, lng: 87.6500 },
+        { name: "Barharwa", lat: 24.8600, lng: 87.7800 }
+    ];
+
+    function calculateDistanceKm(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Earth radius in km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+
+    function matchLocality(lat, lng) {
+        let nearest = null;
+        let minDistance = Infinity;
+
+        for (const loc of SAHIBGANJ_LOCALITIES) {
+            const dist = calculateDistanceKm(lat, lng, loc.lat, loc.lng);
+            if (dist < minDistance) {
+                minDistance = dist;
+                nearest = loc;
+            }
+        }
+
+        if (minDistance <= 3.5) {
+            return { name: nearest.name, distanceKm: minDistance.toFixed(2), isLocal: true };
+        } else if (minDistance <= 25.0) {
+            return { name: nearest.name, distanceKm: minDistance.toFixed(2), isLocal: true };
+        } else {
+            return { name: "Outside Sahibganj", distanceKm: minDistance.toFixed(1), isLocal: false };
+        }
+    }
+
+    function updateHeaderBadge(localityName) {
+        const badge = document.getElementById('headerLocalityName');
+        if (badge) {
+            badge.textContent = localityName;
+        }
+    }
+
+    function saveLocality(name, coords, method) {
+        localStorage.setItem('alif_user_locality', name);
+        if (coords) {
+            localStorage.setItem('alif_user_coords', JSON.stringify({
+                lat: coords.latitude,
+                lng: coords.longitude,
+                accuracy: coords.accuracy,
+                method: method,
+                time: new Date().toISOString()
+            }));
+        }
+        updateHeaderBadge(name);
+
+        // Highlight active chip
+        document.querySelectorAll('.alif-area-chip').forEach(chip => {
+            if (chip.getAttribute('data-locality') === name) {
+                chip.classList.add('active');
+            } else {
+                chip.classList.remove('active');
+            }
+        });
+
+        window.dispatchEvent(new CustomEvent('alif:locality-changed', {
+            detail: { locality: name, method: method, coords: coords }
+        }));
+    }
+
+    function initLocalityModal() {
+        const modal = document.getElementById('localityModal');
+        const backdrop = document.getElementById('localityBackdrop');
+        const closeBtn = document.getElementById('closeLocalityModalBtn');
+        const detectGpsBtn = document.getElementById('detectGpsBtn');
+        const statusEl = document.getElementById('gpsStatusMessage');
+        const headerPill = document.getElementById('headerLocalityBtn');
+
+        if (!modal) return;
+
+        // Restore saved locality
+        const saved = localStorage.getItem('alif_user_locality');
+        if (saved) {
+            updateHeaderBadge(saved);
+            document.querySelectorAll('.alif-area-chip').forEach(chip => {
+                if (chip.getAttribute('data-locality') === saved) {
+                    chip.classList.add('active');
+                }
+            });
+        }
+
+        function openModal() {
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        window.openAlifLocalityModal = openModal;
+        window.closeAlifLocalityModal = closeModal;
+
+        if (headerPill) {
+            headerPill.onclick = openModal;
+        }
+        if (closeBtn) {
+            closeBtn.onclick = closeModal;
+        }
+        if (backdrop) {
+            backdrop.onclick = closeModal;
+        }
+
+        // Chip selection
+        document.querySelectorAll('.alif-area-chip').forEach(chip => {
+            chip.onclick = () => {
+                const loc = chip.getAttribute('data-locality');
+                saveLocality(loc, null, 'manual');
+                closeModal();
+            };
+        });
+
+        // GPS detection
+        if (detectGpsBtn) {
+            detectGpsBtn.onclick = () => {
+                if (!navigator.geolocation) {
+                    if (statusEl) {
+                        statusEl.style.display = 'block';
+                        statusEl.textContent = 'Geolocation is not supported by your browser.';
+                    }
+                    return;
+                }
+
+                if (statusEl) {
+                    statusEl.style.display = 'block';
+                    statusEl.textContent = 'Acquiring GPS signal in Sahibganj...';
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const coords = position.coords;
+                        const match = matchLocality(coords.latitude, coords.longitude);
+                        saveLocality(match.name, coords, 'gps');
+                        if (statusEl) {
+                            statusEl.textContent = `Area detected: ${match.name}`;
+                        }
+                        setTimeout(() => {
+                            closeModal();
+                        }, 600);
+                    },
+                    (error) => {
+                        let errText = 'Location permission denied or unavailable.';
+                        if (error.code === error.TIMEOUT) {
+                            errText = 'Location request timed out. Please choose manually.';
+                        }
+                        if (statusEl) {
+                            statusEl.textContent = errText;
+                        }
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 60000
+                    }
+                );
+            };
+        }
+    }
+
+    document.addEventListener('astro:page-load', initLocalityModal);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLocalityModal);
+    } else {
+        initLocalityModal();
+    }
+})();
+</script>

@@ -11,6 +11,8 @@ interface Props {
 
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
+import CookieConsent from '../components/CookieConsent.astro';
+import LocalityModal from '../components/LocalityModal.astro';
 
 const {
   title = "alif. ladies tailor",
@@ -172,7 +174,19 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
 
     <!-- Fixed Top Nav -->
     <nav class="fixed-top-nav" transition:persist>
-        <a href="/" class="nav-logo">alif.</a>
+        <div class="nav-left-group">
+            <a href="/" class="nav-logo">alif.</a>
+            <button id="headerLocalityBtn" type="button" class="nav-locality-pill" aria-label="Select Delivery Locality" title="Deliver to Sahibganj">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-locality-pin">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span class="nav-locality-label" id="headerLocalityName">Sahibganj</span>
+                <svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-locality-caret">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+        </div>
 
         <div class="nav-actions">
             <button class="nav-search-btn" id="open-search" type="button" aria-label="Search" style="background: transparent; border: none; outline: none; padding: 0; margin: 0; box-shadow: none; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 50%; width: 36px; height: 36px; -webkit-appearance: none; appearance: none;">
@@ -459,6 +473,7 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
                         <li><a href="/contact-us/">Contact Atelier</a></li>
                         <li><a href="/cart/">Shopping Cart</a></li>
                         <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                        <li><button type="button" id="openCookiePrefsBtn" class="footer-link-btn" onclick="window.openAlifCookiePreferences && window.openAlifCookiePreferences()">Cookie Preferences</button></li>
                         <li><a href="/terms-of-service/">Terms of Service</a></li>
                         <li><a href="/return-policy/">Return & Exchange</a></li>
                     </ul>
@@ -556,6 +571,11 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
         </div>
     </div>
 
+    <!-- Locality Selector Modal & Cookie Consent -->
+    <LocalityModal />
+    <CookieConsent />
+
     <script src="../scripts/app.js"></script>
+    <script src="../scripts/analytics.js"></script>
 </body>
 </html>

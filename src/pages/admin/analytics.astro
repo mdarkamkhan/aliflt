@@ -1,0 +1,511 @@
+---
+// src/pages/admin/analytics.astro
+// Private Atelier Analytics & Locality Dashboard for alif. Owner
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Atelier Analytics Dashboard" description="Live visitor dwell time and Sahibganj locality distribution for alif." hideFooter={true}>
+    <div class="analytics-container">
+        <!-- Dashboard Header -->
+        <header class="dash-header">
+            <div>
+                <span class="dash-tag">ATELIER TELEMETRY</span>
+                <h1 class="dash-title">Audience & Locality Insights</h1>
+                <p class="dash-subtitle">High-precision dwell time, active engagement, and Sahibganj neighborhood breakdown.</p>
+            </div>
+            
+            <div class="dash-auth-box">
+                <input type="password" id="ownerPinInput" placeholder="Enter PIN (e.g. alif7250)" class="dash-pin-input" value="alif7250" />
+                <button type="button" id="refreshDataBtn" class="dash-refresh-btn">
+                    REFRESH DATA
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Summary Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-label">TOTAL PAGEVIEWS</span>
+                <div class="kpi-value" id="kpiPageviews">-</div>
+                <span class="kpi-caption">Active browse sessions</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">UNIQUE VISITORS</span>
+                <div class="kpi-value" id="kpiVisitors">-</div>
+                <span class="kpi-caption">Distinct devices</span>
+            </div>
+            <div class="kpi-card highlight">
+                <span class="kpi-label">AVG ACTIVE DWELL TIME</span>
+                <div class="kpi-value" id="kpiDwell">-</div>
+                <span class="kpi-caption">Exact time actively viewing</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">TOP NEIGHBORHOOD</span>
+                <div class="kpi-value gold" id="kpiTopLocality">-</div>
+                <span class="kpi-caption">Leading Sahibganj sector</span>
+            </div>
+        </div>
+
+        <!-- 2-Column Analytics Breakdown -->
+        <div class="breakdown-grid">
+            <!-- Locality Breakdown -->
+            <div class="panel-card">
+                <div class="panel-header">
+                    <h2 class="panel-title">Sahibganj Localities Breakdown</h2>
+                    <span class="panel-badge">GPS + Manual</span>
+                </div>
+                <p class="panel-sub">Which areas in Sahibganj generate the most visits and tailoring inquiries.</p>
+                
+                <div id="localityBars" class="locality-bars-list">
+                    <div class="empty-state">Loading neighborhood data...</div>
+                </div>
+            </div>
+
+            <!-- Top Viewed Products & Pages -->
+            <div class="panel-card">
+                <div class="panel-header">
+                    <h2 class="panel-title">Top Viewed Products & Dwell Time</h2>
+                    <span class="panel-badge">Engagement</span>
+                </div>
+                <p class="panel-sub">Fabrics, curated sets, and services where visitors linger the longest.</p>
+                
+                <div class="table-wrap">
+                    <table class="dash-table">
+                        <thead>
+                            <tr>
+                                <th>Page / Product</th>
+                                <th style="text-align:right;">Views</th>
+                                <th style="text-align:right;">Avg Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topPagesBody">
+                            <tr><td colspan="3" class="table-empty">Loading top items...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-Time Activity Log -->
+        <div class="panel-card full-width">
+            <div class="panel-header">
+                <h2 class="panel-title">Recent Visitor Stream</h2>
+                <span class="panel-live-pill">LIVE PULSE</span>
+            </div>
+            <div class="table-wrap">
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Event</th>
+                            <th>Page</th>
+                            <th>Locality</th>
+                            <th>Active Secs</th>
+                            <th>Scroll</th>
+                            <th>Device</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentEventsBody">
+                        <tr><td colspan="7" class="table-empty">Connecting to telemetry buffer...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</BaseLayout>
+
+<style>
+    .analytics-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+        color: #FBF9F6;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .dash-header {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 24px;
+    }
+
+    @media (min-width: 768px) {
+        .dash-header {
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+    }
+
+    .dash-tag {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #D4AF37;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .dash-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 28px;
+        font-weight: 600;
+        color: #111111;
+        margin: 0 0 6px;
+    }
+
+    .dash-subtitle {
+        font-size: 14px;
+        color: #666666;
+        margin: 0;
+    }
+
+    .dash-auth-box {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .dash-pin-input {
+        background: #FFFFFF;
+        border: 1px solid #D1D5DB;
+        color: #111111;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        outline: none;
+    }
+
+    .dash-refresh-btn {
+        background: #111111;
+        color: #D4AF37;
+        border: 1px solid #111111;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .dash-refresh-btn:hover {
+        background: #27272A;
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        margin-bottom: 28px;
+    }
+
+    @media (min-width: 900px) {
+        .kpi-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    .kpi-card {
+        background: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 14px;
+        padding: 18px 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    .kpi-card.highlight {
+        border-color: rgba(212, 175, 55, 0.4);
+        background: linear-gradient(180deg, #FFFFFF 0%, #FDFBF7 100%);
+    }
+
+    .kpi-label {
+        font-size: 10.5px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #71717A;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .kpi-value {
+        font-family: 'Playfair Display', serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: #111111;
+        margin-bottom: 4px;
+    }
+
+    .kpi-value.gold {
+        color: #B38F26;
+    }
+
+    .kpi-caption {
+        font-size: 11.5px;
+        color: #A1A1AA;
+    }
+
+    /* Breakdown Grid */
+    .breakdown-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    @media (min-width: 900px) {
+        .breakdown-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    .panel-card {
+        background: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 14px;
+        padding: 22px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    .panel-card.full-width {
+        margin-top: 10px;
+    }
+
+    .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 6px;
+    }
+
+    .panel-title {
+        font-size: 17px;
+        font-weight: 600;
+        color: #111111;
+        margin: 0;
+    }
+
+    .panel-badge {
+        font-size: 10.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 3px 8px;
+        border-radius: 4px;
+        background: rgba(0, 0, 0, 0.05);
+        color: #52525B;
+        font-weight: 600;
+    }
+
+    .panel-live-pill {
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 4px 9px;
+        border-radius: 20px;
+        background: #DCFCE7;
+        color: #166534;
+        font-weight: 700;
+    }
+
+    .panel-sub {
+        font-size: 12.5px;
+        color: #71717A;
+        margin: 0 0 18px;
+    }
+
+    /* Locality Bars */
+    .locality-bars-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .locality-bar-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .locality-bar-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        color: #27272A;
+        font-weight: 500;
+    }
+
+    .locality-bar-track {
+        height: 8px;
+        background: #F4F4F5;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .locality-bar-fill {
+        height: 100%;
+        background: #D4AF37;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+    }
+
+    /* Tables */
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    .dash-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        text-align: left;
+    }
+
+    .dash-table th {
+        padding: 10px 12px;
+        border-bottom: 1px solid #E4E4E7;
+        color: #71717A;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .dash-table td {
+        padding: 11px 12px;
+        border-bottom: 1px solid #F4F4F5;
+        color: #18181B;
+    }
+
+    .dash-table tr:hover td {
+        background: #FAFAFA;
+    }
+
+    .table-empty, .empty-state {
+        text-align: center;
+        padding: 24px;
+        color: #A1A1AA;
+        font-size: 13px;
+    }
+</style>
+
+<script is:inline>
+(function() {
+    function formatSeconds(secs) {
+        if (!secs || isNaN(secs)) return '0s';
+        if (secs < 60) return `${secs}s`;
+        const m = Math.floor(secs / 60);
+        const s = secs % 60;
+        return `${m}m ${s}s`;
+    }
+
+    async function loadAnalytics() {
+        const pinInput = document.getElementById('ownerPinInput');
+        const pin = pinInput ? pinInput.value.trim() : 'alif7250';
+
+        try {
+            const res = await fetch(`/.netlify/functions/analytics?pin=${encodeURIComponent(pin)}`);
+            if (!res.ok) {
+                alert('Authentication required or invalid PIN.');
+                return;
+            }
+            const data = await res.json();
+
+            // Populate KPIs
+            document.getElementById('kpiPageviews').textContent = data.total_pageviews || 0;
+            document.getElementById('kpiVisitors').textContent = data.unique_visitors_count || 0;
+            document.getElementById('kpiDwell').textContent = formatSeconds(data.avg_dwell_seconds);
+
+            // Find top locality
+            const locEntries = Object.entries(data.localities || {});
+            locEntries.sort((a, b) => b[1] - a[1]);
+            const topLoc = locEntries.length > 0 ? `${locEntries[0][0]} (${locEntries[0][1]})` : 'None yet';
+            document.getElementById('kpiTopLocality').textContent = topLoc;
+
+            // Render Locality Bars
+            const localityListEl = document.getElementById('localityBars');
+            if (localityListEl) {
+                if (locEntries.length === 0) {
+                    localityListEl.innerHTML = '<div class="empty-state">No neighborhood data recorded yet.</div>';
+                } else {
+                    const maxVal = locEntries[0][1] || 1;
+                    localityListEl.innerHTML = locEntries.map(([name, count]) => {
+                        const pct = Math.round((count / maxVal) * 100);
+                        return `
+                            <div class="locality-bar-item">
+                                <div class="locality-bar-meta">
+                                    <span>${name}</span>
+                                    <span>${count} visits</span>
+                                </div>
+                                <div class="locality-bar-track">
+                                    <div class="locality-bar-fill" style="width: ${pct}%"></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Render Top Pages
+            const topPagesBody = document.getElementById('topPagesBody');
+            if (topPagesBody) {
+                const pages = data.top_pages || [];
+                if (pages.length === 0) {
+                    topPagesBody.innerHTML = '<tr><td colspan="3" class="table-empty">No page telemetry recorded yet.</td></tr>';
+                } else {
+                    topPagesBody.innerHTML = pages.map(p => `
+                        <tr>
+                            <td style="font-family: monospace; font-size: 12px; color: #0284C7;">${p.path}</td>
+                            <td style="text-align:right; font-weight: 600;">${p.views}</td>
+                            <td style="text-align:right;">${formatSeconds(p.avg_seconds)}</td>
+                        </tr>
+                    `).join('');
+                }
+            }
+
+            // Render Recent Events
+            const recentEventsBody = document.getElementById('recentEventsBody');
+            if (recentEventsBody) {
+                const events = data.recent_events || [];
+                if (events.length === 0) {
+                    recentEventsBody.innerHTML = '<tr><td colspan="7" class="table-empty">No stream events yet.</td></tr>';
+                } else {
+                    recentEventsBody.innerHTML = events.map(e => {
+                        const timeStr = new Date(e.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                        return `
+                            <tr>
+                                <td style="color: #71717A; font-size: 12px;">${timeStr}</td>
+                                <td><span style="font-weight: 600; text-transform: uppercase; font-size: 11px;">${e.event_type}</span></td>
+                                <td style="font-family: monospace; font-size: 11.5px;">${e.page_path}</td>
+                                <td><span style="color: #B38F26; font-weight: 500;">${e.locality}</span></td>
+                                <td>${e.active_seconds ? `${e.active_seconds}s` : '-'}</td>
+                                <td>${e.scroll_depth ? `${e.scroll_depth}%` : '-'}</td>
+                                <td><span style="color: #52525B; font-size: 11.5px;">${e.device}</span></td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+        } catch (err) {
+            console.error('Failed to fetch analytics:', err);
+        }
+    }
+
+    document.addEventListener('astro:page-load', () => {
+        const btn = document.getElementById('refreshDataBtn');
+        if (btn) btn.onclick = loadAnalytics;
+        loadAnalytics();
+    });
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadAnalytics);
+    } else {
+        loadAnalytics();
+    }
+})();
+</script>
