@@ -8,7 +8,7 @@ price: 1800
 offer_price: 1500
 product_code: "ALIF-SET-075"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483995/alif-reels/reel_75.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792483995/alif-reels/reel_75.mp4"
 linked_reel_id: "reel-75"
 combo_products:
   - id: "fandy-top-fabric-12"

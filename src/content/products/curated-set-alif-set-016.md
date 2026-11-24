@@ -8,7 +8,7 @@ price: 1750
 offer_price: 1450
 product_code: "ALIF-SET-016"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336475/alif-reels/reel_16.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792336475/alif-reels/reel_16.mp4"
 linked_reel_id: "reel-16"
 combo_products:
   - id: "champagne-gold-plain-tissue-silk-fabric"

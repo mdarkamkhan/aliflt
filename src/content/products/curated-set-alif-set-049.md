@@ -8,7 +8,7 @@ price: 250
 offer_price: 200
 product_code: "ALIF-SET-049"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340589/alif-reels/reel_49.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792340589/alif-reels/reel_49.mp4"
 linked_reel_id: "reel-49"
 combo_products:
   - id: "moss-crape"

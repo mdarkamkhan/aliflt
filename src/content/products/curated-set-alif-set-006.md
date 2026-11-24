@@ -7,7 +7,7 @@ image: "/uploads/curated-sets/curated-set-alif-set-006.webp"
 price: 2700
 product_code: "ALIF-SET-006"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336475/alif-reels/reel_06.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792336475/alif-reels/reel_06.mp4"
 linked_reel_id: "reel-6"
 combo_products:
   - id: "crush-bottom-fabric-03"

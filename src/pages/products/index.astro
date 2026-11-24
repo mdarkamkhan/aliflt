@@ -351,6 +351,7 @@ const firstCardAttrs = products.length > 0
           <span class="section-badge-count" id="activeFabricCount" style="display: none;">0</span>
         </div>
         <div class="chips-flex-wrap" id="fabricChipsGroup">
+          <button type="button" class="filter-chip-btn" data-fabric="banarasi">Banarasi Silk</button>
           <button type="button" class="filter-chip-btn" data-fabric="crush">Crush Silk</button>
           <button type="button" class="filter-chip-btn" data-fabric="fandy">Fandy Silk</button>
           <button type="button" class="filter-chip-btn" data-fabric="tissue">Tissue Silk</button>
@@ -531,9 +532,10 @@ const firstCardAttrs = products.length > 0
     };
 
     const FABRIC_KEYWORDS: Record<string, string[]> = {
+      banarasi: ['banarasi', 'banarsi', 'brocade'],
       crush: ['crush', 'crushed'],
       fandy: ['fandy'],
-      tissue: ['tissue'],
+      tissue: ['tissue', 'shimmer'],
       organza: ['organza'],
       georgette: ['georgette', 'jorget'],
       velvet: ['velvet'],
@@ -565,6 +567,7 @@ const firstCardAttrs = products.length > 0
       rust: 'Color: Rust',
       mauve: 'Color: Mauve',
       blue: 'Color: Blue',
+      banarasi: 'Fabric: Banarasi Silk',
       crush: 'Fabric: Crush Silk',
       fandy: 'Fabric: Fandy Silk',
       tissue: 'Fabric: Tissue Silk',

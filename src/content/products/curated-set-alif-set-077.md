@@ -8,7 +8,7 @@ price: 1350
 offer_price: 1100
 product_code: "ALIF-SET-077"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792484025/alif-reels/reel_77.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792484025/alif-reels/reel_77.mp4"
 linked_reel_id: "reel-77"
 combo_products:
   - id: "rani-pink-plain-fandy-silk-fabric"

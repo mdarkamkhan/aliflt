@@ -7,7 +7,7 @@ image: "/uploads/curated-sets/curated-set-alif-set-002.webp"
 price: 1594
 product_code: "ALIF-SET-002"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336441/alif-reels/reel_02.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792336441/alif-reels/reel_02.mp4"
 linked_reel_id: "reel-2"
 combo_products:
   - id: "champagne-gold-floral-butti-tissue-silk-fabric"

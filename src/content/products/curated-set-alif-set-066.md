@@ -8,7 +8,7 @@ price: 550
 offer_price: 450
 product_code: "ALIF-SET-066"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483720/alif-reels/reel_66.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792483720/alif-reels/reel_66.mp4"
 linked_reel_id: "reel-66"
 combo_products:
   - id: "emerald-green-plain-georgette-fabric"

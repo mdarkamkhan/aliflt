@@ -27,7 +27,8 @@
       "name": "Lace",
       "icon": "lace.png",
       "values": [
-        "lace"
+        "lace",
+        "narrow lace"
       ]
     },
     {
@@ -71,6 +72,9 @@
         "plain fandy silk",
         "tissue silk",
         "tissue",
+        "shimmer",
+        "shimmer silk",
+        "shimmer tissue",
         "sequence net",
         "sequin net",
         "heavy sequence net"

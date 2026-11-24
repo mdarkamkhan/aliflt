@@ -7,7 +7,7 @@ image: "/uploads/curated-sets/curated-set-alif-set-007.webp"
 price: 1900
 product_code: "ALIF-SET-007"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336436/alif-reels/reel_07.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792336436/alif-reels/reel_07.mp4"
 linked_reel_id: "reel-7"
 combo_products:
   - id: "fandy-top-fabric-09"

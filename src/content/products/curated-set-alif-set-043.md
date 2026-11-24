@@ -8,7 +8,7 @@ price: 800
 offer_price: 650
 product_code: "ALIF-SET-043"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340539/alif-reels/reel_43.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792340539/alif-reels/reel_43.mp4"
 linked_reel_id: "reel-43"
 combo_products:
   - id: "deep-wine-plain-georgette-fabric"

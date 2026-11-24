@@ -7,7 +7,7 @@ image: "/uploads/curated-sets/curated-set-alif-set-060.webp"
 price: 220
 product_code: "ALIF-SET-060"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483682/alif-reels/reel_60.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792483682/alif-reels/reel_60.mp4"
 linked_reel_id: "reel-60"
 combo_products:
   - id: "crimson-red-plain-rayon-fabric"

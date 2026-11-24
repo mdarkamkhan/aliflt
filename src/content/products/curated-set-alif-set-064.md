@@ -8,7 +8,7 @@ price: 350
 offer_price: 300
 product_code: "ALIF-SET-064"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792483706/alif-reels/reel_64.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792483706/alif-reels/reel_64.mp4"
 linked_reel_id: "reel-64"
 combo_products:
   - id: "butter-yellow-plain-satin-fabric"

@@ -8,7 +8,7 @@ price: 1850
 offer_price: 1500
 product_code: "ALIF-SET-040"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340436/alif-reels/reel_40.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792340436/alif-reels/reel_40.mp4"
 linked_reel_id: "reel-40"
 combo_products:
   - id: "champagne-gold-floral-butti-tissue-silk-fabric"

@@ -8,7 +8,7 @@ price: 650
 offer_price: 550
 product_code: "ALIF-SET-004"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336466/alif-reels/reel_04.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792336466/alif-reels/reel_04.mp4"
 linked_reel_id: "reel-4"
 combo_products:
   - id: "pearl-white-plain-georgette-fabric"

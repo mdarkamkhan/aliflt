@@ -8,7 +8,7 @@ price: 700
 offer_price: 600
 product_code: "ALIF-SET-038"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792340405/alif-reels/reel_38.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792340405/alif-reels/reel_38.mp4"
 linked_reel_id: "reel-38"
 combo_products:
   - id: "pearl-ivory-plain-fandy-silk-fabric"

@@ -8,7 +8,7 @@ price: 2450
 offer_price: 2050
 product_code: "ALIF-SET-032"
 category: "Reels Outfit"
-reel_video: "https://res.cloudinary.com/b4r0p4me/video/upload/f_auto,q_auto/v1792336445/alif-reels/reel_32.mp4"
+reel_video: "https://res.cloudinary.com/t93qrrde/video/upload/f_auto,q_auto/v1792336445/alif-reels/reel_32.mp4"
 linked_reel_id: "reel-32"
 combo_products:
   - id: "fandy-bottom-fabric-01"
