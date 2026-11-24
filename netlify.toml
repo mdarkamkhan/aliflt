@@ -7,12 +7,15 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  SECRETS_SCAN_OMIT_KEYS = "CLOUDINARY_CLOUD_NAME"
 
 [context.production.environment]
   NODE_VERSION = "22"
+  SECRETS_SCAN_OMIT_KEYS = "CLOUDINARY_CLOUD_NAME"
 
 [context.deploy-preview.environment]
   NODE_VERSION = "22"
+  SECRETS_SCAN_OMIT_KEYS = "CLOUDINARY_CLOUD_NAME"
 
 # Caching and Performance Optimization Headers
 [[headers]]
