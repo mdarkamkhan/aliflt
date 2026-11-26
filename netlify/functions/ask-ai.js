@@ -215,7 +215,7 @@ function formatDynamicContext(ctxData, message, clientContext, todayIST) {
     const signals = extractSearchSignals(message, pageCtx);
     const ranked = scoreCatalogItems(products, signals, pageCtx, cartCtx, todayIST);
 
-    const qLower = (queryText || '').toLowerCase();
+    const qLower = (message || '').toLowerCase();
     const wantsHistory = /\b(history|legacy|gk store|kahan|started|old|rajender|kab|established|2000|2008)\b/i.test(qLower);
     const wantsPolicy = /\b(upi|paytm|gpay|phonepe|cash|advance|trial|alteration|return|refund|policy|urgent|delivery|time|kab tak)\b/i.test(qLower);
 
