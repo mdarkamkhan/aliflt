@@ -73,10 +73,10 @@
 
     .alif-cookie-inner {
         background: #FFFFFF;
-        border-top: 1px solid #111111;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
         box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.12);
-        border-radius: 0px;
-        padding: 16px 18px calc(18px + env(safe-area-inset-bottom, 0px)) 18px;
+        border-radius: 18px 18px 0 0;
+        padding: 18px 20px calc(20px + env(safe-area-inset-bottom, 0px)) 20px;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -86,7 +86,8 @@
 
     @media (min-width: 768px) {
         .alif-cookie-inner {
-            border: 1px solid #111111;
+            border: 1px solid rgba(0, 0, 0, 0.09);
+            border-radius: 16px;
             box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
             padding: 18px 20px;
         }
@@ -107,25 +108,23 @@
         color: #666666;
     }
 
-    /* Signature Dotted Close Button matching MinimalistSidebar */
     .alif-cookie-close {
-        width: 26px;
-        height: 26px;
-        border: 1px dotted rgba(0, 0, 0, 0.45);
-        background: #FFFFFF;
+        width: 28px;
+        height: 28px;
+        border: none;
+        background: #F4F2EE;
         color: #111111;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         padding: 0;
-        border-radius: 0px;
-        transition: border-color 0.2s ease, border-style 0.2s ease;
+        border-radius: 50%;
+        transition: background 0.2s ease;
     }
 
     .alif-cookie-close:hover {
-        border-color: #000000;
-        border-style: solid;
+        background: #EAE7E0;
     }
 
     .alif-cookie-text {
@@ -169,11 +168,11 @@
     .alif-cookie-btn {
         flex: 1;
         padding: 11px 12px;
-        border-radius: 0px;
+        border-radius: 10px;
         font-family: var(--font-body, 'Ubuntu', sans-serif);
         font-size: 0.72rem;
         font-weight: 500;
-        letter-spacing: 1.6px;
+        letter-spacing: 1.4px;
         text-transform: uppercase;
         cursor: pointer;
         transition: all 0.2s ease;
@@ -194,11 +193,12 @@
     .alif-cookie-btn.secondary {
         background: #FFFFFF;
         color: #111111;
-        border: 1px solid #111111;
+        border: 1px solid rgba(0, 0, 0, 0.16);
     }
 
     .alif-cookie-btn.secondary:hover {
         background: #F4F2EE;
+        border-color: rgba(0, 0, 0, 0.3);
     }
 </style>
 
