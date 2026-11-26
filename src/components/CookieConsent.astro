@@ -1,22 +1,27 @@
 ---
 // src/components/CookieConsent.astro
-// Luxury Glassmorphic Cookie & Privacy Consent Banner for alif.
+// Monochrome Editorial Couture Cookie & Privacy Consent Banner for alif.
 ---
 
-<div id="alifCookieBanner" class="alif-cookie-banner" aria-hidden="true" role="region" aria-label="Privacy and Cookie Consent">
+<div id="alifCookieBanner" class="alif-cookie-banner" aria-hidden="true" role="region" aria-label="Privacy and Cookie Consent" transition:persist>
     <div class="alif-cookie-inner">
-        <div class="alif-cookie-content">
-            <div class="alif-cookie-header">
-                <span class="alif-cookie-tag">PRIVACY & PREFERENCES</span>
-            </div>
-            <p class="alif-cookie-text">
-                We use cookies and local area personalization to provide doorstep tailoring pickup, accurate local delivery estimates in Sahibganj, and an elevated boutique shopping experience.
-            </p>
-            <div class="alif-cookie-links">
-                <a href="/privacy-policy/" class="alif-cookie-link">Privacy Policy</a>
-                <span class="alif-cookie-dot" aria-hidden="true">·</span>
-                <a href="/terms-of-service/" class="alif-cookie-link">Terms</a>
-            </div>
+        <div class="alif-cookie-top">
+            <span class="alif-cookie-tag">PRIVACY &amp; COOKIES</span>
+            <button type="button" id="cookieCloseIconBtn" class="alif-cookie-close" aria-label="Accept essential cookies and close">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+            </button>
+        </div>
+
+        <p class="alif-cookie-text">
+            We use cookies to personalize your atelier browsing, improve store performance, and verify local tailoring availability.
+        </p>
+
+        <div class="alif-cookie-links">
+            <a href="/privacy-policy/" class="alif-cookie-link">Privacy Policy</a>
+            <span class="alif-cookie-dot" aria-hidden="true">·</span>
+            <a href="/terms-of-service/" class="alif-cookie-link">Terms of Service</a>
         </div>
 
         <div class="alif-cookie-actions">
@@ -31,30 +36,31 @@
 </div>
 
 <style>
+    /* Mobile: Edge-to-edge monochrome bottom drawer (Zero overlap with #chat-button) */
     .alif-cookie-banner {
         position: fixed;
-        left: 16px;
-        right: 16px;
-        bottom: 80px; /* Sits above mobile bottom nav bar */
-        z-index: 9990;
-        max-width: 460px;
-        margin: 0 auto;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 10005;
+        width: 100%;
         opacity: 0;
         visibility: hidden;
-        transform: translateY(20px);
-        transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
-                    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                    visibility 0.35s;
+        transform: translateY(100%);
+        transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 0.3s;
         pointer-events: none;
     }
 
     @media (min-width: 768px) {
+        /* Desktop: Crisp bottom-left architectural frame (opposite right-side #chat-widget) */
         .alif-cookie-banner {
             left: 24px;
             right: auto;
             bottom: 24px;
-            max-width: 440px;
-            margin: 0;
+            max-width: 390px;
+            transform: translateY(16px);
         }
     }
 
@@ -66,40 +72,67 @@
     }
 
     .alif-cookie-inner {
-        background: rgba(18, 18, 20, 0.94);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(212, 175, 55, 0.32);
-        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 1px 1px rgba(255, 255, 255, 0.05);
-        border-radius: 14px;
-        padding: 16px 18px;
+        background: #FFFFFF;
+        border-top: 1px solid #111111;
+        box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.12);
+        border-radius: 0px;
+        padding: 16px 18px calc(18px + env(safe-area-inset-bottom, 0px)) 18px;
         display: flex;
         flex-direction: column;
-        gap: 14px;
-        color: #FBF9F6;
+        gap: 10px;
+        color: #111111;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
     }
 
-    .alif-cookie-header {
+    @media (min-width: 768px) {
+        .alif-cookie-inner {
+            border: 1px solid #111111;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+            padding: 18px 20px;
+        }
+    }
+
+    .alif-cookie-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 4px;
     }
 
     .alif-cookie-tag {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 10px;
-        letter-spacing: 0.14em;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.64rem;
+        letter-spacing: 2px;
         text-transform: uppercase;
-        font-weight: 600;
-        color: #D4AF37;
+        font-weight: 500;
+        color: #666666;
+    }
+
+    /* Signature Dotted Close Button matching MinimalistSidebar */
+    .alif-cookie-close {
+        width: 26px;
+        height: 26px;
+        border: 1px dotted rgba(0, 0, 0, 0.45);
+        background: #FFFFFF;
+        color: #111111;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 0;
+        border-radius: 0px;
+        transition: border-color 0.2s ease, border-style 0.2s ease;
+    }
+
+    .alif-cookie-close:hover {
+        border-color: #000000;
+        border-style: solid;
     }
 
     .alif-cookie-text {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 12.5px;
-        line-height: 1.5;
-        color: #E2E0D8;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.8rem;
+        line-height: 1.55;
+        color: #333333;
         margin: 0;
     }
 
@@ -107,116 +140,136 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-top: 6px;
     }
 
     .alif-cookie-link {
-        font-size: 11px;
-        color: #B5B3A8;
+        font-size: 0.7rem;
+        letter-spacing: 0.4px;
+        color: #111111;
         text-decoration: underline;
         text-underline-offset: 3px;
-        transition: color 0.2s ease;
+        transition: opacity 0.2s ease;
     }
 
     .alif-cookie-link:hover {
-        color: #D4AF37;
+        opacity: 0.6;
     }
 
     .alif-cookie-dot {
-        font-size: 12px;
-        color: #666;
+        font-size: 11px;
+        color: #999999;
     }
 
     .alif-cookie-actions {
         display: flex;
         gap: 10px;
-        align-items: center;
+        margin-top: 4px;
     }
 
     .alif-cookie-btn {
         flex: 1;
-        padding: 9px 12px;
-        border-radius: 8px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.08em;
+        padding: 11px 12px;
+        border-radius: 0px;
+        font-family: var(--font-body, 'Ubuntu', sans-serif);
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 1.6px;
         text-transform: uppercase;
         cursor: pointer;
         transition: all 0.2s ease;
         text-align: center;
+        -webkit-tap-highlight-color: transparent;
     }
 
     .alif-cookie-btn.primary {
-        background: #D4AF37;
-        color: #121212;
-        border: 1px solid #D4AF37;
+        background: #111111;
+        color: #FFFFFF;
+        border: 1px solid #111111;
     }
 
     .alif-cookie-btn.primary:hover {
-        background: #E5C358;
-        border-color: #E5C358;
+        background: #000000;
     }
 
     .alif-cookie-btn.secondary {
-        background: transparent;
-        color: #D6D4CB;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: #FFFFFF;
+        color: #111111;
+        border: 1px solid #111111;
     }
 
     .alif-cookie-btn.secondary:hover {
-        background: rgba(255, 255, 255, 0.08);
-        color: #FFFFFF;
-        border-color: rgba(255, 255, 255, 0.35);
+        background: #F4F2EE;
     }
 </style>
 
-<script is:inline>
-(function() {
-    function initCookieBanner() {
-        const banner = document.getElementById('alifCookieBanner');
-        const acceptAllBtn = document.getElementById('cookieAcceptAllBtn');
-        const essentialBtn = document.getElementById('cookieEssentialBtn');
-        if (!banner) return;
-
-        const storedConsent = localStorage.getItem('alif_cookie_consent');
-
-        if (!storedConsent) {
-            // Show after a polite 1.2s delay to prioritize initial view
-            setTimeout(() => {
-                banner.classList.add('is-visible');
-                banner.setAttribute('aria-hidden', 'false');
-            }, 1200);
-        }
-
-        function setConsent(choice) {
-            localStorage.setItem('alif_cookie_consent', choice);
-            localStorage.setItem('alif_cookie_consent_time', new Date().toISOString());
-            banner.classList.remove('is-visible');
-            banner.setAttribute('aria-hidden', 'true');
-            window.dispatchEvent(new CustomEvent('alif:consent-updated', { 
-                detail: { consent: choice } 
-            }));
-        }
-
-        if (acceptAllBtn) {
-            acceptAllBtn.onclick = () => setConsent('accepted');
-        }
-        if (essentialBtn) {
-            essentialBtn.onclick = () => setConsent('essential');
-        }
-
-        window.openAlifCookiePreferences = function() {
-            banner.classList.add('is-visible');
-            banner.setAttribute('aria-hidden', 'false');
-        };
+<script>
+function setConsentChoice(choice) {
+    const banner = document.getElementById('alifCookieBanner');
+    localStorage.setItem('alif_cookie_consent', choice);
+    localStorage.setItem('alif_cookie_consent_time', new Date().toISOString());
+    if (banner) {
+        banner.classList.remove('is-visible');
+        banner.setAttribute('aria-hidden', 'true');
     }
+    window.dispatchEvent(
+        new CustomEvent('alif:consent-updated', {
+            detail: { consent: choice }
+        })
+    );
+}
 
-    document.addEventListener('astro:page-load', initCookieBanner);
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCookieBanner);
-    } else {
-        initCookieBanner();
+function showCookieBanner() {
+    const banner = document.getElementById('alifCookieBanner');
+    if (banner) {
+        banner.classList.add('is-visible');
+        banner.setAttribute('aria-hidden', 'false');
     }
-})();
+}
+
+function bindCookieBannerEvents() {
+    if (window.__alifCookieBound) return;
+    window.__alifCookieBound = true;
+
+    window.openAlifCookiePreferences = showCookieBanner;
+
+    document.addEventListener('click', (e) => {
+        const target = e.target;
+        if (!target || !target.closest) return;
+
+        if (target.closest('#cookieAcceptAllBtn')) {
+            setConsentChoice('accepted');
+            return;
+        }
+        if (target.closest('#cookieEssentialBtn') || target.closest('#cookieCloseIconBtn')) {
+            setConsentChoice('essential');
+            return;
+        }
+        if (target.closest('#openCookiePrefsBtn')) {
+            showCookieBanner();
+        }
+    });
+}
+
+function initCookieBanner() {
+    bindCookieBannerEvents();
+    const banner = document.getElementById('alifCookieBanner');
+    if (!banner) return;
+
+    const storedConsent = localStorage.getItem('alif_cookie_consent');
+    if (!storedConsent && !window.__alifCookieScheduled) {
+        window.__alifCookieScheduled = true;
+        setTimeout(() => {
+            if (!localStorage.getItem('alif_cookie_consent')) {
+                showCookieBanner();
+            }
+        }, 1200);
+    }
+}
+
+document.addEventListener('astro:page-load', initCookieBanner);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCookieBanner);
+} else {
+    initCookieBanner();
+}
 </script>

@@ -1,11 +1,11 @@
 // src/scripts/analytics.js
 // High-Precision Atelier Analytics Engine for alif.
-// Tracks: Visits, Active Engagement Seconds, Scroll Depth, Sahibganj Locality & Astro SPA Transitions
+// Tracks: Visits, Active Engagement Seconds, Scroll Depth, Exact Reverse-Geocoded Location & Astro SPA Transitions
+import { getLocationProfile, getLocationTelemetryProps } from './locationStore.js';
 
 (function() {
     if (typeof window === 'undefined') return;
 
-    // Generate or restore anonymous persistent Visitor ID & Session ID
     function getUUID() {
         if (typeof crypto !== 'undefined' && crypto.randomUUID) {
             return crypto.randomUUID();
@@ -25,32 +25,15 @@
         sessionStorage.setItem('alif_sid', sessionId);
     }
 
-    // State for current page
     let currentPagePath = window.location.pathname;
-    let pageEnterTimestamp = Date.now();
     let activeSeconds = 0;
     let maxScrollDepth = 0;
     let isVisible = document.visibilityState === 'visible';
     let lastActiveInteractionTime = Date.now();
     let heartbeatTimer = null;
     let activeTicker = null;
-
-    function getConsent() {
-        return localStorage.getItem('alif_cookie_consent') || 'accepted';
-    }
-
-    function getUserLocality() {
-        return localStorage.getItem('alif_user_locality') || 'Sahibganj (Unselected)';
-    }
-
-    function getUserCoords() {
-        try {
-            const raw = localStorage.getItem('alif_user_coords');
-            return raw ? JSON.parse(raw) : null;
-        } catch {
-            return null;
-        }
-    }
+    let lastPageEnterAt = 0;
+    let lastPageEnterPath = '';
 
     function getDeviceType() {
         const ua = navigator.userAgent;
@@ -59,7 +42,23 @@
         return 'Desktop';
     }
 
-    // Send payload via navigator.sendBeacon or fallback fetch
+    function buildPayload(eventType, extra = {}) {
+        const locProps = getLocationTelemetryProps(getLocationProfile());
+        return {
+            event_type: eventType,
+            visitor_id: visitorId,
+            session_id: sessionId,
+            page_path: currentPagePath,
+            page_title: document.title,
+            active_seconds: activeSeconds,
+            scroll_depth: maxScrollDepth,
+            device: getDeviceType(),
+            timestamp: new Date().toISOString(),
+            ...locProps,
+            ...extra
+        };
+    }
+
     function sendPayload(endpoint, data) {
         const payload = JSON.stringify(data);
         const url = endpoint || '/.netlify/functions/analytics';
@@ -76,11 +75,13 @@
             }).catch(() => {});
         }
 
-        // Also push to Google Analytics 4 if gtag is installed
+        // Forward to Google Analytics 4 if gtag is installed
         if (typeof window.gtag === 'function') {
             window.gtag('event', data.event_type || 'alif_telemetry', {
                 event_category: 'Atelier Engagement',
                 locality: data.locality,
+                city: data.city,
+                in_sahibganj: data.in_sahibganj,
                 active_seconds: data.active_seconds,
                 scroll_depth: data.scroll_depth,
                 device: data.device
@@ -88,13 +89,14 @@
         }
     }
 
-    // Track scroll depth
     function updateScrollDepth() {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         const winHeight = window.innerHeight;
         const docHeight = Math.max(
-            document.body.scrollHeight, document.documentElement.scrollHeight,
-            document.body.offsetHeight, document.documentElement.offsetHeight
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.offsetHeight
         );
         const totalScrollable = docHeight - winHeight;
         if (totalScrollable > 0) {
@@ -106,25 +108,26 @@
         lastActiveInteractionTime = Date.now();
     }
 
-    // Active interaction listeners
-    ['scroll', 'click', 'touchstart', 'mousemove', 'keydown'].forEach(evt => {
-        window.addEventListener(evt, () => {
-            lastActiveInteractionTime = Date.now();
-        }, { passive: true });
+    ['scroll', 'click', 'touchstart', 'mousemove', 'keydown'].forEach((evt) => {
+        window.addEventListener(
+            evt,
+            () => {
+                lastActiveInteractionTime = Date.now();
+            },
+            { passive: true }
+        );
     });
     window.addEventListener('scroll', updateScrollDepth, { passive: true });
 
-    // Active seconds ticker (increments every second only if tab is visible and active in last 45s)
     function startTicker() {
         if (activeTicker) clearInterval(activeTicker);
         activeTicker = setInterval(() => {
-            if (document.visibilityState === 'visible' && (Date.now() - lastActiveInteractionTime < 45000)) {
+            if (document.visibilityState === 'visible' && Date.now() - lastActiveInteractionTime < 45000) {
                 activeSeconds += 1;
             }
         }, 1000);
     }
 
-    // Visibility change handler (pauses timer immediately when phone locked or tab changed)
     document.addEventListener('visibilitychange', () => {
         isVisible = document.visibilityState === 'visible';
         if (isVisible) {
@@ -132,50 +135,34 @@
         }
     });
 
-    // Send heartbeat every 20 seconds
     function startHeartbeat() {
         if (heartbeatTimer) clearInterval(heartbeatTimer);
         heartbeatTimer = setInterval(() => {
             if (activeSeconds > 0 && isVisible) {
-                const data = {
-                    event_type: 'heartbeat',
-                    visitor_id: visitorId,
-                    session_id: sessionId,
-                    page_path: currentPagePath,
-                    page_title: document.title,
-                    active_seconds: activeSeconds,
-                    scroll_depth: maxScrollDepth,
-                    locality: getUserLocality(),
-                    coords: getUserCoords(),
-                    device: getDeviceType(),
-                    timestamp: new Date().toISOString()
-                };
-                sendPayload('/.netlify/functions/analytics', data);
+                sendPayload('/.netlify/functions/analytics', buildPayload('heartbeat'));
             }
         }, 20000);
     }
 
-    // Page view and leave tracking
     function handlePageEnter() {
-        currentPagePath = window.location.pathname;
-        pageEnterTimestamp = Date.now();
+        const nextPath = window.location.pathname;
+        const now = Date.now();
+        // Prevent duplicate pageview when both DOMContentLoaded and astro:page-load fire at boot
+        if (nextPath === lastPageEnterPath && now - lastPageEnterAt < 800) {
+            return;
+        }
+        lastPageEnterPath = nextPath;
+        lastPageEnterAt = now;
+
+        currentPagePath = nextPath;
         activeSeconds = 0;
         maxScrollDepth = 0;
-        lastActiveInteractionTime = Date.now();
+        lastActiveInteractionTime = now;
 
-        const data = {
-            event_type: 'pageview',
-            visitor_id: visitorId,
-            session_id: sessionId,
-            page_path: currentPagePath,
-            page_title: document.title,
-            referrer: document.referrer || '',
-            locality: getUserLocality(),
-            coords: getUserCoords(),
-            device: getDeviceType(),
-            timestamp: new Date().toISOString()
-        };
-        sendPayload('/.netlify/functions/analytics', data);
+        sendPayload(
+            '/.netlify/functions/analytics',
+            buildPayload('pageview', { referrer: document.referrer || '' })
+        );
 
         startTicker();
         startHeartbeat();
@@ -183,35 +170,27 @@
 
     function handlePageLeave() {
         if (activeSeconds > 0) {
-            const data = {
-                event_type: 'pageleave',
-                visitor_id: visitorId,
-                session_id: sessionId,
-                page_path: currentPagePath,
-                active_seconds: activeSeconds,
-                scroll_depth: maxScrollDepth,
-                locality: getUserLocality(),
-                device: getDeviceType(),
-                timestamp: new Date().toISOString()
-            };
-            sendPayload('/.netlify/functions/analytics', data);
+            sendPayload('/.netlify/functions/analytics', buildPayload('pageleave'));
         }
     }
 
-    // Listen to Astro View Transitions
+    // Immediately report exact GPS/manual location verification to telemetry backend
+    window.addEventListener('alif:locality-changed', (e) => {
+        const locProps = getLocationTelemetryProps(e.detail || getLocationProfile());
+        sendPayload('/.netlify/functions/analytics', buildPayload('location_verified', locProps));
+    });
+
     document.addEventListener('astro:page-load', handlePageEnter);
     document.addEventListener('astro:before-swap', handlePageLeave);
     window.addEventListener('pagehide', handlePageLeave);
     window.addEventListener('beforeunload', handlePageLeave);
 
-    // Initial load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', handlePageEnter);
     } else {
         handlePageEnter();
     }
 
-    // Expose client telemetry inspector for owner
     window.__alifGetSessionStats = function() {
         return {
             visitor_id: visitorId,
@@ -219,7 +198,7 @@
             page: currentPagePath,
             active_seconds: activeSeconds,
             scroll_depth: maxScrollDepth,
-            locality: getUserLocality(),
+            ...getLocationTelemetryProps(getLocationProfile()),
             device: getDeviceType()
         };
     };

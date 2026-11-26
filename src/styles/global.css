@@ -639,18 +639,33 @@ footer {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 20px;
-    padding: 4px 10px;
-    font-size: 11px;
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    border-radius: 0px;
+    padding: 4px 9px;
+    font-family: var(--font-body, 'Ubuntu', sans-serif);
+    font-size: 0.65rem;
     font-weight: 500;
-    color: #27272A;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #111111;
     cursor: pointer;
     text-decoration: none;
     transition: all 0.2s ease;
     white-space: nowrap;
-    max-width: 155px;
+    max-width: 165px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.nav-locality-pill[data-loc-state="sahibganj"] {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: #111111;
+    color: #000000;
+}
+
+.nav-locality-pill[data-loc-state="outside"] {
+    border-color: rgba(0, 0, 0, 0.35);
+    color: #111111;
 }
 
 @media (max-width: 480px) {
@@ -658,21 +673,22 @@ footer {
         gap: 8px;
     }
     .nav-locality-pill {
-        max-width: 120px;
-        padding: 3px 8px;
+        max-width: 135px;
+        padding: 3px 7px;
         gap: 4px;
-        font-size: 10.5px;
+        font-size: 0.6rem;
+        letter-spacing: 1px;
     }
 }
 
 .nav-locality-pill:hover {
-    background: rgba(212, 175, 55, 0.12);
-    border-color: rgba(212, 175, 55, 0.4);
-    color: #111111;
+    background: rgba(0, 0, 0, 0.05);
+    border-color: #000000;
+    color: #000000;
 }
 
 .nav-locality-pin {
-    color: #D4AF37;
+    color: #111111;
     flex-shrink: 0;
 }
 
@@ -683,7 +699,7 @@ footer {
 }
 
 .nav-locality-caret {
-    opacity: 0.5;
+    opacity: 0.6;
     flex-shrink: 0;
 }
 
@@ -696,11 +712,12 @@ footer {
     color: inherit;
     cursor: pointer;
     text-align: left;
-    transition: color 0.2s ease;
+    transition: opacity 0.2s ease, color 0.2s ease;
 }
 
 .footer-link-btn:hover {
-    color: #D4AF37;
+    color: #000000;
+    opacity: 0.7;
 }
 
 /* 💡 USER REQUESTED CHANGES APPLIED HERE 💡 */

@@ -176,13 +176,13 @@ const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).hr
     <nav class="fixed-top-nav" transition:persist>
         <div class="nav-left-group">
             <a href="/" class="nav-logo">alif.</a>
-            <button id="headerLocalityBtn" type="button" class="nav-locality-pill" aria-label="Select Delivery Locality" title="Deliver to Sahibganj">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-locality-pin">
+            <button id="headerLocalityBtn" type="button" class="nav-locality-pill" data-loc-state="unset" aria-label="Check Delivery & Tailoring Location" title="Check Delivery & Tailoring Availability">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="nav-locality-pin">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                     <circle cx="12" cy="10" r="3"></circle>
                 </svg>
-                <span class="nav-locality-label" id="headerLocalityName">Sahibganj</span>
-                <svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-locality-caret">
+                <span class="nav-locality-label" id="headerLocalityName">Location</span>
+                <svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="nav-locality-caret">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
             </button>
