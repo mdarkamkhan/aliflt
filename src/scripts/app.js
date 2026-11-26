@@ -1,3 +1,7 @@
+import { initDraggableChatButton } from './chatDrag.js';
+
+initDraggableChatButton();
+
 // --- 1. GLOBAL PWA DEFERRED PROMPT (Captured immediately at earliest execution) ---
 window._alifDeferredPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -532,6 +536,10 @@ document.addEventListener('click', (e) => {
         loadSearch(true);
     }
     if (target.closest('#chat-button') && !chatLoaded) {
+        if (window.__alifSuppressChatClick) {
+            e.preventDefault();
+            return;
+        }
         e.preventDefault();
         loadChat(true);
     }

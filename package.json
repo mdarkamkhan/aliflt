@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "curate": "node scripts/curate-api.mjs",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/sync-ai-context.mjs",
     "preview": "astro preview"
   },
   "keywords": [],
