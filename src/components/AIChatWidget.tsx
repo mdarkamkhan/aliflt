@@ -524,9 +524,15 @@ export default function AIChatWidget({
         }),
       });
 
-      const data = await response.json();
+      const rawText = await response.text();
+      let data: any = {};
+      try {
+        data = rawText ? JSON.parse(rawText) : {};
+      } catch {
+        data = {};
+      }
 
-      if (response.ok) {
+      if (response.ok && typeof data.reply === 'string') {
         const { cleanText, matchedItems, booking } = extractTagsFromReply(
           data.reply || '',
           searchCatalog
@@ -573,7 +579,7 @@ export default function AIChatWidget({
           {
             id: 'err-' + Date.now(),
             role: 'ai',
-            text: data.error || 'Server down. Please call us directly at 7250470009.',
+            text: data.error || 'AI server abhi busy hai. Kripya thodi der me try karein ya 7250470009 par call karein.',
           },
         ]);
       }
@@ -583,7 +589,7 @@ export default function AIChatWidget({
         {
           id: 'err-' + Date.now(),
           role: 'ai',
-          text: 'Connection issue right now. Please try again in a moment.',
+          text: 'Network ya server timeout issue aaya hai. Kripya dubara try karein ya WhatsApp 7250740009 par contact karein.',
         },
       ]);
     } finally {

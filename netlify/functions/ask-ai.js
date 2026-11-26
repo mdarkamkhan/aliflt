@@ -199,8 +199,8 @@ function formatProductLine(p, eff) {
             : 'Price on inquiry';
 
     const attrs = [p.colour, p.fabric, p.work, p.size].filter(Boolean).join(', ');
-    const comboNote = p.combo_summary ? ` | Includes: ${p.combo_summary}` : '';
-    return `- [${p.slug}] (${p.code}) ${p.title} | Cat: ${p.category} | ${priceText}${attrs ? ` | ${attrs}` : ''}${comboNote}`;
+    const comboNote = p.combo_summary ? ` | Includes: ${p.combo_summary.slice(0, 95)}` : '';
+    return `- [${p.slug}] (${p.code}) ${p.title} | ${p.category} | ${priceText}${attrs ? ` | ${attrs}` : ''}${comboNote}`;
 }
 
 function formatDynamicContext(ctxData, message, clientContext, todayIST) {
@@ -215,69 +215,96 @@ function formatDynamicContext(ctxData, message, clientContext, todayIST) {
     const signals = extractSearchSignals(message, pageCtx);
     const ranked = scoreCatalogItems(products, signals, pageCtx, cartCtx, todayIST);
 
-    const topMatched = ranked.slice(0, 15);
+    const qLower = (queryText || '').toLowerCase();
+    const wantsHistory = /\b(history|legacy|gk store|kahan|started|old|rajender|kab|established|2000|2008)\b/i.test(qLower);
+    const wantsPolicy = /\b(upi|paytm|gpay|phonepe|cash|advance|trial|alteration|return|refund|policy|urgent|delivery|time|kab tak)\b/i.test(qLower);
+
+    const topMatched = ranked.slice(0, 10);
     const activeDiscounts = ranked
         .filter((entry) => entry.eff.activeOfferPrice !== null)
         .sort((a, b) => (b.eff.activeDiscountPct || 0) - (a.eff.activeDiscountPct || 0));
 
     const lines = [];
-    lines.push(`=== LIVE INVENTORY SNAPSHOT (Today IST: ${todayIST} | Synced: ${ctxData.generatedAt || 'build'}) ===`);
-    lines.push(`Store Totals: ${products.length} retail products/curated sets, ${services.length} tailoring services, ${ctxData.designSummary?.total || 0} styling designs (/designs/), ${activeDiscounts.length} items currently on active discount.`);
+    lines.push(`=== LIVE INVENTORY (${todayIST}) ===`);
+    lines.push(`Totals: ${products.length} products, ${services.length} services, ${ctxData.designSummary?.total || 0} designs (/designs/), ${activeDiscounts.length} active discounts.`);
 
     if (offers.length > 0) {
-        lines.push(`Promotional Campaigns: ${offers.map((o) => o.title).join(', ')}`);
+        lines.push(`Campaigns: ${offers.map((o) => o.title).join(', ')}`);
     }
 
-    lines.push('\n--- CLIENT SESSION CONTEXT ---');
+    lines.push('\n--- CLIENT CONTEXT ---');
     if (pageCtx?.path) {
-        lines.push(`Current Page: ${pageCtx.path}${pageCtx.title ? ` (${pageCtx.title})` : ''}${pageCtx.code ? ` [Code: ${pageCtx.code}]` : ''}`);
+        lines.push(`Page: ${pageCtx.path}${pageCtx.title ? ` (${pageCtx.title})` : ''}${pageCtx.code ? ` [${pageCtx.code}]` : ''}`);
     }
     if (locCtx?.shared) {
-        if (locCtx.in_sahibganj === true) {
-            lines.push(`Verified Location: ${locCtx.city || 'Sahibganj'} (INSIDE Sahibganj -> Doorstep home measurement, shop pickup & ₹20 Sahibganj home delivery available).`);
-        } else {
-            lines.push(`Verified Location: ${locCtx.city || 'Outside Sahibganj'} (OUTSIDE Sahibganj -> Pan-India parcel delivery for retail items & curated sets available; home-visit measurement/₹20 local delivery are Sahibganj-city only).`);
-        }
+        lines.push(
+            locCtx.in_sahibganj === true
+                ? `Location: ${locCtx.city || 'Sahibganj'} (Sahibganj city -> Home measurement & ₹20 local delivery available).`
+                : `Location: ${locCtx.city || 'Outside Sahibganj'} (Outside Sahibganj -> Pan-India parcel delivery for products/sets; local ₹20 delivery is Sahibganj only).`
+        );
     } else {
-        lines.push('Verified Location: Not shared yet (Do NOT assume customer lives in Sahibganj; clearly distinguish Sahibganj city local service vs Pan-India parcel shipping when asked about delivery).');
+        lines.push('Location: Not shared yet (distinguish Sahibganj local service vs Pan-India parcel delivery if asked).');
     }
 
     if (cartCtx.length > 0) {
-        const cartSummary = cartCtx
-            .slice(0, 8)
-            .map((c) => `${c.quantity || 1}x ${c.title}${c.code ? ` [${c.code}]` : ''} (₹${c.price || 0})`)
-            .join('; ');
-        lines.push(`Shopping Bag (${cartCtx.length} line items): ${cartSummary}`);
-    } else {
-        lines.push('Shopping Bag: Empty');
+        lines.push(
+            `Bag (${cartCtx.length}): ` +
+                cartCtx
+                    .slice(0, 6)
+                    .map((c) => `${c.quantity || 1}x ${c.title}${c.code ? ` [${c.code}]` : ''}`)
+                    .join('; ')
+        );
     }
 
-    lines.push('\n--- TOP MATCHING PRODUCTS FOR THIS QUERY ---');
-    if (topMatched.length > 0) {
-        for (const entry of topMatched) {
-            lines.push(formatProductLine(entry.product, entry.eff));
-        }
-    } else {
-        lines.push('(No specific catalog items indexed)');
+    lines.push('\n--- TOP MATCHING PRODUCTS ---');
+    for (const entry of topMatched) {
+        lines.push(formatProductLine(entry.product, entry.eff));
     }
 
-    // Ensure top discounted deals are also visible even if query wasn't explicitly discount-keyworded
     const alreadyShown = new Set(topMatched.map((m) => m.product.slug));
-    const extraDiscounts = activeDiscounts.filter((d) => !alreadyShown.has(d.product.slug)).slice(0, 8);
+    const extraDiscounts = activeDiscounts.filter((d) => !alreadyShown.has(d.product.slug)).slice(0, 5);
     if (extraDiscounts.length > 0) {
-        lines.push('\n--- TOP ACTIVE DISCOUNT OFFERS RIGHT NOW ---');
+        lines.push('\n--- ACTIVE DISCOUNTS ---');
         for (const entry of extraDiscounts) {
             lines.push(formatProductLine(entry.product, entry.eff));
         }
     }
 
-    lines.push('\n--- ALL TAILORING SERVICES (/services/<slug>/) ---');
+    lines.push('\n--- TAILORING SERVICES (/services/<slug>/) ---');
     for (const s of services) {
         const startText = s.starting_price ? `Starts ₹${s.starting_price}` : 'Custom quote';
-        lines.push(`- [${s.slug}] ${s.title} (${s.category}) | ${startText} | ${s.description}`);
+        const includeDesc = signals.rawTokens.some((t) =>
+            `${s.slug} ${s.title} ${s.category}`.toLowerCase().includes(t)
+        );
+        lines.push(`- [${s.slug}] ${s.title}: ${startText}${includeDesc && s.description ? ` | ${s.description.slice(0, 140)}` : ''}`);
     }
 
-    return lines.join('\n');
+    return { contextText: lines.join('\n'), wantsHistory, wantsPolicy };
+}
+
+function selectCompactKnowledge(knowledgeText, wantsHistory, wantsPolicy) {
+    const core = `Shop: alif. ladies tailor & Boutique | Address: Daal Kuan, College Road, Sahibganj (Opposite Joy Fast Food / Lakshmi Bag House)
+Timings: 10 AM - 9 PM daily (Friday 2 PM - 9 PM, open Sunday) | WhatsApp: 7250740009 | Call: 7250470009
+Rates: Blouse ₹120-₹500 | Suit ₹250-₹500 | Kurti ₹150-₹350 | Lehenga ₹350-₹1200 | Fall & Pico ₹60
+Delivery: Normal 7-10 days, Urgent min 24 hrs (no extra urgent fee), Festive 7-14 days, Bridal/Custom 14-21 days.
+Local delivery: ₹20 in Sahibganj city; Pan-India courier for products & curated sets.
+Fabric & Fitting: Store fabric available or bring own cloth; old garment / WhatsApp / store measurements; free fitting re-alteration within 7 days; no trial room.
+Payment: Cash & UPI (GPay/PhonePe/Paytm/BharatPe up to ₹1,950 max; cash above ₹1,950). Advance optional.`;
+
+    if ((!wantsHistory && !wantsPolicy) || !knowledgeText) {
+        return core;
+    }
+
+    const extraBlocks = [];
+    if (wantsHistory) {
+        const idx = knowledgeText.indexOf('## ALiF — Legacy');
+        if (idx !== -1) extraBlocks.push(knowledgeText.slice(idx, idx + 1100));
+    }
+    if (wantsPolicy) {
+        const idx = knowledgeText.indexOf('## ALiF — Payment');
+        if (idx !== -1) extraBlocks.push(knowledgeText.slice(idx, idx + 1100));
+    }
+    return [core, ...extraBlocks].join('\n\n');
 }
 
 function buildSystemInstruction(knowledgeText, dynamicContextText) {
@@ -341,6 +368,52 @@ function sanitizeHistory(history) {
         .filter(Boolean);
 }
 
+const DEFAULT_MODEL_CHAIN = [
+    'gemini-3.5-flash',
+    'gemini-3.5-flash-lite',
+    'gemini-2.5-flash',
+    'gemini-2.5-flash-lite'
+];
+
+// Skip temporarily overloaded primary model across warm invocations for snappy responses
+let primaryCooldownUntil = 0;
+
+async function callGeminiWithTimeout(modelName, apiKey, payload, timeoutMs) {
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+        const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            signal: controller.signal
+        });
+
+        if (!res.ok) {
+            const errText = await res.text();
+            const err = new Error(`API ${res.status} (${modelName}): ${errText}`);
+            err.status = res.status;
+            throw err;
+        }
+
+        const data = await res.json();
+        const reply =
+            data.candidates?.[0]?.content?.parts
+                ?.map((part) => part.text || '')
+                .join('\n')
+                .trim() || '';
+
+        if (!reply) {
+            throw new Error(`Empty response from ${modelName}`);
+        }
+        return reply;
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
 exports.handler = async (event) => {
     const corsHeaders = {
         'Access-Control-Allow-Origin': '*',
@@ -366,12 +439,19 @@ exports.handler = async (event) => {
             throw new Error('GOOGLE_API_KEY is not configured in Netlify Environment Variables.');
         }
 
-        const modelName = process.env.GEMINI_MODEL || 'gemini-3.5-flash';
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-
         const todayIST = getTodayIST();
-        const dynamicContextText = formatDynamicContext(bundledAiContext, message, context, todayIST);
-        const systemInstructionText = buildSystemInstruction(bundledAiContext.knowledge, dynamicContextText);
+        const { contextText, wantsHistory, wantsPolicy } = formatDynamicContext(
+            bundledAiContext,
+            message,
+            context,
+            todayIST
+        );
+        const compactKnowledge = selectCompactKnowledge(
+            bundledAiContext.knowledge,
+            wantsHistory,
+            wantsPolicy
+        );
+        const systemInstructionText = buildSystemInstruction(compactKnowledge, contextText);
 
         let contents = sanitizeHistory(history);
         const userParts = [];
@@ -392,7 +472,6 @@ exports.handler = async (event) => {
             });
         }
 
-        // Ensure current turn includes userParts (and avoid duplicate trailing text turn if client pushed history first)
         if (contents.length > 0 && contents[contents.length - 1].role === 'user') {
             contents[contents.length - 1] = { role: 'user', parts: userParts };
         } else {
@@ -409,24 +488,51 @@ exports.handler = async (event) => {
             }
         };
 
-        const apiResponse = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+        const envModel = process.env.GEMINI_MODEL;
+        const orderedModels = envModel
+            ? [envModel, ...DEFAULT_MODEL_CHAIN.filter((m) => m !== envModel)]
+            : [...DEFAULT_MODEL_CHAIN];
 
-        if (!apiResponse.ok) {
-            const errorBody = await apiResponse.text();
-            console.error('Gemini API Error:', errorBody);
-            throw new Error(`API error ${apiResponse.status}: ${errorBody}`);
+        const now = Date.now();
+        const activeModels =
+            !envModel && now < primaryCooldownUntil
+                ? [...orderedModels.slice(1), orderedModels[0]]
+                : orderedModels;
+
+        let reply = '';
+        let usedModel = activeModels[0];
+        let lastError = null;
+        const deadline = Date.now() + 8500;
+
+        for (let i = 0; i < activeModels.length; i++) {
+            const modelName = activeModels[i];
+            const remainingMs = deadline - Date.now();
+            if (remainingMs < 1500) break;
+
+            const perAttemptTimeout = Math.min(remainingMs, i === 0 ? 4200 : 3200);
+            try {
+                reply = await callGeminiWithTimeout(modelName, apiKey, payload, perAttemptTimeout);
+                usedModel = modelName;
+                break;
+            } catch (err) {
+                lastError = err;
+                console.warn(`Gemini attempt failed [${modelName}]:`, err.message);
+                if (modelName === 'gemini-3.5-flash') {
+                    primaryCooldownUntil = Date.now() + 90000;
+                }
+            }
         }
 
-        const result = await apiResponse.json();
-        const reply =
-            result.candidates?.[0]?.content?.parts
-                ?.map((part) => part.text || '')
-                .join('\n')
-                .trim() || "Sorry, I couldn't process that right now.";
+        if (!reply) {
+            return {
+                statusCode: 503,
+                headers: corsHeaders,
+                body: JSON.stringify({
+                    error: 'AI servers abhi busy hain. Kripya kuch seconds baad try karein ya WhatsApp 7250740009 par message karein.',
+                    debug: lastError?.message || 'All models unavailable'
+                })
+            };
+        }
 
         return {
             statusCode: 200,
@@ -434,6 +540,7 @@ exports.handler = async (event) => {
             body: JSON.stringify({
                 reply,
                 meta: {
+                    model: usedModel,
                     catalogUpdatedAt: bundledAiContext.generatedAt || null,
                     todayIST
                 }
@@ -444,7 +551,7 @@ exports.handler = async (event) => {
         return {
             statusCode: 500,
             headers: corsHeaders,
-            body: JSON.stringify({ error: `Assistant temporarily unavailable: ${error.message}` })
+            body: JSON.stringify({ error: 'Assistant temporarily unavailable. Please call 7250470009 or message WhatsApp 7250740009.' })
         };
     }
 };
